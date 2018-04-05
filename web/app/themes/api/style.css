@@ -5,3 +5,104 @@ Author: David Paul
 Description: A (nearly) headless implementation of Wordpress, built on Bedrock, for the purpose of separating the STTV REST API from the other concerns of Supertutor's web presence. This API foundation provides all of the data and web services for SupertutorTV's ecommerce platform, online course platform, and front-facing blog and sales/information platforms.
 Version: 2.0
 */
+
+* {
+    box-sizing: border-box;
+    border: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100vh;
+}
+
+body {
+    position: relative;
+    display: block;
+/*     background-image: url('http://idolza.com/a/f/c/cool-movie-backgrounds-wallpaper-cave-wallpapers-for-walls-high-definition-widescreen-desktop_cool-wallpapers-for-walls_house-design-programs-how-to-build-a-wood-headboard-do.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover; */
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 20px;
+    color: rgba(0,0,0,.8)
+}
+
+body a:link, body a:hover, body a:active, body a:visited {
+    color: inherit
+}
+
+img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+input {
+    background-color: transparent;
+    border: none;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: .25em;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    font-size: 1rem;
+    margin: 0 0 20px 0;
+    padding: 0;
+    box-shadow: none;
+    transition: all 0.3s;
+    padding-left: 1em
+}
+
+input:-webkit-autofill {
+    background-color: white !important;
+}
+
+button {
+    width: 100%;
+    padding: .75em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    font: inherit;
+    text-transform: none;
+    background-color: #109fda;
+    color: white !important;
+    -webkit-appearance: button;
+    cursor: pointer !important;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    transition: background-color .25s ease-in-out;
+}
+
+#form-wrapper {
+    width: 400px;
+    padding: 1.5em;
+    height: auto;
+    position: absolute;
+    background: white;
+    z-index: 999;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
+
+#forgot-block {
+    width: 100%;
+    padding: 1em;
+    text-align: center;
+    font-size: .75em;
+}
+
+.message {
+    padding: 1em 0;
+    font-size: .75em;
+    text-align: center;
+    color: red;
+    margin-bottom: .5em;
+}
