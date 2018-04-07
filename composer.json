@@ -38,8 +38,7 @@
     "vlucas/phpdotenv": "^2.0.1",
     "johnpbloch/wordpress": "4.9.5",
     "oscarotero/env": "^1.1.0",
-    "roots/wp-password-bcrypt": "1.0.0",
-    "sttv/sttvapi": "1.0.0"
+    "roots/wp-password-bcrypt": "1.0.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.0.2"
