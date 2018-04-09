@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 date_default_timezone_set('America/Los_Angeles');
 
-require_once __DIR__ . '/includes/sttv.class.php';
+require_once __DIR__ . '/includes/class-sttv.php';
 
 $sttv = STTV::instance();
 

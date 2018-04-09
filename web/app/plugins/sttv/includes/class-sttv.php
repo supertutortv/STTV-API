@@ -1,4 +1,7 @@
 <?php
+
+namespace STTV;
+
 if ( ! defined( 'ABSPATH' ) ) {exit;}
 
 #####################################
