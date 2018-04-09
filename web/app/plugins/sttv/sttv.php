@@ -14,6 +14,6 @@ date_default_timezone_set('America/Los_Angeles');
 
 require_once __DIR__ . '/includes/class-sttv.php';
 
-$sttv = STTV::instance();
+$sttv = \STTV\STTV::instance();
 
 //end of line, man.
