@@ -30,11 +30,11 @@ class Webhook {
     }
 
     private static function verifySignature( $sig ) {
-        return ( $sig === hash_hmac( 'sha256', $body, $sec ) );
+        return ( $sig === hash_hmac( 'sha256', $body, env( 'STTV_WHSEC' ) ) );
     }
 
     private static function sign( $payload ) {
-        return hash_hmac( 'sha256', $payload, env( 'WHSEC_TOKEN' ) );
+        return hash_hmac( 'sha256', $payload, env( 'STTV_WHSEC' ) );
     }
 
     private static function log( $response, $type = 'send' ) {
