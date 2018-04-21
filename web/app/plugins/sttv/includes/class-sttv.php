@@ -62,7 +62,8 @@ final class STTV {
 
     private function init_hooks() {
         add_action( 'after_setup_theme', [ $this, 'theme_setup' ] );
-        add_action( 'init', [ $this, 'init' ], 0 );
+        add_action( 'init', [ 'STTV\Webhook', 'init' ], 0 );
+        add_action( 'init', [ $this, 'init' ], 1 );
         add_action( 'init', [ $this, 'emergency_access' ] );
         add_action( 'wp_enqueue_scripts', [ 'STTV\Scripts', 'init' ] );
         add_action( 'admin_init', function() {
@@ -99,12 +100,11 @@ final class STTV {
     public function init() {
         global $pagenow;
 
+        // divert all requests to wp-login.php (it's unnecessary)
         if ( $pagenow === 'wp-login.php' && !is_user_logged_in() ) {
             wp_redirect(home_url());
             exit;
         }
-
-        add_theme_support( 'custom-header' );
     }
 
     public function emergency_access() {
