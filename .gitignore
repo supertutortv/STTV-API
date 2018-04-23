@@ -4,3 +4,4 @@
 .env.example
 
 *.code-workspace
+sttv-api.code-workspace
