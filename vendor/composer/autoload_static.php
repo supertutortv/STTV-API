@@ -11,6 +11,10 @@ class ComposerStaticInitd6fcf41209a7385f4e84612821c2d263
     );
 
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Stripe\\' => 7,
+        ),
         'D' => 
         array (
             'Dotenv\\' => 7,
@@ -22,6 +26,10 @@ class ComposerStaticInitd6fcf41209a7385f4e84612821c2d263
     );
 
     public static $prefixDirsPsr4 = array (
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
