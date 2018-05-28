@@ -7,6 +7,6 @@ define('SCRIPT_DEBUG', false);
 define('DISALLOW_FILE_MODS', true);
 
 /** Stripe Keys */
-define('STRIPE_PK', env('STRIPE_PK_LIVE'));
-define('STRIPE_SK', env('STRIPE_SK_LIVE'));
-define('STRIPE_WHSEC', env('STRIPE_WHSEC_LIVE'));
+define('STRIPE_PK', env('STRIPE_PK_TEST'));
+define('STRIPE_SK', env('STRIPE_SK_TEST'));
+define('STRIPE_WHSEC', env('STRIPE_WHSEC_TEST'));
