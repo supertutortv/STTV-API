@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name:  STTV API
-Plugin URI:   https://api.supertutortv.com
+Plugin URI:   https://app.supertutortv.com
 Description:  Separate standalone API for Supertutor Media web resources
-Version:      1.0.0
+Version:      2.0.0
 Author:       David Paul
 License:      MIT License
 */

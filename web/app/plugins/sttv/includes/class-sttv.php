@@ -29,12 +29,12 @@ final class STTV {
 
     private function define_constants() {
         // MAIN CONSTANTS
-        $this->define( 'STTV_VERSION', '2.0' );
+        $this->define( 'STTV_VERSION', '2.0.0' );
         $this->define( 'STTV_PREFIX', 'sttv' );
-        $this->define( 'STTV_API_DIR', dirname(__DIR__).'/' );
-        $this->define( 'STTV_CACHE_DIR', dirname(ABSPATH).'/vim/vcache/' );
-        $this->define( 'STTV_RESOURCE_DIR', dirname(ABSPATH).'/resources/' );
-        $this->define( 'STTV_LOGS_DIR', dirname(ABSPATH).'/course_logs/' );
+        $this->define( 'STTV_API_DIR', dirname( dirname( ABSPATH ) ) );
+        $this->define( 'STTV_CACHE_DIR', STTV_API_DIR.'/vim/vcache/' );
+        $this->define( 'STTV_RESOURCE_DIR', STTV_API_DIR.'/resources/' );
+        $this->define( 'STTV_LOGS_DIR', STTV_API_DIR.'/logs/' );
         $this->define( 'STTV_TEMPLATE_DIR', get_template_directory().'/templates/' );
 
         //multi-user
@@ -43,21 +43,20 @@ final class STTV {
 
         //REST API
         $this->define( 'STTV_REST_NAMESPACE', 'v'.STTV_VERSION );
-        $this->define( 'STTV_UA', 'STTV-REST/'.STTV_VERSION.' <'.$_SERVER['SERVER_SOFTWARE'].'>' );
+        $this->define( 'STTV_UA', 'APP-STTV-REST/'.STTV_VERSION.' <'.$_SERVER['SERVER_SOFTWARE'].'>' );
         $this->define( 'STTV_REST_AUTH', ( has_filter( 'rest_nonce_action' ) ) ? STTV_PREFIX.':rest:auth' : 'wp_rest');
     }
 
     private function includes() {
         // load API functions first
-        require_once STTV_API_DIR . 'includes/sttv-functions.php';
+        require_once 'functions/sttv-functions.php';
+        require_once 'functions/sttv-webhook-functions.php';
 
         // required classes
-        require_once STTV_API_DIR . 'includes/class-sttv-install.php';
-        require_once STTV_API_DIR . 'includes/class-sttv-scripts.php';
-        require_once STTV_API_DIR . 'includes/class-sttv-webhook.php';
-
-        // other functions
-        require_once STTV_API_DIR . 'includes/sttv-webhook-functions.php';
+        require_once 'classes/class-sttv-install.php';
+        require_once 'classes/class-sttv-scripts.php';
+        require_once 'classes/class-sttv-webhook.php';
+        require_once 'classes/class-sttv-logger.php';
     }
 
     private function init_hooks() {
@@ -82,7 +81,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
-            print WP_ENV;
+            print dirname(dirname(ABSPATH));
         });
 
 		// cleanup
@@ -101,10 +100,6 @@ final class STTV {
         global $pagenow;
 
         \Stripe\Stripe::setApiKey( STRIPE_SK );
-
-        //print_r( \Stripe\Plan::all( [ "limit" => 3 ] ) );
-
-        //exit;
 
         // divert all requests to wp-login.php (it's unnecessary)
         if ( $pagenow === 'wp-login.php' && !is_user_logged_in() ) {
@@ -135,7 +130,7 @@ final class STTV {
     public function finally() {
         $flushed = get_transient( 'sttv_rest_flush_once' );
 		if (!$flushed){
-			//flush_rewrite_rules();
+			flush_rewrite_rules();
 			set_transient( 'sttv_rest_flush_once', true, 86400 );
 		}
     }
