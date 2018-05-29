@@ -7,7 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 class Webhook {
 
     public static function init() {
-        wp_die('webhook init function');
         if ( !isset($_GET['stripeevent']) || !isset($_GET['sttvwebhook']) ) {
 			return false;
         }
