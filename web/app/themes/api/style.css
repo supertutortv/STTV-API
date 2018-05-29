@@ -3,7 +3,7 @@ Theme Name: Supertutor Media API
 Theme URI: https://supertutormedia.com
 Author: David Paul
 Description: A (nearly) headless implementation of Wordpress, built on Bedrock, for the purpose of separating the STTV REST API from the other concerns of Supertutor's web presence. This API foundation provides all of the data and web services for SupertutorTV's ecommerce platform, online course platform, and front-facing blog and sales/information platforms.
-Version: 2.0
+Version: 2.0.0
 */
 
 * {
@@ -75,6 +75,7 @@ button {
     background-color: #109fda;
     color: white !important;
     -webkit-appearance: button;
+    appearance: button;
     cursor: pointer !important;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
     transition: background-color .25s ease-in-out;
