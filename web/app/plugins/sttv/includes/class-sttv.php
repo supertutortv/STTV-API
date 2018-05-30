@@ -81,7 +81,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
-            print dirname(dirname(ABSPATH));
+            print STTV_LOGS_DIR;
         });
 
 		// cleanup
