@@ -9,7 +9,7 @@ class Trial {
     public static function create() {
         global $wpdb;
 
-        return $wpdb->get_results( "INSERT INTO sttvapp_trial_reference (charge_id,wp_id,exp_date) VALUES ('ch_xxxx',1,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 1 SECOND))" );
+        return $wpdb->get_results( "INSERT INTO sttvapp_trial_reference (charge_id,wp_id,exp_date) VALUES ('ch_xxxx',1,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 5 DAY))" );
     }
 
     public static function delete() {
