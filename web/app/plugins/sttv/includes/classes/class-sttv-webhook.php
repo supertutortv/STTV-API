@@ -46,7 +46,7 @@ class Webhook {
             $log_vars['err_obj'] = $e;
 
             http_response_code(400);
-            /* echo wp_send_json(
+            echo wp_send_json(
                 [
                     [
                         'Dave'=>'Do you read me, HAL?',
@@ -81,7 +81,7 @@ class Webhook {
                         'HAL'=>'Dave... This conversation can serve no purpose anymore. Goodbye.'
                     ]
                 ]
-            ); */
+            );
             
         } catch( \Stripe\Error\SignatureVerification $e ) {
 
@@ -92,7 +92,7 @@ class Webhook {
             echo wp_send_json( $e );
             
         } finally {
-           echo \STTV\Log::webhook( $log_vars );
+           \STTV\Log::webhook( $log_vars );
         }
         die;
     }
