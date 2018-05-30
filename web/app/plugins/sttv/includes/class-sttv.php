@@ -90,10 +90,11 @@ final class STTV {
         add_action( 'print_test', function() {
             //print ABSPATH;
             //print_r(\STTV\Courses\Trial::create());
-            $rows = \STTV\Courses\Trial::cleanup();
+            print_r(\STTV\Courses\Trial::delete(\STTV\Courses\Trial::cleanup()));
+            /* $rows = \STTV\Courses\Trial::cleanup();
             foreach ($rows as $row) {
                 print_r($row);
-            }
+            } */
         });
 
         // cleanup
