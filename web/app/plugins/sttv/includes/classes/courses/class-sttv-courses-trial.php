@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 
 class Trial {
 
-    public static function create( $charge = '', $id = 0 ) {
+    public static function create( $charge = 'ch_xxxxx', $id = 0 ) {
         global $wpdb;
-        return $wpdb->get_results( "INSERT INTO sttvapp_trial_reference (charge_id,wp_id,exp_date) VALUES ($charge,1,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 5 DAY))", ARRAY_A );
+        return $wpdb->get_results( "INSERT INTO sttvapp_trial_reference (charge_id,wp_id,exp_date) VALUES ($charge,$id,DATE_ADD(CURRENT_TIMESTAMP,INTERVAL 5 DAY))", ARRAY_A );
     }
 
     public static function delete( $rows = [] ) {
