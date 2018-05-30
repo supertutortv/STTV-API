@@ -92,7 +92,7 @@ class Webhook {
             echo wp_send_json( $e );
             
         } finally {
-            \STTV\Log::webhook( $log_vars );
+            Log::webhook( $log_vars );
         }
         die;
     }
