@@ -15,7 +15,7 @@ class Log {
 
         $input = [
             'time' => date('G:i:s', time()),
-            'event' => $vars['event'],
+            'event' => $vars['event'] ?? 'error',
             'forwarded_IP' => getenv('HTTP_X_FORWARDED_FOR') ?: '0.0.0.0',
             'IP' => getenv('REMOTE_ADDR'),
             'UA' => getenv('HTTP_USER_AGENT'),
