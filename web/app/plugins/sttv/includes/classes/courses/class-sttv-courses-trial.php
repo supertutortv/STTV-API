@@ -24,7 +24,10 @@ class Trial {
 
     public static function cleanup() {
         global $wpdb;
+    }
 
+    public static function getExpired() {
+        global $wpdb;
         return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE exp_date <= CURRENT_TIMESTAMP", ARRAY_A );
     }
 }
