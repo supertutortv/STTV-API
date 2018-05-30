@@ -60,6 +60,7 @@ final class STTV {
     }
 
     private function init_hooks() {
+        register_activation_hook( STTV_PLUGIN_FILE, [ __NAMESPACE__ . '\\Install', 'install' ] );
         add_action( 'after_setup_theme', [ $this, 'theme_setup' ] );
         add_action( 'init', [ __NAMESPACE__ . '\\Webhook', 'init' ], 0 );
         add_action( 'init', [ $this, 'init' ], 1 );
@@ -79,12 +80,16 @@ final class STTV {
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
+        // login logger
+        add_action( 'wp_login', [ $this, 'sttv_user_login_action' ], 10, 2 );
+
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
-            print STTV_LOGS_DIR;
+            print ABSPATH;
         });
 
-		// cleanup
+        // cleanup
+        show_admin_bar( false );
 		remove_action( 'wp_head', '_admin_bar_bump_cb' );
         remove_action( 'wp_head', 'wp_generator' );
         remove_action( 'rest_api_init', 'create_initial_rest_routes', 99 );
@@ -106,6 +111,12 @@ final class STTV {
             wp_redirect(home_url());
             exit;
         }
+    }
+
+    public function sttv_user_login_action( $username, $user ) {
+        $times = get_user_meta( $user->ID, 'login_timestamps', true ) ?: ['SOR'];
+        $times[] = $this->timestamp;
+        update_user_meta( $user->ID, 'login_timestamps', $times );
     }
 
     public function emergency_access() {
