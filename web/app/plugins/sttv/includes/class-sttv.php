@@ -89,8 +89,11 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
             //print ABSPATH;
-            print_r(\STTV\Courses\Trial::create());
-            //print_r(\STTV\Courses\Trial::cleanup());
+            //print_r(\STTV\Courses\Trial::create());
+            $rows = \STTV\Courses\Trial::cleanup();
+            foreach ($rows as $row) {
+                print_r($row);
+            }
         });
 
         // cleanup
