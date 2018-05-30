@@ -35,7 +35,28 @@ class Install {
     }
 
     private static function tables() {
+        global $wpdb;
 
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+        $tables = [
+            //'mu_keys' => '',
+            'trial_reference' => '(
+                id int(10) NOT NULL AUTO_INCREMENT,
+                charge_id tinytext,
+                exp_date int(10) UNSIGNED,
+                wp_id int(10) UNSIGNED,
+                UNIQUE KEY id (id)
+           )',
+            //'sub_ref' => '',
+            //'nonce' => ''
+        ];
+
+        foreach ( $tables as $name => $statement ) {
+            $collate = $wpdb->get_charset_collate();
+            $sql = "CREATE TABLE IF NOT EXISTS ".$wpdb->prefix.$name." $statement $collate;";
+            dbDelta( $sql );
+        }
     }
 
 }
