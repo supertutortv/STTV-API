@@ -11,7 +11,7 @@ class Install {
 		if ( 'yes' === get_transient( 'sttv_installing' ) ) {
 			return;
 		}
-		set_transient( 'sttv_installing', 'yes', MINUTE_IN_SECONDS * 5 );
+		set_transient( 'sttv_installing', 'yes', MINUTE_IN_SECONDS * 2 );
 
         self::options();
         self::tables();
