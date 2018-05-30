@@ -7,15 +7,10 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 class Webhook {
 
     public static function init() {
-
-        if ( isset($_GET['sttvwebhook']) ) {
-            wp_die( "it's set" );
-        }
         
-        if ( !isset($_GET['stripeevent']) || !isset($_GET['sttvwebhook']) ) {
+        if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
 			return false;
         }
-        die;
 
         $request = @file_get_contents( "php://input" );
 
