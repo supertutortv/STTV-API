@@ -16,6 +16,7 @@ class Install {
         self::options();
         self::tables();
         
+        flush_rewrite_rules();
     }
 
     private static function options() {
