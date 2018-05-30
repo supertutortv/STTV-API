@@ -5,9 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 add_action( 'rest_api_init', 'sttv_rest_cors', 15 );
 remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
 remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
-if ( $this->restauth !== 'wp_rest' ) {
+if ( STTV_REST_AUTH !== 'wp_rest' ) {
 	add_filter( 'rest_nonce_action', function() {
-		return $this->restauth;
+		return STTV_REST_AUTH;
 	});
 }
 add_filter( 'rest_url_prefix', function() {
