@@ -8,7 +8,7 @@ class Webhook {
 
     public static function init() {
 
-        if ( isset($_GET['stripeevent']) ) {
+        if ( isset($_GET['sttvwebhook']) ) {
             wp_die( "it's set" );
         }
         
