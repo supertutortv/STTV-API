@@ -22,7 +22,7 @@ class Webhook {
         
         try {
             if ( empty( $request ) ) {
-                throw new \InvalidPayload( 'Request body cannot be empty.' );
+                throw new \InvalidArgumentException( 'Request body cannot be empty.' );
             }
             
             switch ( array_keys($_GET)[0] ) {
@@ -40,7 +40,7 @@ class Webhook {
 
             self::respond( $event );
             
-        } catch ( \InvalidPayload $e ) {
+        } catch ( \InvalidArgumentException $e ) {
 
             $log_vars['error'] = true;
             $log_vars['err_obj'] = $e;
@@ -109,8 +109,8 @@ class Webhook {
 
     }
 
-    public static function send( $body ) {
-        return self::log( wp_safe_remote_request( 'https://supertutortv.com/?sttvwh', 
+    public static function send( $body, $event ) {
+        return wp_safe_remote_request( 'https://supertutortv.com/?sttvwh', 
             [
                 'method' => 'POST',
                 'user-agent' => STTV_UA,
@@ -119,7 +119,7 @@ class Webhook {
                 ],
                 'body' => json_encode( $body )
             ]
-        ) );
+        );
     }
 
     private static function verifySignature( $request, $sig ) {
@@ -128,7 +128,7 @@ class Webhook {
         if ($data === null && $jsonError !== JSON_ERROR_NONE) {
             $msg = "Invalid payload: $data "
               . "($jsonError)";
-            throw new \InvalidPayload($msg);
+            throw new \InvalidArgumentException($msg);
         }
 
         if ( $sig !== self::sign( $request ) ) {
