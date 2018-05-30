@@ -14,7 +14,8 @@ class Webhook {
 
         $request = @file_get_contents( "php://input" );
 
-        $event = null;
+        $event = $response = null;
+        $http = 200;
         $log_vars = [
             'direction' => 'received',
             'error' => false
@@ -38,16 +39,16 @@ class Webhook {
 
             $log_vars['event'] = $event['type'];
 
-            self::respond( $event );
+            $response = self::respond( $event );
             
         } catch ( \InvalidArgumentException $e ) {
 
             $log_vars['error'] = true;
             $log_vars['err_obj'] = $e;
 
-            http_response_code(400);
-            echo wp_send_json(
-                [
+            $http = 400;
+            
+            $response = [
                     [
                         'Dave'=>'Do you read me, HAL?',
                         'HAL'=>'Affirmative, Dave. I read you.'
@@ -80,19 +81,20 @@ class Webhook {
                         'Dave'=>'HAL, I won\'t argue with you anymore! Open the doors!',
                         'HAL'=>'Dave... This conversation can serve no purpose anymore. Goodbye.'
                     ]
-                ]
-            );
+                ];
             
         } catch( \Stripe\Error\SignatureVerification $e ) {
 
             $log_vars['error'] = true;
             $log_vars['err_obj'] = $e;
 
-            http_response_code(401);
-            echo wp_send_json( $e );
+            $http = 401;
+            $response = $e;
             
         } finally {
            \STTV\Log::webhook( $log_vars );
+           http_response_code( $http );
+           echo wp_send_json( $response );
         }
         die;
     }
@@ -102,10 +104,7 @@ class Webhook {
         //change event dot notation to underscores
         $event = str_replace( '.', '_', $data['event'] );
 
-        $response = ( is_callable( $event ) ) ? $event( $data ) : 'Valid webhook, but no action taken. Thank you!';
-
-        http_response_code(200);
-		echo wp_send_json( $response );
+        return ( is_callable( $event ) ) ? $event( $data ) : 'Valid webhook, but no action taken. Thank you!';
 
     }
 
