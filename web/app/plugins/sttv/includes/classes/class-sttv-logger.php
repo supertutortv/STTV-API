@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 class Log {
 
     public static function webhook( $vars = [] ) {
+        wp_die('logger dead');
         if ( empty( $vars ) ) {
             throw new InvalidArgumentException( 'Log variables cannot be empty.' );
         }
