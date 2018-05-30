@@ -15,6 +15,7 @@ class Webhook {
         if ( !isset($_GET['stripeevent']) || !isset($_GET['sttvwebhook']) ) {
 			return false;
         }
+        die;
 
         $request = @file_get_contents( "php://input" );
 
