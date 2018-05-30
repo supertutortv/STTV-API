@@ -26,8 +26,8 @@ class Log {
             $input['data'] = $vars['err_obj'];
         }
 
-        if ( !is_dir( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] . '/' ) ) {
-            mkdir( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] . '/', 0777, true );
+        if ( !is_dir( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] ) ) {
+            mkdir( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'], 0777, true );
         }
 
         file_put_contents( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] . '/' . date('m-d-Y') . $ext,
