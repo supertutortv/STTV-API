@@ -57,6 +57,9 @@ final class STTV {
         require_once 'classes/class-sttv-scripts.php';
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
+
+        // courses
+        require_once 'classes/courses/class-sttv-courses-trial.php';
     }
 
     private function init_hooks() {
@@ -86,6 +89,8 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
             //print ABSPATH;
+            print_r(\STTV\Courses\Trial::create());
+            print_r(\STTV\Courses\Trial::cleanup());
         });
 
         // cleanup
