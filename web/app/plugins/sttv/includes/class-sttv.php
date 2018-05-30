@@ -58,6 +58,9 @@ final class STTV {
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
 
+        // REST setup and init
+        require_once 'REST/init.php';
+
         // courses
         require_once 'classes/courses/class-sttv-courses-trial.php';
     }
