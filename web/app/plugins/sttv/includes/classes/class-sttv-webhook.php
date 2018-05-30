@@ -44,7 +44,7 @@ class Webhook {
         } catch ( \InvalidArgumentException $e ) {
 
             $log_vars['error'] = true;
-            $log_vars['err_obj'] = $e;
+            $log_vars['err_obj'] = $e->getMessage();
 
             $http = 400;
             
@@ -86,7 +86,7 @@ class Webhook {
         } catch( \Stripe\Error\SignatureVerification $e ) {
 
             $log_vars['error'] = true;
-            $log_vars['err_obj'] = $e;
+            $log_vars['err_obj'] = $e->getMessage();
 
             $http = 401;
             $response = $e;
