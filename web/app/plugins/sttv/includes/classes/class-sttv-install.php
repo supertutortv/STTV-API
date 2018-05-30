@@ -48,8 +48,7 @@ class Install {
                 wp_id int(10) UNSIGNED,
                 active boolean NOT NULL DEFAULT 1,
                 UNIQUE KEY id (id)
-           )',
-            //'sub_ref' => '',
+            )',
             //'nonce' => ''
         ];
 

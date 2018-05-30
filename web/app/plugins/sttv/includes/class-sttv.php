@@ -77,7 +77,7 @@ final class STTV {
 				//Allow ajax calls
 				return;
 			}
-			if( ! current_user_can( 'edit_others_posts' ) ) {
+			if( ! current_user_can( 'edit_others_posts' ) && ! defined( REST_REQUEST ) ) {
 			   //Redirect to main page if the user is not an Editor or higher
 			   wp_redirect( get_site_url( ) );
 			   wp_die();
