@@ -83,7 +83,7 @@ final class STTV {
         // login logger
         add_action( 'wp_login', [ $this, 'sttv_user_login_action' ], 10, 2 );
 
-        add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
+        //add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
             print ABSPATH;
         });
