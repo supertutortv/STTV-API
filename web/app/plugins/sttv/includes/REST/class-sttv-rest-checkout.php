@@ -1,5 +1,9 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+
+namespace STTV\REST;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * SupertutorTV checkout class.
  *
