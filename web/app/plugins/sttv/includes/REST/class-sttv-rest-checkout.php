@@ -342,4 +342,3 @@ class Checkout extends \WP_REST_Controller {
         return new WP_REST_Response( $data, $status );
     }
 }
-new STTV_Checkout;
