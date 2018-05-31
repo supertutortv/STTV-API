@@ -67,6 +67,7 @@ class API {
 
         require_once $path . 'class-sttv-rest-limiter.php';
         require_once $path . 'class-sttv-rest-checkout.php';
+        require_once $path . 'class-sttv-rest-multiuser.php';
 
     }
 
