@@ -1,7 +1,10 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
 
-class MultiUserREST extends WP_REST_Controller {
+namespace STTV\REST;
+
+defined( 'ABSPATH' ) || exit;
+
+class MultiUser extends \WP_REST_Controller {
 
     private $countrydd;
 
@@ -13,14 +16,7 @@ class MultiUserREST extends WP_REST_Controller {
      * @since 1.4.0
      */
     public function __construct() {
-        add_action( 'rest_api_init', [ $this, 'mukey_endpoint' ] );
-
-        $this->countrydd = get_option('sttv_country_options');
-        if (!$this->countrydd) {
-            $this->countrydd = wp_remote_get('https://gist.githubusercontent.com/enlightenedpie/888ba7972fa617579c374e951bd7eab9/raw/b987e55ddc4cde75f50298559e3a173a132657af/gistfile1.txt');
-            update_option('sttv_country_options',$this->countrydd);
-        }
-
+        $this->countrydd = get_option( 'sttv_country_options' );
         $this->price_table = get_option( 'sttv_mu_pricing_table' );
     }
 
@@ -29,7 +25,7 @@ class MultiUserREST extends WP_REST_Controller {
      *
      * @since 1.4.0
      */
-    public function mukey_endpoint() {
+    public function register_routes() {
         register_rest_route( STTV_REST_NAMESPACE , '/multi-user', [
             [
                 'methods' => WP_REST_Server::ALLMETHODS,
@@ -177,4 +173,3 @@ class MultiUserREST extends WP_REST_Controller {
         );
     }
 }
-new MultiUserREST;

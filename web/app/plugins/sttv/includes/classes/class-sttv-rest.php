@@ -72,7 +72,8 @@ class API {
 
     public function register_rest_routes() {
         $controllers = [
-            'STTV\REST\Checkout'
+            'STTV\REST\Checkout',
+            'STTV\REST\MultiUser'
         ];
 
         foreach ( $controllers as $controller ) {
