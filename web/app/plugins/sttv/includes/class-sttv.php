@@ -59,15 +59,12 @@ final class STTV {
         require_once 'classes/class-sttv-logger.php';
 
         // REST setup and init
-        require_once 'REST/init.php';
-        require_once 'REST/class-sttv-feedback.php';
-        require_once 'REST/class-sttv-product_reviews.php';
-        require_once 'REST/class-sttv-forms.php';
-        require_once 'REST/class-sttv-checkout.php';
-        require_once 'REST/class-sttv-murest.php';
+        require_once 'classes/class-sttv-rest.php';
 
         // courses
         require_once 'classes/courses/class-sttv-courses-trial.php';
+
+        $this->rest =   new \STTV\REST\API();
     }
 
     private function init_hooks() {

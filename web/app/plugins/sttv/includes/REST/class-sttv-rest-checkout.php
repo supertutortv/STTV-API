@@ -25,26 +25,17 @@ class STTV_Checkout extends WP_REST_Controller {
     const BOOK_PRICE = 2500;
 
     public function __construct() {
-        add_action( 'rest_api_init', [ $this, 'register_checkout_endpoints' ] );
 
-        $zips = get_transient('sttv_ca_zips');
-        if ($zips === false) {
-            $zips = wp_remote_get('https://gist.githubusercontent.com/enlightenedpie/99139b054dd9e4ad3f81689e2326d198/raw/69b654b47a01d2dc9e9ac34816c05ab5aa9ad355/ca_zips.json')['body'];
-            set_transient('sttv_ca_zips',$zips,MONTH_IN_SECONDS);
-        }
+        $zips = get_option( 'sttv_ca_zips' );
 
-        $countrydd = get_transient('sttv_country_options');
-        if ($countrydd === false) {
-            $countrydd = wp_remote_get('https://gist.githubusercontent.com/enlightenedpie/888ba7972fa617579c374e951bd7eab9/raw/426359f78a9074b9e42fb68c30a583e8997736fe/gistfile1.txt')['body'];
-            set_transient('sttv_country_options',$countrydd,MONTH_IN_SECONDS);
-        }
+        $countrydd = get_option( 'sttv_country_options' );
 
-        $this->zips = json_decode($zips);
+        $this->zips = json_decode( $zips );
         $this->countrydd = $countrydd;
         $this->timestamp = time();
     }
 
-    public function register_checkout_endpoints() {
+    public function register_routes() {
         register_rest_route( STTV_REST_NAMESPACE , '/checkout', [
             [
                 'methods' => 'GET',

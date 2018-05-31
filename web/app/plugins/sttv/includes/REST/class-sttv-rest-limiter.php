@@ -1,7 +1,8 @@
 <?php
+
 namespace STTV\REST;
 
-if ( ! defined( 'ABSPATH' ) ) {exit;}
+defined( 'ABSPATH' ) || exit;
 
 use WP_Error;
 use WP_REST_Request;
