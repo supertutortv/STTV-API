@@ -60,8 +60,6 @@ add_action( 'rest_api_init', function() use ( $sttvlimiter ) {
 
 require_once 'sttv_feedback.class.php';
 require_once 'sttv_product_reviews.class.php';
-require_once 'sttv_test_dates.class.php';
-require_once 'sttv_jobs.class.php';
 require_once 'sttv_forms.class.php';
 require_once 'sttv_checkout.class.php';
 require_once 'sttv_murest.class.php';

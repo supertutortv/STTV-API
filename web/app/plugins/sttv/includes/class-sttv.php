@@ -92,7 +92,7 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
         add_action( 'print_test', function() {
             //print ABSPATH;
-            print_r(\STTV\Courses\Trial::create());
+            //print_r(\STTV\Courses\Trial::create());
         });
 
         // cleanup
@@ -110,8 +110,6 @@ final class STTV {
 
     public function init() {
         global $pagenow;
-
-        \Stripe\Stripe::setApiKey( STRIPE_SK );
 
         // divert all requests to wp-login.php (it's unnecessary)
         if ( $pagenow === 'wp-login.php' && !is_user_logged_in() ) {
@@ -146,7 +144,7 @@ final class STTV {
     }
 
     public function finally() {
-        
+        \Stripe\Stripe::setApiKey( STRIPE_SK );
     }
     
 }
