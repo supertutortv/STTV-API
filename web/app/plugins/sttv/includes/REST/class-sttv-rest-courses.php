@@ -1,26 +1,29 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+
+namespace STTV\REST;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * SupertutorTV feedback mechanism.
  *
- * Custom post type and REST endpoints for reading and creating course feedback.
+ * All REST routes and endpoints for SupertutorTV's prep courses.
  *
- * @class 		STTV_Feedback
+ * @class 		\STTV\REST\Courses
  * @version		1.1.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
  */
 
-class STTV_Feedback extends WP_REST_Controller {
+class Courses extends \WP_REST_Controller {
 	
 	public function __construct() {
         add_action( 'init', array( $this, 'sttv_feedback_init'), 10, 0);
-		add_action( 'rest_api_init', array($this,'sttv_feedback_api') );
 		add_action( 'save_post_feedback', array($this,'update_feedback_with_uniqueid'), 0, 3);
-		add_action( 'wp_trash_post', array($this, 'delete_feedback_transient') );
+		add_action( 'wp_trash_post', [ $this, 'delete_feedback_transient' ] );
 		
-		register_shutdown_function( array( $this, '__destruct' ) );
+		register_shutdown_function( [ $this, '__destruct' ] );
 	}
 	
 	public function __destruct() {
@@ -149,4 +152,3 @@ class STTV_Feedback extends WP_REST_Controller {
 	}
 	
 }
-new STTV_Feedback;

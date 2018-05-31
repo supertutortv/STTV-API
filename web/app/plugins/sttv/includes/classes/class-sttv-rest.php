@@ -68,13 +68,16 @@ class API {
         require_once $path . 'class-sttv-rest-limiter.php';
         require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-multiuser.php';
+        require_once $path . 'class-sttv-rest-courses.php';
 
     }
 
     public function register_rest_routes() {
         $controllers = [
             'STTV\REST\Checkout',
-            'STTV\REST\MultiUser'
+            'STTV\REST\MultiUser',
+            'STTV\REST\Courses',
+            'STTV\REST\Forms',
         ];
 
         foreach ( $controllers as $controller ) {

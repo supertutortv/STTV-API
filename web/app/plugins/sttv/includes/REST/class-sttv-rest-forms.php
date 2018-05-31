@@ -1,5 +1,9 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+
+namespace STTV\REST;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * SupertutorTV Forms handler class.
  *
@@ -12,13 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @category	Class
  * @author		Supertutor Media, inc.
  */
-class STTV_Forms extends WP_REST_Controller {
+class Forms extends \WP_REST_Controller {
 
     public function __construct() {
-        add_action( 'rest_api_init', [ $this, 'register_forms_endpoints' ] );
+        
     }
 
-    public function register_forms_endpoints() {
+    public function register_routes() {
         register_rest_route( STTV_REST_NAMESPACE , '/contact', [
             [
                 'methods' => 'POST',
@@ -171,4 +175,3 @@ class STTV_Forms extends WP_REST_Controller {
     }
 
 }
-new STTV_Forms;

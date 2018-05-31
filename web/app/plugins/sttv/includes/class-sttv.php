@@ -55,6 +55,7 @@ final class STTV {
         // required classes
         require_once 'classes/class-sttv-install.php';
         require_once 'classes/class-sttv-scripts.php';
+        require_once 'classes/class-sttv-custom_post_types.php';
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
 
@@ -148,6 +149,12 @@ final class STTV {
 
     public function finally() {
         \Stripe\Stripe::setApiKey( STRIPE_SK );
+
+        $flushed = get_option( 'sttv_flush_rewrite_once' );
+        if (!$flushed){
+            flush_rewrite_rules();
+            update_option( 'sttv_flush_rewrite_once', true, true );
+        }
     }
     
 }
