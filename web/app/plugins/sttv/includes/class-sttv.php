@@ -80,7 +80,7 @@ final class STTV {
 				//Allow ajax calls
 				return;
 			}
-			if( ! current_user_can( 'manage_options' ) || ! defined( REST_REQUEST ) ) {
+			if( ! current_user_can( 'manage_options' ) || ! defined( 'REST_REQUEST' ) ) {
 			   //Redirect to main page if the user is not an Editor or higher
 			   //wp_redirect( get_site_url( ) );
 			   //wp_die();
