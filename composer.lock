@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d705f5784d875ebd741b936243e02d5",
+    "content-hash": "744148bb65fcfc3902031a4a4347459a",
     "packages": [
         {
             "name": "composer/installers",
@@ -355,16 +355,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.7.3",
+            "version": "v6.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "aa64cc0667a0dee3c2e4687e78d7c5f726c9d84d"
+                "reference": "67fee13fcb344aa865076589888f4afef542dfd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/aa64cc0667a0dee3c2e4687e78d7c5f726c9d84d",
-                "reference": "aa64cc0667a0dee3c2e4687e78d7c5f726c9d84d",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/67fee13fcb344aa865076589888f4afef542dfd7",
+                "reference": "67fee13fcb344aa865076589888f4afef542dfd7",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-05-28T16:13:47+00:00"
+            "time": "2018-05-30T00:13:55+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -457,6 +457,26 @@
                 "environment"
             ],
             "time": "2016-09-01T10:05:43+00:00"
+        },
+        {
+            "name": "wpackagist-plugin/members",
+            "version": "2.1.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/members/",
+                "reference": "tags/2.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/members.2.1.0.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/members/"
         }
     ],
     "packages-dev": [
