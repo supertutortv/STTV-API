@@ -67,6 +67,7 @@ final class STTV {
 
     private function init_hooks() {
         register_activation_hook( STTV_PLUGIN_FILE, [ __NAMESPACE__ . '\\Install', 'install' ] );
+        register_deactivation_hook( STTV_PLUGIN_FILE, [ __NAMESPACE__ . '\\Install', 'uninstall' ] );
         add_action( 'after_setup_theme', [ $this, 'theme_setup' ] );
         add_action( 'init', [ __NAMESPACE__ . '\\Webhook', 'init' ], 0 );
         add_action( 'init', [ $this, 'init' ], 1 );

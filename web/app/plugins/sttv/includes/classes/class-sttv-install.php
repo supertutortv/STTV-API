@@ -6,8 +6,25 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 
 class Install {
 
-    public static function install() {
+    private static $tables = [
+        //'mu_keys' => '',
+        'trial_reference' => '(
+            id int(10) NOT NULL AUTO_INCREMENT,
+            charge_id tinytext,
+            exp_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            wp_id int(10) UNSIGNED,
+            active boolean NOT NULL DEFAULT 1,
+            UNIQUE KEY id (id)
+        )',
+        //'nonce' => ''
+    ];
 
+    private static $roles = [
+        'teacher' => [ 'multi-user_teacher' => true, 'multi-user' => true ],
+        'student' => []
+    ];
+
+    public static function install() {
 		if ( 'yes' === get_transient( 'sttv_installing' ) ) {
 			return;
 		}
@@ -15,7 +32,12 @@ class Install {
 
         self::options();
         self::tables();
+        self::roles();
         
+        flush_rewrite_rules();
+    }
+
+    public static function uninstall() {
         flush_rewrite_rules();
     }
 
@@ -39,23 +61,16 @@ class Install {
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-        $tables = [
-            //'mu_keys' => '',
-            'trial_reference' => '(
-                id int(10) NOT NULL AUTO_INCREMENT,
-                charge_id tinytext,
-                exp_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                wp_id int(10) UNSIGNED,
-                active boolean NOT NULL DEFAULT 1,
-                UNIQUE KEY id (id)
-            )',
-            //'nonce' => ''
-        ];
-
-        foreach ( $tables as $name => $statement ) {
+        foreach ( self::$tables as $name => $statement ) {
             $collate = $wpdb->get_charset_collate();
             $sql = "CREATE TABLE IF NOT EXISTS ".$wpdb->prefix.$name." $statement $collate;";
             dbDelta( $sql );
+        }
+    }
+
+    private static function roles() {
+        foreach ( self::$roles as $role => $caps ) {
+            add_role( $role, ucwords( $roles ), $caps );
         }
     }
 

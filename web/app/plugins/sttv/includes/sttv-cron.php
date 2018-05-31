@@ -10,9 +10,8 @@ class Cron {
     {
         $methods = get_class_methods($this);
 
-        forEach($methods as $method)
-        {
-            if($method != '__construct')
+        foreach ($methods as $method) {
+            if ($method != '__construct')
             {
                 echo $this->{$method}();
             }
