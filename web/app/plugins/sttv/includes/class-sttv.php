@@ -82,8 +82,8 @@ final class STTV {
 			}
 			if( ! current_user_can( 'edit_others_posts' ) && ! defined( REST_REQUEST ) ) {
 			   //Redirect to main page if the user is not an Editor or higher
-			   wp_redirect( get_site_url( ) );
-			   wp_die();
+			   //wp_redirect( get_site_url( ) );
+			   //wp_die();
 			}
         } );
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
