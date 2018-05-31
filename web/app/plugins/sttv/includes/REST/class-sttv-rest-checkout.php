@@ -21,7 +21,7 @@ use WP_REST_Server;
  * @author		Supertutor Media, inc.
  */
 
-class STTV_Checkout extends \WP_REST_Controller {
+class Checkout extends \WP_REST_Controller {
 
     private $zips = [];
 

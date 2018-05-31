@@ -72,7 +72,7 @@ class API {
 
     public function register_rest_routes() {
         $controllers = [
-            'STTV_Checkout'
+            'STTV\REST\Checkout'
         ];
 
         foreach ( $controllers as $controller ) {
