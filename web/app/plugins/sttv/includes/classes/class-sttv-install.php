@@ -70,7 +70,7 @@ class Install {
 
     private static function roles() {
         foreach ( self::$roles as $role => $caps ) {
-            add_role( $role, ucwords( $roles ), $caps );
+            add_role( $role, ucwords( $role ), $caps );
         }
     }
 
