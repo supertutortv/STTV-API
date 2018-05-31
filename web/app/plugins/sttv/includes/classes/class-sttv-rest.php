@@ -70,7 +70,7 @@ class API {
 
     }
 
-    private function register_rest_routes() {
+    public function register_rest_routes() {
         $controllers = [
             'STTV_Checkout'
         ];
