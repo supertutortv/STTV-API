@@ -57,9 +57,3 @@ $sttvlimiter = sttvlimiter();
 add_action( 'rest_api_init', function() use ( $sttvlimiter ) {
 	$sttvlimiter->load();
 }, 5 );
-
-require_once 'sttv_feedback.class.php';
-require_once 'sttv_product_reviews.class.php';
-require_once 'sttv_forms.class.php';
-require_once 'sttv_checkout.class.php';
-require_once 'sttv_murest.class.php';

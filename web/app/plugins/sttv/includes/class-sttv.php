@@ -60,6 +60,11 @@ final class STTV {
 
         // REST setup and init
         require_once 'REST/init.php';
+        require_once 'REST/class-sttv-feedback.php';
+        require_once 'REST/class-sttv-product_reviews.php';
+        require_once 'REST/class-sttv-forms.php';
+        require_once 'REST/class-sttv-checkout.php';
+        require_once 'REST/class-sttv-murest.php';
 
         // courses
         require_once 'classes/courses/class-sttv-courses-trial.php';
