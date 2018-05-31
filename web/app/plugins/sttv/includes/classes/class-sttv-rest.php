@@ -17,7 +17,7 @@ class API {
 
         add_filter( 'rest_url_prefix', function() {
             return 'api';
-        } );
+        }, 11 );
 
         remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
         remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
