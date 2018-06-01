@@ -2,7 +2,7 @@
 
 namespace STTV;
 
-if ( ! defined( 'ABSPATH' ) ) {exit;}
+defined( 'ABSPATH' ) || exit;
 
 #####################################
 ##### STTV INITIALIZATION CLASS #####
