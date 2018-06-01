@@ -118,9 +118,11 @@ class Post_Types {
     <?php }
     
     public static function sttv_display_course_meta() { 
-        global $post; ?>
-        <pre><?php print_r( get_fields( $post->ID ) ); ?></pre>
+        $fields = get_fields();
+        foreach ($fields as $name => $val) { ?>
+        <pre><?php print_r( $name ); ?> => <?php print_r( $val ); ?></pre>
     <?php }
+    }
 
 }
 Post_Types::init();
