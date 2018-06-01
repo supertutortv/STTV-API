@@ -541,5 +541,27 @@
             "payment processing",
             "stripe"
         ]
+    },
+    {
+        "name": "wpackagist-plugin/advanced-custom-fields",
+        "version": "5.6.10",
+        "version_normalized": "5.6.10.0",
+        "source": {
+            "type": "svn",
+            "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
+            "reference": "tags/5.6.10"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.5.6.10.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "type": "wordpress-plugin",
+        "installation-source": "dist",
+        "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
     }
 ]
