@@ -4,14 +4,19 @@ namespace STTV\REST;
 
 defined( 'ABSPATH' ) || exit;
 
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
+
 /**
- * SupertutorTV Forms handler class.
+ * SupertutorTV Forms controller class.
  *
- * Properties, methods, and endpoints for processing the forms on the SupertutorTV website.
+ * Properties, methods, routes, and endpoints for processing the forms on the SupertutorTV website.
  * This includes, for now, the login/logout process, contact form, and email list subscription form.
  *
- * @class 		STTV_Forms
- * @version		1.4.0
+ * @class 		Forms
+ * @version		2.0.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
@@ -156,10 +161,10 @@ class Forms extends \WP_REST_Controller {
         $token = $token['g_recaptcha_response'];
 
         if ( empty($token) ) {
-            return new WP_Error( 'no_recaptcha', 'Shoo bot, shoo!', [ 'status' => 403 ] );
+            return new \WP_Error( 'no_recaptcha', 'Shoo bot, shoo!', [ 'status' => 403 ] );
         }
         $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true);
-        return $response['success'] ?: new WP_Error( 'recaptcha_failed', 'Shoo bot, shoo!', [ 'status' => 403 ] );
+        return $response['success'] ?: new \WP_Error( 'recaptcha_failed', 'Shoo bot, shoo!', [ 'status' => 403 ] );
     }
 
     private function forms_generic_response( $code = '', $msg = '', $status = 200, $extra = [] ) {
@@ -171,7 +176,7 @@ class Forms extends \WP_REST_Controller {
             ]
         ];
         $data = array_merge($data, (array) $extra);
-        return new WP_REST_Response( $data, $status );
+        return new \WP_REST_Response( $data, $status );
     }
 
 }

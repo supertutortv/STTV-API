@@ -69,6 +69,7 @@ class API {
         require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-multiuser.php';
         require_once $path . 'class-sttv-rest-courses.php';
+        require_once $path . 'class-sttv-rest-forms.php';
 
     }
 

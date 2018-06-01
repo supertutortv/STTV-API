@@ -50,12 +50,13 @@ final class STTV {
     private function includes() {
         // load API functions first
         require_once 'functions/sttv-functions.php';
+        require_once 'functions/sttv-rest-functions.php';
         require_once 'functions/sttv-webhook-functions.php';
 
         // required classes
         require_once 'classes/class-sttv-install.php';
         require_once 'classes/class-sttv-scripts.php';
-        require_once 'classes/class-sttv-custom_post_types.php';
+        require_once 'classes/class-sttv-post_types.php';
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
 

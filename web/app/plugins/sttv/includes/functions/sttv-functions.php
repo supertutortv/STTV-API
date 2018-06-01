@@ -30,10 +30,6 @@ function sttv_uid ( $prefix = '', $random = '', $entropy = false, $length = 0 ){
 	return substr( $string, 0, ($length ?: strlen($string)) );
 }
 
-function sttv_verify_rest_nonce( WP_REST_Request $request ) {
-	return wp_verify_nonce( $request->get_header('X-WP-Nonce'), STTV_REST_AUTH );
-}
-
 function sttv_404_redirect() {
 	global $wp_query;
 	$wp_query->set_404();

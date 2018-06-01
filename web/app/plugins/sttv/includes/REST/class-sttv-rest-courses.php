@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
  * All REST routes and endpoints for SupertutorTV's prep courses.
  *
  * @class 		\STTV\REST\Courses
- * @version		1.1.0
+ * @version		2.0.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
@@ -19,49 +19,9 @@ defined( 'ABSPATH' ) || exit;
 class Courses extends \WP_REST_Controller {
 	
 	public function __construct() {
-        add_action( 'init', array( $this, 'sttv_feedback_init'), 10, 0);
 		add_action( 'save_post_feedback', array($this,'update_feedback_with_uniqueid'), 0, 3);
 		add_action( 'wp_trash_post', [ $this, 'delete_feedback_transient' ] );
-		
-		register_shutdown_function( [ $this, '__destruct' ] );
 	}
-	
-	public function __destruct() {
-        return true;
-    }
-    
-    public function sttv_feedback_init() {
-
-        $labels = array(
-			'name'	=>	'Feedback'
-		);
-		
-		$args = array(
-			'labels'				=>	$labels,
-			'description'			=>	'SupertutorTV course feedback',
-			'menu_position'			=>	57,
-			'menu_icon'				=> 'dashicons-megaphone',
-            'public'				=>	false,
-            'public_queryable'      =>  false,
-            'show_ui'               =>  true,
-            'show_in_menu'          =>  true,
-			'hierarchical'			=>	false,
-			'exclude_from_search'	=>	true,
-			'show_in_nav_menus'		=>	false,
-			'show_in_rest'			=>	true,
-			'delete_with_user'		=>	false,
-			'can_export'			=>	true,
-			'supports'				=>	array('title', 'editor', 'comments', 'author'),
-			'register_meta_box_cb'	=> array( $this, 'sttv_feedback_meta' )
-		);
-		
-		register_post_type( 'feedback', $args );
-
-    }
-
-    public function sttv_feedback_meta() {
-
-    }
 
 	public function sttv_feedback_api() {
  		register_rest_route( STTV_REST_NAMESPACE, '/feedback', 
