@@ -69,8 +69,8 @@ class Post_Types {
              'Course Information', // $title
              [ __CLASS__ , 'sttv_display_course_meta' ], // $callback
              'courses', // $post_type
-             'bottom', // $context
-             'high' // $priority
+             'top', // $context
+             'low' // $priority
         );
     
         add_meta_box(
