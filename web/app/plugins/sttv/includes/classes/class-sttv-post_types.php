@@ -117,8 +117,9 @@ class Post_Types {
 		<input type="text" name="course_introvid_album" value="<?php echo get_post_meta( $post->ID, 'course_introvid_album', true ); ?>"/>
     <?php }
     
-    public static function sttv_display_course_meta() { ?>
-        <pre>Hello World!</pre>
+    public static function sttv_display_course_meta() { 
+        global $post; ?>
+        <pre><?php print_r( $post->ID ); ?></pre>
     <?php }
 
 }
