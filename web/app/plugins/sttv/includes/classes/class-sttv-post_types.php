@@ -11,7 +11,7 @@ class Post_Types {
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
     }
 
-    public function register_post_types() {
+    public static function register_post_types() {
 
         $supports = [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields', 'comments', 'author' ];
 		
@@ -63,11 +63,11 @@ class Post_Types {
 		);
     }
 
-    public function add_meta_boxes() {
+    public static function add_meta_boxes() {
         add_meta_box(
              'course_info', // $id
              'Course Information', // $title
-             [ $this, 'sttv_display_course_meta' ], // $callback
+             [ __CLASS__ , 'sttv_display_course_meta' ], // $callback
              'courses', // $post_type
              'top', // $context
              'high' // $priority
@@ -76,7 +76,7 @@ class Post_Types {
         add_meta_box(
              'course_product_page', // $id
              'Course Product Page', // $title
-             [ $this, 'sttv_display_course_product_page' ], // $callback
+             [ __CLASS__ , 'sttv_display_course_product_page' ], // $callback
              'courses', // $post_type
              'side', // $context
              'low' // $priority
@@ -85,14 +85,14 @@ class Post_Types {
         add_meta_box(
             'course_introvid_album', // $id
             'Course Introvideo Album', // $title
-            [ $this, 'sttv_display_course_introvid_album' ], // $callback
+            [ __CLASS__ , 'sttv_display_course_introvid_album' ], // $callback
             'courses', // $post_type
             'side', // $context
             'low' // $priority
        );
     }
 
-    public function sttv_display_course_product_page() { ?>
+    public static function sttv_display_course_product_page() { ?>
 		<select name="product_page_dropdown">
             <option value=""><?php echo esc_attr( __( 'Select page' ) ); ?></option> 
 		<?php global $post;
@@ -111,14 +111,14 @@ class Post_Types {
 		wp_nonce_field( 'save_course_product_page_nonce', 'course_product_page_nonce' );										   
 	}
 	
-	public function sttv_display_course_introvid_album() { 
+	public static function sttv_display_course_introvid_album() { 
 		global $post;
 		?>
 		<input type="text" name="course_introvid_album" value="<?php echo get_post_meta( $post->ID, 'course_introvid_album', true ); ?>"/>
     <?php }
     
-    public function sttv_display_course_meta() {
-        
+    public static function sttv_display_course_meta() {
+
     }
 
 }
