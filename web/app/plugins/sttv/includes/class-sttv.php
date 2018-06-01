@@ -153,7 +153,7 @@ final class STTV {
 
         $flushed = get_option( 'sttv_flush_rewrite_once' );
         if (!$flushed){
-            flush_rewrite_rules();
+            //flush_rewrite_rules();
             update_option( 'sttv_flush_rewrite_once', true, true );
         }
     }
