@@ -73,7 +73,7 @@ class Post_Types {
              'low' // $priority
         );
     
-        add_meta_box(
+        /* add_meta_box(
              'course_product_page', // $id
              'Course Product Page', // $title
              [ __CLASS__ , 'sttv_display_course_product_page' ], // $callback
@@ -89,7 +89,7 @@ class Post_Types {
             'courses', // $post_type
             'side', // $context
             'low' // $priority
-       );
+       ); */
     }
 
     public static function sttv_display_course_product_page() { ?>

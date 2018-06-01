@@ -8,7 +8,7 @@ class Admin {
     public function __construct() {
 		add_action( 'init', [ $this, 'sttv_course_endpoints' ], 10, 0 );
         add_filter( 'query_vars', [ $this, 'sttv_course_query_vars' ], 10, 1 );
-        add_action( 'save_post_courses' , [ $this, 'save_course_meta' ], 10, 2 );
+        add_action( 'save_post_courses' , [ $this, 'sttv_build_course' ], 10, 2 );
     }
 
 
@@ -35,7 +35,7 @@ class Admin {
 		return $vars;
     }
     
-    public function save_course_meta($post_id, $post) {
+    public function sttv_build_course( $post_id, $post ) {
 		// Stop WP from clearing custom fields on autosave
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
