@@ -91,7 +91,7 @@ class Post_Types {
         /* $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
         return $args;
         */
-        return json_encode($file);
+        return $file['id'];
     }
 
 }
