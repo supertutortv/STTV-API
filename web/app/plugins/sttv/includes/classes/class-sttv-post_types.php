@@ -88,14 +88,19 @@ class Post_Types {
     }
 
     public static function course_resource_upload( $args ) {
-        return [
-            'basedir' => '',
-            'subdir' => '',
-            'path' => STTV_RESOURCE_DIR . '/act/',
-            'url' => '',
-            'baseurl' => '',
-            'error' => false
-        ];
+        $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+        if ( $id ) {
+            $meta = get_fields( $id );
+            $args =  [
+                'basedir' => '',
+                'subdir' => '',
+                'path' => STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ),
+                'url' => '',
+                'baseurl' => '',
+                'error' => false
+            ];
+        }
+        return $args;
     }
 
 }
