@@ -24,6 +24,12 @@ class Install {
         'student' => []
     ];
 
+    private static $dirs = [
+        STTV_CACHE_DIR,
+        STTV_RESOURCE_DIR,
+        STTV_LOGS_DIR
+    ];
+
     public static function install() {
 		if ( 'yes' === get_transient( 'sttv_installing' ) ) {
 			return;
@@ -33,6 +39,7 @@ class Install {
         self::options();
         self::tables();
         self::roles();
+        self::dirs();
         
         flush_rewrite_rules();
     }
@@ -71,6 +78,14 @@ class Install {
     private static function roles() {
         foreach ( self::$roles as $role => $caps ) {
             add_role( $role, ucwords( $role ), $caps );
+        }
+    }
+
+    private static function dirs() {
+        foreach ( self::$dirs as $dir ) {
+            if ( ! is_dir( $dir ) ) {
+                mkdir( $dir, 0777, true );
+            }
         }
     }
 

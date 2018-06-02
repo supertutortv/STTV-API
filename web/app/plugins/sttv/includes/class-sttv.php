@@ -32,10 +32,10 @@ final class STTV {
         $this->define( 'STTV_VERSION', '2.0.0' );
         $this->define( 'STTV_PREFIX', 'sttv' );
         $this->define( 'STTV_API_DIR', dirname( dirname( ABSPATH ) ) );
-        $this->define( 'STTV_CACHE_DIR', STTV_API_DIR.'/vim/vcache/' );
-        $this->define( 'STTV_RESOURCE_DIR', STTV_API_DIR.'/resources/' );
-        $this->define( 'STTV_LOGS_DIR', STTV_API_DIR.'/logs/' );
-        $this->define( 'STTV_TEMPLATE_DIR', get_template_directory().'/templates/' );
+        $this->define( 'STTV_CACHE_DIR', STTV_API_DIR . '/cache/' );
+        $this->define( 'STTV_RESOURCE_DIR', STTV_API_DIR . '/resources/' );
+        $this->define( 'STTV_LOGS_DIR', STTV_API_DIR . '/logs/' );
+        $this->define( 'STTV_TEMPLATE_DIR', dirname( __DIR__ ) . '/templates/' );
 
         //multi-user
         $this->define( 'MU_FILE_PATH', dirname(ABSPATH).'/sttv_mu_keys.json' );
