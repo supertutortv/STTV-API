@@ -92,7 +92,7 @@ class Post_Types {
         if ( $id && get_post_type( $id ) === 'courses' ) {
             $meta = get_fields( $id );
             $args =  [
-                'path' => substr(STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ), 1),
+                'path' => STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ),
                 'url' => '',
                 'subdir' => '',
                 'basedir' => '',
