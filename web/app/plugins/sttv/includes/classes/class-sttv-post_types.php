@@ -89,7 +89,7 @@ class Post_Types {
 
     public static function course_resource_upload( $args ) {
         $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
-        if ( $id ) {
+        if ( $id && get_post_type( $id ) === 'courses' ) {
             $meta = get_fields( $id );
             $args =  [
                 'basedir' => '',
