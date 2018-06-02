@@ -7,7 +7,7 @@ class Cron {
     }
 
     public function __call( $method, $args ) {
-        echo "Method $method does not exist.";
+        echo "Method '$method' does not exist.";
     }
 
     public function stuff() {

@@ -28,7 +28,7 @@ class Install {
         STTV_CACHE_DIR,
         STTV_RESOURCE_DIR,
         STTV_LOGS_DIR,
-        STTV_CRON_DIR
+        STTV_CRON_DIR . 'logs'
     ];
 
     public static function install() {
