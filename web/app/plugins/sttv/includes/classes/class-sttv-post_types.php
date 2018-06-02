@@ -9,7 +9,7 @@ class Post_Types {
     public static function init() {
         add_action( 'init', [ __CLASS__, 'register_post_types' ], 5 );
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
-        add_filter( 'upload_dir', 'course_resource_upload' );
+        add_filter( 'upload_dir', [ __CLASS__, 'course_resource_upload' ] );
     }
 
     public static function register_post_types() {
