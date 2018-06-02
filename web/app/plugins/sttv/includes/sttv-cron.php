@@ -1,20 +1,19 @@
 <?php
 
-namespace STTV;
-
-if ( ! defined( 'ABSPATH' ) ) {exit;}
-
 class Cron {
 
-    public function __construct()
-    {
-        $methods = get_class_methods($this);
-
-        foreach ($methods as $method) {
-            if ($method != '__construct')
-            {
-                echo $this->{$method}();
-            }
-        }
+    public function __construct( $method ) {
+        $this->$method();
     }
+
+    public function __call( $method, $args ) {
+        echo "Method $method does not exist.";
+    }
+
+    public function stuff() {
+        echo 'Hello World!';
+    }
+
 }
+
+$cron = new Cron( $argv[1] );
