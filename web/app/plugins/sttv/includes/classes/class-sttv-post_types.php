@@ -94,7 +94,7 @@ class Post_Types {
             $args =  [
                 'basedir' => '',
                 'subdir' => '',
-                'path' => STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ),
+                'path' => substr(STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ), 1),
                 'url' => '',
                 'baseurl' => '',
                 'error' => false
