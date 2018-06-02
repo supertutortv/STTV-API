@@ -120,7 +120,7 @@ class Post_Types {
     public static function sttv_display_course_meta() {
         global $post;
         $fields = get_fields( $post->ID ); ?>
-        <pre><?php var_dump( $fields ); ?></pre>
+        <pre><?php print_r( $fields ); ?></pre>
     <?php }
 
 }
