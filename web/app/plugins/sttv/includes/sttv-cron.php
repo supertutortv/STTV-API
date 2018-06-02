@@ -6,7 +6,7 @@ use Vimeo\Vimeo;
 class Cron {
 
     private $tests = [
-        'act'
+        'ACT'
     ];
 
     private $vtok = '57e52c4bb16997b539ebed506a099c36';
@@ -24,15 +24,23 @@ class Cron {
     }
 
     public function vcache() {
+        $objcache = [];
+
         try {
+            
             $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
+            $path = dirname( __DIR__ ) . '/cache/';
+
             foreach ( $this->tests as $test ) {
                 $alb_data = $vimeo->request( "/me/albums?query=$test&fields=uri,name&per_page=100" );
                 $albs = (array) $alb_data['body']['data'];
                 print_r( $albs );
             }
+
         } catch ( Exception $e ) {
+
             print_r( $e );
+
         }
     }
 
