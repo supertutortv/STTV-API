@@ -27,7 +27,8 @@ class Install {
     private static $dirs = [
         STTV_CACHE_DIR,
         STTV_RESOURCE_DIR,
-        STTV_LOGS_DIR
+        STTV_LOGS_DIR,
+        STTV_CRON_DIR
     ];
 
     public static function install() {
@@ -40,6 +41,7 @@ class Install {
         self::tables();
         self::roles();
         self::dirs();
+        self::files();
         
         flush_rewrite_rules();
     }
@@ -85,6 +87,18 @@ class Install {
         foreach ( self::$dirs as $dir ) {
             if ( ! is_dir( $dir ) ) {
                 mkdir( $dir, 0777, true );
+            }
+        }
+    }
+
+    private static function files() {
+        $files = [
+            'sttv-cron.php' => dirname( __DIR__ ) . '/'
+        ];
+
+        foreach ( $files as $file => $path ) {
+            if ( is_file( $file ) ) {
+                copy( $path . $file, STTV_CRON_DIR . $file );
             }
         }
     }
