@@ -10,7 +10,7 @@ class Cron {
         echo "Method '$method' does not exist.";
     }
 
-    public function stuff() {
+    public function vcache() {
         echo 'Hello World!';
     }
 

@@ -31,7 +31,7 @@ final class STTV {
         // MAIN CONSTANTS
         $this->define( 'STTV_VERSION', '2.0.0' );
         $this->define( 'STTV_PREFIX', 'sttv' );
-        $this->define( 'STTV_API_DIR', dirname( dirname( ABSPATH ) ) );
+        $this->define( 'STTV_API_DIR', dirname( dirname( dirname( ABSPATH ) ) ) );
         $this->define( 'STTV_CACHE_DIR', STTV_API_DIR . '/cache/' );
         $this->define( 'STTV_RESOURCE_DIR', STTV_API_DIR . '/resources/' );
         $this->define( 'STTV_LOGS_DIR', STTV_API_DIR . '/logs/' );
