@@ -10,6 +10,7 @@ class Post_Types {
         add_action( 'init', [ __CLASS__, 'register_post_types' ], 5 );
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
         add_filter( 'upload_dir', [ __CLASS__, 'course_resource_upload' ] );
+        add_filter( 'wp_handle_upload_prefilter', [ __CLASS__, 'course_pre_upload' ] );
     }
 
     public static function register_post_types() {
@@ -81,8 +82,13 @@ class Post_Types {
         <pre><?php print_r( $fields ); ?></pre>
     <?php }
 
+    public static function course_pre_upload( $file ) {
+        add_filter( 'upload_dir', [ __CLASS__, 'course_resource_upload' ] );
+        return $file;
+    }
+
     public static function course_resource_upload( $args ) {
-        return $args;
+        return STTV_RESOURCE_DIR . 'act/';
     }
 
 }
