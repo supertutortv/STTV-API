@@ -91,6 +91,7 @@ class Post_Types {
         return [
             'basedir' => STTV_RESOURCE_DIR,
             'subdir' => '/act/',
+            'dir' => '',
             'url' => '',
             'baseurl' => '',
             'error' => false
