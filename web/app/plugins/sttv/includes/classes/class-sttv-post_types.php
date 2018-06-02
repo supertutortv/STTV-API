@@ -82,7 +82,7 @@ class Post_Types {
     <?php }
 
     public static function course_resource_upload( $args ) {
-        return $_REQUEST['post_id'];
+        return $args;
     }
 
 }
