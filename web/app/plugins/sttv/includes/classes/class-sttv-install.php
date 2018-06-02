@@ -97,7 +97,7 @@ class Install {
         ];
 
         foreach ( $files as $file => $path ) {
-            if ( is_file( $file ) ) {
+            if ( is_file( $path . $file ) ) {
                 copy( $path . $file, STTV_CRON_DIR . $file );
             }
         }
