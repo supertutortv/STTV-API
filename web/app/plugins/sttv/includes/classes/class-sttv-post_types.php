@@ -93,10 +93,10 @@ class Post_Types {
             $meta = get_fields( $id );
             $args =  [
                 'path' => STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ),
-                'url' => '',
-                'subdir' => '',
-                'basedir' => '',
-                'baseurl' => '',
+                'url' => STTV_RESOURCE_DIR,
+                'subdir' => STTV_RESOURCE_DIR,
+                'basedir' => STTV_RESOURCE_DIR,
+                'baseurl' => STTV_RESOURCE_DIR,
                 'error' => false
             ];
         }
