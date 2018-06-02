@@ -88,7 +88,13 @@ class Post_Types {
     }
 
     public static function course_resource_upload( $args ) {
-        return STTV_RESOURCE_DIR . 'act/';
+        return [
+            'basedir' => STTV_RESOURCE_DIR,
+            'subdir' => 'act/',
+            'url' => '',
+            'baseurl' => '',
+            'error' => false
+        ];
     }
 
 }
