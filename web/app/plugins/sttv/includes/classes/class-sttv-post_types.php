@@ -9,8 +9,7 @@ class Post_Types {
     public static function init() {
         add_action( 'init', [ __CLASS__, 'register_post_types' ], 5 );
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
-        add_filter( 'upload_dir', [ __CLASS__, 'course_resource_upload' ] );
-        add_filter( 'wp_handle_upload_prefilter', [ __CLASS__, 'course_pre_upload' ] );
+        add_filter( 'attachment_link', [ __CLASS__, 'course_resource_upload' ] );
     }
 
     public static function register_post_types() {
@@ -87,20 +86,12 @@ class Post_Types {
         return $file;
     }
 
-    public static function course_resource_upload( $args ) {
+    public static function course_resource_upload( $link, $id ) {
+        $file = get_post( $id );
         /* $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
-        if ( $id && get_post_type( $id ) === 'courses' ) {
-            $meta = get_fields( $id );
-            $args =  [
-                'path' => STTV_RESOURCE_DIR . strtolower( $meta['course_meta']['course_abbrev'] ),
-                'url' => STTV_RESOURCE_DIR,
-                'subdir' => STTV_RESOURCE_DIR,
-                'basedir' => STTV_RESOURCE_DIR,
-                'baseurl' => STTV_RESOURCE_DIR,
-                'error' => false
-            ];
-        } */
         return $args;
+        */
+        return json_encode($file);
     }
 
 }
