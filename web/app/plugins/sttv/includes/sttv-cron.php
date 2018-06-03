@@ -24,6 +24,19 @@ class Cron {
     }
 
     public function vcache() {
+        $sec_array = [
+            'eng' => 'English',
+            'mth' => 'Math',
+            'rea' => 'Reading',
+            'sci' => 'Science',
+            'ess' => 'Essay'
+        ];
+        $prac_array = [
+            'bq' => 'Bonus Questions',
+            'ft' => 'Test 0',
+            'nb' => 'New Book',
+            'rb' => 'Red Book'
+        ];
         $objcache = [];
 
         try {
@@ -32,11 +45,32 @@ class Cron {
             $path = dirname( __DIR__ ) . '/cache/';
 
             foreach ( $this->tests as $test ) {
+                $objcache[strtolower($test)] = null;
                 $alb_data = $vimeo->request( "/me/albums?query=$test&fields=uri,name&per_page=100" );
                 $albs = (array) $alb_data['body']['data'];
-                print_r( $albs );
+                
+                foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
+                    $sec = preg_match( '/\*|[\s]|\*/', $alb['name'] );
+                    if ( $sec ) {
+                        $objcache[strtolower($test)][strtolower($sec)] = [];
+                    }
+                    
+                    /* $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
+                    $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
+                    $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
+
+                    $video_data_2 = $vids = [];
+
+                    if ( intval( $video_data['body']['total'] ) > 75 ) {
+                        $video_data_2 = $vimeo->request( $video_data['body']['paging']['next'].'&'.$qstring );
+                        $vids = array_merge( $video_data['body']['data'], $video_data_2['body']['data'] );
+                    } else {
+                        $vids = $video_data['body']['data'];
+                    } */
+                }
             }
 
+            print_r($objcache);
         } catch ( Exception $e ) {
 
             print_r( $e );
