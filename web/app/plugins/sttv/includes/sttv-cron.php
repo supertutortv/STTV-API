@@ -24,18 +24,6 @@ class Cron {
     }
 
     public function vcache() {
-        $ref_array = [
-            'eng' => 'English',
-            'mth' => 'Math',
-            'rea' => 'Reading',
-            'sci' => 'Science',
-            'ess' => 'Essay',
-            'bq' => 'Bonus Questions',
-            'ft' => 'Test 0',
-            'nb' => 'New Book',
-            'rb' => 'Red Book'
-        ];
-        $objcache = [];
 
         try {
             
@@ -43,27 +31,15 @@ class Cron {
             $path = dirname( __DIR__ ) . '/cache/';
 
             foreach ( $this->tests as $test ) {
-                $objcache[strtolower($test)] = null;
+                $test_abbrev = strtolower( $test );
+                $path .= $test_abbrev . '/';
                 $alb_data = $vimeo->request( "/me/albums?query=$test&fields=uri,name&per_page=100" );
                 $albs = (array) $alb_data['body']['data'];
                 
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $route = explode( '|', $alb['name'] );
-
-                    $objcache[strtolower($route[0])][] = [
-                        $route[1] => [
-                            $route[2] => [
-                                $route[3] => [
-                                    $route[4] => [
-                                        $route[5] => null
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ];
-
+                    $name = str_replace( '|', '', $alb['name'] );
                     
-                    /* $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
+                    $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
                     $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
                     $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
 
@@ -74,16 +50,79 @@ class Cron {
                         $vids = array_merge( $video_data['body']['data'], $video_data_2['body']['data'] );
                     } else {
                         $vids = $video_data['body']['data'];
-                    } */
+                    }
+
+                    $vidobj = $albobj = [];
+                    $embcolor = '';
+                    $i = 0;
+                    
+                    foreach ($vids as $vid) { // LOOP THROUGH VIDEOS PER ALBUM
+                        $vidid = str_replace('https://vimeo.com/','',$vid['link']);
+                        $vidname = $vid['name'];
+                        $slug = $this->sanitize_this_title($vidname);
+                        $tags = [];
+                        $stags = $vid['tags'];
+                        foreach ($stags as $tag) {
+                            $tags[] = $tag['tag'];
+                        }
+                        
+                        $vidobj[$slug] = [
+                            'ID' => $vidid,
+                            'name' => $vidname,
+                            'slug' => $slug,
+                            'time' => $vid['duration'],
+                            'tags' => $tags,
+                            'text' => $vid['description'],
+                            'thumb' => $vid['pictures']['sizes'][2]['link'],
+                            'views' => $vid['stats']['plays']
+                        ];
+                        if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
+                        
+                    } // END VIDEO LOOP
+                    $albobj = [
+                        'timestamp' => date("F d, Y H:i:s"),
+                        'albumName' => $alb['name'],
+                        'albumID' => $albid,
+                        'embedColor' => $embcolor,
+                        'videos' => $vidobj,
+                    ];
+                    
+                    ##################################
+                    ##### WRITE RESULTS TO FILES #####
+                    ##################################
+                        
+                        $contents = json_encode( $albobj, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT );
+                        
+                        $filew = fopen( $path . $alb['name'] .'.cache', w );
+                        fwrite( $filew, $contents );
+                        fclose( $filew );
+
+                    print_r( "Album ".$alb['name']." updated \r\n");
                 }
             }
 
-            print_r($objcache);
+            print_r( 'The video data cache has been updated' );
         } catch ( Exception $e ) {
 
             print_r( $e );
 
         }
+    }
+
+    private function sanitize_this_title( $title='' ) {
+        $title = strip_tags( $title );
+        $title = preg_replace('|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $title);
+        $title = str_replace('%', '', $title);
+        $title = preg_replace('|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title);
+        $title = strtolower($title);
+        $title = preg_replace('/&.+?;/', '', $title);
+        $title = str_replace('.', '-', $title);
+        $title = preg_replace('/[^%a-z0-9 _-]/', '', $title);
+        $title = preg_replace('/\s+/', '-', $title);
+        $title = preg_replace('|-+|', '-', $title);
+        $title = trim($title, '-');
+     
+        return $title;
     }
 
 }
