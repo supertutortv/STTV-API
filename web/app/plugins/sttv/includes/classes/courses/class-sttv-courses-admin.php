@@ -88,10 +88,11 @@ class Admin {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
-						$resources[$root_path . $file['file']['filename']] = [
+						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
 							'title' => $file['file']['title'],
+							'file' => $root_path . $file['file']['filename'],
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
-							'updated' => $file['file']['modified']
+							'updated' => strtotime( $file['file']['modified'] )
 						];
 					}
 				}
@@ -116,7 +117,7 @@ class Admin {
 				'abbrev' => $sec['section_info']['section_code'],
 				'description' => $sec['section_info']['description'],
 				'intro' => '',
-				'color' => $color,
+				'color' => '#'.$color,
 				'resources' => $resources,
 				'videos' => $videos,
 				'subsec' => $subsec
