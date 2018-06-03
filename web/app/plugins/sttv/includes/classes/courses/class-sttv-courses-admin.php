@@ -99,13 +99,13 @@ class Admin {
 			}
 
 			foreach ( $sec['subsections'] as $sub ) {
-				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_info']['subsection_name'].'.cache' ), true );
+				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_name'].'.cache' ), true );
 
 				if ( empty( $color ) ) {
 					$color = $calb['embedColor'];
 				}
 
-				$subsec[sanitize_title_with_dashes( $sub['subsection_info']['subsection_name'] )] = [
+				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
 					'id' => $calb['albumID'],
 					'title' => str_replace( '|', ' ', $calb['albumName'] ),
 					'videos' => $calb['videos']
