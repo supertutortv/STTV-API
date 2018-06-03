@@ -90,6 +90,10 @@ class Cron {
                     ##################################
                     ##### WRITE RESULTS TO FILES #####
                     ##################################
+
+                        if ( ! is_dir( $path ) ) {
+                            mkdir( $path, 0777, true );
+                        }
                         
                         $contents = json_encode( $albobj, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT );
                         
