@@ -50,9 +50,9 @@ class Cron {
                 $albs = (array) $alb_data['body']['data'];
                 
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $sec = preg_match( '/\*|[\s]|\*/', $alb['name'] );
+                    $sec = preg_match( '/\*|[\s]|\*/', $alb['name'], $match );
                     if ( $sec ) {
-                        $objcache[strtolower($test)][strtolower($sec)] = [];
+                        $objcache[strtolower($test)][strtolower($match[0])] = [];
                     }
                     
                     /* $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
