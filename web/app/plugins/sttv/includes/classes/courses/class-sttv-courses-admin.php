@@ -76,53 +76,54 @@ class Admin {
 		];
 		
 		foreach( $courses['sections'] as $ind => $sec) {
-
-			$sec['title'] = strtolower($sec['title']);
-	
-			$cap = "course_{$test}_{$sec['title']}";
-			$caps[]=$cap;
-	
-			$albs = [];
-	
+			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
+			$resources = $videos = $subsec = [];
 			$color = '';
-	
-			foreach ($sec['videos'] as $sub) {
-				$albs[sanitize_title_with_dashes($sub['title'])] = [];
-				
-				
-					$calb = $this->get_cached_album($sub['id']);
-					if (empty($color)) {
-						$color = $calb['embedColor'];
+
+			if ( $sec['uploads'] ) {
+				$root_path = STTV_RESOURCE_DIR . $test .'/'. $aslug .'/';
+
+				foreach ( $sec['uploads'] as $file ) {
+					$fcopy = copy( $file['file']['url'], $root_path . $file['file']['filename'] );
+					if ( $fcopy ){
+						$resources[$root_path . $file['file']['filename']] = [
+							'title' => $file['file']['title'],
+							'hash' => md5_file( $root_path . $file['file']['filename'] ),
+							'updated' => $file['file']['modified']
+						];
 					}
-					$albs[sanitize_title_with_dashes($sub['title'])] = [
-						'id' => $sub['id'],
-						'title'=>$sub['title'],
-						'videos' => $calb[$sub['id']]
-					];
-			}
-			
-			$root_path = STTV_RESOURCE_DIR.strtolower($data['test']).'/'.$sec['title'].'/';
-			$resources = [];
-			$files = scandir($root_path);
-			foreach ($files as $file) {
-				if (is_file($root_path.$file)){
-					$resources[$file] = md5_file($root_path.$file);
 				}
 			}
-	
-			$data['sections'][$sec['title']] = [
-				'name'=>ucfirst($sec['title']),
-				'description'=>$sec['desc'],
-				'intro'=>$sec['intro_vid'],
-				'cap'=>$cap,
-				'color'=>'#'.$color,
-				'resources'=>$resources,
-				'videos'=>new stdClass(),
-				'subsec'=>$albs
+			
+			foreach ( $sec['subsections'] as $sub ) {
+				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_info']['subsection_name'].'.cache' ), true );
+
+				if ( empty( $color ) ) {
+					$color = $calb['embedColor'];
+				}
+
+				$subsec[sanitize_title_with_dashes( $sub['subsection_info']['subsection_name'] )] = [
+					'id' => $calb['albumID'],
+					'title' => str_replace( '|', ' ', $calb['albumName'] ),
+					'videos' => $calb['videos']
+				];
+			}
+
+			$data['sections'][$aslug] = [
+				'name' => $sec['section_info']['section_name'],
+				'abbrev' => $sec['section_info']['section_code'],
+				'description' => $sec['section_info']['description'],
+				'intro' => '',
+				'color' => '',
+				'resources' => $resources,
+				'videos' => $videos,
+				'subsec' => $subsec
 			];
+
+			$data['capabilities']['full'] = "course_{$test}_{$aslug}";
 		}
 			
-			$rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
+			/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
 			$resc = [];
 			$f = scandir($rp);
 			foreach ($f as $file) {
@@ -165,17 +166,15 @@ class Admin {
 
 				$caps[]=$data['practice'][$title]['cap'];
 		
-			endforeach;
+			endforeach; */
 		
-			$data['size'] = (mb_strlen(json_encode($data), '8bit')/1000).'KB';
-		
-			$data['allcaps'] = $caps;
+			$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 			
-			update_post_meta($post_id, 'sttv_course_data', $data);
+			update_post_meta( $post_id, 'sttv_course_data', $data );
 		
-			$admin = get_role('administrator');
-			foreach ($caps as $c){
-				$admin->add_cap($c);
-			}
+			/* $admin = get_role( 'administrator' );
+			foreach ( $data as $c ) {
+				$admin->add_cap( $c );
+			} */
 	}
 }

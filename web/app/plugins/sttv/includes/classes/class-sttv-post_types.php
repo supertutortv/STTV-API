@@ -76,8 +76,9 @@ class Post_Types {
     
     public static function sttv_display_course_meta() {
         global $post;
-        $fields = get_fields( $post->ID ); ?>
-        <pre><?php print_r( $fields ); ?></pre>
+        $fields = get_fields( $post->ID ); 
+        $meta = get_post_meta( $post->ID, 'sttv_course_data' ); ?>
+        <pre><?php print_r( $meta ); ?></pre>
     <?php }
 
 }
