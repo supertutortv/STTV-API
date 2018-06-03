@@ -8,7 +8,7 @@ class Admin {
     public function __construct() {
 		add_action( 'init', [ $this, 'sttv_course_endpoints' ], 10, 0 );
         add_filter( 'query_vars', [ $this, 'sttv_course_query_vars' ], 10, 1 );
-        add_action( 'save_post_courses' , [ $this, 'sttv_build_course' ], 10, 2 );
+        //add_action( 'save_post_courses' , [ $this, 'sttv_build_course' ], 10, 2 );
     }
 
 
@@ -44,92 +44,83 @@ class Admin {
 		if (defined('DOING_AJAX') && DOING_AJAX)
 			return;
 
-		//save course intro album
-		if ($_POST['course_introvid_album']) :
-			update_post_meta($post_id, 'course_introvid_album', sanitize_text_field($_POST['course_introvid_album']));
-		endif;
-			
-		//save course product page
-		if ($_POST['product_page_dropdown']) :
-			update_post_meta($post_id, 'course_product_page', sanitize_text_field($_POST['product_page_dropdown']));
-		endif;
+		$course = get_fields( $post_id );
+		$test = strtolower( $course['course_meta']['course_abbrev'] );
 		
-		if ($_POST['courses']) :
-			update_post_meta($post_id, 'course_raw_post_data', $_POST['courses']);
-    
-			$test = strtolower($_POST['courses']['test_abbrev']?:'act');
-			$caps = [ //default caps for all courses
-				'course_post_feedback',
-				'course_post_reviews'
-			];
+		$data = [
+			'id' => $post_id,
+			'name' => $post->post_title,
+			'slug' => $post->post_name,
+			'link' => get_post_permalink( $post_id ),
+			'created' => strtotime( $post->post_date ),
+			'modified' => strtotime( $post->post_modified ),
+			'intro' => 0,
+			'test' => strtoupper( $test ),
+			'pricing' => [
+				'price' => $course['course_meta']['course_price']['price'],
+				'taxable' => $course['course_meta']['course_price']['taxable'],
+				'taxable_amt' => $course['course_meta']['course_price']['taxable_amt']
+			],
+			'capabilities' => [
+				'trial' => [
+					"course_{$test}_trial"
+				],
+				'full' => [
+					"course_{$test}_full",
+					'course_post_feedback',
+					'course_post_reviews'
+				]
+				],
+			'sections'=>[],
+			'practice'=>[]
+		];
 		
-			$data = [
-				'id'=>$post_id,
-				'name'=>$post->post_title,
-				'slug'=>$post->post_name,
-				'link'=>get_post_permalink($post_id),
-				'sales_page'=> get_permalink(get_post_meta($post_id, 'course_product_page',true)),
-				'cap'=>"course_{$test}_full",
-				'created'=>strtotime($post->post_date),
-				'modified'=>strtotime($post->post_modified),
-				'intro'=>$_POST['courses']['intro_vid']?:0,
-				'test'=>strtoupper($test),
-				'dashboard'=>$_POST['courses']['has_dash']?:'null',
-				//'description'=>$post->post_content,
-				'tl_content'=>$_POST['courses']['tl_content'],
-				'sections'=>[],
-				'practice'=>[]
-			];
-			$caps[]=$data['cap'];
-			update_post_meta($post_id,'course_primary_cap',$data['cap']);
-		
-			foreach($_POST['courses']['sections'] as $sec) :
-				$i = 0;
-				$sec['title'] = strtolower($sec['title']);
-		
-				$cap = "course_{$test}_{$sec['title']}";
-				$caps[]=$cap;
-		
-				$albs = [];
-		
-				$color = '';
-		
-				foreach ($sec['videos'] as $sub) {
-					$albs[sanitize_title_with_dashes($sub['title'])] = [];
-					
-					
-						$calb = $this->get_cached_album($sub['id']);
-						if (empty($color)) {
-							$color = $calb['embedColor'];
-						}
-						$albs[sanitize_title_with_dashes($sub['title'])] = [
-							'id' => $sub['id'],
-							'title'=>$sub['title'],
-							'videos' => $calb[$sub['id']]
-						];
-				}
+		foreach( $courses['sections'] as $ind => $sec) {
+
+			$sec['title'] = strtolower($sec['title']);
+	
+			$cap = "course_{$test}_{$sec['title']}";
+			$caps[]=$cap;
+	
+			$albs = [];
+	
+			$color = '';
+	
+			foreach ($sec['videos'] as $sub) {
+				$albs[sanitize_title_with_dashes($sub['title'])] = [];
 				
-				$root_path = STTV_RESOURCE_DIR.strtolower($data['test']).'/'.$sec['title'].'/';
-				$resources = [];
-				$files = scandir($root_path);
-				foreach ($files as $file) {
-					if (is_file($root_path.$file)){
-						$resources[$file] = md5_file($root_path.$file);
+				
+					$calb = $this->get_cached_album($sub['id']);
+					if (empty($color)) {
+						$color = $calb['embedColor'];
 					}
+					$albs[sanitize_title_with_dashes($sub['title'])] = [
+						'id' => $sub['id'],
+						'title'=>$sub['title'],
+						'videos' => $calb[$sub['id']]
+					];
+			}
+			
+			$root_path = STTV_RESOURCE_DIR.strtolower($data['test']).'/'.$sec['title'].'/';
+			$resources = [];
+			$files = scandir($root_path);
+			foreach ($files as $file) {
+				if (is_file($root_path.$file)){
+					$resources[$file] = md5_file($root_path.$file);
 				}
-		
-				$data['sections'][$sec['title']] = [
-					'name'=>ucfirst($sec['title']),
-					'description'=>$sec['desc'],
-					'intro'=>$sec['intro_vid'],
-					'cap'=>$cap,
-					'color'=>'#'.$color,
-					'resources'=>$resources,
-					'videos'=>new stdClass(),
-					'subsec'=>$albs
-				];
-				$i++;
-			endforeach;
+			}
+	
+			$data['sections'][$sec['title']] = [
+				'name'=>ucfirst($sec['title']),
+				'description'=>$sec['desc'],
+				'intro'=>$sec['intro_vid'],
+				'cap'=>$cap,
+				'color'=>'#'.$color,
+				'resources'=>$resources,
+				'videos'=>new stdClass(),
+				'subsec'=>$albs
+			];
+		}
 			
 			$rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
 			$resc = [];
@@ -186,7 +177,5 @@ class Admin {
 			foreach ($caps as $c){
 				$admin->add_cap($c);
 			}
-			
-		endif;
 	}
 }

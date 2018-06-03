@@ -9,7 +9,7 @@ class Post_Types {
     public static function init() {
         add_action( 'init', [ __CLASS__, 'register_post_types' ], 5 );
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
-        //add_filter( 'attachment_link', [ __CLASS__, 'course_resource_upload' ] );
+        add_filter( 'upload_dir', [ __CLASS__, 'course_resource_upload' ] );
     }
 
     public static function register_post_types() {
@@ -86,12 +86,18 @@ class Post_Types {
         return $file;
     }
 
-    public static function course_resource_upload( $link, $id ) {
-        $file = get_post( $id );
-        /* $id = ( isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : '' );
+    public static function course_resource_upload( $args ) {
+        global $post;
+        if ( $post->post_type == 'courses' ) {
+            $args = [
+                'path' => 'course/resources',
+                'url' => '',
+                'subdir' => '',
+                'basedir' => '',
+                'error' => false
+            ];
+        }
         return $args;
-        */
-        return $link;
     }
 
 }
