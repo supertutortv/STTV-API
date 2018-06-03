@@ -95,7 +95,7 @@ final class STTV {
         // login logger
         add_action( 'wp_login', [ $this, 'sttv_user_login_action' ], 10, 2 );
 
-        add_action( 'sttv_loaded', [ $this, 'finally' ], 999 );
+        add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             //print ABSPATH;
             //print_r(\STTV\Courses\Trial::create());
@@ -149,7 +149,7 @@ final class STTV {
 		}
     }
 
-    public function finally() {
+    public function sttv_loaded() {
         \Stripe\Stripe::setApiKey( STRIPE_SK );
 
         $flushed = get_option( 'sttv_flush_rewrite_once' );
