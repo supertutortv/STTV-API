@@ -65,9 +65,11 @@ final class STTV {
         require_once 'classes/class-sttv-rest.php';
 
         // courses
+        require_once 'classes/courses/class-sttv-courses-admin.php';
         require_once 'classes/courses/class-sttv-courses-trial.php';
 
-        $this->rest =   new \STTV\REST\API();
+        new \STTV\Courses\Admin();
+        new \STTV\REST\API();
     }
 
     private function init_hooks() {
