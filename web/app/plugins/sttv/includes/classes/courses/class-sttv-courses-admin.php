@@ -86,7 +86,8 @@ class Admin {
 				$root_path = STTV_RESOURCE_DIR . $test .'/'. $aslug .'/';
 
 				foreach ( $sec['uploads'] as $file ) {
-					$fcopy = copy( $file['file']['url'], $root_path . $file['file']['filename'] );
+					$chunk = stristr( $file['file']['url'], '/uploads');
+					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
 						$resources[$root_path . $file['file']['filename']] = [
 							'title' => $file['file']['title'],
