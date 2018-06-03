@@ -77,7 +77,7 @@ class Admin {
 		];
 		update_post_meta( $post_id, 'sttv_course_data', $data );
 		
-		foreach( $courses['sections'] as $ind => $sec) {
+		foreach( $course['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
 			$resources = $videos = $subsec = [];
 			$color = '';
