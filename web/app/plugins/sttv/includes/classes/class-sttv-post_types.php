@@ -94,6 +94,7 @@ class Post_Types {
                 'url' => '',
                 'subdir' => '',
                 'basedir' => '',
+                'baseurl' => '',
                 'error' => false
             ];
         }
