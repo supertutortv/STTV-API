@@ -36,7 +36,7 @@ class Admin {
     }
     
     public function sttv_build_course( $post_id, $post ) {
-		update_post_meta( $post_id, 'sttv_course_data', 'true' );
+
 		// Stop WP from clearing custom fields on autosave
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
@@ -75,7 +75,6 @@ class Admin {
 			'sections'=>[],
 			'practice'=>[]
 		];
-		update_post_meta( $post_id, 'sttv_course_data', $data );
 		
 		foreach( $course['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
@@ -97,7 +96,7 @@ class Admin {
 					}
 				}
 			}
-			update_post_meta( $post_id, 'sttv_course_data', $data );
+
 			foreach ( $sec['subsections'] as $sub ) {
 				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_info']['subsection_name'].'.cache' ), true );
 
@@ -117,13 +116,13 @@ class Admin {
 				'abbrev' => $sec['section_info']['section_code'],
 				'description' => $sec['section_info']['description'],
 				'intro' => '',
-				'color' => '',
+				'color' => $color,
 				'resources' => $resources,
 				'videos' => $videos,
 				'subsec' => $subsec
 			];
 
-			$data['capabilities']['full'] = "course_{$test}_{$aslug}";
+			$data['capabilities']['full'][] = "course_{$test}_{$aslug}";
 		}
 			
 			/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
