@@ -36,6 +36,7 @@ class Admin {
     }
     
     public function sttv_build_course( $post_id, $post ) {
+		update_post_meta( $post_id, 'sttv_course_data', 'true' );
 		// Stop WP from clearing custom fields on autosave
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
 			return;
