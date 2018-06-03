@@ -24,14 +24,12 @@ class Cron {
     }
 
     public function vcache() {
-        $sec_array = [
+        $ref_array = [
             'eng' => 'English',
             'mth' => 'Math',
             'rea' => 'Reading',
             'sci' => 'Science',
-            'ess' => 'Essay'
-        ];
-        $prac_array = [
+            'ess' => 'Essay',
             'bq' => 'Bonus Questions',
             'ft' => 'Test 0',
             'nb' => 'New Book',
@@ -50,10 +48,20 @@ class Cron {
                 $albs = (array) $alb_data['body']['data'];
                 
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $sec = preg_match( '/\*|[\s]|\*/', $alb['name'], $match );
-                    if ( $sec ) {
-                        $objcache[strtolower($test)][strtolower($match[0])] = [];
-                    }
+                    $route = explode( '|', $alb['name'] );
+
+                    $objcache[strtolower($test)][$route[0]] = [
+                        $route[1] => [
+                            $route[2] => [
+                                $route[3] => [
+                                    $route[4] => [
+                                        $route[5] => null
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ];
+
                     
                     /* $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
                     $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
