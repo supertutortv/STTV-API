@@ -74,6 +74,7 @@ class Admin {
 			'sections'=>[],
 			'practice'=>[]
 		];
+		update_post_meta( $post_id, 'sttv_course_data', $data );
 		
 		foreach( $courses['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
@@ -94,7 +95,7 @@ class Admin {
 					}
 				}
 			}
-			
+			update_post_meta( $post_id, 'sttv_course_data', $data );
 			foreach ( $sec['subsections'] as $sub ) {
 				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_info']['subsection_name'].'.cache' ), true );
 
