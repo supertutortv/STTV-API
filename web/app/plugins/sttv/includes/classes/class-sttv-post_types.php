@@ -87,8 +87,7 @@ class Post_Types {
     }
 
     public static function course_resource_upload( $args ) {
-        global $post;
-        if ( $post->post_type == 'courses' ) {
+        if ( get_post_type( $_REQUEST['post_id'] ) == 'courses' ) {
             $args = [
                 'path' => 'course/resources',
                 'url' => '',
