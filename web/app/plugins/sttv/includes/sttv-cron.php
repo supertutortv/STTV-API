@@ -50,7 +50,7 @@ class Cron {
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
                     $route = explode( '|', $alb['name'] );
 
-                    $objcache[strtolower($test)][$route[0]] = [
+                    $objcache[strtolower($route[0])][] = [
                         $route[1] => [
                             $route[2] => [
                                 $route[3] => [
