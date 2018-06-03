@@ -1,8 +1,13 @@
-<files xmlrpc.php>
+<files wp/xmlrpc.php>
 order allow,deny
 deny from all
 </files>
 
+<Files app/uploads/*>
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+</Files>
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
