@@ -81,7 +81,7 @@ class Cron {
                     } // END VIDEO LOOP
                     $albobj = [
                         'timestamp' => date("F d, Y H:i:s"),
-                        'albumName' => $alb['name'],
+                        'albumName' => $name,
                         'albumID' => $albid,
                         'embedColor' => $embcolor,
                         'videos' => $vidobj,
