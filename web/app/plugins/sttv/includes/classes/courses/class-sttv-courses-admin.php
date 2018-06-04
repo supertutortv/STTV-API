@@ -129,7 +129,7 @@ class Admin {
 			
 		// PRACTICE
 		$data['practice'] = [
-			'description' => $course['practice']['description'],
+			'description' => $course['practice']['description'] ?? '',
 			'resources' => [],
 			'tests' => []
 		];
