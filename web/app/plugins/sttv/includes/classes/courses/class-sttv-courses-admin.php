@@ -61,7 +61,7 @@ class Admin {
 			'test' => strtoupper( $test ),
 			'pricing' => [
 				'price' => $course['course_meta']['course_price']['price'],
-				'taxable' => $course['course_meta']['course_price']['taxable'],
+				'taxable' => (bool) $course['course_meta']['course_price']['taxable'],
 				'taxable_amt' => $course['course_meta']['course_price']['taxable_amt']
 			],
 			'capabilities' => [
