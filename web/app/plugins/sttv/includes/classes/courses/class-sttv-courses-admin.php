@@ -94,7 +94,7 @@ class Admin {
 					}
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
-						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
+						$resources[] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
@@ -150,7 +150,7 @@ class Admin {
 				$chunk = stristr( $file['file']['url'], '/uploads');
 				$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 				if ( $fcopy ){
-					$data['practice']['resources'][sanitize_title_with_dashes( $file['file']['title'] )] = [
+					$data['practice']['resources'][] = [
 						'title' => $file['file']['title'],
 						'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 						'size' => round($file['file']['filesize'] / 1024) . ' KB',
