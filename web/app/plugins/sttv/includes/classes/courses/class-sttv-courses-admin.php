@@ -146,15 +146,9 @@ class Admin {
 			// Main Practice Object
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
-				'tests' => (function(){
-					global $cache_dir, $book;
-					$tests = [];
-					$cache = glob( $cache_dir . 'Practice|' . $book['book_name'] . '*.cache' );
-					foreach ( $cache as $c ) {
-						$tests[] = $c;
-					}
-					return $tests;
-				})()
+				'tests' => array_filter( scandir( STTV_CACHE_DIR ), function($file) {
+
+				})
 			];
 
 			//$tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );

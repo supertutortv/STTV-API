@@ -23,6 +23,23 @@ class Cron {
         echo "Method '$method' does not exist.";
     }
 
+    public function rename_albums() {
+        try {
+            
+            $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
+            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
+            $albs = (array) $alb_data['body']['data'];
+
+            foreach ( $albs as $alb ) {
+                $vimeo->request( '/me/albums' . str_replace( '/albums/', '', stristr( $alb['uri'], '/albums/' ) ), [ 'name' => str_replace( '|', ':', $alb['name'] ) ], 'PATCH' );
+            }
+        } catch ( Exception $e ) {
+
+            print_r( $e );
+
+        }
+    }
+
     public function vcache() {
 
         try {
@@ -37,7 +54,7 @@ class Cron {
                 $albs = (array) $alb_data['body']['data'];
                 
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $name = str_replace( '|', '', $alb['name'] );
+                    $name = str_replace( ':', '', $alb['name'] );
                     
                     $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
                     $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
