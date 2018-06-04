@@ -150,7 +150,15 @@ class Admin {
 					$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 					$cache = [];
 					foreach ( $tests as $test ) {
-						$cache[] = explode( ':', $test );
+						$els = explode( ':', $test );
+						if ( strpos( $els[3], '.cache' ) ) {
+							array_splice( $els, 3, 0, 'Test 1' );
+						}
+						$tsections[sanitize_title_with_dashes( $els[4] )] = json_decode( file_get_contents( $test ), true );
+						$cache[sanitize_title_with_dashes( $els[3] )] = [
+							'name' => $els[3],
+							'sections' => $tsections
+						];
 					}
 					return $cache;
 				})()
