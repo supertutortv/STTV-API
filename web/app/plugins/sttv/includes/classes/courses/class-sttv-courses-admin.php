@@ -123,7 +123,7 @@ class Admin {
 			$data['sections'][$aslug] = [
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
-				'description' => $sec['section_info']['description'],
+				'description' => esc_html( $sec['section_info']['description'] ),
 				'intro' => (int) $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
 				'color' => '#'.$color,
 				'resources' => $resources,
@@ -135,7 +135,7 @@ class Admin {
 			
 		// PRACTICE
 		$data['practice'] = [
-			'description' => $course['practice']['description'] ?? '',
+			'description' => esc_html( $course['practice']['description'] ?? ''),
 			'resources' => [],
 			'tests' => []
 		];
