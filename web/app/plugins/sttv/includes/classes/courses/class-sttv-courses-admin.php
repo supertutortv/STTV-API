@@ -94,6 +94,7 @@ class Admin {
 						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
+							'size' => round($file['file']['filesize'] / 1024) . 'KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
 							'updated' => strtotime( $file['file']['modified'] )
