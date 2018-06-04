@@ -137,10 +137,10 @@ class Admin {
 			'tests' => []
 		];
 
-		if ( $data['practice']['uploads'] ) {
+		if ( $course['practice']['uploads'] ) {
 			$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
 
-			foreach ( $data['practice']['uploads'] as $file ) {
+			foreach ( $course['practice']['uploads'] as $file ) {
 				$chunk = stristr( $file['file']['url'], '/uploads');
 				$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 				if ( $fcopy ){
@@ -156,7 +156,7 @@ class Admin {
 			}
 		}
 
-		foreach ($course['practice']['book'] as $book) {
+		foreach ( $course['practice']['book'] as $book ) {
 	
 			$title = sanitize_title_with_dashes( $book['book_name'] );
 
