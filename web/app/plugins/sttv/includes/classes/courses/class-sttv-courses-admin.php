@@ -149,7 +149,7 @@ class Admin {
 				'tests' => (function(){
 					global $cache_dir, $book;
 					$tests = [];
-					$cache = glob( "{$cache_dir}{$book['book_name']}|*.cache" );
+					$cache = glob( $cache_dir . $book['book_name'] . "*.cache" );
 					foreach ( $cache as $c ) {
 						$tests[] = $c;
 					}
