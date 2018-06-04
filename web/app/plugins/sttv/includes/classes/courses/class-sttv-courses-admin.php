@@ -147,6 +147,7 @@ class Admin {
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
 				'tests' => (function(){
+					global $cache_dir, $book;
 					$tests = [];
 					$cache = glob( "{$cache_dir}{$book['book_name']}|*.cache" );
 					foreach ( $cache as $c ) {
