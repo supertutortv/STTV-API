@@ -89,6 +89,9 @@ class Admin {
 
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
+					if ( ! is_dir( $root_path ) ) {
+						mkdir( $root_path, 0777, true );
+					}
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
 						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
@@ -139,6 +142,9 @@ class Admin {
 
 		if ( $course['practice']['uploads'] ) {
 			$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
+			if ( ! is_dir( $root_path ) ) {
+				mkdir( $root_path, 0777, true );
+			}
 
 			foreach ( $course['practice']['uploads'] as $file ) {
 				$chunk = stristr( $file['file']['url'], '/uploads');
