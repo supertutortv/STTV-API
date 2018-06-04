@@ -146,12 +146,19 @@ class Admin {
 			// Main Practice Object
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
-				'tests' => glob( "{$cache_dir}{$book['book_name']}|*.cache" )
+				'tests' => (function(){
+					$tests = [];
+					$cache = glob( "{$cache_dir}{$book['book_name']}|*.cache" );
+					foreach ( $cache as $c ) {
+						$tests[] = $c;
+					}
+					return $tests;
+				})()
 			];
 
-			/* $tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
+			//$tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
 
-			foreach ($prac['sections'] as $v) {
+			/* foreach ($prac['sections'] as $v) {
 				$calb = $this->get_cached_album($v['id']);
 				if (empty($color)) {
 					$color = $calb['embedColor'];
