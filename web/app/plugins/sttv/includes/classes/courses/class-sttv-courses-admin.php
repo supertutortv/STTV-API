@@ -47,6 +47,7 @@ class Admin {
 
 		$course = get_fields( $post_id );
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
+		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|';
 		
 		$data = [
 			'id' => $post_id,
@@ -76,6 +77,7 @@ class Admin {
 			'practice'=>[]
 		];
 		
+		// SECTIONS
 		foreach( $course['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
 			$resources = $videos = $subsec = [];
@@ -99,7 +101,7 @@ class Admin {
 			}
 
 			foreach ( $sec['subsections'] as $sub ) {
-				$calb = json_decode( file_get_contents( STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|'.$sec['section_info']['section_name'].'|'.$sub['subsection_name'].'.cache' ), true );
+				$calb = json_decode( file_get_contents( $cache_dir.$sec['section_info']['section_name'].'|'.$sub['subsection_name'].'.cache' ), true );
 
 				if ( empty( $color ) ) {
 					$color = $calb['embedColor'];
@@ -119,57 +121,60 @@ class Admin {
 				'intro' => '',
 				'color' => '#'.$color,
 				'resources' => $resources,
-				'videos' => $videos,
 				'subsec' => $subsec
 			];
 
 			$data['capabilities']['full'][] = "course_{$test}_{$aslug}";
 		}
 			
-			/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
+		// PRACTICE
+		$data['practice'] = [
+			'description' => $course['practice']['description'],
+			'resources' => [],
+			'tests' => []
+		];
+
+		foreach ($course['practice']['book'] as $book) {
+	
+			$title = sanitize_title_with_dashes( $book['book_name'] );
+
+			if ( strpos( $book['book_name'], 'Free' ) !== false ) {
+				$data['capabilities']['trial'][] = "course_{$test}_{$title}";
+			}
+			$data['capabilities']['full'][] = "course_{$test}_{$title}";
+	
+			// Main Practice Object
+			$data['practice']['tests'][$title] = [
+				'name' => $book['book_name'],
+				'tests' => glob( $cache_dir . $book['book_name'] . "*.pdf" )
+			];
+
+			/* $tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
+
+			foreach ($prac['sections'] as $v) {
+				$calb = $this->get_cached_album($v['id']);
+				if (empty($color)) {
+					$color = $calb['embedColor'];
+				}
+				
+				$sections[sanitize_title_with_dashes($v['title'])] = [
+					'id'=>$v['id'],
+					'album-name'=>$calb['albumName'],
+					'title'=>$v['title'],
+					'intro'=>$v['intro_vid'],
+					'videos'=>$calb[$v['id']]
+				];
+			} */
+	
+		}
+		/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
 			$resc = [];
 			$f = scandir($rp);
 			foreach ($f as $file) {
 				if (is_file($rp.$file)){
 					$resc[$file] = md5_file($rp.$file);
 				}
-			}
-
-			$data['practice'] = [
-				'description' => $_POST['courses']['practice']['description'],
-				'resources' => $resc,
-				'tests' => []
-			];
-
-			foreach ($_POST['courses']['practice']['tests'] as $prac) :
-		
-				$title = sanitize_title_with_dashes($prac['title']);
-		
-				$sections = [];
-				foreach ($prac['sections'] as $v) {
-					$calb = $this->get_cached_album($v['id']);
-					if (empty($color)) {
-						$color = $calb['embedColor'];
-					}
-					
-					$sections[sanitize_title_with_dashes($v['title'])] = [
-						'id'=>$v['id'],
-						'album-name'=>$calb['albumName'],
-						'title'=>$v['title'],
-						'intro'=>$v['intro_vid'],
-						'videos'=>$calb[$v['id']]
-					];
-				}
-
-				$data['practice']['tests'][$title] = [
-					'name'=>$prac['title'],
-					'cap'=>"course_{$test}_practice_{$title}",
-					'sections'=>$sections
-				];
-
-				$caps[]=$data['practice'][$title]['cap'];
-		
-			endforeach; */
+			} */
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
