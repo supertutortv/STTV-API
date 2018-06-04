@@ -57,7 +57,7 @@ class Admin {
 			'link' => get_post_permalink( $post_id ),
 			'created' => strtotime( $post->post_date ),
 			'modified' => strtotime( $post->post_modified ),
-			'intro' => $intros['videos'][$test.'-course-intro']['ID'],
+			'intro' => (int) $intros['videos'][$test.'-course-intro']['ID'],
 			'test' => strtoupper( $test ),
 			'pricing' => [
 				'price' => $course['course_meta']['course_price']['price'],
@@ -94,7 +94,7 @@ class Admin {
 						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
-							'size' => round($file['file']['filesize'] / 1024) . 'KB',
+							'size' => round($file['file']['filesize'] / 1024) . ' KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
 							'updated' => strtotime( $file['file']['modified'] )
@@ -121,7 +121,7 @@ class Admin {
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
 				'description' => $sec['section_info']['description'],
-				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
+				'intro' => (int) $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
 				'color' => '#'.$color,
 				'resources' => $resources,
 				'subsec' => $subsec
