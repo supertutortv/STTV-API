@@ -48,6 +48,7 @@ class Admin {
 		$course = get_fields( $post_id );
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
 		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
+		$intros = json_decode( file_get_contents( $cache_dir . 'Intro Videos.cache' ), true );
 		
 		$data = [
 			'id' => $post_id,
@@ -56,7 +57,7 @@ class Admin {
 			'link' => get_post_permalink( $post_id ),
 			'created' => strtotime( $post->post_date ),
 			'modified' => strtotime( $post->post_modified ),
-			'intro' => 0,
+			'intro' => $intros['videos'][$test.'-course-intro']['ID'],
 			'test' => strtoupper( $test ),
 			'pricing' => [
 				'price' => $course['course_meta']['course_price']['price'],
