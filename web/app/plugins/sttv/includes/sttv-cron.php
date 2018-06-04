@@ -25,13 +25,12 @@ class Cron {
 
     public function rename_albums() {
         try {
-            
             $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
 
             foreach ( $albs as $alb ) {
-                $vimeo->request( '/me/albums' . str_replace( '/albums/', '', stristr( $alb['uri'], '/albums/' ) ), [ 'name' => str_replace( '|', ':', $alb['name'] ) ], 'PATCH' );
+                $vimeo->request( '/me/albums/' . str_replace( '/albums/', '', stristr( $alb['uri'], '/albums/' ) ), [ 'name' => str_replace( '|', ':', $alb['name'] ) ], 'PATCH' );
             }
         } catch ( Exception $e ) {
 
