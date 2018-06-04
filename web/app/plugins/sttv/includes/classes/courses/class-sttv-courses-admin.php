@@ -94,6 +94,7 @@ class Admin {
 						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
 							'title' => $file['file']['title'],
 							'file' => $root_path . $file['file']['filename'],
+							'thumb' => WP_CONTENT_DIR . str_replace( '.pdf', '.jpg', $chunk),
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
 							'updated' => strtotime( $file['file']['modified'] )
 						];
