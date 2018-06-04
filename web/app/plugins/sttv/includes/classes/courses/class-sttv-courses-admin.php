@@ -119,7 +119,7 @@ class Admin {
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
 				'description' => $sec['section_info']['description'],
-				'intro' => $intros['videos'][$test.strtolower($sec['section_info']['section_code'])]['ID'],
+				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
 				'color' => '#'.$color,
 				'resources' => $resources,
 				'subsec' => $subsec
