@@ -137,6 +137,25 @@ class Admin {
 			'tests' => []
 		];
 
+		if ( $data['practice']['uploads'] ) {
+			$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
+
+			foreach ( $data['practice']['uploads'] as $file ) {
+				$chunk = stristr( $file['file']['url'], '/uploads');
+				$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+				if ( $fcopy ){
+					$data['practice']['resources'][sanitize_title_with_dashes( $file['file']['title'] )] = [
+						'title' => $file['file']['title'],
+						'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
+						'size' => round($file['file']['filesize'] / 1024) . ' KB',
+						'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
+						'hash' => md5_file( $root_path . $file['file']['filename'] ),
+						'updated' => strtotime( $file['file']['modified'] )
+					];
+				}
+			}
+		}
+
 		foreach ($course['practice']['book'] as $book) {
 	
 			$title = sanitize_title_with_dashes( $book['book_name'] );
