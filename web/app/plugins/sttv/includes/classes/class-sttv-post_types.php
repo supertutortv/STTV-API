@@ -80,14 +80,14 @@ class Post_Types {
         $meta = json_decode( get_post_meta( $post->ID, 'sttv_course_data', true ), true ); ?>
         <pre><?php print_r( $meta ); ?></pre>
         <?php
-            foreach( $meta['sections'] as $sec ) {
+            /* foreach( $meta['sections'] as $sec ) {
                 if ( empty( $sec['resources'] ) ) {
                     continue;
                 }
                 foreach ( $sec['resources'] as $img ) {
                     print "<img src='{$img['thumb']}' />";
                 }
-            }
+            } */
         ?>
     <?php }
 
