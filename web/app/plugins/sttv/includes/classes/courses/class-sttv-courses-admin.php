@@ -142,16 +142,18 @@ class Admin {
 				$data['capabilities']['trial'][] = "course_{$test}_{$title}";
 			}
 			$data['capabilities']['full'][] = "course_{$test}_{$title}";
-
-			$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 	
 			// Main Practice Object
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
-				'tests' => $tests
+				'tests' => (function() use ( $cache_dir, $book ){
+					$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
+					$cache = [];
+					foreach ( $tests as $test ) {
+						$cache[] = explode( ':', $test );
+					}
+				})()
 			];
-
-			//$tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
 
 			/* foreach ($prac['sections'] as $v) {
 				$calb = $this->get_cached_album($v['id']);
