@@ -77,8 +77,8 @@ class Post_Types {
     public static function sttv_display_course_meta() {
         global $post, $wp_rewrite;
         $fields = get_fields( $post->ID ); 
-        $meta = get_post_meta( $post->ID, 'sttv_course_data', true ); ?>
-        <pre><?php //print_r( $meta ); ?></pre>
+        $meta = json_decode( get_post_meta( $post->ID, 'sttv_course_data', true ), true ); ?>
+        <pre><?php print_r( $meta ); ?></pre>
         <?php
             foreach( $meta['sections'] as $sec ) {
                 if ( empty( $sec['resources'] ) ) {
