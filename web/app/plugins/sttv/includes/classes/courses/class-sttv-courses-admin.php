@@ -93,8 +93,8 @@ class Admin {
 					if ( $fcopy ){
 						$resources[sanitize_title_with_dashes( $file['file']['title'] )] = [
 							'title' => $file['file']['title'],
-							'file' => $root_path . $file['file']['filename'],
-							'thumb' => WP_CONTENT_DIR . str_replace( '.pdf', '.jpg', $chunk),
+							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
+							'thumb' => str_replace( '.pdf', '.jpg', $file['file']['url'] ),
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
 							'updated' => strtotime( $file['file']['modified'] )
 						];
