@@ -154,7 +154,12 @@ class Admin {
 						if ( strpos( $els[3], '.cache' ) ) {
 							array_splice( $els, 3, 0, 'Test 1' );
 						}
-						$tsections[sanitize_title_with_dashes( $els[4] )] = json_decode( file_get_contents( $test ), true );
+						$pvideos = json_decode( file_get_contents( $test ), true );
+						$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
+							'name' => str_replace( '.cache', '', $els[4] ),
+							'color' => $pvideos['embedColor'],
+							'videos' => $pvideos['videos']
+						];
 						$cache[sanitize_title_with_dashes( $els[3] )] = [
 							'name' => $els[3],
 							'sections' => $tsections

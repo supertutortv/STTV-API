@@ -53,7 +53,7 @@ class Cron {
                 $albs = (array) $alb_data['body']['data'];
                 
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $name = str_replace( ':', '', $alb['name'] );
+                    $name = str_replace( ':', ' ', $alb['name'] );
                     
                     $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
                     $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
