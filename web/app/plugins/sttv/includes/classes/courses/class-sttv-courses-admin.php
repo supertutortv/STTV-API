@@ -157,7 +157,7 @@ class Admin {
 						$pvideos = json_decode( file_get_contents( $test ), true );
 						$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
 							'name' => str_replace( '.cache', '', $els[4] ),
-							'color' => $pvideos['embedColor'],
+							'color' => '#'.$pvideos['embedColor'],
 							'videos' => $pvideos['videos']
 						];
 						$cache[sanitize_title_with_dashes( $els[3] )] = [
