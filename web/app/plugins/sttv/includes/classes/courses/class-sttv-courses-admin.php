@@ -47,7 +47,7 @@ class Admin {
 
 		$course = get_fields( $post_id );
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
-		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].'|';
+		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
 		
 		$data = [
 			'id' => $post_id,
@@ -101,7 +101,7 @@ class Admin {
 			}
 
 			foreach ( $sec['subsections'] as $sub ) {
-				$calb = json_decode( file_get_contents( $cache_dir.$sec['section_info']['section_name'].'|'.$sub['subsection_name'].'.cache' ), true );
+				$calb = json_decode( file_get_contents( $cache_dir.$sec['section_info']['section_name'].':'.$sub['subsection_name'].'.cache' ), true );
 
 				if ( empty( $color ) ) {
 					$color = $calb['embedColor'];
@@ -109,7 +109,7 @@ class Admin {
 
 				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
 					'id' => $calb['albumID'],
-					'title' => str_replace( '|', ' ', $calb['albumName'] ),
+					'title' => str_replace( ':', ' ', $calb['albumName'] ),
 					'videos' => $calb['videos']
 				];
 			}
@@ -142,13 +142,13 @@ class Admin {
 				$data['capabilities']['trial'][] = "course_{$test}_{$title}";
 			}
 			$data['capabilities']['full'][] = "course_{$test}_{$title}";
+
+			$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 	
 			// Main Practice Object
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
-				'tests' => array_filter( scandir( STTV_CACHE_DIR ), function($file) {
-
-				})
+				'tests' => $tests
 			];
 
 			//$tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
