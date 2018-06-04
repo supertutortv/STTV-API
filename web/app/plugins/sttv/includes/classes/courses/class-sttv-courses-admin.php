@@ -178,7 +178,7 @@ class Admin {
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
-		update_post_meta( $post_id, 'sttv_course_data', json_encode( $data ) );
+		update_post_meta( $post_id, 'sttv_course_data', json_encode( $data, JSON_PRETTY_PRINT ) );
 		
 			/* $admin = get_role( 'administrator' );
 			foreach ( $data as $c ) {
