@@ -152,6 +152,7 @@ class Admin {
 					foreach ( $tests as $test ) {
 						$cache[] = explode( ':', $test );
 					}
+					return $cache;
 				})()
 			];
 
