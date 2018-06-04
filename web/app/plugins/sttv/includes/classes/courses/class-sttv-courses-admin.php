@@ -73,7 +73,7 @@ class Admin {
 					'course_post_feedback',
 					'course_post_reviews'
 				]
-				],
+			],
 			'sections'=>[],
 			'practice'=>[]
 		];
@@ -170,22 +170,6 @@ class Admin {
 					return $cache;
 				})()
 			];
-
-			/* foreach ($prac['sections'] as $v) {
-				$calb = $this->get_cached_album($v['id']);
-				if (empty($color)) {
-					$color = $calb['embedColor'];
-				}
-				
-				$sections[sanitize_title_with_dashes($v['title'])] = [
-					'id'=>$v['id'],
-					'album-name'=>$calb['albumName'],
-					'title'=>$v['title'],
-					'intro'=>$v['intro_vid'],
-					'videos'=>$calb[$v['id']]
-				];
-			} */
-	
 		}
 		/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
 			$resc = [];
@@ -198,11 +182,6 @@ class Admin {
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
-		update_post_meta( $post_id, 'sttv_course_data', json_encode( $data, JSON_PRETTY_PRINT ) );
-		
-			/* $admin = get_role( 'administrator' );
-			foreach ( $data as $c ) {
-				$admin->add_cap( $c );
-			} */
+		update_post_meta( $post_id, 'sttv_course_data', $data );
 	}
 }
