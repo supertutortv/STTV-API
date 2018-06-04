@@ -146,7 +146,7 @@ class Admin {
 			// Main Practice Object
 			$data['practice']['tests'][$title] = [
 				'name' => $book['book_name'],
-				'tests' => glob( $cache_dir . $book['book_name'] . "*.pdf" )
+				'tests' => glob( "{$cache_dir}{$book['book_name']}|*.cache" )
 			];
 
 			/* $tests = glob( $cache_dir . $book['book_name'] . "*.pdf" );
