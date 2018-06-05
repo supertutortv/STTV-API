@@ -8,7 +8,7 @@ class Admin {
     public function __construct() {
 		add_action( 'init', [ $this, 'sttv_course_endpoints' ], 10, 0 );
         add_filter( 'query_vars', [ $this, 'sttv_course_query_vars' ], 10, 1 );
-        //add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
+        add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
     }
 
 
@@ -197,14 +197,6 @@ class Admin {
 				})()
 			];
 		}
-		/* $rp = STTV_RESOURCE_DIR.strtolower($data['test']).'/practice/';
-			$resc = [];
-			$f = scandir($rp);
-			foreach ($f as $file) {
-				if (is_file($rp.$file)){
-					$resc[$file] = md5_file($rp.$file);
-				}
-			} */
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
