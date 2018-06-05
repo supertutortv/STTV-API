@@ -78,7 +78,7 @@ class Post_Types {
         global $post, $wp_rewrite;
         $fields = get_fields( $post->ID ); 
         //$meta = get_post_meta( $post->ID, 'sttv_course_data', true ); ?>
-        <pre><?php //print_r( $fields ); ?></pre>
+        <pre><?php print_r( $meta ); ?></pre>
     <?php }
 
 }
