@@ -19,11 +19,11 @@ defined( 'ABSPATH' ) || exit;
 class Courses extends \WP_REST_Controller {
 	
 	public function __construct() {
-		add_action( 'save_post_feedback', array($this,'update_feedback_with_uniqueid'), 0, 3);
+		add_action( 'save_post_feedback', [ $this, 'update_feedback_with_uniqueid' ], 0, 3);
 		add_action( 'wp_trash_post', [ $this, 'delete_feedback_transient' ] );
 	}
 
-	public function sttv_feedback_api() {
+	public function register_routes() {
  		register_rest_route( STTV_REST_NAMESPACE, '/feedback', 
 			array(
 				array(

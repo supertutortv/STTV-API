@@ -99,8 +99,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            //print ABSPATH;
-            //print_r(\STTV\Courses\Trial::create());
+            print '<script>console.log(\'document.pathname\')</script>';
         });
 
         // cleanup
