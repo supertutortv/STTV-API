@@ -60,9 +60,9 @@ class Admin {
 			'intro' => (int) $intros['videos'][$test.'-course-intro']['ID'],
 			'test' => strtoupper( $test ),
 			'pricing' => [
-				'price' => $course['course_meta']['course_price']['price'],
-				'taxable' => (bool) $course['course_meta']['course_price']['taxable'],
-				'taxable_amt' => $course['course_meta']['course_price']['taxable_amt']
+				'price' => $course['course_pricing']['price'],
+				'taxable_amt' => $course['course_pricing']['taxable_amt'],
+				'renewals' => $course['course_pricing']['renewals']
 			],
 			'capabilities' => [
 				'trial' => [
