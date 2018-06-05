@@ -100,8 +100,16 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             print '<script>
-                let zzz = location.pathname.split(\'/\')
-                console.log(zzz.filter(String))
+                var courses = '.json_encode( get_post_meta( 8, 'sttv_course_data', true ) ).'
+                let zzz = location.pathname.split(\'/\').filter(String).join(\'.\')
+                function ref(obj, str) {
+                    str = str.split(".");
+                    for (var i = 0; i < str.length; i++) {
+                        obj = obj[str[i]]
+                    }
+                    return obj;
+                }
+                console.log(ref(courses,zzz))
             </script>';
         });
 
