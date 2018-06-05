@@ -85,6 +85,7 @@ class Cron {
                         $vidobj[$slug] = [
                             'ID' => $vidid,
                             'name' => $vidname,
+                            'type' => 'video',
                             'slug' => $slug,
                             'time' => $vid['duration'],
                             'tags' => $tags,

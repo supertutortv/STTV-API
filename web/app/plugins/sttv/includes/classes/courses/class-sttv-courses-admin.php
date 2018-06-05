@@ -116,6 +116,7 @@ class Admin {
 
 					$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
 						'id' => $calb['albumID'],
+						'type' => 'collection',
 						'title' => str_replace( ':', ' ', $calb['albumName'] ),
 						'videos' => $calb['videos']
 					];
@@ -124,10 +125,14 @@ class Admin {
 				$data['sections'][$aslug] = [
 					'name' => $sec['section_info']['section_name'],
 					'abbrev' => $sec['section_info']['section_code'],
+					'type' => 'collection',
 					'description' => esc_html( $sec['section_info']['description'] ),
 					'intro' => (int) $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
 					'color' => '#'.$color,
-					'resources' => $resources,
+					'resources' => [
+						'type' => 'file',
+						'files' => $resources
+					],
 					'subsec' => $subsec
 				];
 
@@ -137,7 +142,10 @@ class Admin {
 			// PRACTICE
 			$data['practice'] = [
 				'description' => esc_html( $course['practice']['description'] ?? ''),
-				'resources' => [],
+				'type' => 'collection',
+				'resources' => [
+					'type' => 'file'
+				],
 				'tests' => []
 			];
 
@@ -151,7 +159,7 @@ class Admin {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
-						$data['practice']['resources'][] = [
+						$data['practice']['resources']['files'] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
@@ -175,6 +183,7 @@ class Admin {
 				// Main Practice Object
 				$data['practice']['tests'][$title] = [
 					'name' => $book['book_name'],
+					'type' => 'collection',
 					'tests' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 						$cache = [];
@@ -186,11 +195,13 @@ class Admin {
 							$pvideos = json_decode( file_get_contents( $test ), true );
 							$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
 								'name' => str_replace( '.cache', '', $els[4] ),
+								'type' => 'collection',
 								'color' => '#'.$pvideos['embedColor'],
 								'videos' => $pvideos['videos']
 							];
 							$cache[sanitize_title_with_dashes( $els[3] )] = [
 								'name' => $els[3],
+								'type' => 'collection',
 								'sections' => $tsections
 							];
 						}
