@@ -99,7 +99,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print '<script>console.log(location.pathname)</script>';
+            print '<script>console.log(location.pathname.split(\'/\')</script>';
         });
 
         // cleanup
