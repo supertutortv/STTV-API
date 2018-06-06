@@ -188,7 +188,7 @@ class Admin {
 				$data['capabilities']['full'][] = "course_{$test}_{$title}";
 		
 				// Main Practice Object
-				$data['practice']['tests'][$title] = [
+				$data['practice']['books'][$title] = [
 					'name' => $book['book_name'],
 					'in_trial' => (bool) $book['in_trial'],
 					'type' => 'collection',

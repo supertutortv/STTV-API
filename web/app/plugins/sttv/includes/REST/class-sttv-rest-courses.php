@@ -133,20 +133,9 @@ class Courses extends \WP_REST_Controller {
 			}
 		}
 
-		$data['practice'] = [
-			'description' => $meta['practice']['description'],
-			'resources' => $meta['practice']['resources'],
-			'tests' => []
-		];
-		foreach ($meta['practice']['tests'] as $s => $v) {
-			$data['practice']['tests'][$s] = [
-				'name'=> $v['name'],
-				'color'=>'rgba(0,0,0,0.60)',
-				'subsec'=> $v['sections']
-			];
-		}
+		$data['practice'] = $meta['practice'];
 		
-		$data['size'] = (mb_strlen(json_encode($data), '8bit')/1000).'KB';
+		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
 		return $data;
 
