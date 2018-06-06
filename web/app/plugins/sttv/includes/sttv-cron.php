@@ -55,7 +55,7 @@ class Cron {
                 foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
                     $name = str_replace( ':', ' ', $alb['name'] );
                     
-                    $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
+                    $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,pictures.sizes.link_with_play_button,stats.plays&per_page=75&sort=alphabetical&direction=asc';
                     $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
                     $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
 
@@ -90,7 +90,10 @@ class Cron {
                             'time' => $vid['duration'],
                             'tags' => $tags,
                             'text' => $vid['description'],
-                            'thumb' => $vid['pictures']['sizes'][2]['link'],
+                            'thumbs' => [
+                                'plain' => $vid['pictures']['sizes'][2]['link'],
+                                'with-play-button' => $vid['pictures']['sizes'][2]['link_with_play_button']
+                            ],
                             'views' => $vid['stats']['plays']
                         ];
                         if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
