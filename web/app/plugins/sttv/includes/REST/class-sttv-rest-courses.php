@@ -37,7 +37,7 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => [ $this, 'course_permissions_check' ]
+					'permission_callback' => '__return_true'
 				]
 			],
 			'/courses/log' => [
@@ -88,6 +88,9 @@ class Courses extends \WP_REST_Controller {
 
 	public function get_course_meta( $req ) {		
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
+		if ( ! $meta ) {
+			return false;
+		}
 		
 		$data = [
 			'id' => $meta['id'],
@@ -124,11 +127,15 @@ class Courses extends \WP_REST_Controller {
 				unset( $file['in_trial'] );
 			}
 		}
-		foreach ( $meta['tests'] as $k => $test ) {
+		foreach ( $meta['books'] as $k => $book ) {
 			if ( ! $test['in_trial'] ) {
-				/* foreach ( $subsec['videos'] as $vid ) {
-					$vid['ID'] = 0;
-				} */
+				foreach ( $book['tests'] as $test ) {
+					foreach ( $test['sections'] as $sec ) {
+						foreach ( $sec['videos'] as $vid ) {
+							$vid['ID'] = 0;
+						}
+					}
+				}
 				unset( $test['in_trial'] );
 			}
 		}
