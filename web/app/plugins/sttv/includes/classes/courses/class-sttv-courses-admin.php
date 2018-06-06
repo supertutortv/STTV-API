@@ -105,7 +105,8 @@ class Admin {
 								'size' => round($file['file']['filesize'] / 1024) . ' KB',
 								'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 								'hash' => md5_file( $root_path . $file['file']['filename'] ),
-								'updated' => strtotime( $file['file']['modified'] )
+								'updated' => strtotime( $file['file']['modified'] ),
+								'in_trial' => (bool) $file['in_trial']
 							];
 						}
 					}
@@ -169,7 +170,8 @@ class Admin {
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
-							'updated' => strtotime( $file['file']['modified'] )
+							'updated' => strtotime( $file['file']['modified'] ),
+							'in_trial' => (bool) $file['in_trial']
 						];
 					}
 				}
