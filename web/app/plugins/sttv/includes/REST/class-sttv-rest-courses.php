@@ -58,7 +58,7 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_user_feedback' ],
-					'permission_callback' => 'is_user_logged_in'
+					'permission_callback' => '__return_true'
 				],
                 [
 					'methods' => 'POST',
