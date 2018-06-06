@@ -104,15 +104,15 @@ class Courses extends \WP_REST_Controller {
 		];
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
-			foreach ( $val['resources']['files'] as $file ) {
+			foreach ( $val['resources']['files'] as &$file ) {
 				if ( ! $file['in_trial'] ) {
 					$file['file'] = 0;
 					unset( $file['in_trial'] );
 				}
 			}
-			foreach ( $val['subsec'] as $k => $subsec ) {
+			foreach ( $val['subsec'] as $k => &$subsec ) {
 				if ( ! $subsec['in_trial'] ) {
-					foreach ( $subsec['videos'] as $vid ) {
+					foreach ( $subsec['videos'] as &$vid ) {
 						$vid['ID'] = 0;
 					}
 					unset( $subsec['in_trial'] );
@@ -121,17 +121,17 @@ class Courses extends \WP_REST_Controller {
 			$data['sections'][$sec] = $val;
 		}
 
-		foreach ( $meta['practice']['resources']['files'] as $file ) {
+		foreach ( $meta['practice']['resources']['files'] as &$file ) {
 			if ( ! $file['in_trial'] ) {
 				$file['file'] = 0;
 				unset( $file['in_trial'] );
 			}
 		}
-		foreach ( $meta['books'] as $k => $book ) {
+		foreach ( $meta['books'] as $k => &$book ) {
 			if ( ! $test['in_trial'] ) {
-				foreach ( $book['tests'] as $test ) {
-					foreach ( $test['sections'] as $sec ) {
-						foreach ( $sec['videos'] as $vid ) {
+				foreach ( $book['tests'] as &$test ) {
+					foreach ( $test['sections'] as &$sec ) {
+						foreach ( $sec['videos'] as &$vid ) {
 							$vid['ID'] = 0;
 						}
 					}
