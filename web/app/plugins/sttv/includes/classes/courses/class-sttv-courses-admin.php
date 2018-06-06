@@ -123,6 +123,7 @@ class Admin {
 						'id' => $calb['albumID'],
 						'type' => 'collection',
 						'title' => str_replace( ':', ' ', $calb['albumName'] ),
+						'in_trial' => (bool) $sub['in_trial'],
 						'videos' => $calb['videos']
 					];
 				}
@@ -189,6 +190,7 @@ class Admin {
 				// Main Practice Object
 				$data['practice']['tests'][$title] = [
 					'name' => $book['book_name'],
+					'in_trial' => (bool) $book['in_trial'],
 					'type' => 'collection',
 					'tests' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
