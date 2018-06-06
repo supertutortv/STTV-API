@@ -100,7 +100,8 @@ class Courses extends \WP_REST_Controller {
 			'test' => strtolower($meta['test']),
 			'intro' => $meta['intro'],
 			'version' => STTV_VERSION,
-			'lastFetched' => time()
+			'lastFetched' => time(),
+			'thumbUrl' => 'https://i.vimeocdn.com/video/||_295x166.jpg?r=pad'
 		];
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
