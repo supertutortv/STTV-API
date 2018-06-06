@@ -81,7 +81,7 @@ class Cron {
                         foreach ($stags as $tag) {
                             $tags[] = $tag['tag'];
                         }
-                        preg_match('/video/\s*([^\_]+)', $vid['pictures']['sizes'][2]['link'], $out);
+                        preg_match('/video\/\s*([^\_]+)/', $vid['pictures']['sizes'][2]['link'], $out);
                         $vidobj[$slug] = [
                             'ID' => $vidid,
                             'name' => $vidname,
