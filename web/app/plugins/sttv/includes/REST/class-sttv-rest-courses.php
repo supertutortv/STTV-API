@@ -89,7 +89,11 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_meta( $req ) {		
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
-			return false;
+			return sttv_rest_response(
+				'course_not_found',
+				'The course requested was not found or does not exist. Please try again.',
+				404
+			);
 		}
 		
 		$data = [
@@ -101,23 +105,26 @@ class Courses extends \WP_REST_Controller {
 			'intro' => $meta['intro'],
 			'version' => STTV_VERSION,
 			'lastFetched' => time(),
-			'thumbUrl' => 'https://i.vimeocdn.com/video/||_295x166.jpg?r=pad'
+			'thumbUrls' => [
+				'plain' => 'https://i.vimeocdn.com/video/||_295x166.jpg?r=pad',
+				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+			]
 		];
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
 			foreach ( $val['resources']['files'] as &$file ) {
 				if ( ! $file['in_trial'] ) {
 					$file['file'] = 0;
-					unset( $file['in_trial'] );
 				}
+				unset( $file['in_trial'] );
 			}
 			foreach ( $val['subsec'] as $k => &$subsec ) {
 				if ( ! $subsec['in_trial'] ) {
 					foreach ( $subsec['videos'] as &$vid ) {
 						$vid['ID'] = 0;
 					}
-					unset( $subsec['in_trial'] );
 				}
+				unset( $subsec['in_trial'] );
 			}
 			$data['sections'][$sec] = $val;
 		}
