@@ -127,11 +127,11 @@ class Courses extends \WP_REST_Controller {
 				unset( $file['in_trial'] );
 			}
 		}
-		foreach ( $meta['books'] as $k => &$book ) {
-			if ( ! $test['in_trial'] ) {
-				foreach ( $book['tests'] as &$test ) {
-					foreach ( $test['sections'] as &$sec ) {
-						foreach ( $sec['videos'] as &$vid ) {
+		foreach ( $meta['practice']['books'] as $k => &$book ) {
+			if ( ! $book['in_trial'] ) {
+				foreach ( $book['tests'] as $b => &$test ) {
+					foreach ( $test['sections'] as $t => &$sec ) {
+						foreach ( $sec['videos'] as $s => &$vid ) {
 							$vid['ID'] = 0;
 						}
 					}
