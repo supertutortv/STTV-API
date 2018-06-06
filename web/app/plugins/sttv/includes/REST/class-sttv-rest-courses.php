@@ -4,6 +4,8 @@ namespace STTV\REST;
 
 defined( 'ABSPATH' ) || exit;
 
+use \WP_REST_Request;
+
 /**
  * SupertutorTV feedback mechanism.
  *
@@ -24,34 +26,71 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function register_routes() {
- 		register_rest_route( STTV_REST_NAMESPACE, '/feedback', 
-			array(
-				array(
+		$routes = [
+			'/courses' => [
+				[
 					'methods' => 'GET',
-					'callback' => array($this,'get_user_feedback'),
-					'permission_callback' => 'is_user_logged_in'
-                ),
-                array(
+					'callback' => [ $this, 'get_course_info' ]
+				]
+			],
+			'/courses/(?P<id>[\d]+)' => [
+				[
+					'methods' => 'GET',
+					'callback' => [ $this, 'get_course_meta' ],
+					'permission_callback' => [ $this, 'course_permissions_check' ]
+				]
+			],
+			'/courses/log' => [
+				[
 					'methods' => 'POST',
-					'callback' => array($this,'post_feedback'),
-					'permission_callback' => array($this,'can_post_feedback')
-				)
-			)
-        );
-        register_rest_route( STTV_REST_NAMESPACE, '/feedback/reply', 
-            array(
-                array(
-                    'methods' => 'POST',
-                    'callback' => array($this,'post_feedback_reply'),
-                    'permission_callback' => array($this,'can_post_feedback')
-                )
-            )
-        );
-	} // end sttv_feedback_api
+					'callback' => [ $this, 'course_access_log' ],
+					'permission_callback' => 'is_user_logged_in'
+				]
+			],
+			'/courses/alert' => [
+				[
+					'methods' => 'GET',
+					'callback' => [ $this, 'get_course_meta' ],
+					'permission_callback' => [ $this, 'course_permissions_check' ]
+				]
+			],
+			'/courses/feedback' => [
+				[
+					'methods' => 'GET',
+					'callback' => [ $this, 'get_user_feedback' ],
+					'permission_callback' => 'is_user_logged_in'
+				],
+                [
+					'methods' => 'POST',
+					'callback' => [ $this, 'post_feedback' ],
+					'permission_callback' => [ $this, 'can_post_feedback' ]
+				],
+				[
+                    'methods' => 'PUT',
+                    'callback' => [ $this, 'post_feedback_reply' ],
+                    'permission_callback' => [ $this, 'can_post_feedback' ]
+				]
+			]
+		];
+
+		foreach ( $routes as $route => $endpoint ) {
+			register_rest_route( STTV_REST_NAMESPACE, $route, $endpoint );
+		}
+	}
 
 	public function can_post_feedback() {
 		return current_user_can('course_post_feedback') ?: is_user_logged_in();
-    }
+	}
+	
+	public function course_access_log( WP_REST_Request $request ) {
+		$data = [
+			date('c',time()),
+			$_SERVER['REMOTE_ADDR']
+		];
+		$data = array_merge($data, json_decode($request->get_body(), true));
+		$data = implode(' | ',$data);
+		return file_put_contents(STTV_LOGS_DIR.get_current_user_id().'.log',PHP_EOL.$data.PHP_EOL,FILE_APPEND);
+	}
 	
 	public function get_user_feedback() {
 		$user = wp_get_current_user();
@@ -107,8 +146,8 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function delete_feedback_transient($id) {
-		$delete = get_post($id);
-		return delete_transient('sttv_cfbrp:'.$delete->post_author);
+		$delete = get_post( $id );
+		return delete_transient( 'sttv_cfbrp:' . $delete->post_author );
 	}
 	
 }

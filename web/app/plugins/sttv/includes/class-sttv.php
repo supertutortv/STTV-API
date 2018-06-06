@@ -100,7 +100,7 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             print '<script>
-                var courses = '.json_encode( get_post_meta( 8, 'sttv_course_data', true ) ).'
+                //var courses = '.json_encode( get_post_meta( 8, 'sttv_course_data', true ) ).'
                 let zzz = location.pathname.split(\'/\').filter(String).join(\'.\')
                 function ref(obj, str) {
                     str = str.split(".");
@@ -109,7 +109,7 @@ final class STTV {
                     }
                     return obj;
                 }
-                console.log(ref(courses,zzz))
+                //console.log(ref(courses,zzz))
             </script>';
         });
 

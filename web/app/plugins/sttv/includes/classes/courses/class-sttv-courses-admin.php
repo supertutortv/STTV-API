@@ -67,9 +67,11 @@ class Admin {
 				],
 				'capabilities' => [
 					'trial' => [
+						'course_access_cap',
 						"course_{$test}_trial"
 					],
 					'full' => [
+						'course_access_cap',
 						"course_{$test}_full",
 						'course_post_feedback',
 						'course_post_reviews'
