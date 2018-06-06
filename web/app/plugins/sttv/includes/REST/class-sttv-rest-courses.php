@@ -95,13 +95,16 @@ class Courses extends \WP_REST_Controller {
 				404
 			);
 		}
+
+		$test_code = strtolower($meta['test']);
+		$trialing = current_user_can( "course_{$test_code}_trial" );
 		
 		$data = [
 			'id' => $meta['id'],
 			'name' => $meta['name'],
 			'slug' => $meta['slug'],
 			'link' => $meta['link'],
-			'test' => strtolower($meta['test']),
+			'test' => $meta['test'],
 			'intro' => $meta['intro'],
 			'version' => STTV_VERSION,
 			'lastFetched' => time(),
@@ -113,13 +116,13 @@ class Courses extends \WP_REST_Controller {
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
 			foreach ( $val['resources']['files'] as &$file ) {
-				if ( ! $file['in_trial'] ) {
+				if ( ! $file['in_trial'] && $trialing ) {
 					$file['file'] = 0;
 				}
 				unset( $file['in_trial'] );
 			}
 			foreach ( $val['subsec'] as $k => &$subsec ) {
-				if ( ! $subsec['in_trial'] ) {
+				if ( ! $subsec['in_trial'] && $trialing ) {
 					foreach ( $subsec['videos'] as &$vid ) {
 						$vid['ID'] = 0;
 					}
@@ -130,13 +133,13 @@ class Courses extends \WP_REST_Controller {
 		}
 
 		foreach ( $meta['practice']['resources']['files'] as &$file ) {
-			if ( ! $file['in_trial'] ) {
+			if ( ! $file['in_trial'] && $trialing ) {
 				$file['file'] = 0;
 				unset( $file['in_trial'] );
 			}
 		}
 		foreach ( $meta['practice']['books'] as $k => &$book ) {
-			if ( ! $book['in_trial'] ) {
+			if ( ! $book['in_trial'] && $trialing ) {
 				foreach ( $book['tests'] as $b => &$test ) {
 					foreach ( $test['sections'] as $t => &$sec ) {
 						foreach ( $sec['videos'] as $s => &$vid ) {
