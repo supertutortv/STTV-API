@@ -86,8 +86,8 @@ class Courses extends \WP_REST_Controller {
 
 	}
 
-	public function get_course_meta( $data ) {		
-		$meta = get_post_meta( $data['id'], 'sttv_course_data' , true );
+	public function get_course_meta( $req ) {		
+		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		
 		$data = [
 			'id' => $meta['id'],
@@ -96,24 +96,43 @@ class Courses extends \WP_REST_Controller {
 			'link' => $meta['link'],
 			'test' => strtolower($meta['test']),
 			'intro' => $meta['intro'],
-			'version' => STTV_VERSION
+			'version' => STTV_VERSION,
+			'lastFetched' => time()
 		];
 		
-		foreach ($meta['sections'] as $sec => $val) {
-			$data['sections'][$sec] = [
-				'name' => $val['name'],
-				'description' => $val['description'],
-				'intro' => $val['intro'],
-				'color' => $val['color']
-			];
-			
-			if (current_user_can($val['cap'])) {
-				$data['sections'][$sec]['resources'] = $val['resources'];
-				$data['sections'][$sec]['subsec'] = $val['subsec'];
-			} else {
-				$data['sections'][$sec]['restricted'] = 'Restricted access. This section will be available when you purchase the full course, or your trial period ends.';
+		foreach ( $meta['sections'] as $sec => $val ) {
+			foreach ( $val['resources']['files'] as $file ) {
+				if ( ! $file['in_trial'] ) {
+					$file['file'] = 0;
+					unset( $file['in_trial'] );
+				}
+			}
+			foreach ( $val['subsec'] as $k => $subsec ) {
+				if ( ! $subsec['in_trial'] ) {
+					foreach ( $subsec['videos'] as $vid ) {
+						$vid['ID'] = 0;
+					}
+					unset( $subsec['in_trial'] );
+				}
+			}
+			$data['sections'][$sec] = $val;
+		}
+
+		foreach ( $meta['practice']['resources']['files'] as $file ) {
+			if ( ! $file['in_trial'] ) {
+				$file['file'] = 0;
+				unset( $file['in_trial'] );
 			}
 		}
+		foreach ( $meta['tests'] as $k => $test ) {
+			if ( ! $test['in_trial'] ) {
+				/* foreach ( $subsec['videos'] as $vid ) {
+					$vid['ID'] = 0;
+				} */
+				unset( $test['in_trial'] );
+			}
+		}
+
 		$data['practice'] = [
 			'description' => $meta['practice']['description'],
 			'resources' => $meta['practice']['resources'],

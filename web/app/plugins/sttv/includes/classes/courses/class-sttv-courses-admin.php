@@ -152,7 +152,7 @@ class Admin {
 				'resources' => [
 					'type' => 'file'
 				],
-				'tests' => []
+				'books' => []
 			];
 
 			if ( $course['practice']['uploads'] ) {
