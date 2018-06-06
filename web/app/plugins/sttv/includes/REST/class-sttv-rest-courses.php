@@ -86,7 +86,8 @@ class Courses extends \WP_REST_Controller {
 
 	}
 
-	public function get_course_meta( $req ) {		
+	public function get_course_meta( $req ) {
+		return $req->get_headers();	
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
 			return sttv_rest_response(
