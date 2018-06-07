@@ -15,8 +15,7 @@ class Order extends Stripe {
         foreach( $obj['items'] as $item ) {
             \Stripe\InvoiceItem::create( $item );
         }
-        $this->response = \Stripe\Invoice::create( [ 'customer' => $obj['customer'] ] );
-        return $this;
+        return \Stripe\Invoice::create( [ 'customer' => $obj['customer'] ] );
     }
 
     protected function update( $obj ) {
