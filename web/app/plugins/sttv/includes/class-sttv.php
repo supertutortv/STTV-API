@@ -111,6 +111,16 @@ final class STTV {
                         'parent' => 'sttvsub_8_full',
                         'quantity' => 1,
                         'type' => 'sku'
+                    ],
+                    [
+                        'type' => 'shipping',
+                        'description' => 'Priority Shipping',
+                        'amount' => 1285
+                    ],
+                    [
+                        'type' => 'tax',
+                        'description' => 'CA Sales Tax',
+                        'amount' => 2500 * .095
                     ]
                 ],
                 'shipping' => [
