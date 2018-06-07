@@ -106,17 +106,14 @@ final class STTV {
         add_action( 'print_test', function() {
             $test_order = new \STTV\Checkout\Order( 'create', [
                 'customer' => 'cus_CUDuy8TMMclqZs',
+                'trial' => 5,
                 'items' => [
                     [
                         'customer' => 'cus_CUDuy8TMMclqZs',
                         'currency' => 'usd',
                         'amount' => 24900,
                         'description' => 'The Best ACT Prep Course Ever',
-                        'discountable' => true,
-                        'period' => [
-                            'start' => time(),
-                            'end' => time() + (MONTH_IN_SECONDS * 6)
-                        ]
+                        'discountable' => true
                     ],
                     [
                         'customer' => 'cus_CUDuy8TMMclqZs',
