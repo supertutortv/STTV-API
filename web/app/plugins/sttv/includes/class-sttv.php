@@ -105,34 +105,11 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             $test_order = new \STTV\Checkout\Order( 'create', [
-                'currency' => 'usd',
-                'items' => [
-                    [
-                        'parent' => 'sttvsub_8_full',
-                        'quantity' => 1,
-                        'type' => 'sku'
-                    ]
-                ],
-                'shipping' => [
-                    'name' => 'David Paul',
-                    'address' => [
-                        'line1' => '1314 Westwood Blvd',
-                        'line2' => '#107',
-                        'city' => 'Los Angeles',
-                        'state' => 'CA',
-                        'postal_code' => '90024',
-                        'country' => 'US'
-                    ]
-                ],
-                'customer' => 'cus_CUDuy8TMMclqZs',
-                'metadata' => [
-                    'name' => 'David Paul',
-                    'uid' => '1'
-                ]
+                'customer' => 'cus_CUDuy8TMMclqZs'
             ]);
             $order = $test_order->response();
-            $pay = $order->pay();
-            print_r( $pay );
+            //$pay = $order->pay();
+            print_r( $order );
         });
 
         // cleanup
