@@ -104,7 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            $test_order = new \STTV\Checkout\Order( 'create', [
+            /* $test_order = new \STTV\Checkout\Order( 'create', [
                 'customer' => 'cus_CUDuy8TMMclqZs',
                 'items' => [
                     [
@@ -129,10 +129,11 @@ final class STTV {
                         "discountable" => false
                     ]
                 ]
-            ]);
-            $order = $test_order->response();
+            ]); */
+            //$order = $test_order->response();
             //$pay = $order->pay();
-            print_r( $order );
+            $order = new \STTV\Checkout\Order( 'retrieve', 'in_1CaXUYIdKWhsvVLLLHBmIo4X' );
+            print_r( $order->response()->pay() );
         });
 
         // cleanup
