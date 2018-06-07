@@ -5,13 +5,15 @@ defined( 'ABSPATH' ) || exit;
 
 abstract class Stripe {
 
-    protected $type = '\\Stripe\\';
+    protected $namespace = '\\Stripe\\';
 
     public $response = null;
 
-    abstract public function save();
+    abstract protected function create( $obj );
 
-    abstract protected function sanitize( $obj );
+    abstract protected function update( $obj );
+
+    abstract protected function retrieve( $id );
 
     public function __call( $name, $arguments ) {
         return [
@@ -21,7 +23,7 @@ abstract class Stripe {
         ];
     }
 
-    protected function init( $obj = null, $action = 'retrieve', $type = 'Customer' ) {
+    protected function init( $obj = null ) {
         if ( is_null( $obj ) || empty( $obj ) ) {
             return [
                 'error' => true,
@@ -29,9 +31,7 @@ abstract class Stripe {
                 'errMsg' => 'The request body cannot be null or empty'
             ];
         }
-        $this->type .= $type;
-        $this->response = $this->type::$action( $obj );
-        return $this;
+        return $obj;
     }
 
     public function response() {

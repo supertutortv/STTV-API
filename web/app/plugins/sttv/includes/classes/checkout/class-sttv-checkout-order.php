@@ -6,18 +6,29 @@ defined( 'ABSPATH' ) || exit;
 class Order extends Stripe {
 
     public function __construct( $action = 'create', $obj = null ) {
-        //$obj = $this->sanitize( $obj );
-        return $this->init( $obj, $action, $type = 'Invoice' );
+        $obj = $this->init( $obj );
+        $this->response = $this->$action( $obj );
+        return $this;
+    }
+
+    protected function create( $obj ) {
+        foreach( $obj['items'] as $item ) {
+            \Stripe\InvoiceItem::create( $item );
+        }
+        $this->response = \Stripe\Invoice::create( [ 'customer' => $obj['customer'] ] );
+        return $this;
+    }
+
+    protected function update( $obj ) {
+        
+    }
+
+    protected function retrieve( $id ) {
+
     }
 
     public function save() {
-        global $wpdb;
-        $res = $this->response;
-    }
 
-    protected function sanitize( $obj ) {
-        $sanitized = $obj;
-        return $sanitized;
     }
 
 }
