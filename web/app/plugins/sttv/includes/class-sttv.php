@@ -120,7 +120,7 @@ final class STTV {
                     [
                         'type' => 'tax',
                         'description' => 'CA Sales Tax',
-                        'amount' => 2500 * .095
+                        'amount' => round(2500 * .095)
                     ]
                 ],
                 'shipping' => [
