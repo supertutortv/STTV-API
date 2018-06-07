@@ -62,9 +62,9 @@ final class STTV {
         require_once 'classes/class-sttv-logger.php';
 
         // checkout classes
-        require_once 'classes/class-sttv-checkout-stripe.php';
-        require_once 'classes/class-sttv-checkout-order.php';
-        require_once 'classes/class-sttv-checkout-charge.php';
+        require_once 'classes/checkout/class-sttv-checkout-stripe.php';
+        require_once 'classes/checkout/class-sttv-checkout-order.php';
+        require_once 'classes/checkout/class-sttv-checkout-charge.php';
 
         // REST setup and init
         require_once 'classes/class-sttv-rest.php';
