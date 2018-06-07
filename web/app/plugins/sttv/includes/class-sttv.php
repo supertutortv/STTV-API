@@ -108,9 +108,9 @@ final class STTV {
                 'currency' => 'usd',
                 'items' => [
                     [
-                        'description' => 'The Best ACT Prep Course Ever',
+                        'parent' => 'sttvsub_8',
                         'quantity' => 1,
-                        'amount' => 24900
+                        'type' => 'sku'
                     ]
                 ],
                 'email' => 'dave@supertutortv.com',
