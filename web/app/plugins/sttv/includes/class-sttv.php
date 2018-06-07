@@ -104,7 +104,22 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print WP_ENV;
+            $test_order = new \STTV\Checkout\Order( 'create', [
+                'currency' => 'usd',
+                'items' => [
+                    [
+                        'description' => 'The Best ACT Prep Course Ever',
+                        'quantity' => 1,
+                        'amount' => 24900
+                    ]
+                ],
+                'email' => 'dave@supertutortv.com',
+                'metadata' => [
+                    'name' => 'David Paul',
+                    'uid' => '1'
+                ]
+            ]);
+            print_r( $test_order );
         });
 
         // cleanup
