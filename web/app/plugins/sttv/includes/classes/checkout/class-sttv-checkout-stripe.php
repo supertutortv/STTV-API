@@ -11,7 +11,7 @@ abstract class Stripe {
 
     abstract public function save();
 
-    abstract protected function sanitize();
+    abstract protected function sanitize( $obj );
 
     public function __call( $name, $arguments ) {
         return [
