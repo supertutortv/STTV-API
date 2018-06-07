@@ -113,6 +113,17 @@ final class STTV {
                         'type' => 'sku'
                     ]
                 ],
+                'shipping' => [
+                    'name' => 'David Paul',
+                    'address' => [
+                        'line1' => '1314 Westwood Blvd',
+                        'line2' => '#107',
+                        'city' => 'Los Angeles',
+                        'state' => 'CA',
+                        'postal_code' => '90024',
+                        'country' => 'US'
+                    ]
+                ],
                 'email' => 'dave@supertutortv.com',
                 'metadata' => [
                     'name' => 'David Paul',
