@@ -15,7 +15,11 @@ class Order extends Stripe {
         foreach( $obj['items'] as $item ) {
             \Stripe\InvoiceItem::create( $item );
         }
-        return \Stripe\Invoice::create( [ 'customer' => $obj['customer'] ] );
+        return \Stripe\Invoice::create([
+            'customer' => $obj['customer'],
+            'billing' => 'send_invoice',
+            'due_date' => time() + (DAY_IN_SECONDS * 5)
+        ]);
     }
 
     protected function update( $obj ) {
