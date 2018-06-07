@@ -111,8 +111,8 @@ class Courses extends \WP_REST_Controller {
 			'version' => STTV_VERSION,
 			'lastFetched' => time(),
 			'thumbUrls' => [
-				'plain' => 'https://i.vimeocdn.com/video/||_295x166.jpg?r=pad',
-				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+				'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
 			]
 		];
 		

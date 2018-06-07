@@ -61,6 +61,11 @@ final class STTV {
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
 
+        // checkout classes
+        require_once 'classes/class-sttv-checkout-stripe.php';
+        require_once 'classes/class-sttv-checkout-order.php';
+        require_once 'classes/class-sttv-checkout-charge.php';
+
         // REST setup and init
         require_once 'classes/class-sttv-rest.php';
 
@@ -99,18 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print '<script>
-                //var courses = '.json_encode( get_post_meta( 8, 'sttv_course_data', true ) ).'
-                let zzz = location.pathname.split(\'/\').filter(String).join(\'.\')
-                function ref(obj, str) {
-                    str = str.split(".");
-                    for (var i = 0; i < str.length; i++) {
-                        obj = obj[str[i]]
-                    }
-                    return obj;
-                }
-                //console.log(ref(courses,zzz))
-            </script>';
+            print WP_ENV;
         });
 
         // cleanup
