@@ -115,9 +115,9 @@ final class STTV {
                         'discountable' => true
                     ],
                     [
-                        "customer" => 'cus_CUDuy8TMMclqZs',
-                        "amount" => round(2500*($obj['taxrate']/100)),
-                        "currency" => "usd",
+                        'customer' => 'cus_CUDuy8TMMclqZs',
+                        'amount' => round(2500*(9.5/100)),
+                        'currency' => "usd",
                         "description" => "Sales tax",
                         "discountable" => false
                     ],
