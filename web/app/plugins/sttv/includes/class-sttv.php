@@ -119,7 +119,7 @@ final class STTV {
                     'uid' => '1'
                 ]
             ]);
-            print_r( $test_order );
+            print_r( $test_order->response() );
         });
 
         // cleanup
