@@ -124,22 +124,14 @@ final class STTV {
                         'country' => 'US'
                     ]
                 ],
-                'email' => 'dave@supertutortv.com',
+                'customer' => 'cus_CUDuy8TMMclqZs',
                 'metadata' => [
                     'name' => 'David Paul',
                     'uid' => '1'
                 ]
             ]);
             $order = $test_order->response();
-            $pay = $order->pay([
-                "source" => [
-                    'exp_month' => '04',
-                    'exp_year' => '24',
-                    'number' => '4242424242424242',
-                    'cvc' => '242',
-                    'object' => 'card'
-                ]
-            ]);
+            $pay = $order->pay();
             print_r( $pay );
         });
 
