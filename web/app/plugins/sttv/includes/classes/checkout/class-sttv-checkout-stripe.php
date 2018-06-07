@@ -30,8 +30,8 @@ abstract class Stripe {
             ];
         }
         $this->response = $obj;
-        $this->type .= $type;
-        $this->response = $this->type::$action( $obj );
+        //$this->type .= $type;
+        //$this->response = $this->type::$action( $obj );
         return $this->response;
     }
 
