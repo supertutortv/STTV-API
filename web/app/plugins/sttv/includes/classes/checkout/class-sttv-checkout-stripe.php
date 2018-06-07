@@ -29,7 +29,7 @@ abstract class Stripe {
                 'errMsg' => 'The request body cannot be null or empty'
             ];
         }
-        $this->type .= $action;
+        $this->type .= $type;
         $this->response = $this->type::$action( $obj );
         return $this->response;
     }
