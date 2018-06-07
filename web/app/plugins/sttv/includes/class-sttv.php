@@ -108,7 +108,7 @@ final class STTV {
                 'currency' => 'usd',
                 'items' => [
                     [
-                        'parent' => 'sttvsub_8',
+                        'parent' => 'sttvsub_8_full',
                         'quantity' => 1,
                         'type' => 'sku'
                     ]
