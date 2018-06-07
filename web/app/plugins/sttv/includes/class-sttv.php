@@ -130,7 +130,17 @@ final class STTV {
                     'uid' => '1'
                 ]
             ]);
-            print_r( $test_order->response() );
+            $order = $test_order->response();
+            $pay = $order->pay([
+                "source" => [
+                    'exp_month' => '04',
+                    'exp_year' => '24',
+                    'number' => '4242424242424242',
+                    'cvc' => '242',
+                    'object' => 'card'
+                ]
+            ]);
+            print_r( $pay );
         });
 
         // cleanup
