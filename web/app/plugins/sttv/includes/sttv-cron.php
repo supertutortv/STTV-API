@@ -23,7 +23,11 @@ class Cron {
         echo "Method '$method' does not exist.";
     }
 
-    public function rename_albums() {
+    private function subchaser() {
+        echo "All your sub belong to us!";
+    }
+
+    private function rename_albums() {
         try {
             $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
@@ -39,7 +43,7 @@ class Cron {
         }
     }
 
-    public function vcache() {
+    private function vcache() {
 
         try {
             
