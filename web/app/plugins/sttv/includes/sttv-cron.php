@@ -25,13 +25,23 @@ class Cron {
     }
 
     private function subchaser() {
-        try {
-            $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
-            $alb_data = $vimeo->request( "/me/videos/266175666" );
-            print_r( $alb_data );
-        } catch ( Exception $e ) {
-            print_r( $e );
-        }
+        $data = http_build_query(
+            [
+                'from' => 'sttvcron'
+            ]
+        );
+        $opts = [ 
+            'https' => [
+                'method'  => 'POST',
+                'header'  => [
+                    'X_STTV_WHSEC' => hash_hmac( 'sha256', json_encode( $data ), $this->seckeys['sttvwhsec'] )
+                ],
+                'content' => $data
+            ]
+        ];
+        $context  = stream_context_create( $opts );
+        $result = file_get_contents( 'https://app.supertutortv.com/?sttvwebhook', false, $context );
+        print_r( $result );
         //echo "All your sub belong to us!";
     }
 
