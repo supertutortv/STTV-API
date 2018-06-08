@@ -12,7 +12,7 @@ class Cron {
     private $seckeys = [];
 
     public function __construct( $method ) {
-        $vars = file( dirname( __DIR__ ) . '/vimeo/.seckeys', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $vars = file( dirname( __DIR__ ) . '/vimeo/.seckeys', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES );
         foreach ( $vars as $v ) {
             $line = explode( '=', $v );
             $this->seckeys[$line[0]] = $line[1];
