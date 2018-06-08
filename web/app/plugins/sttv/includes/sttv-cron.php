@@ -9,13 +9,14 @@ class Cron {
         'ACT'
     ];
 
-    private $vtok = '57e52c4bb16997b539ebed506a099c36';
-
-    private $vsec = '8ZwrHod1K6aec7ZAPETVPgcshokYimu9Jt9Ms+zOfvFetzogUlNHAOvPWm1Emn5iw2BrVuEl/UyCnt/gny6W1iJKadmqDXGTR/PgFj25p/2t65uZdVkJEBsxxs/ZkUf0';
-
-    private $vclient = '5fc7293a02bf8a93179503d7bf72fb190cf8e9af';
+    private $seckeys = [];
 
     public function __construct( $method ) {
+        $vars = file( dirname( __DIR__ ) . '/vimeo/.seckeys', FILE_IGNORE_NEW_LINES, FILE_SKIP_EMPTY_LINES);
+        foreach ( $vars as $v ) {
+            $line = explode( '=', $v );
+            $this->seckeys[$line[0]] = $line[1];
+        }
         $this->$method();
     }
 
@@ -24,12 +25,19 @@ class Cron {
     }
 
     private function subchaser() {
-        echo "All your sub belong to us!";
+        try {
+            $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
+            $alb_data = $vimeo->request( "/me/videos/266175666" );
+            print_r( $alb_data );
+        } catch ( Exception $e ) {
+            print_r( $e );
+        }
+        //echo "All your sub belong to us!";
     }
 
     private function rename_albums() {
         try {
-            $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
+            $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
 
