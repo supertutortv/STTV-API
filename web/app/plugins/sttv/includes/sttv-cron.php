@@ -34,7 +34,7 @@ class Cron {
             'http' => [
                 'method'  => 'GET',
                 'header'  => [
-                    'User-Agent' => 'sttv.cron.2.0.0.VPS',
+                    'User-Agent' => 'STTVCron (BUDDHA 2.0.0 / VPS)',
                     'X_STTV_WHSEC' => hash_hmac( 'sha256', json_encode( $data ), $this->seckeys['sttvwhsec'] )
                 ],
                 'content' => $data
