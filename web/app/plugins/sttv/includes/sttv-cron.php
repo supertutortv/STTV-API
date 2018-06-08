@@ -31,7 +31,7 @@ class Cron {
             ]
         );
         $opts = [ 
-            'https' => [
+            'http' => [
                 'method'  => 'POST',
                 'header'  => [
                     'X_STTV_WHSEC' => hash_hmac( 'sha256', json_encode( $data ), $this->seckeys['sttvwhsec'] )
