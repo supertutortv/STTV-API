@@ -15,7 +15,7 @@ use WP_REST_Server;
  * Properties, methods, and endpoints for the frontend checkout form to interact with.
  *
  * @class 		STTV_Checkout
- * @version		1.4.0
+ * @version		2.0.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
