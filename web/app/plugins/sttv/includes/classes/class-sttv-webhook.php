@@ -2,7 +2,7 @@
 
 namespace STTV;
 
-if ( ! defined( 'ABSPATH' ) ) {exit;}
+defined( 'ABSPATH' ) || exit;
 
 class Webhook {
 
@@ -13,6 +13,7 @@ class Webhook {
         }
 
         $request = @file_get_contents( "php://input" );
+        echo $request && die;
 
         $event = $response = null;
         $http = 200;
