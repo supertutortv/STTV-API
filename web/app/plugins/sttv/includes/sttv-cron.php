@@ -34,11 +34,10 @@ class Cron {
             'http' => [
                 'method'  => 'POST',
                 'ignore_errors' => '1',
-                'header'  => [
-                    'User-Agent' => 'STTVCron (BUDDHA 2.0.0 / VPS)',
-                    'Content-Type' => 'application/json',
-                    'X-STTV-WHSEC' => hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] )
-                ],
+                'header'  =>
+                    "User-Agent: STTVCron (BUDDHA 2.0.0 / VPS)\r\n".
+                    "Content-Type: application/json\r\n".
+                    "X-STTV-WHSEC: " . hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] ) . "\r\n",
                 'content' => $data
             ]
         ];
