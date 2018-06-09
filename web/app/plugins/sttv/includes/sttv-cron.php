@@ -25,7 +25,7 @@ class Cron {
     }
 
     private function subchaser() {
-        $data = http_build_query(
+        $data = json_encode(
             [
                 'from' => 'sttvcron'
             ]
@@ -37,7 +37,7 @@ class Cron {
                 'header'  => [
                     'User-Agent' => 'STTVCron (BUDDHA 2.0.0 / VPS)',
                     'Content-Type' => 'application/json',
-                    'X-STTV-WHSEC' => hash_hmac( 'sha256', json_encode( $data ), $this->seckeys['sttvwhsec'] )
+                    'X-STTV-WHSEC' => hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] )
                 ],
                 'content' => $data
             ]
