@@ -13,7 +13,6 @@ class Webhook {
         }
 
         $request = @file_get_contents( "php://input" );
-        echo $request && die;
 
         $event = $response = null;
         $http = 200;
@@ -23,9 +22,11 @@ class Webhook {
         ];
         
         try {
-            if ( empty( $request ) ) {
+            $response = $request;
+            /* if ( empty( $request ) ) {
                 throw new \InvalidArgumentException( 'Request body cannot be empty.' );
             }
+            return 
             
             switch ( array_keys($_GET)[0] ) {
                 case 'sttvwebhook':
@@ -40,7 +41,7 @@ class Webhook {
 
             $log_vars['event'] = $event['type'];
 
-            $response = self::respond( $event );
+            $response = self::respond( $event ); */
             
         } catch ( \InvalidArgumentException $e ) {
 
