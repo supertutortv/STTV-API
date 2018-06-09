@@ -22,15 +22,14 @@ class Webhook {
         ];
         
         try {
-            $response = $request;
-            /* if ( empty( $request ) ) {
+
+            if ( empty( $request ) ) {
                 throw new \InvalidArgumentException( 'Request body cannot be empty.' );
             }
-            return 
             
             switch ( array_keys($_GET)[0] ) {
                 case 'sttvwebhook':
-                    $event = self::verifySignature( $request, @$_SERVER['HTTP_X_STTV_WHSEC'] );
+                    $event = self::verifySignature( $request, @$_SERVER['HTTP_X-STTV-WHSEC'] );
                     break;
                 case 'stripeevent':
                     $event = \Stripe\Webhook::constructEvent(
@@ -41,7 +40,7 @@ class Webhook {
 
             $log_vars['event'] = $event['type'];
 
-            $response = self::respond( $event ); */
+            $response = self::respond( $event );
             
         } catch ( \InvalidArgumentException $e ) {
 
