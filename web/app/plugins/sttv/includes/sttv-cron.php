@@ -32,7 +32,8 @@ class Cron {
         );
         $opts = [ 
             'http' => [
-                'method'  => 'GET',
+                'method'  => 'POST',
+                'ignore_errors' => '1',
                 'header'  => [
                     'User-Agent' => 'STTVCron (BUDDHA 2.0.0 / VPS)',
                     'Content-Type' => 'application/json',
@@ -42,8 +43,9 @@ class Cron {
             ]
         ];
         $context  = stream_context_create( $opts );
-        $result = file_get_contents( 'https://app.supertutortv.com/?sttvwebhook', false, $context );
+        $result = fopen( 'https://app.supertutortv.com/?sttvwebhook', false, $context );
         print_r( $result );
+        fclose( $result );
         //echo "All your sub belong to us!";
     }
 
