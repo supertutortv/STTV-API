@@ -30,7 +30,7 @@ class Log {
         }
 
         return file_put_contents( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] . '/' . date('m-d-Y') . $ext,
-			json_encode( $input ) . "\n",
+			json_encode( $input ) . "\r\n",
 			FILE_APPEND | LOCK_EX
 		);
     }
