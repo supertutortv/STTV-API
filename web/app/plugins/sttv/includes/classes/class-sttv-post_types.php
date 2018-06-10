@@ -28,7 +28,7 @@ class Post_Types {
                 'hierarchical'			=>	true,
                 'exclude_from_search'	=>	true,
                 'show_in_nav_menus'		=>	false,
-                'show_in_rest'			=>	true,
+                'show_in_rest'			=>	false,
                 'rewrite'				=>	[
                     'with_front'	=>	true,
                     'pages'			=>	false
