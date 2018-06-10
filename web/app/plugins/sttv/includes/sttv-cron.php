@@ -27,7 +27,8 @@ class Cron {
     private function subchaser() {
         $data = json_encode(
             [
-                'from' => 'sttvcron'
+                'from' => 'sttvcron',
+                'rand' => openssl_random_pseudo_bytes(8)
             ]
         );
         $opts = [ 

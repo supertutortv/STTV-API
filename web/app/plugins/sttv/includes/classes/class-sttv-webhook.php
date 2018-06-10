@@ -26,7 +26,6 @@ class Webhook {
     }
 
     public function __toString() {
-        return json_encode($_SERVER);
         return json_encode( sttv_rest_response(
                 $this->event,
                 $this->message,
@@ -55,7 +54,7 @@ class Webhook {
         if ( !$this->error ) {
             switch ( array_keys($_GET)[0] ) {
                 case 'sttvwebhook':
-                    $signed = $this->verifySignature( $this->request, @$_SERVER["HTTP_X-STTV-WHSEC"] );
+                    $signed = $this->verifySignature( $this->request, @$_SERVER["HTTP_X_STTV_WHSEC"] );
                     break;
                 case 'stripeevent':
                     $signed = \Stripe\Webhook::constructEvent(
