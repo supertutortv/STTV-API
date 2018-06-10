@@ -82,15 +82,16 @@ class Courses extends \WP_REST_Controller {
 	##### COURSE METHODS #####
 	##########################
 
-	public function get_course_info( $id = 0 ) {
+	public function get_course_info() {
 
 	}
 
 	public function get_course_meta( $req ) {
-		$cached = get_transient( "sttv_course_cache_{$req['id']}");
+		$cached = get_transient( "sttv_course_cache_{$req['id']}" );
 		if ( $cached ) {
 			return $cached;
 		}
+		
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
 			return sttv_rest_response(
