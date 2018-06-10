@@ -42,7 +42,7 @@ class Cron {
             ]
         ];
         $context  = stream_context_create( $opts );
-        $result = file_get_contents( 'https://app.supertutortv.com/?sttvwebhook', false, $context );
+        $result = file_get_contents( 'https://api.supertutortv.com/?sttvwebhook', false, $context );
         print_r( $result );
         //echo "All your sub belong to us!";
     }

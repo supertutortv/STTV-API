@@ -24,12 +24,16 @@ class Webhook {
         try {
 
             if ( empty( $request ) ) {
-                throw new \InvalidArgumentException( 'Request body cannot be empty.' );
+                return sttv_rest_response(
+                    'null_body',
+                    'Request body cannot be empty.',
+                    400
+                );
             }
             
             switch ( array_keys($_GET)[0] ) {
                 case 'sttvwebhook':
-                    $event = self::verifySignature( $request, @$_SERVER['HTTP_X-STTV-WHSEC'] );
+                    $event = self::verifySignature( $request, @$_SERVER["HTTP_X-STTV-WHSEC"] );
                     break;
                 case 'stripeevent':
                     $event = \Stripe\Webhook::constructEvent(
@@ -126,13 +130,20 @@ class Webhook {
         $data = json_decode( $request, true );
         $jsonError = json_last_error();
         if ($data === null && $jsonError !== JSON_ERROR_NONE) {
-            $msg = "Invalid payload: $data "
-              . "($jsonError)";
-            throw new \InvalidArgumentException($msg);
+            return sttv_rest_response(
+                'invalid_payload',
+                "Invalid payload. ($jsonError)",
+                403,
+                [ 'data' => $data ]
+            );
         }
 
         if ( $sig !== self::sign( $request ) ) {
-            throw new \Stripe\Error\SignatureVerification( 'Webhook signature is invalid.', $sig );
+            return sttv_rest_response(
+                'invalid_signature',
+                "Webhook signature is invalid. ($sig)",
+                401
+            );
         }
 
         return $data;
