@@ -71,7 +71,7 @@ define('NONCE_SALT', env('NONCE_SALT'));
 /**
  * Custom Settings
  */
-define('COOKIE_DOMAIN', '.supertutortv.com');
+define('COOKIE_DOMAIN', env('COOKIE_DOMAIN'));
 define('AUTOMATIC_UPDATER_DISABLED', true);
 define('DISABLE_WP_CRON', env('DISABLE_WP_CRON') ?: false);
 define('DISALLOW_FILE_EDIT', true);
