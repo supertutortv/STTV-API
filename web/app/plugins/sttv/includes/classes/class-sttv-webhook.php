@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Webhook {
 
-    private $http = 400;
+    private $http = 200;
 
     private $event = null;
 
@@ -64,7 +64,7 @@ class Webhook {
             }
 
             if ( $signed ) {
-                $this->response = $this->respond( json_decode( $this->request, true ) );
+                $this->respond( json_decode( $this->request, true ) );
             }
         }
 
@@ -94,7 +94,13 @@ class Webhook {
         //change event dot notation to underscores
         $this->event = str_replace( '.', '_', $data['event'] );
 
-        return ( is_callable( $this->event ) ) ? ($this->event)( $data ) : 'Valid webhook, but no action taken. Thank you!';
+        if ( is_callable( $this->event ) ) {
+            $this->response = ($this->event)( $data );
+            $this->message = 'Webhook executed';
+        } else {
+            $this->response = [];
+            $this->message = 'Valid webhook, but no action taken. Thank you!';
+        }
 
     }
 

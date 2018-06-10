@@ -2,7 +2,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function trial_expiration_checker() {
+function trail_expiration_checker() {
     return 'Hello world!';
 }
 
