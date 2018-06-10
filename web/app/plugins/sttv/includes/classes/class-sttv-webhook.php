@@ -21,7 +21,8 @@ class Webhook {
 			return false;
         }
         $class = __CLASS__;
-        new $class;
+        return new $class;
+        die;
     }
 
     public function __toString() {
@@ -84,8 +85,6 @@ class Webhook {
             $this->http,
             $this->response
         );
-
-        die;
     }
 
     private function respond( $data ) {
