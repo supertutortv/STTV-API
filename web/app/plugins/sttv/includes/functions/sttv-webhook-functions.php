@@ -8,7 +8,10 @@ defined( 'ABSPATH' ) || exit;
 
 // trial.expiration.checker
 function trial_expiration_checker() {
-    return 'Hello world!';
+    global $wpdb;
+    $time = time();
+    $invs = $wpdb->get_results( "SELECT charge_id FROM sttvapp_trial_reference WHERE exp_date < $time");
+    return $invs;
 }
 
 #########################
