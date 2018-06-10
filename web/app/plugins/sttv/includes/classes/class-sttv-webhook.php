@@ -30,7 +30,7 @@ class Webhook {
                 $this->event,
                 $this->message,
                 $this->http,
-                $this->response
+                [ 'data' => $this->response ]
             )
         );
     }
@@ -83,7 +83,7 @@ class Webhook {
             $this->event,
             $this->message,
             $this->http,
-            $this->response
+            [ 'data' => $this->response ]
         );
     }
 
@@ -117,7 +117,7 @@ class Webhook {
             $this->event = 'invalid_payload';
             $this->message = "Invalid payload. ($jsonError)";
             $this->http = 403;
-            $this->response = $request;
+            $this->response = $data;
             $this->error = true;
             return false;
         }
@@ -126,7 +126,7 @@ class Webhook {
             $this->event = 'invalid_signature';
             $this->message = "Webhook signature is invalid. ($sig)";
             $this->http = 401;
-            $this->response = $request;
+            $this->response = $data;
             $this->error = true;
             return false;
         }
