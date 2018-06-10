@@ -87,11 +87,11 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function get_course_meta( $req ) {
-		$cached = get_transient( "sttv_course_cache_{$req['id']}" );
-		if ( $cached ) {
+		$cached = get_option( "sttv_course_cache_{$req['id']}" );
+		if ( $cached['lastFetched'] + DAY_IN_SECONDS > time() ) {
 			return $cached;
 		}
-		
+
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
 			return sttv_rest_response(
@@ -160,7 +160,7 @@ class Courses extends \WP_REST_Controller {
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 
-		set_transient( "sttv_course_cache_{$req['id']}", $data, 3600 );
+		update_option( "sttv_course_cache_{$req['id']}", $data, true );
 		
 		return $data;
 
