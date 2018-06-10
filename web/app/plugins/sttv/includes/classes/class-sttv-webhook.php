@@ -122,7 +122,7 @@ class Webhook {
             return false;
         }
 
-        if ( $sig !== self::sign( $request ) ) {
+        if ( $sig !== self::sign( $request[0] ) ) {
             $this->event = 'invalid_signature';
             $this->message = "Webhook signature is invalid. ($sig)";
             $this->http = 401;
