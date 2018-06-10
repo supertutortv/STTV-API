@@ -6,6 +6,19 @@ defined( 'ABSPATH' ) || exit;
 
 class Webhook {
 
+    private static $http = 200;
+
+    private static $log_vars = [
+        'direction' => 'received',
+        'error' => false
+    ];
+
+    private static $event = null;
+
+    private static $response = null;
+
+    private static $error = false;
+
     public static function init() {
         
         if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
@@ -13,38 +26,40 @@ class Webhook {
         }
 
         $request = @file_get_contents( "php://input" );
+        if ( empty( $request ) ) {
+            self::$response = sttv_rest_response(
+                'null_body',
+                'Request body cannot be empty.',
+                400
+            );
+        }
+        return array_keys($_GET)[0];
+        switch ( array_keys($_GET)[0] ) {
+            case 'sttvwebhook':
+                self::$event = self::verifySignature( $request, @$_SERVER["HTTP_X-STTV-WHSEC"] );
+                break;
+            case 'stripeevent':
+                self::$event = \Stripe\Webhook::constructEvent(
+                    $request, @$_SERVER["HTTP_STRIPE_SIGNATURE"], STRIPE_WHSEC
+                );
+                break;
+        }
 
-        $event = $response = null;
-        $http = 200;
-        $log_vars = [
-            'direction' => 'received',
-            'error' => false
-        ];
+        self::$log_vars['event'] = self::$event['type'];
+
+        $response = self::respond( self::$event );
+
+        \STTV\Log::webhook( self::$log_vars );
+        http_response_code( self::$http );
+        return $response;
         
         try {
 
-            if ( empty( $request ) ) {
-                return sttv_rest_response(
-                    'null_body',
-                    'Request body cannot be empty.',
-                    400
-                );
-            }
             
-            switch ( array_keys($_GET)[0] ) {
-                case 'sttvwebhook':
-                    $event = self::verifySignature( $request, @$_SERVER["HTTP_X-STTV-WHSEC"] );
-                    break;
-                case 'stripeevent':
-                    $event = \Stripe\Webhook::constructEvent(
-                        $request, @$_SERVER["HTTP_STRIPE_SIGNATURE"], STRIPE_WHSEC
-                    );
-                    break;
-            }
+            
+            
 
-            $log_vars['event'] = $event['type'];
-
-            $response = self::respond( $event );
+            
             
         } catch ( \InvalidArgumentException $e ) {
 
@@ -96,10 +111,6 @@ class Webhook {
             $http = 401;
             $response = $e;
             
-        } finally {
-           \STTV\Log::webhook( $log_vars );
-           http_response_code( $http );
-           echo wp_send_json( $response );
         }
         die;
     }
