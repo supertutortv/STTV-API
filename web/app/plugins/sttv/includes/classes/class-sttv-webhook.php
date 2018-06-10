@@ -24,7 +24,7 @@ class Webhook {
         if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
 			return false;
         }
-        return array_keys($_GET)[0] && die;
+        return array_keys($_GET) && die;
 
         $request = @file_get_contents( "php://input" );
         if ( empty( $request ) ) {
