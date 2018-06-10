@@ -21,7 +21,7 @@ class Webhook {
 			return false;
         }
         $class = __CLASS__;
-        return new $class;
+        echo new $class;
         die;
     }
 
