@@ -82,13 +82,15 @@ class Courses extends \WP_REST_Controller {
 	##### COURSE METHODS #####
 	##########################
 
-	public function get_course_info() {
+	public function get_course_info( $id = 0 ) {
 
 	}
 
 	public function get_course_meta( $req ) {
-		/* setcookie( 'app_auth', 'hbqrecubkqerco86gqrelycbqrelycbqrel6cbqyecbqeck' );
-		return $req->get_headers();	 */
+		$cached = get_transient( "sttv_course_cache_{$req['id']}");
+		if ( $cached ) {
+			return $cached;
+		}
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
 			return sttv_rest_response(
@@ -156,6 +158,8 @@ class Courses extends \WP_REST_Controller {
 		$data['practice'] = $meta['practice'];
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
+
+		set_transient( "sttv_course_cache_{$req['id']}", $data, 3600 );
 		
 		return $data;
 
