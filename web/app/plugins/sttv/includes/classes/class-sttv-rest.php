@@ -55,7 +55,7 @@ class API {
             }
             header( 'Access-Control-Allow-Methods: GET, OPTIONS' );
             header( 'Access-Control-Allow-Credentials: true' );
-            //header( 'Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
+            header( 'Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
             header( 'Content-Type: application/sttv.app.data+json' );
             header( 'Host: '.rest_url(STTV_REST_NAMESPACE) );
     
