@@ -27,54 +27,54 @@ class Courses extends \WP_REST_Controller {
 
 	public function register_routes() {
 		$routes = [
-			'/courses' => [
+			'/' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_info' ]
 				]
 			],
-			'/courses/(?P<id>[\d]+)' => [
+			'/(?P<id>[\d]+)' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_meta' ],
 					'permission_callback' => '__return_true'
 				]
 			],
-			'/courses/log' => [
+			'/log' => [
 				[
 					'methods' => 'POST',
 					'callback' => [ $this, 'course_access_log' ],
 					'permission_callback' => 'is_user_logged_in'
 				]
 			],
-			'/courses/alert' => [
+			'/alert' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_meta' ],
 					'permission_callback' => [ $this, 'course_permissions_check' ]
 				]
 			],
-			'/courses/feedback' => [
+			'/feedback' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_user_feedback' ],
 					'permission_callback' => '__return_true'
 				],
-                [
+				[
 					'methods' => 'POST',
 					'callback' => [ $this, 'post_feedback' ],
 					'permission_callback' => [ $this, 'can_post_feedback' ]
 				],
 				[
-                    'methods' => 'PUT',
-                    'callback' => [ $this, 'post_feedback_reply' ],
-                    'permission_callback' => [ $this, 'can_post_feedback' ]
+					'methods' => 'PUT',
+					'callback' => [ $this, 'post_feedback_reply' ],
+					'permission_callback' => [ $this, 'can_post_feedback' ]
 				]
 			]
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
-			register_rest_route( STTV_REST_NAMESPACE, $route, $endpoint );
+			register_rest_route( 'courses', $route, $endpoint );
 		}
 	}
 

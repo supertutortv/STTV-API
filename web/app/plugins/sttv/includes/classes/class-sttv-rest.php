@@ -16,7 +16,7 @@ class API {
         }
 
         add_filter( 'rest_url_prefix', function() {
-            return 'api';
+            return STTV_REST_NAMESPACE;
         }, 11 );
 
         remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
