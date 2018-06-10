@@ -17,6 +17,9 @@ class Webhook {
     private $error = false;
 
     public static function init() {
+        if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
+			return false;
+        }
         $class = __CLASS__;
         new $class;
     }
@@ -32,10 +35,6 @@ class Webhook {
     }
 
     private function __construct() {
-        
-        if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
-			return false;
-        }
 
         $this->request = @file_get_contents( "php://input" );
         
