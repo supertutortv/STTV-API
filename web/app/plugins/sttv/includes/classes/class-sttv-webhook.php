@@ -92,7 +92,7 @@ class Webhook {
     private function respond( $data ) {
 
         //change event dot notation to underscores
-        $this->event = str_replace( '.', '_', $data['event'] );
+        $this->event = str_replace( '.', '_', $data['type'] );
 
         if ( is_callable( $this->event ) ) {
             $this->response = ($this->event)( $data );

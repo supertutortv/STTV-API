@@ -27,7 +27,7 @@ class Cron {
     private function subchaser() {
         $data = json_encode(
             [
-                'event' => 'trial.expiration.checker',
+                'type' => 'trial.expiration.checker',
                 'rand' => uniqid( 'st_' )
             ]
         );
