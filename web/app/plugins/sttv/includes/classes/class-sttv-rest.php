@@ -52,7 +52,7 @@ class API {
             header( 'Host: '.rest_url(STTV_REST_NAMESPACE) );
     
             //remove default headers
-            //header_remove( 'Access-Control-Expose-Headers' );
+            header_remove( 'Access-Control-Expose-Headers' );
             header_remove( 'Link' );
             header_remove( 'X-Powered-By' );
             header_remove( 'X-Robots-Tag' );
