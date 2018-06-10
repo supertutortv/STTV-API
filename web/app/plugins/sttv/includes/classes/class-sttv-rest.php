@@ -31,8 +31,8 @@ class API {
         add_action( 'rest_api_init', function() use ( $limiter ) {
             $limiter->load();
         }, 5 );
-        add_action( 'rest_api_init', [ $this, 'register_rest_routes' ], 10 );
-        add_action( 'rest_api_init', [ $this, 'sttv_rest_cors' ], 15 );
+        add_action( 'rest_api_init', [ $this, 'sttv_rest_cors' ], 10 );
+        add_action( 'rest_api_init', [ $this, 'register_rest_routes' ], 11 );
     }
 
     public function sttv_rest_cors() {
@@ -52,7 +52,7 @@ class API {
             header( 'Access-Control-Allow-Credentials: true' );
             header( 'Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
             header( 'Content-Type: application/sttv.app.data+json' );
-            header( 'Host: '.rest_url(STTV_REST_NAMESPACE) );
+            header( 'Host: ' . rest_url( STTV_REST_NAMESPACE ) );
     
             return $value;
             
