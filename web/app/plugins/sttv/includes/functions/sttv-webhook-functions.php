@@ -17,6 +17,11 @@ function trial_expiration_checker() {
     foreach ( $invs as $inv ) {
         $pay = \Stripe\Invoice::retrieve( $inv[0] );
         $pay->pay();
+        $wpdb->delete( $wpdb->prefix.'trial_reference',
+            [
+                'charge_id' => $inv[0]
+            ]
+        );
     }
 }
 
