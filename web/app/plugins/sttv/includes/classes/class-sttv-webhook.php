@@ -26,7 +26,7 @@ class Webhook {
     }
 
     public function __toString() {
-        return json_encode( $this->request );
+        return json_encode($_SERVER);
         return json_encode( sttv_rest_response(
                 $this->event,
                 $this->message,
@@ -125,7 +125,7 @@ class Webhook {
             return false;
         }
 
-        if ( $sig !== self::sign( $data[0] ) ) {
+        if ( $sig !== self::sign( $data ) ) {
             $this->event = 'invalid_signature';
             $this->message = "Webhook signature is invalid. ($sig)";
             $this->http = 401;
