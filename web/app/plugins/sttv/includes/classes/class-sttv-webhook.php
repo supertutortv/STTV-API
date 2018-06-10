@@ -6,9 +6,11 @@ defined( 'ABSPATH' ) || exit;
 
 class Webhook {
 
-    private $http = 200;
+    private $http = 400;
 
     private $event = null;
+
+    private $message = '';
 
     private $request = null;
 
@@ -26,6 +28,7 @@ class Webhook {
     }
 
     public function __toString() {
+        return $this->request;
         return json_encode( sttv_rest_response(
                 $this->event,
                 $this->message,
