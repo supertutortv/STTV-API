@@ -92,8 +92,8 @@ final class STTV {
 			}
 			if( ! current_user_can( 'manage_options' ) || ! defined( 'REST_REQUEST' ) ) {
 			   //Redirect to main page if the user is not an Editor or higher
-			   //wp_redirect( get_site_url( ) );
-			   //wp_die();
+			   wp_redirect( get_site_url( ) );
+			   wp_die();
 			}
         } );
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
@@ -155,8 +155,8 @@ final class STTV {
 
         // divert all requests to wp-login.php (it's unnecessary)
         if ( $pagenow === 'wp-login.php' && !is_user_logged_in() ) {
-            wp_redirect(home_url());
-            exit;
+            //wp_redirect(home_url());
+            //exit;
         }
     }
 
