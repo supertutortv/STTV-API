@@ -39,6 +39,14 @@ class API {
     
         remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
         add_filter( 'rest_pre_serve_request', function( $value ) {
+
+            //remove default headers
+            header_remove( 'Access-Control-Expose-Headers' );
+            header_remove( 'Access-Control-Allow-Headers' );
+            header_remove( 'Link' );
+            header_remove( 'X-Powered-By' );
+            header_remove( 'X-Robots-Tag' );
+            
             $origin = get_http_origin();
             if ( $origin ) {
                 header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
@@ -50,12 +58,6 @@ class API {
             header( 'Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
             header( 'Content-Type: application/sttv.app.data+json' );
             header( 'Host: '.rest_url(STTV_REST_NAMESPACE) );
-    
-            //remove default headers
-            header_remove( 'Access-Control-Expose-Headers' );
-            header_remove( 'Link' );
-            header_remove( 'X-Powered-By' );
-            header_remove( 'X-Robots-Tag' );
     
             return $value;
             
