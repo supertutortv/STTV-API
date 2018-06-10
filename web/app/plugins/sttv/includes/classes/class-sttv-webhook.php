@@ -28,7 +28,6 @@ class Webhook {
     }
 
     public function __toString() {
-        return $this->request;
         return json_encode( sttv_rest_response(
                 $this->event,
                 $this->message,
@@ -49,8 +48,6 @@ class Webhook {
             $this->response = [];
             $this->error = true;
         }
-
-        return $this;
 
         $signed = null;
         
