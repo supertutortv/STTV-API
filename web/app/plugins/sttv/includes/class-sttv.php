@@ -104,6 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
+            global $wpdb;
             $test_order = new \STTV\Checkout\Order( 'create', [
                 'customer' => 'cus_CUDuy8TMMclqZs',
                 'trial' => 5,
@@ -132,6 +133,12 @@ final class STTV {
                 ]
             ]);
             $order = $test_order->response();
+            $wpdb->insert( $wpdb->prefix.'trial_reference',
+                [
+                    'charge_id' => $order->id,
+                    'wp_id' => get_current_user_id()
+                ]
+            );
             //$pay = $order->pay();
             //$order = new \STTV\Checkout\Order( 'retrieve', 'in_1CaXUYIdKWhsvVLLLHBmIo4X' );
             print_r( $order );
