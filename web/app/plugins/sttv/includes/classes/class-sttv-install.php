@@ -11,7 +11,7 @@ class Install {
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
             charge_id tinytext,
-            exp_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
             active boolean NOT NULL DEFAULT 1,
             UNIQUE KEY id (id)

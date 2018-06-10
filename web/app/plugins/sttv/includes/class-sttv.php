@@ -133,12 +133,6 @@ final class STTV {
                 ]
             ]);
             $order = $test_order->response();
-            $wpdb->insert( $wpdb->prefix.'trial_reference',
-                [
-                    'charge_id' => $order->id,
-                    'wp_id' => get_current_user_id()
-                ]
-            );
             //$pay = $order->pay();
             //$order = new \STTV\Checkout\Order( 'retrieve', 'in_1CaXUYIdKWhsvVLLLHBmIo4X' );
             print_r( $order );

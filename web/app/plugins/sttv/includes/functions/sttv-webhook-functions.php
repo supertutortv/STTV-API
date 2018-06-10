@@ -15,14 +15,17 @@ function trial_expiration_checker() {
 ##### STRIPE EVENTS #####
 #########################
 
-// charge.succeeded
-function charge_succeeded( $data ) {
-
-}
-
 // invoice.created
 function invoice_created( $data ) {
-    return $data;
+    global $wpdb;
+    $obj = $data['data']['object'];
+    return $wpdb->insert( $wpdb->prefix.'trial_reference',
+        [
+            'charge_id' => $obj['id'],
+            'wp_id' => $obj['metadata']['wp_id'] ?? 1,
+            'timestamp' => $obj['due_date']
+        ]
+    );
 }
 
 // invoice.payment_succeeded
