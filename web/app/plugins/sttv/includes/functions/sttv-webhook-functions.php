@@ -10,3 +10,8 @@ function trail_expiration_checker() {
 function charge_succeeded( $data ) {
 
 }
+
+// invoice.created
+function invoice_created( $data ) {
+    return $data;
+}
