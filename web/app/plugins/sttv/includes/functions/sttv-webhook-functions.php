@@ -23,6 +23,7 @@ function trial_expiration_checker() {
             ]
         );
     }
+    return [ 'completed' => date('c') ];
 }
 
 #########################
