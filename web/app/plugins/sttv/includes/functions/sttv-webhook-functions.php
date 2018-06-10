@@ -29,5 +29,5 @@ function invoice_created( $data ) {
 function invoice_payment_succeeded( $data ) {
     global $wpdb;
     $id = $data['data']['object']['id'];
-    return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = $id");
+    return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'");
 }
