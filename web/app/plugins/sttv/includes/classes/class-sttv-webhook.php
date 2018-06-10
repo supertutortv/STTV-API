@@ -24,6 +24,7 @@ class Webhook {
         if ( !isset($_GET['stripeevent']) && !isset($_GET['sttvwebhook']) ) {
 			return false;
         }
+        return array_keys($_GET)[0];
 
         $request = @file_get_contents( "php://input" );
         if ( empty( $request ) ) {
@@ -33,7 +34,7 @@ class Webhook {
                 400
             );
         }
-        return array_keys($_GET)[0];
+        
         switch ( array_keys($_GET)[0] ) {
             case 'sttvwebhook':
                 self::$event = self::verifySignature( $request, @$_SERVER["HTTP_X-STTV-WHSEC"] );
