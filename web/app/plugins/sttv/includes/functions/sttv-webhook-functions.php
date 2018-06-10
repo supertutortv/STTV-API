@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 function trial_expiration_checker() {
     global $wpdb;
     $time = time();
-    $invs = $wpdb->get_results( "SELECT charge_id FROM sttvapp_trial_reference WHERE exp_date < $time");
+    $invs = $wpdb->get_results( "SELECT charge_id FROM sttvapp_trial_reference WHERE exp_date < $time", ARRAY_N );
     return $invs;
 }
 
