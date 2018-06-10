@@ -64,7 +64,7 @@ class Webhook {
             }
 
             if ( $signed ) {
-                $this->response = $this->respond( json_decode( $this->request ) );
+                $this->response = $this->respond( json_decode( $this->request, true ) );
             }
         }
 
