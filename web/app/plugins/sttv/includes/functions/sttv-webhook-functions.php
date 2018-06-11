@@ -42,7 +42,8 @@ function invoice_created( $data ) {
         [
             'charge_id' => $obj['id'],
             'wp_id' => $obj['metadata']['wp_id'] ?? 1,
-            'exp_date' => $obj['due_date']
+            'exp_date' => $obj['due_date'],
+            'retries' => 0
         ]
     );
 }
