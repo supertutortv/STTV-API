@@ -42,8 +42,12 @@ function invoice_created( $data ) {
         [
             'charge_id' => $obj['id'],
             'wp_id' => $obj['metadata']['wp_id'] ?? 1,
-            'exp_date' => $obj['due_date'],
-            'retries' => 0
+            'exp_date' => $obj['due_date']
+        ],
+        [
+            '%s',
+            '%d',
+            '%d'
         ]
     );
 }
@@ -65,13 +69,13 @@ function invoice_payment_failed( $data ) {
     $ret = [];
 
     if ( $record[0]['retries'] < 3 ) {
-        $caps = $user->allcaps;
+        /* $caps = $user->allcaps;
         foreach ( $caps as $cap => $g ) {
             $ret = $cap;
-        }
+        } */
         $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'retries' => (int) $record[0]['retries']++,
+                'retries' => ++$record[0]['retries'],
                 'exp_date' => time() + 300
             ],
             [
@@ -89,5 +93,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $ret;
+    return $user->allcaps;
 }
