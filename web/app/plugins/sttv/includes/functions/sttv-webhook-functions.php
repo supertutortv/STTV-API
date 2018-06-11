@@ -71,7 +71,7 @@ function invoice_payment_failed( $data ) {
         }
         $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'retries' => $record[0]['retries']++,
+                'retries' => (int) $record[0]['retries']++,
                 'exp_date' => time() + 300
             ],
             [
