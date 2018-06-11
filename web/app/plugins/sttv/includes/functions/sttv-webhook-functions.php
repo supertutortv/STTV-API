@@ -85,5 +85,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $user->allcaps;
+    return $record[0]['retries'];
 }
