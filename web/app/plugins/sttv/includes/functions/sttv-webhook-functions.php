@@ -66,7 +66,6 @@ function invoice_payment_failed( $data ) {
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'", ARRAY_A );
 
     $user = wp_set_current_user( $record[0]['wp_id'] );
-    $ret = [];
 
     if ( $record[0]['retries'] < 3 ) {
         /* $caps = $user->allcaps;
@@ -93,5 +92,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $user->allcaps;
+    return $user->caps;
 }
