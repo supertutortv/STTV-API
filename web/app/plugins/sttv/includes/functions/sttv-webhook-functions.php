@@ -58,9 +58,31 @@ function invoice_payment_succeeded( $data ) {
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {
     global $wpdb;
-    return $wpdb->delete( $wpdb->prefix.'trial_reference',
-        [
-            'charge_id' => $data['data']['object']['id']
-        ]
-    );
+    $id = $data['data']['object']['id'];
+    $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'", ARRAY_A );
+
+    $user = wp_set_current_user( $record['wp_id'] );
+
+    if ( $record['retries'] < 3 ) {
+        $wpdb->update( $wpdb->prefix.'trial_reference',
+            [
+                'retries' => $record['retries']++,
+                'exp_date' => time() + 300
+            ],
+            [
+                'charge_id' => $data['data']['object']['id']
+            ],
+            [
+                '%d',
+                '%d'
+            ]
+        );
+    } else {
+        $wpdb->delete( $wpdb->prefix.'trial_reference',
+            [
+                'charge_id' => $id
+            ]
+        );
+    }
+    return $user;
 }
