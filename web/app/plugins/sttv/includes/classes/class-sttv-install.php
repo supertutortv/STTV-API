@@ -10,7 +10,7 @@ class Install {
         //'mu_keys' => '',
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
-            charge_id tinytext,
+            invoice_id tinytext,
             exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
             retries tinyint(1) UNSIGNED NOT NULL DEFAULT 0,

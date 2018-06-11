@@ -10,17 +10,17 @@ defined( 'ABSPATH' ) || exit;
 function trial_expiration_checker() {
     global $wpdb;
     $time = time();
-    $invs = $wpdb->get_results( "SELECT charge_id FROM sttvapp_trial_reference WHERE exp_date < $time", ARRAY_N );
+    $invs = $wpdb->get_results( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date < $time", ARRAY_A );
     if ( is_null( $invs ) ) {
         return 'noActionTaken';
     }
     foreach ( $invs as $inv ) {
         try {
-            $pay = \Stripe\Invoice::retrieve( $inv[0] );
+            $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
             $pay->pay();
             $wpdb->delete( $wpdb->prefix.'trial_reference',
                 [
-                    'charge_id' => $inv[0]
+                    'invoice_id' => $inv[0]
                 ]
             );
         } catch (Exception $e) {
@@ -40,7 +40,7 @@ function invoice_created( $data ) {
     $obj = $data['data']['object'];
     return $wpdb->insert( $wpdb->prefix.'trial_reference',
         [
-            'charge_id' => $obj['id'],
+            'invoice_id' => $obj['id'],
             'wp_id' => $obj['metadata']['wp_id'] ?? 1,
             'exp_date' => $obj['due_date']
         ],
@@ -56,14 +56,14 @@ function invoice_created( $data ) {
 function invoice_payment_succeeded( $data ) {
     global $wpdb;
     $id = $data['data']['object']['id'];
-    return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'");
+    return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'");
 }
 
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {
     global $wpdb;
     $id = $data['data']['object']['id'];
-    $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'", ARRAY_A );
+    $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
 
     $user = wp_set_current_user( $record[0]['wp_id'] );
 
@@ -78,7 +78,7 @@ function invoice_payment_failed( $data ) {
                 'exp_date' => time() + 300
             ],
             [
-                'charge_id' => $data['data']['object']['id']
+                'invoice_id' => $data['data']['object']['id']
             ],
             [
                 '%d',
@@ -88,9 +88,9 @@ function invoice_payment_failed( $data ) {
     } else {
         $wpdb->delete( $wpdb->prefix.'trial_reference',
             [
-                'charge_id' => $id
+                'invoice_id' => $id
             ]
         );
     }
-    return $user->caps;
+    return $user;
 }
