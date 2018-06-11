@@ -68,8 +68,8 @@ class Webhook {
             }
         }
 
-        if ( false === $this->response ) {
-            return $this->response;
+        if ( 'noActionTaken' === $this->response ) {
+            return;
         }
 
         \STTV\Log::webhook([
