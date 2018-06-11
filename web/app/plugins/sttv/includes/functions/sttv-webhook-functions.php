@@ -64,6 +64,7 @@ function invoice_payment_failed( $data ) {
     $user = wp_set_current_user( $record['wp_id'] );
 
     if ( $record['retries'] < 3 ) {
+        // remove all user caps here
         $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'retries' => $record['retries']++,
@@ -84,5 +85,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $user;
+    return $record;
 }
