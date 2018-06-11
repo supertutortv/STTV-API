@@ -61,13 +61,13 @@ function invoice_payment_failed( $data ) {
     $id = $data['data']['object']['id'];
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'", ARRAY_A );
 
-    $user = wp_set_current_user( $record['wp_id'] );
+    $user = wp_set_current_user( $record[0]['wp_id'] );
 
-    if ( $record['retries'] < 3 ) {
+    if ( $record[0]['retries'] < 3 ) {
         // remove all user caps here
         $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'retries' => $record['retries']++,
+                'retries' => $record[0]['retries']++,
                 'exp_date' => time() + 300
             ],
             [
@@ -85,5 +85,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $record;
+    return $user;
 }
