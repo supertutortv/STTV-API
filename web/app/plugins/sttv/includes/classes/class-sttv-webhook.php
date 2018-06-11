@@ -49,7 +49,7 @@ class Webhook {
             $this->error = true;
         }
 
-        $signed = null;
+        $signed = $res = null;
         
         if ( !$this->error ) {
             switch ( array_keys($_GET)[0] ) {
@@ -66,6 +66,10 @@ class Webhook {
             if ( $signed ) {
                 $this->respond( json_decode( $this->request, true ) );
             }
+        }
+
+        if ( false === $this->response ) {
+            return $this->response;
         }
 
         \STTV\Log::webhook([
