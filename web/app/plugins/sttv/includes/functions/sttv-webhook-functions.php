@@ -49,3 +49,8 @@ function invoice_payment_succeeded( $data ) {
     $id = $data['data']['object']['id'];
     return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE charge_id = '$id'");
 }
+
+// invoice.payment_failed
+function invoice_payment_failed( $data ) {
+    return 'Payment failed, homie!';
+}
