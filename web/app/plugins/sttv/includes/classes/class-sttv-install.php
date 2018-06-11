@@ -13,7 +13,7 @@ class Install {
             charge_id tinytext,
             exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
-            retries tinyint(1) UNSIGNED,
+            retries tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
             active boolean NOT NULL DEFAULT 1,
             UNIQUE KEY id (id)
         )',
