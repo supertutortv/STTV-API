@@ -52,6 +52,7 @@ function invoice_payment_succeeded( $data ) {
 
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {
+    global $wpdb;
     return $wpdb->delete( $wpdb->prefix.'trial_reference',
         [
             'charge_id' => $data['object']['id']
