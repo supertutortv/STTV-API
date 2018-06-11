@@ -49,7 +49,7 @@ class Webhook {
             $this->error = true;
         }
 
-        $signed = $res = null;
+        $signed = null;
         
         if ( !$this->error ) {
             switch ( array_keys($_GET)[0] ) {
