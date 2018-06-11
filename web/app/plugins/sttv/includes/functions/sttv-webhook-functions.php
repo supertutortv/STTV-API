@@ -85,5 +85,5 @@ function invoice_payment_failed( $data ) {
             ]
         );
     }
-    return $user;
+    return $user->allcaps;
 }
