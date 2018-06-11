@@ -73,7 +73,7 @@ function invoice_payment_failed( $data ) {
         foreach ( $caps as $cap => $g ) {
             $ret = $cap;
         } */
-        $wpdb->update( $wpdb->prefix.'trial_reference',
+        return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'retries' => ++$record[0]['retries'],
                 'exp_date' => time() + 300
