@@ -15,13 +15,17 @@ function trial_expiration_checker() {
         return 'noActionTaken';
     }
     foreach ( $invs as $inv ) {
-        $pay = \Stripe\Invoice::retrieve( $inv[0] );
-        $pay->pay();
-        $wpdb->delete( $wpdb->prefix.'trial_reference',
-            [
-                'charge_id' => $inv[0]
-            ]
-        );
+        try {
+            $pay = \Stripe\Invoice::retrieve( $inv[0] );
+            $pay->pay();
+            $wpdb->delete( $wpdb->prefix.'trial_reference',
+                [
+                    'charge_id' => $inv[0]
+                ]
+            );
+        } catch (Exception $e) {
+            continue;
+        }
     }
     return [ 'completed' => date('c') ];
 }
@@ -55,7 +59,7 @@ function invoice_payment_failed( $data ) {
     global $wpdb;
     return $wpdb->delete( $wpdb->prefix.'trial_reference',
         [
-            'charge_id' => $data['object']['id']
+            'charge_id' => $data['data']['object']['id']
         ]
     );
 }
