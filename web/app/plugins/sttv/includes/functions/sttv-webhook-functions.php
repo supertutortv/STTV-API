@@ -55,6 +55,11 @@ function invoice_created( $data ) {
 function invoice_payment_succeeded( $data ) {
     global $wpdb;
     $id = $data['data']['object']['id'];
+    $wpdb->delete( $wpdb->prefix.'trial_reference',
+        [
+            'invoice_id' => $id
+        ]
+    );
     return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'");
 }
 
