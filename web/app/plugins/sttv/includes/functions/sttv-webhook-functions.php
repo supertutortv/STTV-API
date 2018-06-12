@@ -86,9 +86,17 @@ function invoice_payment_failed( $data ) {
             ]
         );
     } else {
-        $wpdb->delete( $wpdb->prefix.'trial_reference',
+        $delete = time() + (DAY_IN_SECONDS * 3);
+        return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'invoice_id' => $id
+                'active' => 0,
+                'exp_date' => $delete
+            ],
+            [
+                'invoice_id' => $data['data']['object']['id']
+            ],
+            [
+                '%d'
             ]
         );
     }
