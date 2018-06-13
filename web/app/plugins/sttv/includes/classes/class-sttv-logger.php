@@ -53,7 +53,7 @@ class Log {
             'data' => json_encode( $vars['data'] )
         ];
 
-        return file_put_contents( $dir . '/' . date('m-d-Y') . $ext,
+        return file_put_contents( $dir . '/' . date('Y-m-d') . $ext,
 			implode( ' | ', $input ) . "\r\n",
 			FILE_APPEND | LOCK_EX
 		);
