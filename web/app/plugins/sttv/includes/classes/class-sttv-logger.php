@@ -12,16 +12,18 @@ class Log {
         }
 
         $files = scandir( $dir );
+        $f = [];
         foreach ( $files as $file ) {
             if ( !is_file( $file ) ) {
                 continue;
             }
             
-            if ( strtotime( substr( $file, 0, -4 ) ) + (DAY_IN_SECONDS * 7) < strtotime( date('m-d-Y') ) ) {
+            $f[] = $name = substr( $file, 0, -4 );
+            if ( strtotime( $name ) + (DAY_IN_SECONDS * 7) < strtotime( date('m-d-Y') ) ) {
                 unlink( $dir . '/' . $file );
             }
         }
-        return $files;
+        return $f;
     }
 
     public static function webhook( $vars = [] ) {
