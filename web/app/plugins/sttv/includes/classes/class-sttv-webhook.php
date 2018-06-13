@@ -73,7 +73,6 @@ class Webhook {
             'error' => $this->error,
             'event' => $this->event,
             'data' => [
-                $this->event,
                 $this->message,
                 $this->http,
                 $this->response
