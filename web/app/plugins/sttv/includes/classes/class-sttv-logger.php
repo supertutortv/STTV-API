@@ -14,7 +14,7 @@ class Log {
         $files = scandir( $dir );
         $f = [];
         foreach ( $files as $file ) {
-            if ( !is_file( $file ) ) {
+            if ( !is_file( $dir . '/' . $file ) ) {
                 continue;
             }
             
