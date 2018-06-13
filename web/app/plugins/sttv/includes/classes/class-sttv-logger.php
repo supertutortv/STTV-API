@@ -21,7 +21,7 @@ class Log {
                 unlink( $dir . '/' . $file );
             }
         }
-
+        return $files;
     }
 
     public static function webhook( $vars = [] ) {
@@ -45,7 +45,7 @@ class Log {
             'forwarded_IP' => getenv('HTTP_X_FORWARDED_FOR') ?: '0.0.0.0',
             'IP' => getenv('REMOTE_ADDR'),
             'UA' => getenv('HTTP_USER_AGENT'),
-            'gc' => $gc,
+            'gc' => json_encode( $gc ),
             'data' => json_encode( $vars['data'] )
         ];
 
