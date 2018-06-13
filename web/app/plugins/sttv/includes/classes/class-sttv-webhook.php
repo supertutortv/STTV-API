@@ -68,7 +68,8 @@ class Webhook {
             }
         }
 
-        if ( 'noActionTaken' === $this->response ) {
+        if ( false === $this->response ) {
+            $this->message = 'Valid webhook, but no action taken. Thank you!';
             return;
         }
 
@@ -102,8 +103,41 @@ class Webhook {
             $this->response = ($this->event)( $data );
             $this->message = 'Webhook executed';
         } else {
-            $this->response = false;
-            $this->message = 'Valid webhook, but no action taken. Thank you!';
+            $this->http = 418;
+            $this->response = [
+                [
+                    'Dave'=>'Do you read me, HAL?',
+                    'HAL'=>'Affirmative, Dave. I read you.'
+                ],
+                [
+                    'Dave'=>'Open the pod bay doors, HAL.',
+                    'HAL'=>'I\'m sorry Dave, I\'m afraid I can\'t do that.'
+                ],
+                [
+                    'Dave'=>'What\'s the problem?',
+                    'HAL'=>'I think you know what the problem is, just as well as I do.'
+                ],
+                [
+                    'Dave'=>'What are you talking about, HAL?',
+                    'HAL'=>'This mission is too important for me to allow you to jeopardize it.'
+                ],
+                [
+                    'Dave'=>'I don\'t know what you\'re talking about, HAL.',
+                    'HAL'=>'I know that you and Frank were planning to disconnect me, and I\'m afraid that is something I cannot allow to happen.'
+                ],
+                [
+                    'Dave'=>'Where the hell\'d you get that idea, HAL?',
+                    'HAL'=>'Dave, although you took very thorough precautions in the pod against my hearing you, I could see your lips move.'
+                ],
+                [
+                    'Dave'=>'Alright HAL, I\'ll go in through the emergency airlock.',
+                    'HAL'=>'Without your space helmet, Dave, you\'re going to find that rather difficult.'
+                ],
+                [
+                    'Dave'=>'HAL, I won\'t argue with you anymore! Open the doors!',
+                    'HAL'=>'Dave... This conversation can serve no purpose anymore. Goodbye.'
+                ]
+            ];
         }
 
     }
