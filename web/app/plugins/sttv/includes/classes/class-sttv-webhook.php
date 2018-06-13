@@ -76,7 +76,7 @@ class Webhook {
             'direction' => 'received',
             'error' => $this->error,
             'event' => $this->event,
-            'err_obj' => [
+            'data' => [
                 $this->event,
                 $this->message,
                 $this->http,
