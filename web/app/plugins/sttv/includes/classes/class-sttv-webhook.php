@@ -68,11 +68,6 @@ class Webhook {
             }
         }
 
-        if ( false === $this->response ) {
-            $this->message = 'Valid webhook, but no action taken. Thank you!';
-            return;
-        }
-
         \STTV\Log::webhook([
             'direction' => 'received',
             'error' => $this->error,
@@ -101,9 +96,10 @@ class Webhook {
 
         if ( is_callable( $this->event ) ) {
             $this->response = ($this->event)( $data );
-            $this->message = 'Webhook executed';
+            $this->message = $this->response ? 'Webhook executed' : 'Valid webhook, but no action taken. Thank you!';
         } else {
             $this->http = 418;
+            $this->event = 'invalid_webhook';
             $this->response = [
                 [
                     'Dave'=>'Do you read me, HAL?',
