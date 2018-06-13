@@ -135,6 +135,7 @@ final class STTV {
             //$pay = $order->pay();
             //$order = new \STTV\Checkout\Order( 'retrieve', 'in_1CaXUYIdKWhsvVLLLHBmIo4X' );
             print_r( $order ); */
+            print_r( apply_filters( 'rest_url' ) );
         });
     }
 
