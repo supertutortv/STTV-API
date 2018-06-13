@@ -51,7 +51,7 @@ class API {
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
             header( 'Access-Control-Allow-Headers: Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
-            header( 'Content-Type: application/sttv.app.data+json' );
+            header( 'Content-Type: application/vnd.sttv.app+json' );
             header( 'Host: ' . rest_url( STTV_REST_NAMESPACE ) );
     
             return $value;

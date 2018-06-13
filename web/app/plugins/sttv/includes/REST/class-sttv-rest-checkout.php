@@ -45,40 +45,46 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function register_routes() {
-        register_rest_route( STTV_REST_NAMESPACE , '/checkout', [
-            [
-                'methods' => 'GET',
-                'callback' => [ $this, 'sttv_parameter_checker' ],
-                'permission_callback' => 'sttv_verify_rest_nonce',
-                'args' => [
-                    'email' => [
-                        'required' => false,
-                        'type' => 'string',
-                        'description' => 'Email to check'
-                    ],
-                    'coupon' => [
-                        'required' => false,
-                        'type' => 'string',
-                        'description' => 'Coupon to check'
-                    ],
-                    'zip' => [
-                        'required' => false,
-                        'type' => 'string',
-                        'description' => 'Postal code to check'
-                    ],
-                    'uid' => [
-                        'required' => false,
-                        'type' => 'string',
-                        'description' => 'Request a generated unique id'
+        $routes = [
+			'/' => [
+				[
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'sttv_parameter_checker' ],
+                    'permission_callback' => 'sttv_verify_rest_nonce',
+                    'args' => [
+                        'email' => [
+                            'required' => false,
+                            'type' => 'string',
+                            'description' => 'Email to check'
+                        ],
+                        'coupon' => [
+                            'required' => false,
+                            'type' => 'string',
+                            'description' => 'Coupon to check'
+                        ],
+                        'zip' => [
+                            'required' => false,
+                            'type' => 'string',
+                            'description' => 'Postal code to check'
+                        ]/* ,
+                        'uid' => [
+                            'required' => false,
+                            'type' => 'string',
+                            'description' => 'Request a generated unique id'
+                        ] */
                     ]
+                ],
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'sttv_checkout' ],
+                    'permission_callback' => 'sttv_verify_rest_nonce',
                 ]
-            ],
-            [
-                'methods' => 'POST',
-                'callback' => [ $this, 'sttv_checkout' ],
-                'permission_callback' => 'sttv_verify_rest_nonce',
             ]
-        ]);
+		];
+
+		foreach ( $routes as $route => $endpoint ) {
+			register_rest_route( 'checkout', $route, $endpoint );
+		}
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
