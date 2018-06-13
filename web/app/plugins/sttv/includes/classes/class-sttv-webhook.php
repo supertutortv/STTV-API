@@ -102,7 +102,7 @@ class Webhook {
             $this->response = ($this->event)( $data );
             $this->message = 'Webhook executed';
         } else {
-            $this->response = [];
+            $this->response = false;
             $this->message = 'Valid webhook, but no action taken. Thank you!';
         }
 

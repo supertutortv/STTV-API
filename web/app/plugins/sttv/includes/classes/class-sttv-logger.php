@@ -19,7 +19,7 @@ class Log {
             'forwarded_IP' => getenv('HTTP_X_FORWARDED_FOR') ?: '0.0.0.0',
             'IP' => getenv('REMOTE_ADDR'),
             'UA' => getenv('HTTP_USER_AGENT'),
-            'data' => $vars['data']
+            'data' => json_encode($vars['data'])
         ];
 
         if ( !is_dir( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] ) ) {
@@ -27,7 +27,7 @@ class Log {
         }
 
         return file_put_contents( STTV_LOGS_DIR . 'webhooks/' . $vars['direction'] . '/' . date('m-d-Y') . $ext,
-			implode( '|', $input ) . "\r\n",
+			implode( ' | ', $input ) . "\r\n",
 			FILE_APPEND | LOCK_EX
 		);
     }
