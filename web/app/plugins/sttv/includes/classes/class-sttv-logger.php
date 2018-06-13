@@ -13,7 +13,13 @@ class Log {
 
         $files = scandir( $dir );
         foreach ( $files as $file ) {
-            //if ()
+            if ( !is_file( $file ) ) {
+                continue;
+            }
+            
+            if ( strtotime( substr( $file, 0, -4 ) ) + (DAY_IN_SECONDS * 7) < strtotime( date('m-d-Y') ) ) {
+                unlink( $dir . $file );
+            }
         }
 
     }
@@ -39,6 +45,7 @@ class Log {
             mkdir( $dir, 0777, true );
         }
 
+        self::garbage_collector( $dir );
         return file_put_contents( $dir . '/' . date('m-d-Y') . $ext,
 			implode( ' | ', $input ) . "\r\n",
 			FILE_APPEND | LOCK_EX
