@@ -30,7 +30,14 @@ class Log {
         }
 
         $dir = STTV_LOGS_DIR . 'webhooks/' . $vars['direction'];
+
+        if ( !is_dir( $dir ) ) {
+            mkdir( $dir, 0777, true );
+        }
+
         $ext = ( $vars['error'] ) ? '.err' : '.log';
+
+        $gc = self::garbage_collector( $dir );
 
         $input = [
             'time' => date('G:i:s', time()),
@@ -38,14 +45,10 @@ class Log {
             'forwarded_IP' => getenv('HTTP_X_FORWARDED_FOR') ?: '0.0.0.0',
             'IP' => getenv('REMOTE_ADDR'),
             'UA' => getenv('HTTP_USER_AGENT'),
+            'gc' => $gc,
             'data' => json_encode( $vars['data'] )
         ];
 
-        if ( !is_dir( $dir ) ) {
-            mkdir( $dir, 0777, true );
-        }
-
-        self::garbage_collector( $dir );
         return file_put_contents( $dir . '/' . date('m-d-Y') . $ext,
 			implode( ' | ', $input ) . "\r\n",
 			FILE_APPEND | LOCK_EX
