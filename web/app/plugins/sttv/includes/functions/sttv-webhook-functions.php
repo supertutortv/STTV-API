@@ -14,8 +14,9 @@ function trial_expiration_checker() {
     $garbage_col = $wpdb->get_results( $wpdb->prepare( "DELETE FROM sttvapp_trial_reference WHERE exp_date <= %d AND active = 0", $time ) );
 
     //Invoices
-    $invs = $wpdb->get_results( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date <= $time AND active = 1", ARRAY_A );
-    if ( is_empty( $invs ) ) {
+    $invs = $wpdb->get_results( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date < $time AND active = 1", ARRAY_A );
+    return $invs;
+    if ( is_null( $invs ) ) {
         return 'noActionTaken';
     }
     foreach ( $invs as $inv ) {
