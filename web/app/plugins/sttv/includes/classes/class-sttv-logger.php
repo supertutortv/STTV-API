@@ -19,8 +19,8 @@ class Log {
             }
             
             $name = substr( $file, 0, -4 );
-            $f[] = $file;
-            if ( strtotime( $name ) + (DAY_IN_SECONDS * 7) < strtotime( date('m-d-Y') ) ) {
+            $f[] = strtotime( $name );
+            if ( strtotime( $name ) < strtotime( date('m-d-Y') ) - (DAY_IN_SECONDS * 7) ) {
                 unlink( $dir . '/' . $file );
             }
         }
