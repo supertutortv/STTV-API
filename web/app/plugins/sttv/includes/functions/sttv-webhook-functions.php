@@ -33,6 +33,11 @@ function trial_expiration_checker() {
 ##### STRIPE EVENTS #####
 #########################
 
+// customer.created
+function customer_created( $data ) {
+    return false;
+}
+
 // invoice.created
 function invoice_created( $data ) {
     global $wpdb;
@@ -49,6 +54,11 @@ function invoice_created( $data ) {
             '%d'
         ]
     );
+}
+
+// invoice.updated
+function invoice_updated( $data ) {
+    return false;
 }
 
 // invoice.payment_succeeded
