@@ -21,7 +21,7 @@ class Log {
             
             $name = substr( $file, 0, -4 );
             if ( $allow > strtotime( $name ) ) {
-                $f[strtotime( $name )] = $allow;
+                $f[] = $name;
                 unlink( $dir . '/' . $file );
             }
         }
