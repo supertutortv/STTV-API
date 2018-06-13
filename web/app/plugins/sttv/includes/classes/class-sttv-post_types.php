@@ -30,7 +30,7 @@ class Post_Types {
                 'show_in_nav_menus'		=>	false,
                 'show_in_rest'			=>	false,
                 'rewrite'				=>	[
-                    'with_front'	=>	true,
+                    'with_front'	=>	false,
                     'pages'			=>	false
                 ],
                 'delete_with_user'		=>	false,
