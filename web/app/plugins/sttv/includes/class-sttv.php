@@ -43,7 +43,7 @@ final class STTV {
         $this->define( 'MU_FILE_BACKUP_PATH', dirname(ABSPATH).'/mu_keys_bk' );
 
         //REST API
-        $this->define( 'STTV_REST_NAMESPACE', 'v'.STTV_VERSION );
+        $this->define( 'STTV_REST_NAMESPACE', '' );
         $this->define( 'STTV_UA', 'APP-STTV-REST/'.STTV_VERSION.' <'.$_SERVER['SERVER_SOFTWARE'].'>' );
         $this->define( 'STTV_REST_AUTH', ( has_filter( 'rest_nonce_action' ) ) ? STTV_PREFIX.':rest:auth' : 'wp_rest');
     }
