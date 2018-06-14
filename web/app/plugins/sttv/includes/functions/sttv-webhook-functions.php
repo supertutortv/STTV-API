@@ -18,7 +18,7 @@ function trial_expiration_checker() {
 
     //Invoices
     $invs = $wpdb->get_results( 
-        $wpdb->prepare( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 1 ] )
+        $wpdb->prepare( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date > %d AND active = %d", [ $time, 1 ] )
     , ARRAY_A );
     /* if ( is_empty( $invs ) ) {
         return false;
