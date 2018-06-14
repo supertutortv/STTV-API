@@ -204,7 +204,6 @@ class Checkout extends \WP_REST_Controller {
 
     private function _checkout( $body ){
         $userdata = [
-			'ID' => ( get_current_user_id() ) ?: '',
 			'user_login' => $body['email'],
 			'user_pass' => $body['password'],
 			'user_email' => $body['email'],
