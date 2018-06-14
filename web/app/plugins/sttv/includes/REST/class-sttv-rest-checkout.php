@@ -249,11 +249,20 @@ class Checkout extends \WP_REST_Controller {
             ]);
             return $customer->response();
         } catch ( \Exception $e ) {
+            $err = $e->getJsonBody()['error'];
+            switch ( $err['code'] ) {
+                case 'resource_missing':
+                    if ( $err['param'] == 'coupon' ) {
+                        require_once( ABSPATH.'wp-admin/includes/user.php' );
+                        wp_delete_user( $user_id );
+                    }
+                break;
+            }
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 403,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody()['error'] ]
             );
         }
         
