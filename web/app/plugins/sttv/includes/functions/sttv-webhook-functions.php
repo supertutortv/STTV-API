@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 function trial_expiration_checker() {
     global $wpdb;
     $time = time();
-
+    return date_default_timezone_get();
     // Garbage Collection
     $garbage_col = $wpdb->get_results(
         $wpdb->prepare( "DELETE FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 0 ] )
