@@ -260,7 +260,7 @@ class Checkout extends \WP_REST_Controller {
             ];
 
             $this->set_tax( $body['shipping_pcode'] );
-            return round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) );
+            return $course['pricing']['price'];
 
             if ( $this->tax > 0 ) {
                 $items[] = [
