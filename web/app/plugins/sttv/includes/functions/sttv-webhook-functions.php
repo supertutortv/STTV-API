@@ -165,6 +165,10 @@ function invoice_payment_failed( $data ) {
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
+            ],
+            [
+                '%d',
+                '%d'
             ]
         );
     }
