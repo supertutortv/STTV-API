@@ -43,6 +43,11 @@ function customer_updated( $data ) {
     return false;
 }
 
+// customer.deleted
+function customer_deleted( $data ) {
+    return false;
+}
+
 // invoice.created
 function invoice_created( $data ) {
     global $wpdb;
