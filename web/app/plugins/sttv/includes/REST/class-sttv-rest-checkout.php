@@ -248,7 +248,7 @@ class Checkout extends \WP_REST_Controller {
                 ]
             ]);
             $customer = $customer->response();
-            $course = json_decode( get_post_meta( $body['course'], 'sttv_course_data', true ), true );
+            $course = get_post_meta( $body['course'], 'sttv_course_data', true );
             $items = [
                 [
                     'customer' => $customer['id'],
