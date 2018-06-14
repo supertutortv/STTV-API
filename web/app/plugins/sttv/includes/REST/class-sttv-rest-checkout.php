@@ -260,25 +260,24 @@ class Checkout extends \WP_REST_Controller {
             ];
 
             $this->set_tax( $body['shipping_pcode'] );
-            return $course['pricing']['price'];
 
             if ( $this->tax > 0 ) {
                 $items[] = [
                     'customer' => $customer['id'],
                     'amount' => round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) ),
-                    'currency' => "usd",
-                    'description' => "Sales tax",
+                    'currency' => 'usd',
+                    'description' => 'Sales tax',
                     'discountable' => false
                 ];
             }
 
             if ( $body['shipping'] ) {
                 $items[] = [
-                    "customer" => $customer['id'],
-                    "amount" => 1285,
-                    "currency" => "usd",
-                    "description" => "Priority Shipping",
-                    "discountable" => false
+                    'customer' => $customer['id'],
+                    'amount' => 1285,
+                    'currency' => 'usd',
+                    'description' => 'Priority Shipping',
+                    'discountable' => false
                 ];
             }
 
