@@ -203,11 +203,28 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
+        $userdata = [
+			'ID' => ( get_current_user_id() ) ?: '',
+			'user_login' => $obj['email'],
+			'user_pass' => $obj['password'],
+			'user_email' => $obj['email'],
+			'first_name' => $obj['firstname'],
+			'last_name' => $obj['lastname'],
+			'display_name' => $obj['firstname'].' '.$obj['lastname'],
+			'show_admin_bar_front' => 'false',
+			'role' => 'student'
+		];
+
+        $user_id = wp_insert_user( $userdata );
+        
         return new \STTV\Checkout\Customer( 'create', [
             'description' => $obj['firstname'].' '.$obj['lastname'],
             'source' => $obj['token']['id'],
             'email' => $obj['email'],
             'coupon' => $obj['coupon'] ?: null,
+            'metadata' => [
+                'wp_id' => $user_id
+            ],
             'shipping' => [
                 "name" => "shipping",
                 "address" => [
