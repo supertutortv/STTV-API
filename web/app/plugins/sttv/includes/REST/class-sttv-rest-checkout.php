@@ -203,7 +203,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
-        return new \STTV\Checkout\Customer([
+        return new \STTV\Checkout\Customer( 'create', [
             'description' => $obj['firstname'].' '.$obj['lastname'],
             'source' => $obj['token']['id'],
             'email' => $obj['email'],
