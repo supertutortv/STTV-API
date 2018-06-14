@@ -311,21 +311,6 @@ class Checkout extends \WP_REST_Controller {
                 [ 'data' => $e->getJsonBody()['error'] ]
             );
         }
-
-        /* if ( isset( $body['mailinglist'] ) && $body['mailinglist'] == 'on' ) {
-            sttv_mailinglist_subscribe( $body['email'], $body['firstname'], $body['lastname'] );
-        }
-
-        return sttv_rest_response(
-            'success',
-            'Success! Thank you for your purchase, you will be redirected to your account shortly.',
-            200,
-            [
-                'order' => $order,
-                'cart' => $body['cart']
-            ]
-        ); */
-        
     }
 
     private function checkout_init( $body ) {

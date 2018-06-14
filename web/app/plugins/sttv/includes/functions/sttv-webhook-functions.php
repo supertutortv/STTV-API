@@ -10,11 +10,7 @@ defined( 'ABSPATH' ) || exit;
 function trial_expiration_checker() {
     global $wpdb;
     $time = time();
-
-    // Garbage Collection
-    $garbage_col = $wpdb->get_results(
-        $wpdb->prepare( "DELETE FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 0 ] )
-    );
+    $returned = [];
 
     //Invoices
     $invs = $wpdb->get_results( 
@@ -22,9 +18,11 @@ function trial_expiration_checker() {
     , ARRAY_A );
 
     if ( empty( $invs ) ) {
-        return false;
+        $returned = false;
+    } else {
+        $returned[] = $invs;
     }
-    
+
     foreach ( $invs as $inv ) {
         try {
             $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
@@ -33,7 +31,26 @@ function trial_expiration_checker() {
             continue;
         }
     }
-    return $invs;
+
+    // Garbage Collection
+    $garbage = $wpdb->get_results(
+        $wpdb->prepare( "SELECT invoice_id,wp_id FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 0 ] )
+    , ARRAY_A );
+
+    if ( !empty( $garbage ) ) {
+        foreach ( $garbage as $g ) {
+            $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
+            $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
+            $wpdb->delete( $wpdb->prefix.'trial_reference',
+                [
+                    'invoice_id' => $g['invoice_id']
+                ]
+            );
+        }
+        $returned[] = $garbage;
+    }
+
+    return $returned;
 }
 
 #########################
@@ -90,12 +107,15 @@ function invoice_updated( $data ) {
 function invoice_payment_succeeded( $data ) {
     global $wpdb;
     $id = $data['data']['object']['id'];
-    $wpdb->delete( $wpdb->prefix.'trial_reference',
+    return $wpdb->update( $wpdb->prefix.'trial_reference',
+        [
+            'exp_date' => 0,
+            'active' => false
+        ],
         [
             'invoice_id' => $id
         ]
     );
-    return $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'");
 }
 
 // invoice.payment_failed
@@ -129,13 +149,10 @@ function invoice_payment_failed( $data ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'active' => 0,
-                'exp_date' => $delete
+                'exp_date' => 0//$delete
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
-            ],
-            [
-                '%d'
             ]
         );
     }

@@ -104,37 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            /* $test_order = new \STTV\Checkout\Order( 'create', [
-                'customer' => 'cus_CUDuy8TMMclqZs',
-                'trial' => 5,
-                'items' => [
-                    [
-                        'customer' => 'cus_CUDuy8TMMclqZs',
-                        'currency' => 'usd',
-                        'amount' => 24900,
-                        'description' => 'The Best ACT Prep Course Ever',
-                        'discountable' => true
-                    ],
-                    [
-                        'customer' => 'cus_CUDuy8TMMclqZs',
-                        'amount' => round(2500*(9.5/100)),
-                        'currency' => "usd",
-                        "description" => "Sales tax",
-                        "discountable" => false
-                    ],
-                    [
-                        "customer" => 'cus_CUDuy8TMMclqZs',
-                        "amount" => 1285,
-                        "currency" => "usd",
-                        "description" => "Priority Shipping",
-                        "discountable" => false
-                    ]
-                ]
-            ]);
-            $order = $test_order->response();
-            //$pay = $order->pay();
-            //$order = new \STTV\Checkout\Order( 'retrieve', 'in_1CaXUYIdKWhsvVLLLHBmIo4X' );
-            print_r( $order ); */
+            
         });
     }
 
