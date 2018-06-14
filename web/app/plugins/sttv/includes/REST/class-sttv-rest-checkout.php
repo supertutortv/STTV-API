@@ -247,7 +247,7 @@ class Checkout extends \WP_REST_Controller {
                     'phone' => $body['phone']
                 ]
             ]);
-            $customer = $customer->response();
+            return $customer->response();
         } catch ( \Exception $e ) {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
