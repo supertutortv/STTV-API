@@ -48,7 +48,7 @@ function customer_updated( $data ) {
 // customer.deleted
 function customer_deleted( $data ) {
     $user = get_userdata( $data['data']['object']['metadata']['wp_id'] );
-    return $user->remove_all_caps();
+    return wp_delete_user( $user->ID );
 }
 
 // invoice.created
