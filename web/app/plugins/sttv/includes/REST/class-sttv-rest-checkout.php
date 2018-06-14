@@ -214,16 +214,14 @@ class Checkout extends \WP_REST_Controller {
 			'role' => 'student'
 		];
 
-        $user_id = wp_insert_user( $userdata );
-
-        if ( is_wp_error( $user_id ) ) {
+        /* if ( is_wp_error( $user_id ) ) {
             return sttv_rest_response(
                 'user_insert_error',
                 'There was an error adding you as a user. Please check your registration form and try again.',
                 400,
                 [ 'data' => $user_id ]
             );
-        }
+        } */
         
         try {
             $customer = new \STTV\Checkout\Customer( 'create', [
@@ -232,7 +230,7 @@ class Checkout extends \WP_REST_Controller {
                 'email' => $body['email'],
                 'coupon' => $body['coupon'] ?: null,
                 'metadata' => [
-                    'wp_id' => $user_id
+                    'wp_id' => wp_insert_user( $userdata )
                 ],
                 'shipping' => [
                     "name" => "shipping",
@@ -251,9 +249,9 @@ class Checkout extends \WP_REST_Controller {
         } catch ( \Exception $e ) {
             return sttv_rest_response(
                 'stripe_error',
-                'Oops',
+                'There was an error',
                 403,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody()['error'] ]
             );
         }
         
