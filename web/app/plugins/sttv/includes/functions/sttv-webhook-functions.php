@@ -47,6 +47,7 @@ function customer_updated( $data ) {
 
 // customer.deleted
 function customer_deleted( $data ) {
+    require_once( ABSPATH.'wp-admin/includes/user.php' );
     $user = get_userdata( $data['data']['object']['metadata']['wp_id'] );
     return wp_delete_user( $user->ID );
 }
