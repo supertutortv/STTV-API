@@ -101,7 +101,6 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
-        //return sttv_rest_response( 'stuff', 'things', 200, $this->zips );
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
@@ -204,6 +203,24 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
+        return new \STTV\Checkout\Customer([
+            'description' => $obj['firstname'].' '.$obj['lastname'],
+            'source' => $obj['token']['id'],
+            'email' => $obj['email'],
+            'coupon' => $obj['coupon'] ?: null,
+            'shipping' => [
+                "name" => "shipping",
+                "address" => [
+                    "line1" => $obj['shipping_address1'],
+                    "line2" => $obj['shipping_address2'],
+                    "city" => $obj['shipping_city'],
+                    "state" => $obj['shipping_state'],
+                    "postal_code" => $obj['shipping_pcode'],
+                    "country" => $obj['shipping_country']
+                ],
+                'phone' => $obj['phone']
+            ]
+        ]);
 
         //set tax rate based on postal code
         if ( in_array( $body['shipping_pcode'], $this->zips->losangeles ) ) {
