@@ -77,7 +77,8 @@ function customer_updated( $data ) {
 // customer.deleted
 function customer_deleted( $data ) {
     require_once( ABSPATH.'wp-admin/includes/user.php' );
-    $user = get_userdata( $data['data']['object']['metadata']['wp_id'] );
+    $id = ($data['data']['object']['metadata']['wp_id'] == 1) ? 0 : $data['data']['object']['metadata']['wp_id'];
+    $user = get_userdata( $id );
     return wp_delete_user( $user->ID );
 }
 
@@ -120,14 +121,18 @@ function invoice_updated( $data ) {
 // invoice.payment_succeeded
 function invoice_payment_succeeded( $data ) {
     global $wpdb;
-    $id = $data['data']['object']['id'];
+
+    $meta = $data['data']['object']['metadata'];
+    $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
+    $user = get_userdata( $meta['wp_id'] );
+
     return $wpdb->update( $wpdb->prefix.'trial_reference',
         [
             'exp_date' => 0,
             'active' => false
         ],
         [
-            'invoice_id' => $id
+            'invoice_id' => $data['data']['object']['id']
         ]
     );
 }
@@ -163,13 +168,12 @@ function invoice_payment_failed( $data ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'active' => 0,
-                'exp_date' => 0//$delete
+                'exp_date' => 0
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
             ],
             [
-                '%d',
                 '%d'
             ]
         );
