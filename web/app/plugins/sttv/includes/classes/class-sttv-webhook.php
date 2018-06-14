@@ -98,7 +98,7 @@ class Webhook {
             $this->message = $this->response ? 'Webhook executed' : 'Valid webhook, but no action taken. Thank you!';
         } else {
             $this->http = 418;
-            $this->event = 'invalid_webhook';
+            $this->message = 'invalid_webhook';
             $this->response = [
                 [
                     'Dave'=>'Do you read me, HAL?',

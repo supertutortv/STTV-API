@@ -215,28 +215,48 @@ class Checkout extends \WP_REST_Controller {
 		];
 
         $user_id = wp_insert_user( $userdata );
+
+        if ( is_wp_error() ) {
+            return sttv_rest_response(
+                'user_insert_error',
+                'There was an error adding you as a user. Please check your registration form and try again.',
+                400,
+                [ 'data' => $user_id ]
+            );
+        }
         
-        return new \STTV\Checkout\Customer( 'create', [
-            'description' => $body['firstname'].' '.$body['lastname'],
-            'default_source' => $body['default_source'] ?: null,
-            'email' => $body['email'],
-            'coupon' => $body['coupon'] ?: null,
-            'metadata' => [
-                'wp_id' => $user_id
-            ],
-            'shipping' => [
-                "name" => "shipping",
-                "address" => [
-                    "line1" => $body['shipping_address1'],
-                    "line2" => $body['shipping_address2'],
-                    "city" => $body['shipping_city'],
-                    "state" => $body['shipping_state'],
-                    "postal_code" => $body['shipping_pcode'],
-                    "country" => $body['shipping_country']
+        try {
+            $customer = \STTV\Checkout\Customer( 'create', [
+                'description' => $body['firstname'].' '.$body['lastname'],
+                'default_source' => $body['default_source'] ?: null,
+                'email' => $body['email'],
+                'coupon' => $body['coupon'] ?: null,
+                'metadata' => [
+                    'wp_id' => $user_id
                 ],
-                'phone' => $body['phone']
-            ]
-        ]);
+                'shipping' => [
+                    "name" => "shipping",
+                    "address" => [
+                        "line1" => $body['shipping_address1'],
+                        "line2" => $body['shipping_address2'],
+                        "city" => $body['shipping_city'],
+                        "state" => $body['shipping_state'],
+                        "postal_code" => $body['shipping_pcode'],
+                        "country" => $body['shipping_country']
+                    ],
+                    'phone' => $body['phone']
+                ]
+            ]);
+            return $customer->response();
+        } catch ( \Exception $e ) {
+            return sttv_rest_response(
+                'stripe_error',
+                'Oops',
+                403,
+                [ 'data' => $e ]
+            );
+        }
+        
 
         //set tax rate based on postal code
         if ( in_array( $body['shipping_pcode'], $this->zips->losangeles ) ) {

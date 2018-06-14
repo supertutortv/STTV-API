@@ -15,7 +15,7 @@ function trial_expiration_checker() {
 
     //Invoices
     $invs = $wpdb->get_results( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date < $time AND active = 1", ARRAY_A );
-    if ( is_null( $invs ) ) {
+    if ( is_empty( $invs ) ) {
         return false;
     }
     foreach ( $invs as $inv ) {
@@ -36,8 +36,12 @@ function trial_expiration_checker() {
 // customer.created
 function customer_created( $data ) {
     $customer = $data['data']['object'];
-    return $customer;
-    //return false;
+    return update_user_meta( $customer['metadata']['wp_id'], 'sttv_user_data', [
+        'customer' => $customer['id'],
+        'uid' => $customer['invoice_prefix'],
+        'orders' => [],
+        'courses' => []
+    ]);
 }
 
 // customer.updated
