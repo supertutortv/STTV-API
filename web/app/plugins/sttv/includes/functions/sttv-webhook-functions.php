@@ -35,8 +35,9 @@ function trial_expiration_checker() {
 
 // customer.created
 function customer_created( $data ) {
-    $customer = \Stripe\Customer::retrieve( $data['data']['object']['id'] );
-    return $customer;
+    $customer = $data['data']['object'];
+    $customer->invoice_prefix = 'A';
+    return $customer->save();
     //return false;
 }
 
