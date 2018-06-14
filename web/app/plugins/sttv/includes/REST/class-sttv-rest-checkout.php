@@ -216,7 +216,7 @@ class Checkout extends \WP_REST_Controller {
 
         $user_id = wp_insert_user( $userdata );
 
-        if ( is_wp_error() ) {
+        if ( is_wp_error( $user_id ) ) {
             return sttv_rest_response(
                 'user_insert_error',
                 'There was an error adding you as a user. Please check your registration form and try again.',
