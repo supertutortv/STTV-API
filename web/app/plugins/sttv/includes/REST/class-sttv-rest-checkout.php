@@ -228,7 +228,7 @@ class Checkout extends \WP_REST_Controller {
         try {
             $customer = new \STTV\Checkout\Customer( 'create', [
                 'description' => $body['firstname'].' '.$body['lastname'],
-                'default_source' => $body['default_source'] ?: null,
+                'source' => $body['source'] ?: null,
                 'email' => $body['email'],
                 'coupon' => $body['coupon'] ?: null,
                 'metadata' => [
