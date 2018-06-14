@@ -88,6 +88,16 @@ function customer_deleted( $data ) {
 function invoice_created( $data ) {
     global $wpdb;
     $obj = $data['data']['object'];
+    $meta = $obj['metadata'];
+    $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
+    $user = get_userdata( $meta['wp_id'] );
+
+    $test = strtolower( $course['test'] );
+
+    foreach ( $course['capabilities']['trial'] as $cap ) {
+        $user->add_cap( $cap );
+    }
+
     return $wpdb->insert( $wpdb->prefix.'trial_reference',
         [
             'invoice_id' => $obj['id'],
@@ -128,10 +138,12 @@ function invoice_payment_succeeded( $data ) {
     $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
     $user = get_userdata( $meta['wp_id'] );
 
-    $user->remove_all_caps();
-    /* foreach ( $course['capabilities']['full'] as $cap ) {
-        
-    } */
+    $test = strtolower( $course['test'] );
+
+    $user->remove_cap( "course_{$test}_trial" );
+    foreach ( $course['capabilities']['full'] as $cap ) {
+        $user->add_cap( $cap );
+    }
 
     return $wpdb->update( $wpdb->prefix.'trial_reference',
         [
