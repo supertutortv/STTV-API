@@ -46,7 +46,7 @@ class Checkout extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
-			'/' => [
+			'/verify' => [
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
@@ -66,14 +66,11 @@ class Checkout extends \WP_REST_Controller {
                             'required' => false,
                             'type' => 'string',
                             'description' => 'Postal code to check'
-                        ]/* ,
-                        'uid' => [
-                            'required' => false,
-                            'type' => 'string',
-                            'description' => 'Request a generated unique id'
-                        ] */
+                        ]
                     ]
-                ],
+                ]
+            ],
+            '/pay' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'sttv_checkout' ],
