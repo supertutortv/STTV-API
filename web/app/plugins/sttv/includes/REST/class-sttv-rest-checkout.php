@@ -205,12 +205,12 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         $userdata = [
 			'ID' => ( get_current_user_id() ) ?: '',
-			'user_login' => $obj['email'],
-			'user_pass' => $obj['password'],
-			'user_email' => $obj['email'],
-			'first_name' => $obj['firstname'],
-			'last_name' => $obj['lastname'],
-			'display_name' => $obj['firstname'].' '.$obj['lastname'],
+			'user_login' => $body['email'],
+			'user_pass' => $body['password'],
+			'user_email' => $body['email'],
+			'first_name' => $body['firstname'],
+			'last_name' => $body['lastname'],
+			'display_name' => $body['firstname'].' '.$body['lastname'],
 			'show_admin_bar_front' => 'false',
 			'role' => 'student'
 		];
@@ -218,24 +218,24 @@ class Checkout extends \WP_REST_Controller {
         $user_id = wp_insert_user( $userdata );
         
         return new \STTV\Checkout\Customer( 'create', [
-            'description' => $obj['firstname'].' '.$obj['lastname'],
-            'source' => $obj['token']['id'],
-            'email' => $obj['email'],
-            'coupon' => $obj['coupon'] ?: null,
+            'description' => $body['firstname'].' '.$body['lastname'],
+            'source' => $body['token']['id'],
+            'email' => $body['email'],
+            'coupon' => $body['coupon'] ?: null,
             'metadata' => [
                 'wp_id' => $user_id
             ],
             'shipping' => [
                 "name" => "shipping",
                 "address" => [
-                    "line1" => $obj['shipping_address1'],
-                    "line2" => $obj['shipping_address2'],
-                    "city" => $obj['shipping_city'],
-                    "state" => $obj['shipping_state'],
-                    "postal_code" => $obj['shipping_pcode'],
-                    "country" => $obj['shipping_country']
+                    "line1" => $body['shipping_address1'],
+                    "line2" => $body['shipping_address2'],
+                    "city" => $body['shipping_city'],
+                    "state" => $body['shipping_state'],
+                    "postal_code" => $body['shipping_pcode'],
+                    "country" => $body['shipping_country']
                 ],
-                'phone' => $obj['phone']
+                'phone' => $body['phone']
             ]
         ]);
 
