@@ -36,7 +36,7 @@ function trial_expiration_checker() {
 // customer.created
 function customer_created( $data ) {
     $customer = \Stripe\Customer::retrieve( $data['data']['object']['id'] );
-    return $customer->delete();
+    return $customer;
     //return false;
 }
 
@@ -47,9 +47,9 @@ function customer_updated( $data ) {
 
 // customer.deleted
 function customer_deleted( $data ) {
-    //require_once( ABSPATH.'wp-admin/includes/user.php' );
+    require_once( ABSPATH.'wp-admin/includes/user.php' );
     $user = get_userdata( $data['data']['object']['metadata']['wp_id'] );
-    return $user->remove_all_caps();
+    return wp_delete_user( $user->ID );
 }
 
 // invoice.created
