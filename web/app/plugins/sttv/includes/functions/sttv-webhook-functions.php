@@ -128,7 +128,7 @@ function invoice_payment_succeeded( $data ) {
     $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
     $user = get_userdata( $meta['wp_id'] );
 
-    $user->remove_all_Caps();
+    $user->remove_all_caps();
     /* foreach ( $course['capabilities']['full'] as $cap ) {
         
     } */
