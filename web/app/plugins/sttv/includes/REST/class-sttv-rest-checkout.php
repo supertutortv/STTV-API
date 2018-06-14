@@ -247,7 +247,60 @@ class Checkout extends \WP_REST_Controller {
                     'phone' => $body['phone']
                 ]
             ]);
-            return $customer->response();
+            $customer = $customer->response();
+            $course = json_decode( get_post_meta( $body['course'], 'sttv_course_data', true ), true );
+            $items = [
+                [
+                    'customer' => $customer['id'],
+                    'currency' => 'usd',
+                    'amount' => $course['pricing']['price'],
+                    'description' => $course['name'],
+                    'discountable' => true
+                ]
+            ];
+
+            //set tax rate based on postal code
+            if ( in_array( $body['shipping_pcode'], $this->zips->losangeles ) ) {
+                $this->tax = 9.5;
+            } else {
+                foreach ( $this->zips as $array ) {
+                    if ( in_array( $body['shipping_pcode'], $array ) ) {
+                        $this->tax = 7.5;
+                        break;
+                    }
+                }
+            }
+
+            if ( $this->tax > 0 ) {
+                $items[] = [
+                    'customer' => $customer['id'],
+                    'amount' => round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) ),
+                    'currency' => "usd",
+                    "description" => "Sales tax",
+                    "discountable" => false
+                ];
+            }
+
+            if ( $body['shipping'] ) {
+                $items[] = [
+                    "customer" => $customer['id'],
+                    "amount" => 1285,
+                    "currency" => "usd",
+                    "description" => "Priority Shipping",
+                    "discountable" => false
+                ];
+            }
+
+            $order = new \STTV\Checkout\Order( 'create', [
+                'customer' => $customer['id'],
+                'trial' => $body['trial'] ? $course['pricing']['trial_period'] : 0,
+                'metadata' => [
+                    'start' => time(),
+                    'end' => time() + (MONTH_IN_SECONDS * 6)
+                ],
+                'items' => $items
+            ]);
+            return $order->response();
         } catch ( \Exception $e ) {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
@@ -265,22 +318,6 @@ class Checkout extends \WP_REST_Controller {
                 [ 'data' => $e->getJsonBody()['error'] ]
             );
         }
-        
-
-        //set tax rate based on postal code
-        if ( in_array( $body['shipping_pcode'], $this->zips->losangeles ) ) {
-            $this->tax = 9.5;
-        } else {
-            foreach ( $this->zips as $array ) {
-                if ( in_array( $body['shipping_pcode'], $array ) ) {
-                    $this->tax = 7.5;
-                    break;
-                }
-            }
-        }
-        $body['taxrate'] = $this->tax;
-
-        $order = \STTV\Order::create( $body );
 
         if ( isset( $order['error'] ) ) {
             return sttv_rest_response(
