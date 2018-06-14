@@ -292,7 +292,8 @@ class Checkout extends \WP_REST_Controller {
                 ],
                 'items' => $items
             ]);
-            return $order->response();
+            $order = $order->response();
+            return ($body['trial']) ? $order : $order->pay();
         } catch ( \Exception $e ) {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
