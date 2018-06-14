@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 function trial_expiration_checker() {
     global $wpdb;
     $time = time();
-    return date_default_timezone_get();
+
     // Garbage Collection
     $garbage_col = $wpdb->get_results(
         $wpdb->prepare( "DELETE FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 0 ] )
@@ -20,9 +20,9 @@ function trial_expiration_checker() {
     $invs = $wpdb->get_results( 
         $wpdb->prepare( "SELECT invoice_id FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 1 ] )
     , ARRAY_A );
-    if ( is_empty( $invs ) ) {
+    /* if ( is_empty( $invs ) ) {
         return false;
-    }
+    } */
     foreach ( $invs as $inv ) {
         try {
             $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
