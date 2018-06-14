@@ -312,16 +312,7 @@ class Checkout extends \WP_REST_Controller {
             );
         }
 
-        if ( isset( $order['error'] ) ) {
-            return sttv_rest_response(
-                'error',
-                'There was an error. See the error response for more information.',
-                420,
-                $order
-            );
-        }
-
-        if ( isset( $body['mailinglist'] ) && $body['mailinglist'] == 'on' ) {
+        /* if ( isset( $body['mailinglist'] ) && $body['mailinglist'] == 'on' ) {
             sttv_mailinglist_subscribe( $body['email'], $body['firstname'], $body['lastname'] );
         }
 
@@ -333,7 +324,7 @@ class Checkout extends \WP_REST_Controller {
                 'order' => $order,
                 'cart' => $body['cart']
             ]
-        );
+        ); */
         
     }
 
