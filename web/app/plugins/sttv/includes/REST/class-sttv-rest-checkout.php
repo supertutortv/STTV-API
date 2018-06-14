@@ -283,7 +283,7 @@ class Checkout extends \WP_REST_Controller {
 
             $order = new \STTV\Checkout\Order( 'create', [
                 'customer' => $customer['id'],
-                'trial' => $body['trial'] ? $course['pricing']['trial_period'] : 0,
+                'trial' => ($body['trial']) ? $course['pricing']['trial_period'] : 0,
                 'metadata' => [
                     'wp_id' => $user_id,
                     'course' => $course['id'],
