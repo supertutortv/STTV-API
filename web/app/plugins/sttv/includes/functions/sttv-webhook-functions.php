@@ -41,6 +41,7 @@ function trial_expiration_checker() {
         foreach ( $garbage as $g ) {
             $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
             $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
+            $customer->delete();
             $wpdb->delete( $wpdb->prefix.'trial_reference',
                 [
                     'invoice_id' => $g['invoice_id']
