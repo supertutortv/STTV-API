@@ -293,7 +293,21 @@ class Checkout extends \WP_REST_Controller {
                 'items' => $items
             ]);
             $order = $order->response();
-            return ($body['trial']) ? $order : $order->pay();
+            $response = ($body['trial']) ? $order : $order->pay();
+
+            if ( ! is_wp_error( wp_signon( [
+                'user_login'    => $body['email'],
+                'user_password' => $body['password'],
+                'remember'      => true
+            ], is_ssl() ) ) ) {
+                return sttv_rest_response(
+                    'checkout_success',
+                    'Thank you for signing up! You will be redirected shortly.',
+                    200,
+                    [ 'data' => $response ]
+                );
+            }
+
         } catch ( \Exception $e ) {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
