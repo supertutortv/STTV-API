@@ -260,14 +260,15 @@ class Checkout extends \WP_REST_Controller {
             ];
 
             $this->set_tax( $body['shipping_pcode'] );
+            return round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) );
 
             if ( $this->tax > 0 ) {
                 $items[] = [
                     'customer' => $customer['id'],
                     'amount' => round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) ),
                     'currency' => "usd",
-                    "description" => "Sales tax",
-                    "discountable" => false
+                    'description' => "Sales tax",
+                    'discountable' => false
                 ];
             }
 
