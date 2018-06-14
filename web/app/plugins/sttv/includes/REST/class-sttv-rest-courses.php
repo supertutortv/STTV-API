@@ -37,7 +37,7 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => '__return_true'
+					'permission_callback' => 'sttv_verify_rest_nonce'
 				]
 			],
 			'/log' => [
