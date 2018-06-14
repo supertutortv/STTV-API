@@ -68,18 +68,7 @@ class Webhook {
             }
         }
 
-        \STTV\Log::webhook([
-            'direction' => 'received',
-            'error' => $this->error,
-            'event' => $this->event,
-            'data' => [
-                $this->message,
-                $this->http,
-                $this->response
-            ]
-        ]);
-
-        /* if ( false !== $this->response ) {
+        if ( false !== $this->response ) {
             \STTV\Log::webhook([
                 'direction' => 'received',
                 'error' => $this->error,
@@ -90,7 +79,7 @@ class Webhook {
                     $this->response
                 ]
             ]);
-        } */
+        }
 
         http_response_code( $this->http );
         return sttv_rest_response(
