@@ -94,18 +94,18 @@ class Checkout extends \WP_REST_Controller {
         } elseif ( isset( $pars['zip'] ) ) {
             return $this->check_zip( sanitize_text_field($pars['zip']) );
         } elseif ( isset( $pars['sid'] ) ) {
-            return (new MultiUserPermissions('1c74e69ef1f4f0388bc6da713a599142'))->roll_key()->get_current_key();
+            //return (new MultiUserPermissions('1c74e69ef1f4f0388bc6da713a599142'))->roll_key()->get_current_key();
         } else {
-            return $this->checkout_generic_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
+            return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
-        return true;
+        return $this->zips;
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
-            return $this->checkout_generic_response( 'bad_request', 'Request body cannot be empty', 400 );
+            return sttv_rest_response( 'bad_request', 'Request body cannot be empty', 400 );
         }
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
@@ -128,7 +128,7 @@ class Checkout extends \WP_REST_Controller {
         $key = $mu->validate_key( $body['muid'] );
 
         if ( false === $key ) {
-            return $this->checkout_generic_response(
+            return sttv_rest_response(
                 'invalid_multi-user_token',
                 'This multi-user token is invalid or expired. Please contact purchaser of this token if you have reached this in error.',
                 403
@@ -156,7 +156,7 @@ class Checkout extends \WP_REST_Controller {
             }
 
             if ( $mu->is_subscribed( $student->ID , $course->ID ) ) {
-                return $this->checkout_generic_response(
+                return sttv_rest_response(
                     'user_already_subscribed',
                     'This user has already signed up for this course. Please choose a unique user for this key.',
                     400
@@ -180,7 +180,7 @@ class Checkout extends \WP_REST_Controller {
                 'remember' => true
             ], is_ssl());
 
-            return $this->checkout_generic_response(
+            return sttv_rest_response(
                 'subscription_success',
                 'Thank you for subscribing! You are being redirected to your account page.',
                 200,
@@ -193,7 +193,7 @@ class Checkout extends \WP_REST_Controller {
                 ]
             );
         } else {
-            return $this->checkout_generic_response(
+            return sttv_rest_response(
                 'registration_error',
                 'There was an error setting up your account. If you are an existing user, please log in first and try again..',
                 400,
@@ -221,7 +221,7 @@ class Checkout extends \WP_REST_Controller {
         $order = \STTV\Order::create( $body );
 
         if ( isset( $order['error'] ) ) {
-            return $this->checkout_generic_response(
+            return sttv_rest_response(
                 'error',
                 'There was an error. See the error response for more information.',
                 420,
@@ -233,7 +233,7 @@ class Checkout extends \WP_REST_Controller {
             sttv_mailinglist_subscribe( $body['email'], $body['firstname'], $body['lastname'] );
         }
 
-        return $this->checkout_generic_response(
+        return sttv_rest_response(
             'success',
             'Success! Thank you for your purchase, you will be redirected to your account shortly.',
             200,
@@ -256,7 +256,7 @@ class Checkout extends \WP_REST_Controller {
             'type' => 'checkout'
         ]);
 
-        return $this->checkout_generic_response(
+        return sttv_rest_response(
             'checkout',
             'Here\'s your checkout, bitch!',
             200,
