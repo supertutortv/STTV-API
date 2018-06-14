@@ -101,6 +101,7 @@ function invoice_created( $data ) {
 
 // invoice.updated
 function invoice_updated( $data ) {
+    global $wpdb;
     $obj = $data['data']['object'];
     if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
