@@ -322,7 +322,7 @@ class Checkout extends \WP_REST_Controller {
                 'stripe_error',
                 'There was an error',
                 403,
-                [ 'data' => $e->getJsonBody()['error'] ]
+                [ 'data' => $e->getJsonBody() ]
             );
         }
     }
