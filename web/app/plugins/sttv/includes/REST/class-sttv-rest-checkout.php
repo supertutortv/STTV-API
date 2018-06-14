@@ -298,7 +298,7 @@ class Checkout extends \WP_REST_Controller {
             } else {
                 return $this->checkout_generic_response( 'coupon_expired', 'expired coupon', 200 );
             }
-        } catch (Exception $e) {
+        } catch ( \Exception $e ) {
             $body = $e->getJsonBody();
             return $this->checkout_generic_response( 'coupon_invalid', 'invalid coupon', 200, [
                 'error' => $body['error']
