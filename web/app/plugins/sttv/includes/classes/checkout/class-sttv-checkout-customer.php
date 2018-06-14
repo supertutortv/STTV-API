@@ -3,7 +3,7 @@ namespace STTV\Checkout;
 
 defined( 'ABSPATH' ) || exit;
 
-class Charge extends Stripe {
+class Customer extends Stripe {
 
     protected function create( $obj ) {
 

@@ -101,7 +101,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
-        return sttv_rest_response( 'stuff', 'things', 200, $this->zips );
+        //return sttv_rest_response( 'stuff', 'things', 200, $this->zips );
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
