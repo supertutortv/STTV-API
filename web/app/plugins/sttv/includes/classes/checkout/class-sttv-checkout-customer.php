@@ -6,7 +6,9 @@ defined( 'ABSPATH' ) || exit;
 class Customer extends Stripe {
 
     public function __construct( $action = 'create', $obj = null ) {
-        return parent::__construct( $action, $obj );
+        $obj = $this->init( $obj );
+        $this->response = $this->$action( $obj );
+        return $this;
     }
 
     protected function create( $obj ) {

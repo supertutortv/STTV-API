@@ -23,12 +23,6 @@ abstract class Stripe {
         ];
     }
 
-    public function __construct( $action = 'create', $obj = null ) {
-        $obj = $this->init( $obj );
-        $this->response = $this->$action( $obj );
-        return $this;
-    }
-
     protected function init( $obj = null ) {
         if ( is_null( $obj ) || empty( $obj ) ) {
             return [
