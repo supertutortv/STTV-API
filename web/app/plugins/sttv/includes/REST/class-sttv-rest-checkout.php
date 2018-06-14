@@ -259,17 +259,7 @@ class Checkout extends \WP_REST_Controller {
                 ]
             ];
 
-            //set tax rate based on postal code
-            if ( in_array( $body['shipping_pcode'], $this->zips->losangeles ) ) {
-                $this->tax = 9.5;
-            } else {
-                foreach ( $this->zips as $array ) {
-                    if ( in_array( $body['shipping_pcode'], $array ) ) {
-                        $this->tax = 7.5;
-                        break;
-                    }
-                }
-            }
+            $this->set_tax( $body['shipping_pcode'] );
 
             if ( $this->tax > 0 ) {
                 $items[] = [
@@ -409,23 +399,30 @@ class Checkout extends \WP_REST_Controller {
         if ( empty( $zip ) ) {
             return $this->checkout_generic_response( 'bad_request', 'ZIP/Postal code cannot be empty or blank.', 400 );
         }
-        
-        $tax = 0;
-        $msg = '';
 
+        $this->set_tax( $zip );
+        $msg = ($this->tax > 0) ? "CA tax ($this->tax%)" : "";
+
+        return $this->checkout_generic_response(
+            'checkout_tax',
+            $msg,
+            200,
+            [ 'tax' => $this->tax ]
+        );
+    }
+
+    private function set_tax( $zip ) {
+        //set tax rate based on postal code
         if ( in_array( $zip, $this->zips->losangeles ) ) {
-            $tax = 9.5;
-            $msg = "CA tax ($tax%)";
+            $this->tax = 9.5;
         } else {
-            foreach ($this->zips as $array) {
+            foreach ( $this->zips as $array ) {
                 if ( in_array( $zip, $array ) ) {
-                    $tax = 7.5;
-                    $msg = "CA tax ($tax%)";
+                    $this->tax = 7.5;
                     break;
                 }
             }
         }
-        return $this->checkout_generic_response( 'checkout_tax', $msg, 200, [ 'tax' => $tax ] );
     }
 
     public function checkout_origin_verify( WP_REST_Request $request ) {
