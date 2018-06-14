@@ -20,7 +20,7 @@ class Customer extends Stripe {
     }
     
     protected function retrieve( $id ) {
-
+        return \Stripe\Customer::retrieve( $id );
     }
 
 }
