@@ -93,7 +93,7 @@ final class STTV {
 			if( ! current_user_can( 'manage_options' ) || ! defined( 'REST_REQUEST' ) ) {
 			   //Redirect to main page if the user is not an Editor or higher
 			   //wp_redirect( get_site_url( ) );
-			   //wp_die();
+               //wp_die();
 			}
         } );
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
@@ -104,7 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print openssl_random_pseudo_bytes(128);
+            print md5(openssl_random_pseudo_bytes(128));
         });
     }
 
