@@ -12,14 +12,14 @@ class Order extends Stripe {
     }
 
     protected function create( $obj ) {
-        $duedate = time() + (DAY_IN_SECONDS * $obj['trial']);
         foreach( $obj['items'] as $item ) {
             \Stripe\InvoiceItem::create( $item );
         }
+        $due_date = time() + (DAY_IN_SECONDS * $obj['trial']);
         return \Stripe\Invoice::create([
             'customer' => $obj['customer'],
             'billing' => 'send_invoice',
-            'due_date' => (int) $duedate,
+            'due_date' => $due_date + 3,
             'metadata' => $obj['metadata']
         ]);
     }

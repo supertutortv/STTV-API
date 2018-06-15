@@ -203,31 +203,6 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
-        $course = get_post_meta( $body['course'], 'sttv_course_data', true );
-        $trial = ($body['trial']) ? $course['pricing']['trial_period'] : 0;
-        return time() + (DAY_IN_SECONDS * $trial);
-        $userdata = [
-			'user_login' => $body['email'],
-			'user_pass' => $body['password'],
-			'user_email' => $body['email'],
-			'first_name' => $body['firstname'],
-			'last_name' => $body['lastname'],
-			'display_name' => $body['firstname'].' '.$body['lastname'],
-			'show_admin_bar_front' => 'false',
-			'role' => 'student'
-		];
-
-        $user_id = wp_insert_user( $userdata );
-
-        if ( is_wp_error( $user_id ) ) {
-            return sttv_rest_response(
-                'user_insert_error',
-                'There was an error adding you as a user. Please check your registration form and try again.',
-                400,
-                [ 'data' => $user_id ]
-            );
-        }
-        
         try {
             $customer = new \STTV\Checkout\Customer( 'create', [
                 'description' => $body['firstname'].' '.$body['lastname'],
@@ -251,7 +226,33 @@ class Checkout extends \WP_REST_Controller {
                 ]
             ]);
             $customer = $customer->response();
+
+            $userdata = [
+                'user_login' => $body['email'],
+                'user_pass' => $body['password'],
+                'user_email' => $body['email'],
+                'first_name' => $body['firstname'],
+                'last_name' => $body['lastname'],
+                'display_name' => $body['firstname'].' '.$body['lastname'],
+                'show_admin_bar_front' => 'false',
+                'role' => 'student'
+            ];
+    
+            $user_id = wp_insert_user( $userdata );
+    
+            if ( is_wp_error( $user_id ) ) {
+                $customer->delete();
+                return sttv_rest_response(
+                    'user_insert_error',
+                    'There was an error adding you as a user. Please check your registration form and try again.',
+                    400,
+                    [ 'data' => $user_id ]
+                );
+            }
             
+            //Begin Order Processing
+            $course = get_post_meta( $body['course'], 'sttv_course_data', true );
+        
             $items = [
                 [
                     'customer' => $customer['id'],
@@ -284,9 +285,10 @@ class Checkout extends \WP_REST_Controller {
                 ];
             }
 
+            $trial = ($body['trial']) ? $course['pricing']['trial_period'] : 0;
             $order = new \STTV\Checkout\Order( 'create', [
                 'customer' => $customer['id'],
-                'trial' => (int) $trial,
+                'trial' => $trial,
                 'metadata' => [
                     'wp_id' => $user_id,
                     'course' => $course['id'],
