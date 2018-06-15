@@ -15,13 +15,13 @@ function trial_expiration_checker() {
 
     // Garbage Collection
     $garbage = $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM $ref_table WHERE is_trash = %d", [ 1 ] )
+        $wpdb->prepare( "SELECT * FROM $ref_table WHERE exp_date < %d AND is_trash = %d", [ $time, 1 ] )
     , ARRAY_A );
 
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
             $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
-            if ( ( $time > $g['exp_date'] && $g['exp_date'] > 0 ) && $umeta ) {
+            if ( ( $g['exp_date'] > 0 ) && $umeta ) {
                 try {
                     $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                     $customer->delete();
@@ -30,6 +30,7 @@ function trial_expiration_checker() {
                     continue;
                 }
             }
+            
             $wpdb->delete( $ref_table,
                 [
                     'invoice_id' => $g['invoice_id']
