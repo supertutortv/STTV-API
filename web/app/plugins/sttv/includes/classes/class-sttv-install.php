@@ -14,7 +14,14 @@ class Install {
             exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
             retries tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-            active boolean NOT NULL DEFAULT 1,
+            delete boolean NOT NULL DEFAULT 0,
+            UNIQUE KEY id (id)
+        )',
+        'subscription_ref' => '(
+            id int(10) NOT NULL AUTO_INCREMENT,
+            exp_date int UNSIGNED,
+            wp_id int(10) UNSIGNED,
+            delete boolean NOT NULL DEFAULT 0,
             UNIQUE KEY id (id)
         )',
         //'nonce' => ''
