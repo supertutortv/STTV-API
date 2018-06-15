@@ -204,11 +204,25 @@ class Checkout extends \WP_REST_Controller {
 
     private function _checkout( $body ){
         try {
+            $userdata = [
+                'user_login' => $body['email'],
+                'user_pass' => $body['password'],
+                'user_email' => $body['email'],
+                'first_name' => $body['firstname'],
+                'last_name' => $body['lastname'],
+                'display_name' => $body['firstname'].' '.$body['lastname'],
+                'show_admin_bar_front' => 'false',
+                'role' => 'student'
+            ];
+    
+            $user_id = wp_insert_user( $userdata );
+
             $customer = new \STTV\Checkout\Customer( 'create', [
                 'description' => $body['firstname'].' '.$body['lastname'],
                 'source' => $body['source'] ?: null,
                 'email' => $body['email'],
                 'coupon' => $body['coupon'] ?: null,
+                'metadata' => [ 'wp_id' => $user_id ],
                 'shipping' => [
                     "name" => "shipping",
                     "address" => [
@@ -223,19 +237,6 @@ class Checkout extends \WP_REST_Controller {
                 ]
             ]);
             $customer = $customer->response();
-
-            $userdata = [
-                'user_login' => $body['email'],
-                'user_pass' => $body['password'],
-                'user_email' => $body['email'],
-                'first_name' => $body['firstname'],
-                'last_name' => $body['lastname'],
-                'display_name' => $body['firstname'].' '.$body['lastname'],
-                'show_admin_bar_front' => 'false',
-                'role' => 'student'
-            ];
-    
-            $user_id = wp_insert_user( $userdata );
     
             if ( is_wp_error( $user_id ) ) {
                 $customer->delete();
@@ -245,9 +246,6 @@ class Checkout extends \WP_REST_Controller {
                     400,
                     [ 'data' => $user_id ]
                 );
-            } else {
-                $customer->metadata = [ 'wp_id' => $user_id ];
-                $customer->save();
             }
             
             //Begin Order Processing
