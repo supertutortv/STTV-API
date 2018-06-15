@@ -13,36 +13,14 @@ function trial_expiration_checker() {
     $ref_table = "{$wpdb->prefix}trial_reference";
     $returned = [];
 
-    //Invoices
-    $invs = $wpdb->get_results( 
-        $wpdb->prepare( "SELECT invoice_id,exp_date FROM `$ref_table` WHERE exp_date < %d AND active = %d", [ $time, 1 ] )
-    , ARRAY_A );
-
-    if ( empty( $invs ) ) {
-        $returned = false;
-    } else {
-        $returned[] = $invs;
-    }
-
-    foreach ( $invs as $inv ) {
-        if ( $inv['exp_date'] !== 0 ) {
-            try {
-                $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
-                $pay->pay();
-            } catch ( Exception $e ) {
-                continue;
-            }
-        }
-    }
-
     // Garbage Collection
     $garbage = $wpdb->get_results(
-        $wpdb->prepare( "SELECT invoice_id,wp_id,active FROM `$ref_table` WHERE exp_date < %d", [ $time ] )
+        $wpdb->prepare( "SELECT * FROM `$ref_table` WHERE is_trash = %d", [ 1 ] )
     , ARRAY_A );
 
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
-            if ( $g['wp_id'] > 1 && !$g['active'] ) {
+            if ( $g['exp_date'] > 0 ) {
                 $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
                 $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                 $customer->delete();
@@ -56,7 +34,26 @@ function trial_expiration_checker() {
         $returned[] = $garbage;
     }
 
-    return $returned;
+    //Invoices
+    $invs = $wpdb->get_results( 
+        $wpdb->prepare( "SELECT invoice_id,exp_date FROM `$ref_table` WHERE exp_date < %d", [ $time ] )
+    , ARRAY_A );
+
+    if ( !empty( $invs ) ) {
+        foreach ( $invs as $inv ) {
+            if ( $inv['exp_date'] !== 0 ) {
+                try {
+                    $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
+                    $pay->pay();
+                } catch ( Exception $e ) {
+                    continue;
+                }
+            }
+        }
+        $returned[] = $invs;
+    }
+
+    return $returned ?: false ;
 }
 
 #########################
@@ -122,8 +119,8 @@ function invoice_updated( $data ) {
     if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'exp_date' => 0,
-                'active' => false
+                'exp_date' => time(),
+                'is_trash' => 1
             ],
             [
                 'invoice_id' => $obj['id']
@@ -155,7 +152,8 @@ function invoice_payment_succeeded( $data ) {
 
     return $wpdb->update( $wpdb->prefix.'trial_reference',
         [
-            'exp_date' => 0
+            'exp_date' => 0,
+            'is_trash' => 1
         ],
         [
             'invoice_id' => $data['data']['object']['id']
@@ -165,7 +163,7 @@ function invoice_payment_succeeded( $data ) {
 
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {
-    global $wpdb;
+    global $wpdb; $time = time();
     $id = $data['data']['object']['id'];
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
 
@@ -179,7 +177,7 @@ function invoice_payment_failed( $data ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'retries' => ++$record[0]['retries'],
-                'exp_date' => time() + 300
+                'exp_date' => $time + 300
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
@@ -190,11 +188,11 @@ function invoice_payment_failed( $data ) {
             ]
         );
     } else {
-        $delete = time() + (DAY_IN_SECONDS * 3);
+        $delete = $time;// + (DAY_IN_SECONDS * 3);
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
-                'active' => 0,
-                'exp_date' => 0
+                'is_trash' => 1,
+                'exp_date' => $delete
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
