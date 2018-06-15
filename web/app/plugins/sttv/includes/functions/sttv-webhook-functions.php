@@ -18,6 +18,8 @@ function trial_expiration_checker() {
         $wpdb->prepare( "SELECT * FROM `$ref_table` WHERE is_trash = %d", 1 )
     , ARRAY_A );
 
+    return $garbage;
+
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
             if ( $g['exp_date'] > 0 ) {
