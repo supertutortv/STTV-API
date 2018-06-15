@@ -25,7 +25,7 @@ function trial_expiration_checker() {
                 $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                 $customer->delete();
             }
-            return $wpdb->delete( $ref_table,
+            $wpdb->delete( $ref_table,
                 [
                     'invoice_id' => $g['invoice_id']
                 ]
