@@ -27,6 +27,7 @@ function trial_expiration_checker() {
                     $customer->delete();
                 } catch ( Exception $e ) {
                     $returned[] = $e;
+                    continue;
                 }
             }
             $wpdb->delete( $ref_table,
