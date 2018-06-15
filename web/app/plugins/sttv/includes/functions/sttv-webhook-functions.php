@@ -15,7 +15,7 @@ function trial_expiration_checker() {
 
     // Garbage Collection
     $garbage = $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM `$ref_table` WHERE is_trash = %d", [ 1 ] )
+        $wpdb->prepare( "SELECT * FROM `$ref_table` WHERE is_trash = %d", 1 )
     , ARRAY_A );
 
     if ( !empty( $garbage ) ) {
@@ -36,7 +36,7 @@ function trial_expiration_checker() {
 
     //Invoices
     $invs = $wpdb->get_results( 
-        $wpdb->prepare( "SELECT invoice_id,exp_date FROM `$ref_table` WHERE exp_date < %d", [ $time ] )
+        $wpdb->prepare( "SELECT invoice_id,exp_date FROM `$ref_table` WHERE exp_date < %d", $time )
     , ARRAY_A );
 
     if ( !empty( $invs ) ) {
