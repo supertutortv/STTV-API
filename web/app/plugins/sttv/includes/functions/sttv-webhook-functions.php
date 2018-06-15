@@ -163,7 +163,7 @@ function invoice_payment_succeeded( $data ) {
 
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {
-    global $wpdb; $time = time();
+    global $wpdb;
     $id = $data['data']['object']['id'];
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
 
@@ -185,11 +185,11 @@ function invoice_payment_failed( $data ) {
             ]
         );
     } else {
-        $delete = $time;// + (DAY_IN_SECONDS * 3);
+        $delete = time() + (DAY_IN_SECONDS * 3);
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'is_trash' => 1,
-                'exp_date' => $delete
+                'exp_date' => time() - 300
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
