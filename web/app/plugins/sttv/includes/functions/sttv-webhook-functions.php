@@ -20,8 +20,10 @@ function trial_expiration_checker() {
 
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
+            $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
+            $returned[] = $umeta;
             if ( $g['exp_date'] > 0 ) {
-                $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
+                
                 try {
                     $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                     $customer->delete();
