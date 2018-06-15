@@ -26,7 +26,7 @@ function trial_expiration_checker() {
                     $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                     $customer->delete();
                 } catch ( Exception $e ) {
-                    $returned[] = $e;
+                    $returned[] = $e->getJsonBody();
                     continue;
                 }
             }
