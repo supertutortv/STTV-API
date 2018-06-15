@@ -175,7 +175,7 @@ function invoice_payment_failed( $data ) {
     $user = get_userdata( $record[0]['wp_id'] );
     $user->remove_cap( 'course_access_cap' );
 
-    if ( $record[0]['retries'] <= 2 ) {
+    if ( $record[0]['retries'] <= 1 ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'retries' => ++$record[0]['retries'],
