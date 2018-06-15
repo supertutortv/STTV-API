@@ -34,12 +34,12 @@ function trial_expiration_checker() {
 
     // Garbage Collection
     $garbage = $wpdb->get_results(
-        $wpdb->prepare( "SELECT invoice_id,wp_id FROM sttvapp_trial_reference WHERE exp_date < %d AND active = %d", [ $time, 0 ] )
+        $wpdb->prepare( "SELECT invoice_id,wp_id,active FROM sttvapp_trial_reference WHERE exp_date < %d", [ $time ] )
     , ARRAY_A );
 
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
-            if ( $g['wp_id'] > 1 ) {
+            if ( $g['wp_id'] > 1 && !$g['active'] ) {
                 $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
                 $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                 $customer->delete();
