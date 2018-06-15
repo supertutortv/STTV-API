@@ -104,7 +104,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print md5(openssl_random_pseudo_bytes(128));
+            print wp_hash_password(openssl_random_pseudo_bytes(128));
         });
     }
 
