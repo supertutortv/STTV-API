@@ -102,7 +102,7 @@ function invoice_created( $data ) {
         [
             'invoice_id' => $obj['id'],
             'wp_id' => $obj['metadata']['wp_id'] ?? 1,
-            'exp_date' => $obj['due_date']
+            'exp_date' => $obj['due_date'] + 3
         ],
         [
             '%s',
