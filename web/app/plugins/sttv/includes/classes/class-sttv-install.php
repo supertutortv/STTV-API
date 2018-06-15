@@ -8,6 +8,7 @@ class Install {
 
     private static $tables = [
         //'mu_keys' => '',
+        //'nonce' => '',
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
             invoice_id tinytext,
@@ -23,8 +24,7 @@ class Install {
             wp_id int(10) UNSIGNED,
             delete boolean NOT NULL DEFAULT 0,
             UNIQUE KEY id (id)
-        )',
-        //'nonce' => ''
+        )'
     ];
 
     private static $roles = [
