@@ -147,8 +147,7 @@ function invoice_payment_succeeded( $data ) {
 
     return $wpdb->update( $wpdb->prefix.'trial_reference',
         [
-            'exp_date' => 0,
-            'active' => false
+            'exp_date' => 0
         ],
         [
             'invoice_id' => $data['data']['object']['id']
