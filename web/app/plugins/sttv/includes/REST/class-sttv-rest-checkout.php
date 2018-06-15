@@ -318,7 +318,8 @@ class Checkout extends \WP_REST_Controller {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
                 case 'resource_missing':
-                    if ( $err['param'] == 'coupon' ) {
+                case 'card_declined':
+                    if ( $err['param'] == 'coupon' || isset($err['decline_code']) ) {
                         require_once( ABSPATH.'wp-admin/includes/user.php' );
                         wp_delete_user( $user_id );
                     }
