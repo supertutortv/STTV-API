@@ -22,12 +22,11 @@ function trial_expiration_checker() {
         foreach ( $garbage as $g ) {
             if ( $g['exp_date'] > 0 ) {
                 $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
-                $returned[] = $umeta;
                 try {
                     $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                     $customer->delete();
                 } catch ( Exception $e ) {
-
+                    $returned[] = $e;
                 }
             }
             $wpdb->delete( $ref_table,
