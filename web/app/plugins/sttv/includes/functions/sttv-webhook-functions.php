@@ -31,8 +31,9 @@ function trial_expiration_checker() {
                 ]
             );
         }
-        $returned[] = $garbage;
+        
     }
+    $returned[] = $garbage;
 
     //Invoices
     $invs = $wpdb->get_results( 
