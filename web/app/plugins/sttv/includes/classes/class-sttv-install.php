@@ -48,6 +48,7 @@ class Install {
     }
 
     public static function uninstall() {
+        delete_transient( 'sttv_installing' );
         flush_rewrite_rules();
     }
 
