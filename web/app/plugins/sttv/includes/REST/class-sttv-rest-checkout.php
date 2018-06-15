@@ -306,7 +306,7 @@ class Checkout extends \WP_REST_Controller {
                     'Thank you for signing up! You will be redirected shortly.',
                     200,
                     [
-                        'user' => get_userdata( $user_id )->caps,
+                        'user' => get_userdata( $user_id )->allcaps,
                         'data' => $response
                     ]
                 );
