@@ -141,11 +141,16 @@ function invoice_payment_succeeded( $data ) {
     $user = get_userdata( $meta['wp_id'] );
 
     $test = strtolower( $course['test'] );
-
     $user->remove_cap( "course_{$test}_trial" );
+
     foreach ( $course['capabilities']['full'] as $cap ) {
         $user->add_cap( $cap );
     }
+
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $umeta['orders'][] = $obj['id'];
+    $umeta['courses'][$course['slug']] = [];
+    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
     return $wpdb->update( $wpdb->prefix.'trial_reference',
         [
