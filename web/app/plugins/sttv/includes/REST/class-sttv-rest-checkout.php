@@ -209,9 +209,6 @@ class Checkout extends \WP_REST_Controller {
                 'source' => $body['source'] ?: null,
                 'email' => $body['email'],
                 'coupon' => $body['coupon'] ?: null,
-                'metadata' => [
-                    'wp_id' => $user_id
-                ],
                 'shipping' => [
                     "name" => "shipping",
                     "address" => [
@@ -248,6 +245,9 @@ class Checkout extends \WP_REST_Controller {
                     400,
                     [ 'data' => $user_id ]
                 );
+            } else {
+                $customer->metadata = [ 'wp_id' => $user_id ];
+                $customer->save();
             }
             
             //Begin Order Processing
