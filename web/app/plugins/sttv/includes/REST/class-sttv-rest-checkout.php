@@ -205,7 +205,7 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         $course = get_post_meta( $body['course'], 'sttv_course_data', true );
         $trial = ($body['trial']) ? $course['pricing']['trial_period'] : 0;
-        return $trial;
+        return time() + (DAY_IN_SECONDS * $trial);
         $userdata = [
 			'user_login' => $body['email'],
 			'user_pass' => $body['password'],
