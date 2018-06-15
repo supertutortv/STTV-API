@@ -18,7 +18,7 @@ class Order extends Stripe {
         return \Stripe\Invoice::create([
             'customer' => $obj['customer'],
             'billing' => 'send_invoice',
-            'due_date' => time() + (DAY_IN_SECONDS * $obj['trial']),
+            'due_date' => (int) time() + (DAY_IN_SECONDS * $obj['trial']),
             'metadata' => $obj['metadata']
         ]);
     }
