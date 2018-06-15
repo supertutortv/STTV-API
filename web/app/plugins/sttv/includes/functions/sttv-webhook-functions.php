@@ -167,13 +167,10 @@ function invoice_payment_failed( $data ) {
     $id = $data['data']['object']['id'];
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
 
-    $user = wp_set_current_user( $record[0]['wp_id'] );
+    $user = get_userdata( $record[0]['wp_id'] );
+    $user->remove_cap( 'course_access_cap' );
 
     if ( $record[0]['retries'] < 3 ) {
-        /* $caps = $user->allcaps;
-        foreach ( $caps as $cap => $g ) {
-            $ret = $cap;
-        } */
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'retries' => ++$record[0]['retries'],
