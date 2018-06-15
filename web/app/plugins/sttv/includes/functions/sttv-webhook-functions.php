@@ -18,8 +18,6 @@ function trial_expiration_checker() {
         $wpdb->prepare( "SELECT * FROM `$ref_table` WHERE is_trash = %d", 1 )
     , ARRAY_A );
 
-    return $ref_table;
-
     if ( !empty( $garbage ) ) {
         foreach ( $garbage as $g ) {
             if ( $g['exp_date'] > 0 ) {
@@ -27,7 +25,7 @@ function trial_expiration_checker() {
                 $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
                 $customer->delete();
             }
-            $wpdb->delete( $ref_table,
+            return $wpdb->delete( $ref_table,
                 [
                     'invoice_id' => $g['invoice_id']
                 ]
