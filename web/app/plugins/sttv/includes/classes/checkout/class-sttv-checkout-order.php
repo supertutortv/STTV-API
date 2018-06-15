@@ -13,7 +13,6 @@ class Order extends Stripe {
 
     protected function create( $obj ) {
         $duedate = time() + (DAY_IN_SECONDS * $obj['trial']);
-        return $duedate;
         foreach( $obj['items'] as $item ) {
             \Stripe\InvoiceItem::create( $item );
         }
