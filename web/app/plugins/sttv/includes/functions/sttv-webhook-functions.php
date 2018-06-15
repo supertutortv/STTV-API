@@ -194,7 +194,7 @@ function invoice_payment_failed( $data ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'is_trash' => 1,
-                'exp_date' => time() - 300
+                'exp_date' => $delete
             ],
             [
                 'invoice_id' => $data['data']['object']['id']
