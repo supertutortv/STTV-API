@@ -295,8 +295,8 @@ class Checkout extends \WP_REST_Controller {
                 ],
                 'items' => $items
             ]);
-            $order = $order->response();
-            $response = ($body['trial']) ? $order : $order->pay();
+            $response = $order->response();
+            //$response = ($body['trial']) ? $order : $order->pay();
 
             if ( ! is_wp_error( wp_signon( [
                 'user_login'    => $body['email'],
