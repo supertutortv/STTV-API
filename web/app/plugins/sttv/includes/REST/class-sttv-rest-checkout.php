@@ -264,7 +264,7 @@ class Checkout extends \WP_REST_Controller {
             $this->set_tax( $body['shipping_pcode'] );
 
             if ( $this->tax > 0 ) {
-                $items[] = [
+                $items[99] = [
                     'customer' => $customer['id'],
                     'amount' => round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) ),
                     'currency' => 'usd',
@@ -274,7 +274,7 @@ class Checkout extends \WP_REST_Controller {
             }
 
             if ( $body['shipping'] ) {
-                $items[] = [
+                $items[100] = [
                     'customer' => $customer['id'],
                     'amount' => 1285,
                     'currency' => 'usd',
