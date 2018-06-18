@@ -191,7 +191,7 @@ function invoice_payment_failed( $data ) {
             ]
         );
     } else {
-        $delete = time() + (DAY_IN_SECONDS * 3);
+        $delete = time() + (HOUR_IN_SECONDS * 48);
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'is_trash' => 1,

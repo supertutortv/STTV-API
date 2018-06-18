@@ -146,13 +146,14 @@ class Admin {
 			}
 				
 			// PRACTICE
-			$data['practice'] = [
+			$data['sections']['practice'] = [
+				'name' => 'Practice Tests',
 				'description' => esc_html( $course['practice']['description'] ?? ''),
 				'type' => 'collection',
 				'resources' => [
 					'type' => 'file'
 				],
-				'books' => []
+				'subsec' => []
 			];
 
 			if ( $course['practice']['uploads'] ) {
@@ -165,7 +166,7 @@ class Admin {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
-						$data['practice']['resources']['files'] = [
+						$data['sections']['practice']['resources']['files'] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
@@ -188,11 +189,11 @@ class Admin {
 				$data['capabilities']['full'][] = "course_{$test}_{$title}";
 		
 				// Main Practice Object
-				$data['practice']['books'][$title] = [
+				$data['sections']['practice']['subsec'][$title] = [
 					'name' => $book['book_name'],
 					'in_trial' => (bool) $book['in_trial'],
 					'type' => 'collection',
-					'tests' => (function() use ( $cache_dir, $book ){
+					'subsec' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 						$cache = [];
 						foreach ( $tests as $test ) {
@@ -210,7 +211,7 @@ class Admin {
 							$cache[sanitize_title_with_dashes( $els[3] )] = [
 								'name' => $els[3],
 								'type' => 'collection',
-								'sections' => $tsections
+								'subjects' => $tsections
 							];
 						}
 						return $cache;
