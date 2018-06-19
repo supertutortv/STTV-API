@@ -6,8 +6,6 @@ defined( 'ABSPATH' ) || exit;
 
 class Email {
 
-    private static $email_sent = false;
-
     private static $error = false;
 
     private $to = null;
@@ -38,13 +36,10 @@ class Email {
         foreach (get_object_vars($this) as $par => $val) {
             if ( is_null( $this->$par ) ) {
                 self::$error = $par.' must be set to send email';
+                break;
             }
         }
         return self::$error ?: $this->_send();
-    }
-
-    public function email_sent() {
-        return self::$email_sent;
     }
 
     public function get_last_error() {
