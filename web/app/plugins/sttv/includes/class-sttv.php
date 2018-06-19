@@ -60,6 +60,7 @@ final class STTV {
         require_once 'classes/class-sttv-post_types.php';
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
+        require_once 'classes/class-sttv-email.php';
 
         // checkout classes
         require_once 'classes/checkout/class-sttv-checkout-stripe.php';
@@ -104,7 +105,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            //print wp_hash_password(openssl_random_pseudo_bytes(128));
+            print_r((new Email())->get_params());
         });
     }
 
