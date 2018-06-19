@@ -8,7 +8,7 @@ class Email {
 
     private static $email_sent = false;
 
-    private static $error = '';
+    private static $error = false;
 
     private $to = null;
 
@@ -35,15 +35,12 @@ class Email {
     }
 
     public function send() {
-        $params = get_object_vars($this);
-        foreach ($params as $par => $val) {
+        foreach (get_object_vars($this) as $par => $val) {
             if ( is_null( $this->$par ) ) {
                 self::$error = $par.' must be set to send email';
             }
         }
-
-        //self::$email_sent = $this->_send();
-        return $this;
+        return self::$error ?: $this->_send();
     }
 
     public function email_sent() {
