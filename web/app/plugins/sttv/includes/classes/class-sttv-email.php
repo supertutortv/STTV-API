@@ -28,8 +28,13 @@ class Email {
 
     public function send() {
         $params = $this->get_params();
+        foreach ($params as $par => $val) {
+            if ( empty( $this->$par ) ) {
+                return $par.' cannot be empty';
+            }
+        }
 
-        self::$email_sent = $this->_send();
+        //self::$email_sent = $this->_send();
         return $this;
     }
 
