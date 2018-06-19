@@ -81,5 +81,7 @@ class Email {
         remove_filter( 'wp_mail_from', [ $this, 'from_email' ] );
         remove_filter( 'wp_mail_from_name', [ $this, 'from_email_name' ] );
         remove_filter( 'wp_mail_content_type', [ $this, 'content_type' ] );
+
+        return $mailed;
     }
 }
