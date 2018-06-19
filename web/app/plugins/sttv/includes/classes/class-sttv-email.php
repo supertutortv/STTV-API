@@ -10,13 +10,13 @@ class Email {
 
     private static $error = '';
 
-    private $to;
+    private $to = null;
 
-    private $subject;
+    private $subject = null;
 
-    private $message;
+    private $message = null;
 
-    private $headers;
+    private $headers = [];
 
     private $attachments = [];
 
@@ -52,7 +52,11 @@ class Email {
 
     private function _send() {
         return wp_mail(
-            $this->to
+            $this->to,
+            $this->subject,
+            $this->message,
+            $this->headers,
+            $this->attachments
         );
     }
 }
