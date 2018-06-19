@@ -8,6 +8,8 @@ class Email {
 
     private static $email_sent = false;
 
+    private static $error = '';
+
     private $to;
 
     private $subject;
@@ -15,6 +17,8 @@ class Email {
     private $message;
 
     private $headers;
+
+    private $attachments = [];
 
     public function __construct( $args=[] ) {
         $this->to = $args['to'] ?? get_option('admin_email');
@@ -27,10 +31,10 @@ class Email {
     }
 
     public function send() {
-        $params = $this->get_params();
+        $params = get_object_vars($this);
         foreach ($params as $par => $val) {
-            if ( empty( $this->$par ) ) {
-                return $par.' cannot be empty';
+            if ( is_null( $this->$par ) ) {
+                self::$error = $par.' must be set to send email';
             }
         }
 
@@ -38,12 +42,12 @@ class Email {
         return $this;
     }
 
-    public function get_params() {
-        return get_object_vars($this);
-    }
-
     public function email_sent() {
         return self::$email_sent;
+    }
+
+    public function get_last_error() {
+        return self::$error;
     }
 
     private function _send() {
