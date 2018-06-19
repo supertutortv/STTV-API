@@ -30,6 +30,10 @@ class Email {
         return $this;
     }
 
+    public function __toString() {
+        return json_encode($this);
+    }
+
     public function send() {
         $params = get_object_vars($this);
         foreach ($params as $par => $val) {
