@@ -19,12 +19,17 @@ class Email {
     private $attachments = [];
 
     public function __construct( $args=[] ) {
+        add_filter( 'wp_mail_from', function() {return 'info@supertutortv.com';});
+        add_filter( 'wp_mail_from_name', function() {return 'SupertutorTV';});
+        add_filter( 'wp_mail_content_type', function() {return 'text/html';});
+
         $this->to = $args['to'] ?? get_option('admin_email');
 
         foreach( $args as $k => $v ) {
             if ( $k == 'to' ) continue;
             $this->$k = $v; 
         }
+
         return $this;
     }
 
