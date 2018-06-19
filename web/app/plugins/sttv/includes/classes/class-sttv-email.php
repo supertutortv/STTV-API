@@ -12,7 +12,7 @@ class Email {
 
     private $message = 'Default message';
 
-    public function __construct($args) {
+    public function __construct( $args=[] ) {
         $this->to = $args['to'] ?? get_option('admin_email');
 
         foreach( $args as $k => $v ) {
