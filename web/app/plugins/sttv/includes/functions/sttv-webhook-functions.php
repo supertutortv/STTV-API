@@ -107,7 +107,7 @@ function invoice_created( $data ) {
     return $wpdb->insert( $wpdb->prefix.'trial_reference',
         [
             'invoice_id' => $obj['id'],
-            'wp_id' => $obj['metadata']['wp_id'] ?: 1,
+            'wp_id' => $obj['metadata']['wp_id'] ?? 1,
             'exp_date' => $obj['due_date']
         ],
         [
