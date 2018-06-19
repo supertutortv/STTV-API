@@ -105,7 +105,7 @@ final class STTV {
 
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
-            print_r((new Email())->send());
+            print_r((new Email())->send()->get_params());
         });
     }
 
