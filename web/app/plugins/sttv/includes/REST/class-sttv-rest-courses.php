@@ -87,11 +87,11 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function get_course_meta( $req ) {
-		/* $cached = get_option( "sttv_course_cache_{$req['id']}" );
+		$cached = get_option( "sttv_course_cache_{$req['id']}" );
 		if ( $cached['lastFetched'] + DAY_IN_SECONDS > time() ) {
 			$cached['cached'] = true;
 			return $cached;
-		} */
+		}
 
 		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
 		if ( ! $meta ) {
