@@ -36,3 +36,15 @@ function sttv_404_redirect() {
 	status_header( 404 );
 	get_template_part( 404 );
 }
+
+function __return_email_from() {
+	return get_option('admin_email');
+}
+
+function __return_email_from_name() {
+	return STTV_BRANDNAME;
+}
+
+function __return_email_content_type() {
+	return 'text/html';
+}

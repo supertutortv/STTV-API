@@ -29,6 +29,7 @@ final class STTV {
 
     private function define_constants() {
         // MAIN CONSTANTS
+        $this->define( 'STTV_BRANDNAME', 'SupertutorTV' );
         $this->define( 'STTV_VERSION', '2.0.0' );
         $this->define( 'STTV_PREFIX', 'sttv' );
         $this->define( 'STTV_API_DIR', dirname( dirname( dirname( ABSPATH ) ) ) );
@@ -99,6 +100,11 @@ final class STTV {
         } );
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
+
+        // emails
+        add_filter( 'wp_mail_from', '__return_email_from' );
+        add_filter( 'wp_mail_from_name', '__return_email_from_name' );
+        add_filter( 'wp_mail_content_type', '__return_email_content_type' );
 
         // login logger
         add_action( 'wp_login', [ $this, 'sttv_user_login_action' ], 10, 2 );
