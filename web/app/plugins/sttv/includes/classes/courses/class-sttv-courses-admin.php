@@ -79,7 +79,8 @@ class Admin {
 						'course_post_reviews'
 					]
 				],
-				'sections'=>[]
+				'sections' => [],
+				'practice' => []
 			];
 			
 			// SECTIONS
@@ -210,7 +211,7 @@ class Admin {
 				];
 			}
 
-			$data['sections']['practice'] = [
+			$data['practice'] = [
 				'name' => 'Practice Tests',
 				'description' => esc_html( $course['practice']['description'] ?? ''),
 				'type' => 'collection',
