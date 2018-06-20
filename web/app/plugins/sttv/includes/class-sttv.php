@@ -147,7 +147,7 @@ final class STTV {
 
     public function sttv_user_login_action( $username, $user ) {
         $times = get_user_meta( $user->ID, 'login_timestamps', true ) ?: ['SOR'];
-        $times[] = $this->timestamp;
+        $times[] = time();
         update_user_meta( $user->ID, 'login_timestamps', $times );
     }
 
