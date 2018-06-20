@@ -135,7 +135,7 @@ class Courses extends \WP_REST_Controller {
 			$data['sections'][$sec] = $val;
 		}
 
-		foreach ( $meta['practice']['resources']['files'] as &$file ) {
+		/* foreach ( $meta['practice']['resources']['files'] as &$file ) {
 			if ( ! $file['in_trial'] && $trialing ) {
 				$file['file'] = 0;
 				unset( $file['in_trial'] );
@@ -154,7 +154,7 @@ class Courses extends \WP_REST_Controller {
 			}
 		}
 
-		$data['practice'] = $meta['practice'];
+		$data['practice'] = $meta['practice']; */
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 
