@@ -152,8 +152,8 @@ class Courses extends \WP_REST_Controller {
 						}
 					}
 				}
-				unset( $test['in_trial'] );
 			}
+			unset( $book['in_trial'] );
 		}
 
 		$data['sections']['practice'] = $meta['practice'];
