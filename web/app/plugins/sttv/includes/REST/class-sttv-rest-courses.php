@@ -121,11 +121,13 @@ class Courses extends \WP_REST_Controller {
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
 			foreach ( $val['resources']['files'] as &$file ) {
-				if ( ! $file['in_trial'] && $trialing ) $file['file'] = 0;
+				if ( $file['in_trial'] === false && $trialing ) {
+					$file['file'] = 0;
+				}
 				unset( $file['in_trial'] );
 			}
 			foreach ( $val['subsec'] as $k => &$subsec ) {
-				if ( ! $subsec['in_trial'] && $trialing ) {
+				if ( $subsec['in_trial'] === false && $trialing ) {
 					foreach ( $subsec['videos'] as &$vid ) {
 						$vid['ID'] = 0;
 					}
