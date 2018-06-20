@@ -120,19 +120,10 @@ class Courses extends \WP_REST_Controller {
 		];
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
-			if ( empty( $val['resources']['files'] ) ) {
-
-			} else {
-				foreach ( $val['resources']['files'] as &$file ) {
-					try {
-						if ( ! $file['in_trial'] && $trialing ) $file['file'] = 0;
-						unset( $file['in_trial'] );
-					} catch ( \Error $e ) {
-						wp_die(print_r($val['resources']['files']));
-					}
-				}
+			foreach ( $val['resources']['files'] as &$file ) {
+				if ( ! $file['in_trial'] && $trialing ) $file['file'] = 0;
+				unset( $file['in_trial'] );
 			}
-			
 			foreach ( $val['subsec'] as $k => &$subsec ) {
 				if ( ! $subsec['in_trial'] && $trialing ) {
 					foreach ( $subsec['videos'] as &$vid ) {
