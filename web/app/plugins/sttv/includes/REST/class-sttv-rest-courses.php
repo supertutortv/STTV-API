@@ -128,7 +128,7 @@ class Courses extends \WP_REST_Controller {
 						if ( ! $file['in_trial'] && $trialing ) $file['file'] = 0;
 						unset( $file['in_trial'] );
 					} catch ( \Error $e ) {
-						return [$sec, $file];
+						wp_die(print_r($file));
 					}
 				}
 			}
