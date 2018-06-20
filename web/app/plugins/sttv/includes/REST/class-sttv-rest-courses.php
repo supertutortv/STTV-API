@@ -121,7 +121,7 @@ class Courses extends \WP_REST_Controller {
 		
 		foreach ( $meta['sections'] as $sec => $val ) {
 			foreach ( $val['resources']['files'] as &$file ) {
-				wp_die($file);
+				wp_die(print_r($file));
 				/* if ( ! $file['in_trial'] && $trialing ) {
 					$file['file'] = 0;
 				}
