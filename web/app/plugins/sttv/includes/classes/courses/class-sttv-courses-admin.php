@@ -79,8 +79,7 @@ class Admin {
 						'course_post_reviews'
 					]
 				],
-				'sections'=>[],
-				'practice'=>[]
+				'sections'=>[]
 			];
 			
 			// SECTIONS
@@ -146,15 +145,7 @@ class Admin {
 			}
 				
 			// PRACTICE
-			$data['sections']['practice'] = [
-				'name' => 'Practice Tests',
-				'description' => esc_html( $course['practice']['description'] ?? ''),
-				'type' => 'collection',
-				'resources' => [
-					'type' => 'file'
-				],
-				'subsec' => []
-			];
+			$presc = $psubsec = [];
 
 			if ( $course['practice']['uploads'] ) {
 				$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
@@ -166,7 +157,7 @@ class Admin {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
-						$data['sections']['practice']['resources']['files'] = [
+						$presc[] = [
 							'title' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
@@ -189,7 +180,7 @@ class Admin {
 				$data['capabilities']['full'][] = "course_{$test}_{$title}";
 		
 				// Main Practice Object
-				$data['sections']['practice']['subsec'][$title] = [
+				$psubsec[$title] = [
 					'name' => $book['book_name'],
 					'in_trial' => (bool) $book['in_trial'],
 					'type' => 'collection',
@@ -218,6 +209,17 @@ class Admin {
 					})()
 				];
 			}
+
+			$data['sections']['practice'] = [
+				'name' => 'Practice Tests',
+				'description' => esc_html( $course['practice']['description'] ?? ''),
+				'type' => 'collection',
+				'resources' => [
+					'type' => 'file',
+					'files' => $presc
+				],
+				'subsec' => $psubsec
+			];
 			
 			$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 			
