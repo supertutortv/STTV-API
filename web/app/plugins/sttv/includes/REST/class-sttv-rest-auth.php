@@ -60,7 +60,7 @@ class Auth extends \WP_REST_Controller {
                 400
             );
         }
-        $creds = explode( ':', base64_decode($auth) );
+        $creds = explode( ':', base64_decode( str_replace( 'Basic ', '', $auth ) ) );
         return $creds;
         $login_fail = sttv_rest_response(
             'login_fail',
