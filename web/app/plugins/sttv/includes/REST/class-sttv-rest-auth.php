@@ -61,7 +61,6 @@ class Auth extends \WP_REST_Controller {
             );
         }
         $creds = explode( ':', base64_decode( str_replace( 'Basic ', '', $auth ) ) );
-        return $creds;
         $login_fail = sttv_rest_response(
             'login_fail',
             'The username or password you entered is incorrect',
@@ -73,12 +72,14 @@ class Auth extends \WP_REST_Controller {
         if ( !validate_username( $user ) )
             return $login_fail;
 
+        // attempt login
         $login = wp_signon([
             'user_login' => $user,
             'user_password' => $creds[1],
             'remember' => true
         ], true);
 
+        // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
             return $login_fail;
         
