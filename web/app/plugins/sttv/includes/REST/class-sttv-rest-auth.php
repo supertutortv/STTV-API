@@ -63,6 +63,7 @@ class Auth extends \WP_REST_Controller {
         while (!!wp_validate_auth_cookie()) {
             wp_logout();
         }
+        return 'logged out';
     }
 
     public function log_all_logins( $username, $user ) {
