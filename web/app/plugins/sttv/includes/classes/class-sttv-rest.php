@@ -61,17 +61,17 @@ class API {
 
     private function rest_includes() {
         $path = dirname( __DIR__ ) . '/REST/';
-
         require_once $path . 'class-sttv-rest-limiter.php';
+        require_once $path . 'class-sttv-rest-auth.php';
         require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-multiuser.php';
         require_once $path . 'class-sttv-rest-courses.php';
         require_once $path . 'class-sttv-rest-forms.php';
-
     }
 
     public function register_rest_routes() {
         $controllers = [
+            'STTV\REST\Auth',
             'STTV\REST\Checkout',
             'STTV\REST\MultiUser',
             'STTV\REST\Courses',
