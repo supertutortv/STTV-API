@@ -24,7 +24,11 @@ use WP_REST_Server;
 class Auth extends \WP_REST_Controller {
 
     public function __construct() {
-        
+        // Log all logins to our API
+        add_action( 'wp_login', [ $this, 'log_all_logins' ], 10, 2 );
+
+        // Check that the auth cookie was removed
+        add_action( 'wp_logout', [ $this, 'verify_logout_happened' ] );
     }
 
     public function register_routes() {
@@ -32,14 +36,14 @@ class Auth extends \WP_REST_Controller {
             '/login' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'auth_endpoint' ],
+                    'callback' => [ $this, 'login' ],
                     'permission_callback' => 'sttv_verify_rest_nonce'
                 ]
             ],
             '/logout' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'auth_endpoint' ],
+                    'callback' => 'wp_logout',
                     'permission_callback' => 'sttv_verify_rest_nonce'
                 ]
             ]
@@ -50,15 +54,20 @@ class Auth extends \WP_REST_Controller {
 		}
     }
 
-    public function auth_endpoint( WP_REST_Request $request ) {
+    public function login( WP_REST_Request $request ) {
         $route = str_replace( '/auth/', '', $request->get_route() );
-        switch ( $route ) {
-            case 'login' :
-                return $route;
-            case 'logout' :
-                return $route;
-            default :
-                return null;
+        return $route;
+    }
+
+    public function verify_logout_happened() {
+        while (!!wp_validate_auth_cookie()) {
+            wp_logout();
         }
+    }
+
+    public function log_all_logins( $username, $user ) {
+        $times = get_user_meta( $user->ID, 'login_timestamps', true ) ?: ['SOR'];
+        $times[] = time();
+        update_user_meta( $user->ID, 'login_timestamps', $times );
     }
 }

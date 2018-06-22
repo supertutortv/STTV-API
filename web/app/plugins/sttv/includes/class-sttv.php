@@ -106,9 +106,6 @@ final class STTV {
         add_filter( 'wp_mail_from_name', '__return_email_from_name' );
         add_filter( 'wp_mail_content_type', '__return_email_content_type' );
 
-        // login logger
-        add_action( 'wp_login', [ $this, 'sttv_user_login_action' ], 10, 2 );
-
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             //print_r($_SERVER['SERVER_SOFTWARE']);
@@ -144,12 +141,6 @@ final class STTV {
         remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
         remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
         remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-    }
-
-    public function sttv_user_login_action( $username, $user ) {
-        $times = get_user_meta( $user->ID, 'login_timestamps', true ) ?: ['SOR'];
-        $times[] = time();
-        update_user_meta( $user->ID, 'login_timestamps', $times );
     }
 
     public function emergency_access() {
