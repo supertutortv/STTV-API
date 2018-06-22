@@ -61,6 +61,7 @@ class Auth extends \WP_REST_Controller {
             );
         }
         $creds = explode( ':', base64_decode($auth) );
+        return $creds;
         $login_fail = sttv_rest_response(
             'login_fail',
             'The username or password you entered is incorrect',
