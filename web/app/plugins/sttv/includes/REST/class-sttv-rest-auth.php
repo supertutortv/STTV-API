@@ -51,7 +51,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function auth_endpoint( WP_REST_Request $request ) {
-        $route = $request->get_route();
+        $route = str_replace( '/auth/', '', $request->get_route() );
         return $route;
     }
 }
