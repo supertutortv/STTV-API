@@ -80,36 +80,6 @@ class Forms extends \WP_REST_Controller {
         }
     }
 
-    private function login( $auth, $redirect = '' ) {
-        if ( null === $auth || empty($auth) ) {
-            return $this->forms_generic_response( 'auth_header', 'You must set the authentication header X-STTV-Auth', 400 );
-        }
-
-        $auth = explode( ':', base64_decode($auth) );
-
-        // username validation
-        $user = sanitize_user($auth[0]);
-        if (!validate_username($user)){
-            return $this->forms_generic_response( 'login_fail', '<strong>ERROR: </strong>The username or password you entered is incorrect', 401 );
-        }
-
-        unset($auth[0]);
-        $pw = implode( ':', $auth);
-
-        $login = wp_signon([
-            'user_login' => $user,
-            'user_password' => $pw,
-            'remember' => true
-        ], true);
-
-        if ( !is_wp_error( $login ) ){
-            unset($login->data->user_pass,$login->data->user_activation_key);
-            return $this->forms_generic_response( 'login_success', 'Login successful! Redirecting...', 200, [ 'data' => $login->data, 'redirect' => $redirect ] );
-        } else {
-            return $this->forms_generic_response( 'login_fail', '<strong>ERROR: </strong>The username or password you entered is incorrect', 401, $login );
-        }
-    }
-
     public function verify_form_submit( WP_REST_Request $request ){
         $token = json_decode($request->get_body(),true);
         $token = $token['g_recaptcha_response'];

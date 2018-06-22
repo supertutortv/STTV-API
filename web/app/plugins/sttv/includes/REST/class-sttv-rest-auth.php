@@ -60,12 +60,35 @@ class Auth extends \WP_REST_Controller {
                 400
             );
         }
+        $creds = explode( ':', base64_decode($auth) );
+        $login_fail = sttv_rest_response(
+            'login_fail',
+            'The username or password you entered is incorrect',
+            401
+        );
+
+        // username validation
+        $user = sanitize_user( $creds[0] );
+        if ( !validate_username( $user ) )
+            return $login_fail;
+
+        $login = wp_signon([
+            'user_login' => $user,
+            'user_password' => $creds[1],
+            'remember' => true
+        ], true);
+
+        if ( is_wp_error( $login ) )
+            return $login_fail;
         
         return sttv_rest_response(
-            'logged_in',
-            'Login successful.',
+            'login_success',
+            'Login successful!',
             200,
-            [ 'data' => base64_decode($auth) ]
+            [ 'data' => [
+                    'auth_cookies_set' => wp_validate_auth_cookie()
+                ]
+            ]
         );
     }
 
