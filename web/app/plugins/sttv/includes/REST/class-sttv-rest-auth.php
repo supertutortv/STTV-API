@@ -85,7 +85,8 @@ class Auth extends \WP_REST_Controller {
             'login_success',
             'Login successful!',
             200,
-            [ 'data' => [
+            [
+                'data' => [
                     'auth_cookies_set' => wp_validate_auth_cookie()
                 ]
             ]
