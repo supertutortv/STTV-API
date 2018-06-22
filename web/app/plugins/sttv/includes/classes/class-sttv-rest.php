@@ -47,7 +47,7 @@ class API {
             header_remove( 'X-Powered-By' );
             header_remove( 'X-Robots-Tag' );
 
-            header( 'Access-Control-Allow-Origin: *' );
+            header( 'Access-Control-Allow-Origin: api.supertutortv.com, localhost:8080' );
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
             header( 'Access-Control-Allow-Headers: Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
