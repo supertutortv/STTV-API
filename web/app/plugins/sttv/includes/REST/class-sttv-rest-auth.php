@@ -86,7 +86,8 @@ class Auth extends \WP_REST_Controller {
         return sttv_rest_response(
             'login_success',
             'Login successful!',
-            200
+            200,
+            [ 'data' => 'Cookie domain '.COOKIE_DOMAIN ]
         );
     }
 
