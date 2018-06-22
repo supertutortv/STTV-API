@@ -34,14 +34,14 @@ class Auth extends \WP_REST_Controller {
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'login' ],
-                    'permission_callback' => 'sttv_verify_rest_nonce'
+                    'permission_callback' => '__return_true'
                 ]
             ],
             '/logout' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'logout' ],
-                    'permission_callback' => 'sttv_verify_rest_nonce'
+                    'permission_callback' => 'is_user_logged_in'
                 ]
             ]
         ];
@@ -53,11 +53,19 @@ class Auth extends \WP_REST_Controller {
 
     public function login( WP_REST_Request $request ) {
         $auth = $request->get_header( 'Authorization' );
+        if ( is_null( $auth ) ) {
+            return sttv_rest_response(
+                'auth_header_missing',
+                'You must include valid credentials in the Authorization header to proceed.',
+                400
+            );
+        }
+        
         return sttv_rest_response(
             'logged_in',
             'Login successful.',
             200,
-            [ 'data' => $auth ]
+            [ 'data' => base64_decode($auth) ]
         );
     }
 
@@ -68,7 +76,11 @@ class Auth extends \WP_REST_Controller {
         return sttv_rest_response(
             'logged_out',
             'Logout successful.',
-            200
+            200,
+            [ 'data' => [
+                    'redirect' => site_url()
+                ]
+            ]
         );
     }
 

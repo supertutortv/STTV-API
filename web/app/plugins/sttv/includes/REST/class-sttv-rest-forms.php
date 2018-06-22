@@ -36,25 +36,6 @@ class Forms extends \WP_REST_Controller {
             ]
         ]);
 
-        register_rest_route( STTV_REST_NAMESPACE , '/auth', [
-            [
-                'methods' => 'GET',
-                'callback' => [ $this, 'sttv_auth_form' ],
-                'permission_callback' => 'sttv_verify_rest_nonce'
-            ],
-            [
-                'methods' => 'POST',
-                'callback' => [ $this, 'sttv_auth_processor' ],
-                'args' => [
-                    'action' => [
-                        'required' => true,
-                        'type' => 'string',
-                        'description' => 'The type of auth action requested'
-                    ]
-                ]
-            ]
-        ]);
-
         register_rest_route( STTV_REST_NAMESPACE , '/subscribe', [
             [
                 'methods' => 'POST',
@@ -84,28 +65,6 @@ class Forms extends \WP_REST_Controller {
             return $this->forms_generic_response( 'contact_form_fail', 'There was an issue sending your message. Please try again later.', 200, [ 'sent' => $sentmail ] );
         }
 
-    }
-
-    public function sttv_auth_processor( WP_REST_Request $request ) {
-        $action = $request->get_param('action');
-        $auth = $request->get_header('X-STTV-Auth');
-
-        switch ($action) {
-            case 'login':
-                return $this->login($auth,site_url());
-
-            case 'logout':
-                return $this->logout(site_url());
-
-            default:
-                return $this->forms_generic_response( 'action_invalid', 'The action parameter was invalid. Check documentation for allowed actions.', 400 );
-        }
-    }
-
-    public function sttv_auth_form() {
-        ob_start();
-        sttv_get_template('_authform','auth');
-        return ob_get_clean();
     }
 
     public function sttv_subscribe_processor( WP_REST_Request $request ) {
@@ -149,11 +108,6 @@ class Forms extends \WP_REST_Controller {
         } else {
             return $this->forms_generic_response( 'login_fail', '<strong>ERROR: </strong>The username or password you entered is incorrect', 401, $login );
         }
-    }
-
-    private function logout( $redirect = '' ){
-        wp_logout();
-        return $redirect;
     }
 
     public function verify_form_submit( WP_REST_Request $request ){
