@@ -28,7 +28,7 @@ class Auth extends \WP_REST_Controller {
         add_action( 'wp_login', [ $this, 'log_all_logins' ], 10, 2 );
 
         // Check that the auth cookie was removed
-        add_action( 'wp_logout', [ $this, 'verify_logout_happened' ] );
+        //add_action( 'wp_logout', [ $this, 'verify_logout_happened' ] );
     }
 
     public function register_routes() {
@@ -43,7 +43,7 @@ class Auth extends \WP_REST_Controller {
             '/logout' => [
                 [
                     'methods' => 'POST',
-                    'callback' => 'wp_logout',
+                    'callback' => [ $this, 'logout' ],
                     'permission_callback' => 'sttv_verify_rest_nonce'
                 ]
             ]
@@ -59,7 +59,7 @@ class Auth extends \WP_REST_Controller {
         return $route;
     }
 
-    public function verify_logout_happened() {
+    public function logout() {
         while (!!wp_validate_auth_cookie()) {
             wp_logout();
         }
