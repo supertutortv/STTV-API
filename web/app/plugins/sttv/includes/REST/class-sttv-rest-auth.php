@@ -26,9 +26,6 @@ class Auth extends \WP_REST_Controller {
     public function __construct() {
         // Log all logins to our API
         add_action( 'wp_login', [ $this, 'log_all_logins' ], 10, 2 );
-
-        // Check that the auth cookie was removed
-        //add_action( 'wp_logout', [ $this, 'verify_logout_happened' ] );
     }
 
     public function register_routes() {
@@ -55,15 +52,24 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function login( WP_REST_Request $request ) {
-        $route = str_replace( '/auth/', '', $request->get_route() );
-        return $route;
+        $auth = $request->get_header( 'Authorization' );
+        return sttv_rest_response(
+            'logged_in',
+            'Login successful.',
+            200,
+            [ 'data' => $auth ]
+        );
     }
 
     public function logout() {
         while (!!wp_validate_auth_cookie()) {
             wp_logout();
         }
-        return 'logged out';
+        return sttv_rest_response(
+            'logged_out',
+            'Logout successful.',
+            200
+        );
     }
 
     public function log_all_logins( $username, $user ) {
