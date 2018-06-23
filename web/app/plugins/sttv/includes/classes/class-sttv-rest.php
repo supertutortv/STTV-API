@@ -8,6 +8,14 @@ class API {
 
     public $limiter = null;
 
+    private $allowed_origins = [
+        'https://supertutortv.com',
+        'https://courses.supertutortv.com',
+        'https://api.supertutortv.com'
+    ];
+
+    private $origin;
+
     public function __construct() {
         if ( STTV_REST_AUTH !== 'wp_rest' ) {
             add_filter( 'rest_nonce_action', function() {
@@ -21,6 +29,8 @@ class API {
 
         remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
         remove_action( 'template_redirect', 'rest_output_link_header', 11, 0 );
+
+        $this->origin = get_http_origin();
 
         $this->rest_includes();
         $this->init();
@@ -47,7 +57,11 @@ class API {
             header_remove( 'X-Powered-By' );
             header_remove( 'X-Robots-Tag' );
 
-            header( 'Access-Control-Allow-Origin: api.supertutortv.com, localhost:8080' );
+            if ( in_array( $this->origin, $this->allowed_origins ) ) {
+                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $this->origin ) );
+            } else {
+                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( site_url() ) );
+            }
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
             header( 'Access-Control-Allow-Headers: Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
