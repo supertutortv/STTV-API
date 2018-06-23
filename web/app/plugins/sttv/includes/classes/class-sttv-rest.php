@@ -60,7 +60,7 @@ class API {
             if ( in_array( $this->origin, $this->allowed_origins ) ) {
                 header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $this->origin ) );
             } else {
-                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( site_url() ) );
+                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( home_url() ) );
             }
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
