@@ -100,7 +100,7 @@ class Auth extends \WP_REST_Controller {
             'Logout successful.',
             200,
             [ 'data' => [
-                    'redirect' => site_url()
+                    'redirect' => home_url()
                 ]
             ]
         );
