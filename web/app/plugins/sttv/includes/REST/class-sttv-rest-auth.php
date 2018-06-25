@@ -101,7 +101,7 @@ class Auth extends \WP_REST_Controller {
             'Logout successful.',
             200,
             [ 'data' => [
-                    'redirect' => home_url()
+                    'redirect' => "https://supertutortv.com"
                 ]
             ]
         );
