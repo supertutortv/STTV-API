@@ -76,6 +76,10 @@ define('AUTOMATIC_UPDATER_DISABLED', true);
 define('DISABLE_WP_CRON', env('DISABLE_WP_CRON') ?: false);
 define('DISALLOW_FILE_EDIT', true);
 
+define('MAILCHIMP_API_KEY', env('MAILCHIMP_API_KEY'));
+define('MANDRILL_API_KEY', env('MANDRILL_API_KEY'));
+define('RECAPTCHA_SITEKEY', env('RECAPTCHA_SITEKEY'));
+define('RECAPTCHA_SECRET', env('RECAPTCHA_SECRET'));
 define('STTV_BACKDOOR', env('STTV_BACKDOOR'));
 
 /**

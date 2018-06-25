@@ -90,7 +90,7 @@ class API {
             'STTV\REST\Checkout',
             'STTV\REST\MultiUser',
             'STTV\REST\Courses',
-            'STTV\REST\Forms',
+            'STTV\REST\Contact',
         ];
 
         foreach ( $controllers as $controller ) {

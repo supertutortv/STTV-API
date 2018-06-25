@@ -48,3 +48,32 @@ function __return_email_from_name() {
 function __return_email_content_type() {
 	return 'text/html';
 }
+
+/* Subscribe the user to SupertutorTV's Mailchimp mailing list */
+function sttv_mailinglist_subscribe( $email = '', $firstname = '', $lastname = '' ) {
+	if ( empty( $email ) || empty( $firstname ) || empty( $lastname ) ) {
+		return new WP_Error( 'no_body_nobody', 'The request parameters cannot be empty. You\'re doing it wrong.' );
+	}
+	
+	return wp_remote_post( 'https://us7.api.mailchimp.com/3.0/lists/df497b5cbd/members/'.md5( strtolower( $email ) ),
+		[
+			'headers' => [
+				'Authorization' => 'apikey '.MAILCHIMP_API_KEY,
+				'Content-Type' => 'application/json',
+				'X-HTTP-Method-Override' => 'PUT',
+				'User Agent' => STTV_UA
+			],
+			'body' => json_encode([
+				'email_address' => $email,
+				'status' => 'subscribed',
+				'status_if_new' => 'subscribed',
+				'merge_fields' => [
+					'FNAME' => $firstname,
+					'LNAME' => $lastname
+				],
+				'ip_signup' => $_SERVER['REMOTE_ADDR']
+			])
+		]
+	);
+
+}

@@ -21,11 +21,14 @@ class Email {
     public function __construct( $args=[], $template = '' ) {
         $admin = get_option('admin_email');
         $this->to = $args['to'] ?? $admin;
-        $this->headers[] = "From: SupertutorTV <{$admin}>";
 
         foreach( $args as $k => $v ) {
             if ( $k == 'to' ) continue;
             $this->$k = $v; 
+        }
+
+        if ( !isset( $args['headers'] ) || array_search( 'From: ', $args['headers'] ) === false ) {
+            $this->headers[] = "From: SupertutorTV <{$admin}>";
         }
 
         return $this;
