@@ -47,7 +47,7 @@ class API {
 
     public function sttv_rest_cors() {
     
-        remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+        /* remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
         add_filter( 'rest_pre_serve_request', function( $value ) {
 
             //remove default headers
@@ -70,7 +70,7 @@ class API {
     
             return $value;
             
-        });
+        }); */
     }
 
     private function rest_includes() {
