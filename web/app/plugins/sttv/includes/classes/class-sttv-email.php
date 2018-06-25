@@ -19,7 +19,9 @@ class Email {
     private $attachments = [];
 
     public function __construct( $args=[], $template = '' ) {
-        $this->to = $args['to'] ?? get_option('admin_email');
+        $admin = get_option('admin_email');
+        $this->to = $args['to'] ?? $admin;
+        $this->headers[] = "From: SupertutorTV <{$admin}>";
 
         foreach( $args as $k => $v ) {
             if ( $k == 'to' ) continue;
