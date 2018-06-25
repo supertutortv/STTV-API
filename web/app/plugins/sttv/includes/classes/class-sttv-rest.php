@@ -11,7 +11,8 @@ class API {
     private $allowed_origins = [
         'https://supertutortv.com',
         'https://courses.supertutortv.com',
-        'https://api.supertutortv.com'
+        'https://api.supertutortv.com',
+        'http://localhost:8080'
     ];
 
     private $origin;
