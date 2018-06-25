@@ -41,7 +41,8 @@ class Auth extends \WP_REST_Controller {
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'logout' ],
-                    'permission_callback' => 'is_user_logged_in'
+                    //'permission_callback' => 'is_user_logged_in'
+                    'permission_callback' => '__return_true'
                 ]
             ]
         ];
