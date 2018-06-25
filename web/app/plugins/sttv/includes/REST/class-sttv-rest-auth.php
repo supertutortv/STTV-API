@@ -52,6 +52,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function login( WP_REST_Request $request ) {
+        return $request->get_headers();
         $auth = $request->get_header( 'Authorization' );
         if ( is_null( $auth ) ) {
             return sttv_rest_response(
