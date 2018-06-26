@@ -168,17 +168,24 @@ class Courses extends \WP_REST_Controller {
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
 		
-		return $umeta;
+		return sttv_rest_response(
+			'user_course_data_success',
+			'Here is your data.',
+			200,
+			['data' => $umeta]
+		);
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
 		$userid = get_current_user_id();
+		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 		switch ($request->get_param('patch')) {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
+			case 'userdata':
 			case 'options':
-				return $userid;
+				return $umeta;
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
