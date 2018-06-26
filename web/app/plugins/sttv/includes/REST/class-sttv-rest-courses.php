@@ -27,7 +27,7 @@ class Courses extends \WP_REST_Controller {
 
 	public function register_routes() {
 		$routes = [
-			'/' => [
+			'/data' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_info' ],
