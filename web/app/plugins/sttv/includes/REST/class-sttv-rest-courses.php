@@ -109,7 +109,6 @@ class Courses extends \WP_REST_Controller {
 
 			$test_code = strtolower($meta['test']);
 			$trialing = current_user_can( "course_{$test_code}_trial" );
-			return $trialing;
 			
 			$umeta['courses'][$slug] = [
 				'id' => $meta['id'],
