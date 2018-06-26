@@ -34,13 +34,6 @@ class Courses extends \WP_REST_Controller {
 					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
-			'/(?P<id>[\d]+)' => [
-				[
-					'methods' => 'GET',
-					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => 'sttv_verify_web_token('
-				]
-			],
 			'/log' => [
 				[
 					'methods' => 'POST',
