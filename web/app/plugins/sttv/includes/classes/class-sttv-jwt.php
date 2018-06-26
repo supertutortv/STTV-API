@@ -18,9 +18,9 @@ class JWT {
     public $error = false;
 
     private $algs = [
-        'HS256' => 'SHA256',
-        'HS512' => 'SHA512',
-        'HS384' => 'SHA384',
+        'HS256' => 'sha256',
+        'HS512' => 'sha512',
+        'HS384' => 'sha384',
     ];
 
     public function __construct( $arg, $alg = 'HS256' ) {
