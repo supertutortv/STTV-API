@@ -14,7 +14,7 @@ function sttv_get_template($temp,$dir='',$sgt=null) {
 	require $path.$extension;
 }
 
-function sttv_array_map_recursive($callback, $array) {
+function sttv_array_map_recursive($callback, &$array) {
 	$func = function ($item) use (&$func, &$callback) {
 		return is_array($item) ? array_map($func, $item) : call_user_func($callback, $item);
 	};
