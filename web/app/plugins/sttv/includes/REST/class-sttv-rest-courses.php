@@ -84,10 +84,11 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+		$fetch = false;
 
 		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
-			'course_data_not_found',
-			'The course data requested for this user is corrupted. Please contact SupertutorTV for further assistance.',
+			'course_data_invalid',
+			'The course data requested for this user is invalid or corrupted. Please contact SupertutorTV for further assistance.',
 			400
 		);
 
@@ -118,8 +119,6 @@ class Courses extends \WP_REST_Controller {
 				'test' => $meta['test'],
 				'intro' => $meta['intro'],
 				'version' => STTV_VERSION,
-				'cached' => false,
-				'lastFetched' => time(),
 				'thumbUrls' => [
 					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
 					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
