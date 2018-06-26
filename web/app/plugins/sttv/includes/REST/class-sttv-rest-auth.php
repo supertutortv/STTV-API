@@ -30,11 +30,10 @@ class Auth extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
-            '/login' => [
+            '/token' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'login' ],
-                    'permission_callback' => '__return_true'
+                    'callback' => [ $this, 'token' ]
                 ]
             ],
             '/logout' => [
@@ -52,43 +51,40 @@ class Auth extends \WP_REST_Controller {
 		}
     }
 
-    public function login( WP_REST_Request $request ) {
-        $auth = $request->get_header( 'Authorization' );
-        if ( is_null( $auth ) ) {
-            return sttv_rest_response(
-                'auth_header_missing',
-                'You must include valid credentials in the Authorization header to proceed.',
-                400
-            );
-        }
-        $creds = explode( ':', base64_decode( str_replace( 'Basic ', '', $auth ) ) );
-        $login_fail = sttv_rest_response(
-            'login_fail',
-            'The username or password you entered is incorrect',
-            401
-        );
-
-        // username validation
-        $user = sanitize_user( $creds[0] );
-        if ( !validate_username( $user ) )
-            return $login_fail;
+    public function token( WP_REST_Request $request ) {
+        // get username and password from request
+        $username = $request->get_param('username');
+        $password = $request->get_param('password');
 
         // attempt login
-        $login = wp_signon([
-            'user_login' => $user,
-            'user_password' => $creds[1],
-            'remember' => true
-        ], true);
+        $login = wp_authenticate( $username, $password );
 
         // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
-            return $login_fail;
+            return sttv_rest_response(
+                'login_fail',
+                'The username or password you entered is incorrect',
+                401
+            );;
+
+        $issued = time();
+        $token = [
+            'iss' => get_bloginfo('url'),
+            'iat' => $issued,
+            'nbf' => $issued,
+            'exp' => $issued + (DAY_IN_SECONDS*5),
+            'data' => [
+                'user' => [
+                    'id' => $login->data->ID
+                ]
+            ]
+        ];
         
         return sttv_rest_response(
             'login_success',
             'Login successful!',
             200,
-            [ 'data' => 'Cookie domain '.COOKIE_DOMAIN ]
+            [ 'token' => \STTV\JWT::generate( $token ) ]
         );
     }
 
