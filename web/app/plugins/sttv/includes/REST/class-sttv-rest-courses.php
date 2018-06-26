@@ -127,7 +127,7 @@ class Courses extends \WP_REST_Controller {
 			];
 			$data['sections']['practice'] = $meta['practice'];
 
-			sttv_array_map_recursive( function($item) use ($trialing){
+			sttv_array_map_recursive( function(&$item) use ($trialing){
 				if ( isset( $item['in_trial'] ) ) {
 					unset($item['in_trial']);
 				}
