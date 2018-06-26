@@ -27,10 +27,22 @@ class Courses extends \WP_REST_Controller {
 
 	public function register_routes() {
 		$routes = [
+			'/alert' => [
+				[
+					'methods' => 'GET',
+					'callback' => [ $this, 'get_course_meta' ],
+					'permission_callback' => [ $this, 'course_permissions_check' ]
+				]
+			],
 			'/data' => [
 				[
 					'methods' => 'GET',
-					'callback' => [ $this, 'get_course_info' ],
+					'callback' => [ $this, 'get_course_data' ],
+					'permission_callback' => 'sttv_verify_web_token'
+				],
+				[
+					'method' => 'PATCH',
+					'callback' => [ $this, 'update_user_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
@@ -39,13 +51,6 @@ class Courses extends \WP_REST_Controller {
 					'methods' => 'POST',
 					'callback' => [ $this, 'course_access_log' ],
 					'permission_callback' => 'is_user_logged_in'
-				]
-			],
-			'/alert' => [
-				[
-					'methods' => 'GET',
-					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => [ $this, 'course_permissions_check' ]
 				]
 			],
 			'/feedback' => [
@@ -76,12 +81,9 @@ class Courses extends \WP_REST_Controller {
 	##### COURSE METHODS #####
 	##########################
 
-	public function get_course_info() {
-		$user = wp_get_current_user();
-		return $user;
-	}
-
-	public function get_course_meta( $req ) {
+	public function get_course_data( $req ) {
+		$userid = get_current_user_id();
+		return $userid;
 		$cached = get_option( "sttv_course_cache_{$req['id']}" );
 		if ( $cached['lastFetched'] + DAY_IN_SECONDS > time() ) {
 			$cached['cached'] = true;
@@ -181,8 +183,11 @@ class Courses extends \WP_REST_Controller {
 	##### FEEDBACK METHODS #####
 	############################
 
-	public function can_post_feedback() {
-		return current_user_can('course_post_feedback') ?: is_user_logged_in();
+	public function can_post_feedback( WP_REST_Request $req ) {
+		$valid = sttv_verify_web_token( $req );
+		if ( is_wp_error( $valid ) )
+			return $valid;
+		return current_user_can('course_post_feedback');
 	}
 	
 	public function get_user_feedback() {
