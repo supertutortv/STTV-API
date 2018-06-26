@@ -49,13 +49,7 @@ class Courses extends \WP_REST_Controller {
 					'args' => [
 						'patch' => [
 							'required' => true,
-							'type' => 'string',
-							'enum' => [
-								'history',
-								'bookmarks',
-								'downloads',
-								'options'
-							]
+							'type' => 'string'
 						]
 					]
 				]
@@ -180,9 +174,16 @@ class Courses extends \WP_REST_Controller {
 	public function update_user_course_data( WP_REST_Request $request ) {
 		switch ($request->get_param('patch')) {
 			case 'history':
+			case 'bookmarks':
+			case 'downloads':
+			case 'options':
 				return $request->get_param('patch');
 			default:
-				return 'Not "history".';
+				return sttv_rest_response(
+					'invalid_patch_parameter',
+					'The route you are trying to reach was not found due to an invalid patch parameter.',
+					404
+				);
 		}
 	}
 
