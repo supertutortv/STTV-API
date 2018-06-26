@@ -43,7 +43,7 @@ class JWT {
             'iss' => STTV_JWT_ISSUER,
             'iat' => $issued,
             'nbf' => $issued,
-            'exp' => $issued + 30,//(DAY_IN_SECONDS*5),
+            'exp' => $issued + (DAY_IN_SECONDS*5),
             'sub' => $user->data->user_email.'|'.$user->data->ID
         ];
 
@@ -56,29 +56,30 @@ class JWT {
     }
 
     private function verify( $auth = '' ) {
-        if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing');
+        $status = ['status'=>403];
+        if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing','',$status);
 
         $timestamp = time();
         list($token) = sscanf($auth, 'Bearer %s');
-        if (!$token) return new WP_Error('web_token_auth_header_malformed');
+        if (!$token) return new WP_Error('web_token_auth_header_malformed','',$status);
 
         $pieces = explode('.', $token);
-        if ( count($pieces) != 3 ) return new WP_Error('web_token_malformed');
+        if ( count($pieces) != 3 ) return new WP_Error('web_token_malformed','',$status);
 
         list( $header64, $payload64, $sig64 ) = $pieces;
 
-        if ( null === ( $header = json_decode( $this->base64Decode( $header64 ) ) ) ) return new WP_Error('web_token_header_encoding_invalid');
-        if ( null === ( $payload = json_decode( $this->base64Decode( $payload64 ) ) ) ) return new WP_Error('web_token_payload_encoding_invalid');
-        if ( false === ( $sig = $this->base64Decode( $sig64 ) ) ) return new WP_Error('web_token_signature_encoding_invalid');
-        if ( !isset($this->algs[$header->alg]) ) return new WP_Error('web_token_algorithm_invalid');
+        if ( null === ( $header = json_decode( $this->base64Decode( $header64 ) ) ) ) return new WP_Error('web_token_header_encoding_invalid','',$status);
+        if ( null === ( $payload = json_decode( $this->base64Decode( $payload64 ) ) ) ) return new WP_Error('web_token_payload_encoding_invalid','',$status);
+        if ( false === ( $sig = $this->base64Decode( $sig64 ) ) ) return new WP_Error('web_token_signature_encoding_invalid','',$status);
+        if ( !isset($this->algs[$header->alg]) ) return new WP_Error('web_token_algorithm_invalid','',$status);
 
         $sigcheck = $this->sign( "$header64.$payload64", $header->alg );
 
-        if ( $sigcheck !== $sig ) return new WP_Error('web_token_signature_verification_failed');
-        if ( $payload->iss !== STTV_JWT_ISSUER ) return new WP_Error('web_token_issuer_invalid');
+        if ( $sigcheck !== $sig ) return new WP_Error('web_token_signature_verification_failed','',$status);
+        if ( $payload->iss !== STTV_JWT_ISSUER ) return new WP_Error('web_token_issuer_invalid','',$status);
         if ( (isset( $payload->nbf ) && $payload->nbf > $timestamp) || (isset( $payload->iat ) && $payload->iat > $timestamp) )
-            return new WP_Error('web_token_used_too_soon');
-        if ( !isset( $payload->exp ) || $payload->exp < $timestamp ) return new WP_Error('web_token_expired');
+            return new WP_Error('web_token_used_too_soon','',$status);
+        if ( !isset( $payload->exp ) || $payload->exp < $timestamp ) return new WP_Error('web_token_expired','',$status);
 
         $this->payload = $payload;
         return false;
