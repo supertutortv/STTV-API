@@ -178,6 +178,7 @@ class Courses extends \WP_REST_Controller {
 
 	public function update_user_course_data( WP_REST_Request $request ) {
 		$userid = get_current_user_id();
+		$body = $request->get_body();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 		switch ($request->get_param('patch')) {
 			case 'history':
@@ -185,7 +186,7 @@ class Courses extends \WP_REST_Controller {
 			case 'downloads':
 			case 'userdata':
 			case 'options':
-				return $umeta;
+				return $body;
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
