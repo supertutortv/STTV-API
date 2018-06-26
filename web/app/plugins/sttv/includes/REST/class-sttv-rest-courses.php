@@ -172,12 +172,13 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
+		$userid = get_current_user_id();
 		switch ($request->get_param('patch')) {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
 			case 'options':
-				return $request->get_param('patch');
+				return $userid;
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
