@@ -32,6 +32,7 @@ class JWT {
     }
 
     private function generate( $user, $alg ) {
+        return $this->algs[$alg];
         $issued = time();
         $pieces = [];
 
