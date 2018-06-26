@@ -43,7 +43,7 @@ class JWT {
             'iss' => STTV_JWT_ISSUER,
             'iat' => $issued,
             'nbf' => $issued,
-            'exp' => $issued + (DAY_IN_SECONDS*5),
+            'exp' => $issued + 30,//(DAY_IN_SECONDS*5),
             'sub' => $user->data->user_email.'|'.$user->data->ID
         ];
 
