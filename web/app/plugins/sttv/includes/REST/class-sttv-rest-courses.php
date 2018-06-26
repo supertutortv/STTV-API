@@ -83,86 +83,94 @@ class Courses extends \WP_REST_Controller {
 
 	public function get_course_data( $req ) {
 		$userid = get_current_user_id();
-		return get_user_meta( $userid, 'sttv_user_data', true );
-		$cached = get_option( "sttv_course_cache_{$req['id']}" );
-		if ( $cached['lastFetched'] + DAY_IN_SECONDS > time() ) {
-			$cached['cached'] = true;
-			return $cached;
-		}
+		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		$meta = get_post_meta( $req['id'], 'sttv_course_data' , true );
-		if ( ! $meta ) {
-			return sttv_rest_response(
-				'course_not_found',
-				'The course requested was not found or does not exist. Please try again.',
-				404
-			);
-		}
+		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
+			'course_data_not_found',
+			'The course data requested for this user is corrupted. Please contact SupertutorTV for further assistance.',
+			400
+		);
 
-		$test_code = strtolower($meta['test']);
-		$trialing = current_user_can( "course_{$test_code}_trial" );
-		
-		$data = [
-			'id' => $meta['id'],
-			'name' => $meta['name'],
-			'slug' => $meta['slug'],
-			'link' => $meta['link'],
-			'test' => $meta['test'],
-			'intro' => $meta['intro'],
-			'version' => STTV_VERSION,
-			'cached' => false,
-			'lastFetched' => time(),
-			'thumbUrls' => [
-				'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
-				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-			]
-		];
-		
-		foreach ( $meta['sections'] as $sec => $val ) {
-			foreach ( $val['resources']['files'] as &$file ) {
-				if ( $file['in_trial'] === false && $trialing ) {
-					$file['file'] = 0;
-				}
-				unset( $file['in_trial'] );
+		foreach( $umeta['courses'] as $slug => $data ) {
+			$course = get_posts([
+				'name' => $slug,
+				'post_status' => 'publish',
+				'posts_per_page' => 1,
+				'post_type' => 'courses'
+			]);
+			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
+			if ( ! $meta ) {
+				return sttv_rest_response(
+					'course_not_found',
+					'The course requested was not found or does not exist. Please try again.',
+					404
+				);
 			}
-			foreach ( $val['subsec'] as $k => &$subsec ) {
-				if ( $subsec['in_trial'] === false && $trialing ) {
-					foreach ( $subsec['videos'] as &$vid ) {
-						$vid['ID'] = 0;
+
+			$test_code = strtolower($meta['test']);
+			$trialing = current_user_can( "course_{$test_code}_trial" );
+			
+			$data = [
+				'id' => $meta['id'],
+				'name' => $meta['name'],
+				'slug' => $meta['slug'],
+				'link' => $meta['link'],
+				'test' => $meta['test'],
+				'intro' => $meta['intro'],
+				'version' => STTV_VERSION,
+				'cached' => false,
+				'lastFetched' => time(),
+				'thumbUrls' => [
+					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+				]
+			];
+			
+			foreach ( $meta['sections'] as $sec => $val ) {
+				foreach ( $val['resources']['files'] as &$file ) {
+					if ( $file['in_trial'] === false && $trialing ) {
+						$file['file'] = 0;
 					}
+					unset( $file['in_trial'] );
 				}
-				unset( $subsec['in_trial'] );
-			}
-			$data['sections'][$sec] = $val;
-		}
-
-		foreach ( $meta['practice']['resources']['files'] as &$file ) {
-			if ( ! $file['in_trial'] && $trialing ) {
-				$file['file'] = 0;
-				unset( $file['in_trial'] );
-			}
-		}
-		foreach ( $meta['practice']['subsec'] as $k => &$book ) {
-			if ( ! $book['in_trial'] && $trialing ) {
-				foreach ( $book['subsec'] as $b => &$test ) {
-					foreach ( $test['subjects'] as $t => &$sec ) {
-						foreach ( $sec['videos'] as $s => &$vid ) {
+				foreach ( $val['subsec'] as $k => &$subsec ) {
+					if ( $subsec['in_trial'] === false && $trialing ) {
+						foreach ( $subsec['videos'] as &$vid ) {
 							$vid['ID'] = 0;
 						}
 					}
+					unset( $subsec['in_trial'] );
+				}
+				$data['sections'][$sec] = $val;
+			}
+
+			foreach ( $meta['practice']['resources']['files'] as &$file ) {
+				if ( ! $file['in_trial'] && $trialing ) {
+					$file['file'] = 0;
+					unset( $file['in_trial'] );
 				}
 			}
-			unset( $book['in_trial'] );
+			foreach ( $meta['practice']['subsec'] as $k => &$book ) {
+				if ( ! $book['in_trial'] && $trialing ) {
+					foreach ( $book['subsec'] as $b => &$test ) {
+						foreach ( $test['subjects'] as $t => &$sec ) {
+							foreach ( $sec['videos'] as $s => &$vid ) {
+								$vid['ID'] = 0;
+							}
+						}
+					}
+				}
+				unset( $book['in_trial'] );
+			}
+
+			$data['sections']['practice'] = $meta['practice'];
+
+			$umeta['courses'][$slug] = $data;
 		}
 
-		$data['sections']['practice'] = $meta['practice'];
+		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
 		
-		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
-
-		update_option( "sttv_course_cache_{$req['id']}", $data, true );
-		
-		return $data;
-
+		return $umeta;
 	}
 
 	#######################
