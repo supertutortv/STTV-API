@@ -39,18 +39,13 @@ class Courses extends \WP_REST_Controller {
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
-				],
+				]
+			],
+			'/data/(?P<id>[\w]+)' => [
 				[
 					'method' => 'PATCH',
 					'callback' => [ $this, 'update_user_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
-				]
-			],
-			'/log' => [
-				[
-					'methods' => 'POST',
-					'callback' => [ $this, 'course_access_log' ],
-					'permission_callback' => 'is_user_logged_in'
 				]
 			],
 			'/feedback' => [
@@ -168,6 +163,10 @@ class Courses extends \WP_REST_Controller {
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
 		
 		return $umeta;
+	}
+
+	public function update_user_course_data( WP_REST_Request $request ) {
+		return $request->get_params();
 	}
 
 	#######################
