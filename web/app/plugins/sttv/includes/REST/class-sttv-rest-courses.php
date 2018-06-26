@@ -45,7 +45,19 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'PATCH',
 					'callback' => [ $this, 'update_user_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token'
+					'permission_callback' => 'sttv_verify_web_token',
+					'args' => [
+						'patch' => [
+							'required' => true,
+							'type' => 'string',
+							'enum' => [
+								'history',
+								'bookmarks',
+								'downloads',
+								'options'
+							]
+						]
+					]
 				]
 			],
 			'/feedback' => [
@@ -166,7 +178,12 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
-		return $request->get_params();
+		switch ($request->get_param('patch')) {
+			case 'history':
+				return $request->get_param('patch');
+			default:
+				return 'Not "history".';
+		}
 	}
 
 	#######################
