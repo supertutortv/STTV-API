@@ -30,14 +30,15 @@ class Courses extends \WP_REST_Controller {
 			'/' => [
 				[
 					'methods' => 'GET',
-					'callback' => [ $this, 'get_course_info' ]
+					'callback' => [ $this, 'get_course_info' ],
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
 			'/(?P<id>[\d]+)' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => 'sttv_verify_rest_nonce'
+					'permission_callback' => 'sttv_verify_web_token('
 				]
 			],
 			'/log' => [
@@ -83,7 +84,8 @@ class Courses extends \WP_REST_Controller {
 	##########################
 
 	public function get_course_info() {
-
+		$user = wp_get_current_user();
+		return $user;
 	}
 
 	public function get_course_meta( $req ) {
