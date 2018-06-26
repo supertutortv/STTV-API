@@ -84,7 +84,6 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-		$fetch = false;
 
 		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
 			'course_data_invalid',
@@ -111,7 +110,7 @@ class Courses extends \WP_REST_Controller {
 			$test_code = strtolower($meta['test']);
 			$trialing = current_user_can( "course_{$test_code}_trial" );
 			
-			$data = [
+			$umeta['courses'][$slug] = [
 				'id' => $meta['id'],
 				'name' => $meta['name'],
 				'slug' => $meta['slug'],
@@ -123,54 +122,47 @@ class Courses extends \WP_REST_Controller {
 					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
 					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
 				],
-				'sections' => $meta['sections']
-			];
-			$data['sections']['practice'] = $meta['practice'];
-
-			sttv_array_map_recursive( function($item) use ($trialing){
-				if ( isset( $item['in_trial'] ) ) {
-					unset($item['in_trial']);
-				}
-			}, $data );
-			
-			/* foreach ( $meta['sections'] as $sec => $val ) {
-				foreach ( $val['resources']['files'] as &$file ) {
-					if ( $file['in_trial'] === false && $trialing ) {
-						$file['file'] = 0;
+				'sections' => (function() use ($meta,$trialing) {
+					$sections = [];
+					foreach ( $meta['sections'] as $sec => $val ) {
+						foreach ( $val['resources']['files'] as &$file ) {
+							if ( $file['in_trial'] === false && $trialing ) {
+								$file['file'] = 0;
+							}
+							unset( $file['in_trial'] );
+						}
+						foreach ( $val['subsec'] as $k => &$subsec ) {
+							if ( $subsec['in_trial'] === false && $trialing ) {
+								foreach ( $subsec['videos'] as &$vid ) {
+									$vid['ID'] = 0;
+								}
+							}
+							unset( $subsec['in_trial'] );
+						}
+						$data['sections'][$sec] = $val;
 					}
-					unset( $file['in_trial'] );
-				}
-				foreach ( $val['subsec'] as $k => &$subsec ) {
-					if ( $subsec['in_trial'] === false && $trialing ) {
-						foreach ( $subsec['videos'] as &$vid ) {
-							$vid['ID'] = 0;
+					foreach ( $meta['practice']['resources']['files'] as &$file ) {
+						if ( ! $file['in_trial'] && $trialing ) {
+							$file['file'] = 0;
+							unset( $file['in_trial'] );
 						}
 					}
-					unset( $subsec['in_trial'] );
-				}
-				$data['sections'][$sec] = $val;
-			}
-
-			foreach ( $meta['practice']['resources']['files'] as &$file ) {
-				if ( ! $file['in_trial'] && $trialing ) {
-					$file['file'] = 0;
-					unset( $file['in_trial'] );
-				}
-			}
-			foreach ( $meta['practice']['subsec'] as $k => &$book ) {
-				if ( ! $book['in_trial'] && $trialing ) {
-					foreach ( $book['subsec'] as $b => &$test ) {
-						foreach ( $test['subjects'] as $t => &$sec ) {
-							foreach ( $sec['videos'] as $s => &$vid ) {
-								$vid['ID'] = 0;
+					foreach ( $meta['practice']['subsec'] as $k => &$book ) {
+						if ( ! $book['in_trial'] && $trialing ) {
+							foreach ( $book['subsec'] as $b => &$test ) {
+								foreach ( $test['subjects'] as $t => &$sec ) {
+									foreach ( $sec['videos'] as $s => &$vid ) {
+										$vid['ID'] = 0;
+									}
+								}
 							}
 						}
+						unset( $book['in_trial'] );
 					}
-				}
-				unset( $book['in_trial'] );
-			} */
-
-			$umeta['courses'][$slug] = $data;
+					$sections['practice'] = $meta['practice'];
+					return $sections;
+				})()
+			];
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
