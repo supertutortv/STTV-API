@@ -13,7 +13,7 @@ class JWT {
 
     public $token = '';
 
-    private $alg = [
+    private $algs = [
         'HS256' => 'SHA256',
         'HS512' => 'SHA512',
         'HS384' => 'SHA384',
@@ -68,7 +68,7 @@ class JWT {
         if ( null === ( $header = json_decode( $this->base64Decode( $header64 ) ) ) ) return new WP_Error('web_token_header_encoding_invalid');
         if ( null === ( $payload = json_decode( $this->base64Decode( $payload64 ) ) ) ) return new WP_Error('web_token_payload_encoding_invalid');
         if ( false === ( $sig = $this->base64Decode( $sig64 ) ) ) return new WP_Error('web_token_signature_encoding_invalid');
-        if ( !in_array($header->alg, $allowed_algs) ) return new WP_Error('web_token_algorithm_invalid');
+        if ( !in_array($header->alg, $this->algs) ) return new WP_Error('web_token_algorithm_invalid');
 
         $sigcheck = $this->sign( "$header64.$payload64", $header->alg );
 
