@@ -36,12 +36,18 @@ class Auth extends \WP_REST_Controller {
                     'callback' => [ $this, 'token' ]
                 ]
             ],
+            '/token/verify' => [
+                [
+                    'methods' => 'POST',
+                    'permission_callback' => 'sttv_verify_web_token',
+                    'callback' => [ $this, 'verify' ]
+                ]
+            ],
             '/logout' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'logout' ],
-                    //'permission_callback' => 'is_user_logged_in'
-                    'permission_callback' => '__return_true'
+                    'permission_callback' => 'sttv_verify_web_token'
                 ]
             ]
         ];
@@ -67,24 +73,21 @@ class Auth extends \WP_REST_Controller {
                 401
             );;
 
-        $issued = time();
-        $token = [
-            'iss' => get_bloginfo('url'),
-            'iat' => $issued,
-            'nbf' => $issued,
-            'exp' => $issued + (DAY_IN_SECONDS*5),
-            'data' => [
-                'user' => [
-                    'id' => $login->data->ID
-                ]
-            ]
-        ];
+        $token = new \STTV\JWT( $login );
         
         return sttv_rest_response(
             'login_success',
             'Login successful!',
             200,
-            [ 'token' => \STTV\JWT::generate( $token ) ]
+            [ 'token' => $token ]
+        );
+    }
+
+    public function verify() {
+        return sttv_rest_response(
+            'token_verified',
+            'You provided a valid JSON web token to the API.',
+            200
         );
     }
 

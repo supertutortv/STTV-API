@@ -21,12 +21,15 @@ function sttv_rest_response( $code = '', $msg = '', $status = 200, $extra = [] )
 }
 
 function sttv_verify_web_token( WP_REST_Request $request ) {
-    $token = \STTV\JWT::verify( $request->get_header('Authorization') );
+    $token = new \STTV\JWT( $request->get_header('Authorization') );
 
     if ( is_wp_error() ) {
         return $token;
     }
 
-    $user = wp_set_current_user( $token->data->ID );
+    $pieces = explode( '|', $token->sub );
+    list( $email, $id ) = $pieces;
+
+    $user = wp_set_current_user( $id );
     return !!$user->ID;
 }

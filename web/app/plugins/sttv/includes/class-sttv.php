@@ -44,8 +44,10 @@ final class STTV {
         $this->define( 'MU_FILE_BACKUP_PATH', dirname(ABSPATH).'/mu_keys_bk' );
 
         //REST API
-        $this->define( 'STTV_REST_NAMESPACE', 'json' );
-        $this->define( 'STTV_UA', 'APP-STTV-REST/'.STTV_VERSION.' <'.$_SERVER['SERVER_SOFTWARE'].'>' );
+        $this->define( 'STTV_REST_NAMESPACE', 'v2' );
+        $this->define( 'STTV_UA', 'STTV-API/'.STTV_REST_NAMESPACE.' <'.$_SERVER['SERVER_SOFTWARE'].'>' );
+        $this->define( 'STTV_JWT_ISSUER', STTV_UA.' | '.get_bloginfo('url') );
+        $this->define( 'STTV_REST_CONTENT_TYPE', 'application/vnd.sttv.app+json' );
         $this->define( 'STTV_REST_AUTH', ( has_filter( 'rest_nonce_action' ) ) ? STTV_PREFIX.':rest:auth' : 'wp_rest');
     }
 
@@ -62,6 +64,7 @@ final class STTV {
         require_once 'classes/class-sttv-webhook.php';
         require_once 'classes/class-sttv-logger.php';
         require_once 'classes/class-sttv-email.php';
+        require_once 'classes/class-sttv-jwt.php';
 
         // checkout classes
         require_once 'classes/checkout/class-sttv-checkout-stripe.php';
