@@ -83,7 +83,7 @@ class Courses extends \WP_REST_Controller {
 
 	public function get_course_data( $req ) {
 		$userid = get_current_user_id();
-		return $userid;
+		return get_user_meta( $userid, 'sttv_user_data', true );
 		$cached = get_option( "sttv_course_cache_{$req['id']}" );
 		if ( $cached['lastFetched'] + DAY_IN_SECONDS > time() ) {
 			$cached['cached'] = true;
