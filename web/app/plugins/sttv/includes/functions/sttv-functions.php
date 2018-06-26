@@ -21,6 +21,17 @@ function sttv_array_map_recursive($callback, $array) {
   return array_map($func, $array);
 }
 
+function array_key_unset_recursive($needle, &$haystack) {
+	$rec = function( &$thestring, &$thearray ) {
+		
+		foreach ( $thearray as $key => &$val ) {
+			if ( ! is_array($val) ) continue;
+			$rec( $val );
+		}
+	};
+	$rec( $needle, $haystack );
+}
+
 function sttvhashit($input,$num = 9) {
 	return base64_encode(substr(md5($input),0,$num));
 }
