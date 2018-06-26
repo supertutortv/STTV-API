@@ -34,7 +34,7 @@ class Courses extends \WP_REST_Controller {
 					'permission_callback' => [ $this, 'course_permissions_check' ]
 				]
 			],
-			'/data/(?P<id>[\d]+)' => [
+			'/data' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
