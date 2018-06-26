@@ -13,6 +13,10 @@ class JWT {
 
     public $token = '';
 
+    public $payload = [];
+
+    public $error = false;
+
     private $algs = [
         'HS256' => 'SHA256',
         'HS512' => 'SHA512',
@@ -21,11 +25,10 @@ class JWT {
 
     public function __construct( $arg, $alg = 'HS256' ) {
         if ( $arg instanceof \WP_User ) {
-            return $this->generate( $arg, $alg );
+            $this->token = $this->generate( $arg, $alg );
         } elseif ( is_string( $arg ) ) {
-            return $this->verify( $arg );
+            $this->error = $this->verify( $arg );
         }
-        return false;
     }
 
     private function generate( $user, $alg ) {
@@ -49,11 +52,10 @@ class JWT {
         $signature = $this->sign( implode( '.', $pieces ), $alg );
         $pieces[] = $this->base64Encode( $signature );
 
-        $this->token = implode( '.', $pieces );
-        return $this;
+        return implode( '.', $pieces );
     }
 
-    public function verify( $auth = '' ) {
+    private function verify( $auth = '' ) {
         if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing');
 
         $timestamp = time();
@@ -78,7 +80,8 @@ class JWT {
             return new WP_Error('web_token_used_too_soon');
         if ( !isset( $payload->exp ) || $payload->exp < $timestamp ) return new WP_Error('web_token_expired');
 
-        return $payload;
+        $this->payload = $payload;
+        return false;
     }
 
     private function sign( $input, $alg = 'HS256' ) {
