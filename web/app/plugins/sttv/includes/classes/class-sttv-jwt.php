@@ -11,6 +11,8 @@ defined( 'ABSPATH' ) || exit;
 
 class JWT {
 
+    public $token = '';
+
     private $alg = [
         'HS256' => 'SHA256',
         'HS512' => 'SHA512',
@@ -47,7 +49,8 @@ class JWT {
         $signature = $this->sign( implode( '.', $pieces ), $alg );
         $pieces[] = $this->base64Encode( $signature );
 
-        return implode( '.', $pieces );
+        $this->token = implode( '.', $pieces );
+        return $this;
     }
 
     public function verify( $auth = '' ) {
