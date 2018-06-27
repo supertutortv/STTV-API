@@ -43,7 +43,7 @@ class Courses extends \WP_REST_Controller {
 			],
 			'/data/(?P<patch>[\w]+)' => [
 				[
-					'methods' => 'PATCH',
+					'methods' => 'PUT',
 					'callback' => [ $this, 'update_user_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token',
 					'args' => [
@@ -99,7 +99,7 @@ class Courses extends \WP_REST_Controller {
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['data_timestamp'];
 			$umeta['user'][$rec['data_type']][] = [
-				$ind => json_decode($rec['data_record'],true)
+				$ind => $rec['data_record']
 			];
 		}
 
