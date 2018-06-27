@@ -13,7 +13,7 @@ class JWT {
 
     public $token = '';
 
-    public $payload = [];
+    public $payload;
 
     public $error = false;
 
