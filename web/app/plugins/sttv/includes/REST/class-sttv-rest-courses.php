@@ -188,7 +188,7 @@ class Courses extends \WP_REST_Controller {
 			case 'bookmarks':
 			case 'downloads':
 				$updated[$patch] = [
-					'ID' => $body[0],
+					'ID' => $body['id'],
 					'timestamp' => $timestamp
 				];
 				$umeta['user'][$patch][] = $updated;
