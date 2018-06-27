@@ -13,7 +13,7 @@ use WP_REST_Server;
  * SupertutorTV Auth controller class.
  *
  * Properties, methods, routes, and endpoints for processing and managing the authorization process on all SupertutorTV web applications.
- * Currently only handles login/lgout, but will in future releases handle JSON web tokenization.
+ * Currently only handles login/logout, but will in future releases handle JSON web tokenization.
  *
  * @class 		Auth
  * @version		2.0.0
@@ -74,6 +74,8 @@ class Auth extends \WP_REST_Controller {
             );;
 
         $token = new \STTV\JWT( $login );
+
+        do_action( 'wp_login' );
         
         return sttv_rest_response(
             'login_success',
@@ -107,8 +109,8 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function log_all_logins( $username, $user ) {
-        $times = get_user_meta( $user->ID, 'login_timestamps', true ) ?: ['SOR'];
-        $times[] = time();
-        update_user_meta( $user->ID, 'login_timestamps', $times );
+        $times = get_user_meta( $user->ID, 'sttv_user_data', true );
+        $times['login_timestamps'][] = time();
+        update_user_meta( $user->ID, 'sttv_user_data', $times );
     }
 }

@@ -73,6 +73,7 @@ function customer_created( $data ) {
         'customer' => $customer['id'],
         'uid' => $customer['invoice_prefix'],
         'orders' => [],
+        'login_timestamps' => [],
         'user' => [],
         'courses' => []
     ]);

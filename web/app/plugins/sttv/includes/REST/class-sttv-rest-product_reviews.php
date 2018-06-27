@@ -12,17 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @author		Supertutor Media, inc.
  */
 
-class STTV_Product_Reviews extends WP_REST_Controller {
+class STTV_Product_Reviews extends \WP_REST_Controller {
 	
 	public function __construct() {
 		add_action( 'rest_api_init', array($this,'sttv_product_reviews_api') );
-		
-		register_shutdown_function( array( $this, '__destruct' ) );
 	}
-	
-	public function __destruct() {
-        return true;
-    }
 	
 	public function sttv_product_reviews_api() {
  		register_rest_route( STTV_REST_NAMESPACE, '/reviews/(?P<id>[\d]+)', 
