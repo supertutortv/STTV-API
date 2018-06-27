@@ -251,13 +251,13 @@ class Courses extends \WP_REST_Controller {
 			$result = $wpdb->delete( $wpdb->prefix.'course_user_data', $delete, ['%d'] );
 			if ( $result === false ) {
 				$deleted[] = [
-					'id' => 'There was an error. ID .'.$v.' not deleted.'
+					'id' => 'There was an error. ID '.$v.' not deleted.'
 				];
 				continue;
 			};
 			if ( $result === 0 ) {
 				$deleted[] = [
-					'id' => 'ID .'.$v.' could not be found. No action taken.'
+					'id' => 'ID '.$v.' could not be found. No action taken.'
 				];
 				continue;
 			}

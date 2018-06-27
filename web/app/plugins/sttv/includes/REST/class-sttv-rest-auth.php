@@ -70,7 +70,7 @@ class Auth extends \WP_REST_Controller {
             return sttv_rest_response(
                 'login_fail',
                 'The username or password you entered is incorrect',
-                401
+                200
             );;
 
         $token = new \STTV\JWT( $login );
