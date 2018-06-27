@@ -95,17 +95,13 @@ class Courses extends \WP_REST_Controller {
 
 		$dbtable = $wpdb->prefix.'course_user_data';
 		$cu_data = $wpdb->get_results("SELECT data_type,data_timestamp,data_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
-		$cu_data_ret = (function() use ($cu_data){
-			$returned = [];
-			foreach ($cu_data as $rec) {
-				$ind = (int) $rec['data_timestamp'];
-				$returned[$rec['data_type']][] = [
-					$ind => json_decode($rec['data_record'],true)
-				];
-			}
-			return $returned;
-		})();
-		array_merge( $umeta['user'], $cu_data_ret );
+
+		foreach ($cu_data as $rec) {
+			$ind = (int) $rec['data_timestamp'];
+			$umeta['user'][$rec['data_type']][] = [
+				$ind => json_decode($rec['data_record'],true)
+			];
+		}
 
 		foreach( $umeta['courses'] as $slug => $data ) {
 			$course = get_posts([
