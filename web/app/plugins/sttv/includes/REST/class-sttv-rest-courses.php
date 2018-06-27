@@ -83,6 +83,7 @@ class Courses extends \WP_REST_Controller {
 	##########################
 
 	public function get_course_data( $req ) {
+		global $wpdb;
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -91,6 +92,10 @@ class Courses extends \WP_REST_Controller {
 			'The course data requested for this user is invalid or corrupted. Please contact SupertutorTV for further assistance.',
 			400
 		);
+
+		$dbtable = $wpdb->prefix.'course_user_data';
+		$course_user_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		$umeta['user'] = $course_user_data;
 
 		foreach( $umeta['courses'] as $slug => $data ) {
 			$course = get_posts([
