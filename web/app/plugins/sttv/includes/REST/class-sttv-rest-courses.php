@@ -187,11 +187,11 @@ class Courses extends \WP_REST_Controller {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
-				$updated[$patch] = [
+				$updated = [
 					'ID' => $body['id'],
 					'timestamp' => $timestamp
 				];
-				$umeta['user'][$patch][] = $updated;
+				$umeta['user'][$patch] = $updated;
 				break;
 			case 'userdata':
 			case 'options':
