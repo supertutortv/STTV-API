@@ -105,6 +105,7 @@ class Courses extends \WP_REST_Controller {
 			}
 			return $returned;
 		})();
+		array_merge( $umeta['user'], $cu_data_ret );
 
 		foreach( $umeta['courses'] as $slug => $data ) {
 			$course = get_posts([
