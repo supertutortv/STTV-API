@@ -234,7 +234,7 @@ class Courses extends \WP_REST_Controller {
 		);
 	}
 
-	public function update_user_course_data( WP_REST_Request $request ) {
+	public function delete_user_course_data( WP_REST_Request $request ) {
 		return json_decode($request->get_body(),true);
 	}
 
