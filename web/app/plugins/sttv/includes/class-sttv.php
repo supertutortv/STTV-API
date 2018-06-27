@@ -170,7 +170,7 @@ final class STTV {
 
         $flushed = get_transient( 'sttv_flush_rewrite_once' );
         if (!$flushed){
-            flush_rewrite_rules();
+            add_action( 'shutdown', 'flush_rewrite_rules');
             set_transient( 'sttv_flush_rewrite_once', true, time() + DAY_IN_SECONDS );
         }
     }
