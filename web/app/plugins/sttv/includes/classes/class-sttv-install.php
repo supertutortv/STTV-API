@@ -74,7 +74,7 @@ class Install {
         update_option( 'sttv_country_options', $countrydd, true );
 
         // crytpo dictionary, just a bunch of random words
-        $crypto = file( 'https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-usa.txt', FILE_IGNORE_NEW_LINES );
+        $crypto = wp_remote_get( 'https://raw.githubusercontent.com/first20hours/google-10000-english/master/google-10000-english-usa.txt')['body'];
         update_option( 'sttv_crypto_dictionary', $crypto, true );
 
     }
