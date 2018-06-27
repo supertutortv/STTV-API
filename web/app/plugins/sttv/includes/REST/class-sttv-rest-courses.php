@@ -235,7 +235,33 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function delete_user_course_data( WP_REST_Request $request ) {
-		return json_decode($request->get_body(),true);
+		global $wpdb;
+		$body = json_decode($request->get_body(),true);
+		if ( ! isset($body['id'] ) ) return sttv_rest_response(
+			'resource_delete_no_id',
+			'You must provide a valid resource id to this endpoint.',
+			403
+		);
+		$deleted = [
+			'id' => $body['id']
+		];
+		$result = $wpdb->delete( $wpdb->prefix.'course_user_data', $deleted, ['%d'] );
+		if ( $result === false ) return sttv_rest_response(
+			'resource_delete_error',
+			'There was an error deleting this resource. Please try again.',
+			500
+		);
+		if ( $result === 0 ) return sttv_rest_response(
+			'resource_not_found',
+			'The resource requested for deletion was not found. No action has been taken.',
+			404
+		);
+		return sttv_rest_response(
+			'resource_delete_success',
+			'The resource was deleted.',
+			200,
+			['data' => $deleted]
+		);
 	}
 
 	#######################
