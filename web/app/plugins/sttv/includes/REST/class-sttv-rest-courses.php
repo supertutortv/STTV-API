@@ -180,13 +180,22 @@ class Courses extends \WP_REST_Controller {
 		$userid = get_current_user_id();
 		$body = $request->get_body();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-		switch ($request->get_param('patch')) {
+		$patch = $request->get_param('patch');
+		$updated = [];
+		$timestamp = time();
+		switch ($patch) {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
+				$updated[$patch] = [
+					'ID' => $body[0],
+					'timestamp' => $timestamp
+				];
+				$umeta['user'][$patch][] = $updated;
+				break;
 			case 'userdata':
 			case 'options':
-				return $body;
+				return $patch;
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
@@ -194,6 +203,13 @@ class Courses extends \WP_REST_Controller {
 					404
 				);
 		}
+		update_user_meta( $userid, 'sttv_user_data', $umeta );
+		return sttv_rest_response(
+			'resource_updated',
+			'The resource has been updated',
+			200,
+			['data' => $updated]
+		);
 	}
 
 	#######################
