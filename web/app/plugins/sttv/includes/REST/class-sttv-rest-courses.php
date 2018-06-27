@@ -178,12 +178,12 @@ class Courses extends \WP_REST_Controller {
 
 	public function update_user_course_data( WP_REST_Request $request ) {
 		$userid = get_current_user_id();
-		$body = $request->get_body();
+		$body = json_decode( $request->get_body(), true );
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-		$patch = $request->get_param('patch');
+		$patch = $request->get_param( 'patch' );
 		$updated = [];
 		$timestamp = time();
-		switch ($patch) {
+		switch ( $patch ) {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
