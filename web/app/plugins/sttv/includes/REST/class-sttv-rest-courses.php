@@ -39,6 +39,11 @@ class Courses extends \WP_REST_Controller {
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
+				],
+				[
+					'methods' => 'DELETE',
+					'callback' => [ $this, 'delete_user_course_data' ],
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
 			'/data/(?P<patch>[\w]+)' => [
@@ -99,7 +104,7 @@ class Courses extends \WP_REST_Controller {
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['data_timestamp'];
 			$umeta['user'][$rec['data_type']][] = [
-				'id' => $rec['id'],
+				'id' => (int) $rec['id'],
 				'timestamp' => $ind,
 				'data' => json_decode($rec['data_record'])
 			];
@@ -227,6 +232,10 @@ class Courses extends \WP_REST_Controller {
 			200,
 			['data' => $updated]
 		);
+	}
+
+	public function update_user_course_data( WP_REST_Request $request ) {
+		return json_decode($request->get_body(),true);
 	}
 
 	#######################
