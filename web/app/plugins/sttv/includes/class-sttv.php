@@ -168,10 +168,10 @@ final class STTV {
     public function sttv_loaded() {
         \Stripe\Stripe::setApiKey( STRIPE_SK );
 
-        $flushed = get_option( 'sttv_flush_rewrite_once' );
+        $flushed = get_transient( 'sttv_flush_rewrite_once' );
         if (!$flushed){
-            //flush_rewrite_rules();
-            update_option( 'sttv_flush_rewrite_once', true, true );
+            flush_rewrite_rules();
+            set_transient( 'sttv_flush_rewrite_once', true, time() + DAY_IN_SECONDS );
         }
     }
     

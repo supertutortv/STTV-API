@@ -58,13 +58,10 @@ class Install {
         self::roles();
         self::dirs();
         self::files();
-        
-        flush_rewrite_rules();
     }
 
     public static function uninstall() {
         delete_transient( 'sttv_installing' );
-        flush_rewrite_rules();
     }
 
     private static function options() {
