@@ -177,9 +177,10 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
+		global $wpdb;
 		$userid = get_current_user_id();
 		$body = json_decode( $request->get_body(), true );
-		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+		//$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 		$patch = $request->get_param( 'patch' );
 		$updated = [];
 		$timestamp = time();
@@ -187,11 +188,11 @@ class Courses extends \WP_REST_Controller {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
-				$updated = [
+				/* $updated = [
 					'ID' => $body['id'],
 					'timestamp' => $timestamp
 				];
-				$umeta['user'][$patch] = $updated;
+				$umeta['user'][$patch] = $updated; */
 				break;
 			case 'userdata':
 			case 'options':
@@ -203,7 +204,7 @@ class Courses extends \WP_REST_Controller {
 					404
 				);
 		}
-		update_user_meta( $userid, 'sttv_user_data', $umeta );
+		//update_user_meta( $userid, 'sttv_user_data', $umeta );
 		return sttv_rest_response(
 			'resource_updated',
 			'The resource has been updated',

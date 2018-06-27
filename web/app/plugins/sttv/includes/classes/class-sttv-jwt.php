@@ -18,26 +18,24 @@ class JWT {
     public $error = false;
 
     private $algs = [
-        'HS256' => 'sha256',
-        'HS512' => 'sha512',
-        'HS384' => 'sha384',
+        'HS256' => 'sha256'
     ];
 
-    public function __construct( $arg, $alg = 'HS256' ) {
+    public function __construct( $arg ) {
         if ( $arg instanceof \WP_User ) {
-            $this->token = $this->generate( $arg, $alg );
+            $this->token = $this->generate( $arg );
         } elseif ( is_string( $arg ) ) {
             $this->error = $this->verify( $arg );
         }
     }
 
-    private function generate( $user, $alg ) {
+    private function generate( $user ) {
         $issued = time();
         $pieces = [];
 
         $header = [
             'typ' => 'jwt',
-            'alg' => $alg
+            'alg' => 'HS256'
         ];
         $payload = [
             'iss' => STTV_JWT_ISSUER,
@@ -49,7 +47,7 @@ class JWT {
 
         $pieces[] = $this->base64Encode( json_encode( $header ) );
         $pieces[] = $this->base64Encode( json_encode( $payload ) );
-        $signature = $this->sign( implode( '.', $pieces ), $alg );
+        $signature = $this->sign( implode( '.', $pieces ) );
         $pieces[] = $this->base64Encode( $signature );
 
         return implode( '.', $pieces );
@@ -73,7 +71,7 @@ class JWT {
         if ( false === ( $sig = $this->base64Decode( $sig64 ) ) ) return new WP_Error('web_token_signature_encoding_invalid','',$status);
         if ( !isset($this->algs[$header->alg]) ) return new WP_Error('web_token_algorithm_invalid','',$status);
 
-        $sigcheck = $this->sign( "$header64.$payload64", $header->alg );
+        $sigcheck = $this->sign( "$header64.$payload64" );
 
         if ( $sigcheck !== $sig ) return new WP_Error('web_token_signature_verification_failed','',$status);
         if ( $payload->iss !== STTV_JWT_ISSUER ) return new WP_Error('web_token_issuer_invalid','',$status);
@@ -85,9 +83,9 @@ class JWT {
         return false;
     }
 
-    private function sign( $input, $alg = 'HS256' ) {
-        $secret = hash_hmac( 'SHA512', LOGGED_IN_KEY, LOGGED_IN_SALT );
-        return hash_hmac( $this->algs[$alg], $input, $secret, true);
+    private function sign( $input ) {
+        $secret = hash_hmac( 'sha512', LOGGED_IN_KEY, LOGGED_IN_SALT );
+        return hash_hmac( 'sha256', $input, $secret, true);
     }
 
     private function base64Encode( $input ) {

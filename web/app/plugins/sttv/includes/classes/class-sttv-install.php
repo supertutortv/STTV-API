@@ -24,6 +24,14 @@ class Install {
             wp_id int(10) UNSIGNED,
             is_trash boolean NOT NULL DEFAULT 0,
             UNIQUE KEY id (id)
+        )',
+        'course_user_data' => '(
+            id int(10) NOT NULL AUTO_INCREMENT,
+            uid int(10) UNSIGNED,
+            data_type tinytext,
+            data_timestamp int UNSIGNED,
+            data_record text,
+            UNIQUE KEY id (id)
         )'
     ];
 
