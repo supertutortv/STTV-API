@@ -98,7 +98,9 @@ class Courses extends \WP_REST_Controller {
 
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['data_timestamp'];
-			return $ind;
+			return [
+				$ind => json_decode($rec['data_record'],true)
+			];;
 			$umeta['user'][$rec['data_type']][] = [
 				$ind => json_decode($rec['data_record'],true)
 			];
