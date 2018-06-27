@@ -99,7 +99,7 @@ class Courses extends \WP_REST_Controller {
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['data_timestamp'];
 			$umeta['user'][$rec['data_type']][] = [
-				$ind => $rec['data_record']
+				$ind => json_decode($rec['data_record'])
 			];
 		}
 
@@ -205,10 +205,12 @@ class Courses extends \WP_REST_Controller {
 					'data_record' => json_encode($body)
 				];
 				$wpdb->insert( $wpdb->prefix.'course_user_data', $updated, ['%d','%s','%d','%s'] );
+				$updated['data_record'] = json_decode($updated['data_record']);
 				break;
 			case 'userdata':
 			case 'options':
 				$updated = get_user_meta( $userid, 'sttv_user_data', true );
+				update_user_meta( $userid, 'sttv_user_data', $umeta );
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
@@ -216,7 +218,7 @@ class Courses extends \WP_REST_Controller {
 					404
 				);
 		}
-		//update_user_meta( $userid, 'sttv_user_data', $umeta );
+
 		return sttv_rest_response(
 			'resource_updated',
 			'The resource has been updated',
