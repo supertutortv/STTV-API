@@ -94,12 +94,14 @@ class Courses extends \WP_REST_Controller {
 		);
 
 		$dbtable = $wpdb->prefix.'course_user_data';
-		$cu_data = $wpdb->get_results("SELECT data_type,data_timestamp,data_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		$cu_data = $wpdb->get_results("SELECT id,data_type,data_timestamp,data_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
 
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['data_timestamp'];
 			$umeta['user'][$rec['data_type']][] = [
-				$ind => json_decode($rec['data_record'])
+				'id' => $rec['id'],
+				'timestamp' => $ind,
+				'data' => json_decode($rec['data_record'])
 			];
 		}
 
