@@ -180,7 +180,6 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$userid = get_current_user_id();
 		$body = json_decode( $request->get_body(), true );
-		//$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 		$patch = $request->get_param( 'patch' );
 		$updated = [];
 		$timestamp = time();
@@ -188,15 +187,17 @@ class Courses extends \WP_REST_Controller {
 			case 'history':
 			case 'bookmarks':
 			case 'downloads':
-				/* $updated = [
-					'ID' => $body['id'],
-					'timestamp' => $timestamp
+				$updated = [
+					'wp_id' => $userid,
+					'data_type' => $patch,
+					'data_timestamp' => $timestamp,
+					'data_record' => json_encode($body)
 				];
-				$umeta['user'][$patch] = $updated; */
+				$wpdb->insert( $wpdb->prefix.'course_user_data', $updated, ['%d','%s','%d','%s'] );
 				break;
 			case 'userdata':
 			case 'options':
-				return $patch;
+				$updated = get_user_meta( $userid, 'sttv_user_data', true );
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
