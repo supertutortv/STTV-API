@@ -106,14 +106,14 @@ class Cron {
                         }
                         preg_match('/video\/\s*([^\_]+)/', $vid['pictures']['sizes'][2]['link'], $out);
                         $vidobj[$slug] = [
-                            'ID' => $vidid,
+                            'ID' => (int) $vidid,
                             'name' => $vidname,
                             'type' => 'video',
                             'slug' => $slug,
                             'time' => $vid['duration'],
                             'tags' => $tags,
                             'text' => $vid['description'],
-                            'thumb' => $out[1],
+                            'thumb' => (int) str_replace('video/','',$out[0]),
                             'views' => $vid['stats']['plays']
                         ];
                         if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
