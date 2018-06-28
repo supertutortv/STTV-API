@@ -104,7 +104,7 @@ class Cron {
                         foreach ($stags as $tag) {
                             $tags[] = $tag['tag'];
                         }
-                        preg_match('/video\/\s*([^\_]+)/', $vid['pictures']['sizes'][2]['link'], $out);
+                        $out = substr( substr( $vid['pictures']['sizes'][2]['link'], 0, strpos( $vid['pictures']['sizes'][2]['link'], '_' ) ), strpos( $vid['pictures']['sizes'][2]['link'], 'eo/' )+3 );
                         $vidobj[$slug] = [
                             'ID' => (int) $vidid,
                             'name' => $vidname,
@@ -113,7 +113,7 @@ class Cron {
                             'time' => $vid['duration'],
                             'tags' => $tags,
                             'text' => $vid['description'],
-                            'thumb' => (int) str_replace('video/','',$out[0]),
+                            'thumb' => (int) $out,
                             'views' => $vid['stats']['plays']
                         ];
                         if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
