@@ -98,15 +98,15 @@ class Courses extends \WP_REST_Controller {
 			400
 		);
 
-		$dbtable = $wpdb->prefix.'course_user_data';
-		$cu_data = $wpdb->get_results("SELECT id,data_type,data_timestamp,data_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		$dbtable = $wpdb->prefix.'course_udata';
+		$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
 
 		foreach ($cu_data as $rec) {
-			$ind = (int) $rec['data_timestamp'];
-			$umeta['user'][$rec['data_type']][] = [
+			$ind = (int) $rec['udata_timestamp'];
+			$umeta['user'][$rec['udata_type']][] = [
 				'id' => (int) $rec['id'],
 				'timestamp' => $ind,
-				'data' => json_decode($rec['data_record'])
+				'data' => json_decode($rec['udata_record'])
 			];
 		}
 
@@ -207,12 +207,12 @@ class Courses extends \WP_REST_Controller {
 			case 'downloads':
 				$updated = [
 					'wp_id' => $userid,
-					'data_type' => $patch,
-					'data_timestamp' => $timestamp,
-					'data_record' => json_encode($body)
+					'udata_type' => $patch,
+					'udata_timestamp' => $timestamp,
+					'udata_record' => json_encode($body)
 				];
-				$wpdb->insert( $wpdb->prefix.'course_user_data', $updated, ['%d','%s','%d','%s'] );
-				$updated['data_record'] = json_decode($updated['data_record']);
+				$wpdb->insert( $wpdb->prefix.'course_udata', $updated, ['%d','%s','%d','%s'] );
+				$updated['udata_record'] = json_decode($updated['udata_record']);
 				break;
 			case 'userdata':
 			case 'options':
@@ -248,7 +248,7 @@ class Courses extends \WP_REST_Controller {
 			$delete = [
 				'id' => $v
 			];
-			$result = $wpdb->delete( $wpdb->prefix.'course_user_data', $delete, ['%d'] );
+			$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
 			if ( $result === false ) {
 				$deleted[] = [
 					'id' => 'There was an error. ID '.$v.' not deleted.'
