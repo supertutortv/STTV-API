@@ -42,9 +42,7 @@ class Limiter {
 	 * @since 1.4
 	 * @var array
 	 */
-	private $allow = [
-		'172.91.69.58'
-	];
+	private $allow = [];
 	/**
 	 * Blacklisted IP addresses.
 	 *
