@@ -137,7 +137,7 @@ class Cron {
                         
                         $contents = json_encode( $albobj, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT );
                         
-                        $filew = fopen( $path . $alb['name'] .'.cache', w );
+                        $filew = fopen( $path . str_replace( ' ', '_', $alb['name'] ) .'.cache', 'w+' );
                         fwrite( $filew, $contents );
                         fclose( $filew );
 
