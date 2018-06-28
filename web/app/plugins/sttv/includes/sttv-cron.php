@@ -66,7 +66,7 @@ class Cron {
 
         try {
             
-            $vimeo = new Vimeo( $this->vclient, $this->vsec, $this->vtok );
+            $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
             $path = dirname( __DIR__ ) . '/cache/';
 
             foreach ( $this->tests as $test ) {
