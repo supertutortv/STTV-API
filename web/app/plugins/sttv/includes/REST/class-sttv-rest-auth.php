@@ -74,6 +74,7 @@ class Auth extends \WP_REST_Controller {
             );
 
         $token = new \STTV\JWT( $login );
+        print_r($token);
 
         //do_action( 'wp_login' );
         
