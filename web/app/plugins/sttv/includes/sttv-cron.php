@@ -25,15 +25,17 @@ class Cron {
     }
 
     private function subchaser() {
-        $data = [
+        $data = json_encode([
             'type' => 'trial.expiration.checker',
             'rand' => uniqid( 'st_' )
-        ];
+        ]);
+        $key = hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] );
 
         echo $this->request( 'https://api.supertutortv.com/?sttvwebhook', [
             'headers' => [
                 'Content-Type: application/json',
-                'X-STTV-WHSEC: ' . hash_hmac( 'sha256', json_encode($data), $this->seckeys['sttvwhsec'] )
+                'Content-Length: '.strlen($data),
+                "X-STTV-WHSEC: $key"
             ],
             'body' => $data
         ]);
