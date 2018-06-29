@@ -46,7 +46,7 @@ class Courses extends \WP_REST_Controller {
 					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
-			'/data/(?P<patch>[\w]+)' => [
+			'/udata/(?P<patch>[\w]+)' => [
 				[
 					'methods' => 'PUT',
 					'callback' => [ $this, 'update_user_course_data' ],
