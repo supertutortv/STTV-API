@@ -35,6 +35,7 @@ class Cron {
             'headers' => [
                 'Content-Type: application/json',
                 'Content-Length: '.strlen($data),
+                'User-Agent: STTVCron (BUDDHA 2.0.0 / VPS)',
                 "X-STTV-WHSEC: $key"
             ],
             'body' => $data
@@ -171,9 +172,8 @@ class Cron {
 
         curl_setopt_array($req, [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => 'STTVCron (BUDDHA 2.0.0 / VPS)',
             CURLOPT_FAILONERROR => true,
-            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_HTTPHEADER => $args['headers'],
             CURLOPT_POST => true,
             CURLOPT_POSTFIELDS => $args['body']
