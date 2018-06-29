@@ -25,9 +25,8 @@ function sttv_verify_web_token( WP_REST_Request $request ) {
     if ( $token->error !== false ) return $token->error;
 
     $pieces = explode( '|', $token->payload->sub );
-    print_r($pieces);
     list( $email, $id ) = $pieces;
 
     $user = wp_set_current_user( $id );
-    return !!$user->ID;
+    return $user->ID;
 }
