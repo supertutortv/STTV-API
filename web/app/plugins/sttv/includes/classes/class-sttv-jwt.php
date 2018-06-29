@@ -54,13 +54,14 @@ class JWT {
     }
 
     private function verify( $auth = '' ) {
-        $this->token = $auth;
         $status = ['status'=>403];
         if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing','',$status);
 
         $timestamp = time();
         list($token) = sscanf($auth, 'Bearer %s');
         if (!$token) return new WP_Error('web_token_auth_header_malformed','',$status);
+
+        $this->token = $token;
 
         $pieces = explode('.', $token);
         if ( count($pieces) != 3 ) return new WP_Error('web_token_malformed','',$status);
