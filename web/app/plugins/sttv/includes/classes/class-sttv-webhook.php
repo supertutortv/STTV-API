@@ -40,6 +40,8 @@ class Webhook {
     private function __construct() {
 
         $this->request = @file_get_contents( "php://input" );
+        http_response_code( $this->http );
+        return $this->request;
         
         if ( empty( $this->request ) ) {
             $this->http = 400;
