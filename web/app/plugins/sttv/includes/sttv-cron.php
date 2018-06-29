@@ -169,7 +169,7 @@ class Cron {
 
         $req = curl_init( $route );
 
-        curl_setopt_array($curl, [
+        curl_setopt_array($req, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT => 'STTVCron (BUDDHA 2.0.0 / VPS)',
             CURLOPT_FAILONERROR => true,
