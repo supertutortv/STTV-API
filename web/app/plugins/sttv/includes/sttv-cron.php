@@ -31,19 +31,14 @@ class Cron {
                 'rand' => uniqid( 'st_' )
             ]
         );
-        $opts = [ 
-            'http' => [
-                'method'  => 'POST',
-                'ignore_errors' => '1',
-                'header'  =>
-                    "User-Agent: STTVCron (BUDDHA 2.0.0 / VPS)\r\n".
-                    "Content-Type: application/json\r\n".
-                    "X-STTV-WHSEC: " . hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] ) . "\r\n",
-                'content' => $data
-            ]
-        ];
-        $context  = stream_context_create( $opts );
-        echo file_get_contents( 'https://api.supertutortv.com/?sttvwebhook', false, $context );
+
+        echo $this->request( 'https://api.supertutortv.com/?sttvwebhook', [
+            'headers' => [
+                'Content-Type: application/json',
+                'X-STTV-WHSEC: ' . hash_hmac( 'sha256', $data, $this->seckeys['sttvwhsec'] )
+            ],
+            'body' => $data
+        ]);
     }
 
     private function rename_albums() {
@@ -169,6 +164,30 @@ class Cron {
         return $title;
     }
 
+    private function request( $route = '', $args = [] ) {
+        if ( empty($route) ) return false;
+
+        $req = curl_init( $route );
+
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_USERAGENT => 'STTVCron (BUDDHA 2.0.0 / VPS)',
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_HTTPHEADER => $args['headers'],
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $args['body']
+        ]);
+
+        $res = curl_exec( $req );
+        
+
+        if ( !$res ) {
+            echo 'Error: "' . curl_error($req) . '" - Code: ' . curl_errno($req);
+        } else {
+            echo $req;
+        }
+        curl_close( $req );
+    }
 }
 
 $cron = new Cron( $argv[1] );
