@@ -39,8 +39,7 @@ class Auth extends \WP_REST_Controller {
             '/token/verify' => [
                 [
                     'methods' => 'POST',
-                    'permission_callback' => 'sttv_verify_web_token',
-                    //'callback' => [ $this, 'verify' ]
+                    'callback' => 'sttv_verify_web_token'
                 ]
             ],
             '/logout' => [
@@ -82,15 +81,6 @@ class Auth extends \WP_REST_Controller {
             'Login successful!',
             200,
             [ 'token' => $token->token ]
-        );
-    }
-
-    public function verify( WP_REST_Request $req ) {
-        return sttv_verify_web_token( $req );
-        return sttv_rest_response(
-            'token_verified',
-            'You provided a valid JSON web token to the API.',
-            200
         );
     }
 
