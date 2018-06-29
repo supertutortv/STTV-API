@@ -23,10 +23,9 @@ function sttv_rest_response( $code = '', $msg = '', $status = 200, $extra = [] )
 function sttv_verify_web_token( WP_REST_Request $request ) {
     $token = new \STTV\JWT( $request->get_header('Authorization') );
     if ( $token->error !== false ) return $token->error;
-    print_r($token->payload->sub);
-    return;
 
     $pieces = explode( '|', $token->payload->sub );
+    print_r($pieces);
     list( $email, $id ) = $pieces;
 
     $user = wp_set_current_user( $id );
