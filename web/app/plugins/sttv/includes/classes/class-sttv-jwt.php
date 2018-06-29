@@ -54,6 +54,7 @@ class JWT {
     }
 
     private function verify( $auth = '' ) {
+        $this->token = $auth;
         $status = ['status'=>403];
         if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing','',$status);
 
