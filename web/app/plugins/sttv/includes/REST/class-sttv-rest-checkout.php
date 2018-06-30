@@ -31,16 +31,9 @@ class Checkout extends \WP_REST_Controller {
 
     private $timestamp;
 
-    const BOOK_PRICE = 2500;
-
     public function __construct() {
-
-        $zips = get_option( 'sttv_ca_zips' );
-
-        $countrydd = get_option( 'sttv_country_options' );
-
-        $this->zips = json_decode( $zips );
-        $this->countrydd = $countrydd;
+        $this->zips = json_decode( get_option( 'sttv_ca_zips' ) );
+        $this->countrydd = get_option( 'sttv_country_options' );
         $this->timestamp = time();
     }
 
@@ -53,7 +46,8 @@ class Checkout extends \WP_REST_Controller {
                     'permission_callback' => '__return_true',
                     'args' => [
                         'pricing' => [
-                            'required' => false
+                            'required' => false,
+                            'description' => 'Course ID to retrieve pricing'
                         ],
                         'email' => [
                             'required' => false,
@@ -65,10 +59,10 @@ class Checkout extends \WP_REST_Controller {
                             'type' => 'string',
                             'description' => 'Coupon to check'
                         ],
-                        'zip' => [
+                        'tax' => [
                             'required' => false,
                             'type' => 'string',
-                            'description' => 'Postal code to check'
+                            'description' => 'Postal code to check for tax rate'
                         ]
                     ]
                 ],
@@ -88,14 +82,14 @@ class Checkout extends \WP_REST_Controller {
     public function sttv_parameter_checker( WP_REST_Request $request ) {
         $pars = $request->get_params();
 
-        if ( isset( $pars['pricing'] ) ) {
-            return $this->_pricing($pars['pricing']);
-        } elseif ( isset( $pars['email'] ) ) {
+        if ( isset( $pars['pricing'] ) && !empty($pars['pricing']) ) {
+            return $this->_pricing( $pars['pricing'] );
+        } elseif ( isset( $pars['email'] ) && !empty($pars['email']) ) {
             return $this->check_email( sanitize_email($pars['email']) );
-        } elseif ( isset( $pars['coupon'] ) ) {
+        } elseif ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
             return $this->check_coupon( sanitize_text_field($pars['coupon']) );
-        } elseif ( isset( $pars['zip'] ) ) {
-            return $this->check_zip( sanitize_text_field($pars['zip']) );
+        } elseif ( isset( $pars['tax'] ) && !empty($pars['tax']) ) {
+            return $this->check_zip( sanitize_text_field($pars['tax']) );
         } else {
             return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
