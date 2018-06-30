@@ -30,7 +30,11 @@ function sttv_uid ( $prefix = '', $random = '', $entropy = false, $length = 0 ){
 	return substr( $string, 0, ($length ?: strlen($string)) );
 }
 
-function sttv_id_converter( $hid ) {
+function sttv_id_encode( $hid ) {
+	return dechex($hid*100000);
+}
+
+function sttv_id_decode( $hid ) {
 	return hexdec($hid) / 100000;
 }
 

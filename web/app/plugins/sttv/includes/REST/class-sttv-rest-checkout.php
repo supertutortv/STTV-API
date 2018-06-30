@@ -338,9 +338,8 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $id ) {
-        return sttv_id_converter( $id );
         $pricing = $code = $msg = '';
-        $course = get_post( $id );
+        $course = get_post( sttv_id_decode($id) );
 
         if ( !$course ) {
             $code = 'checkout_pricing_course_invalid';
@@ -351,12 +350,7 @@ class Checkout extends \WP_REST_Controller {
             $code = 'checkout_pricing_success';
         }
 
-        return sttv_rest_response(
-            $code,
-            $msg,
-            200,
-            ['data' => $pricing]
-        );
+        return sttv_rest_response( $code, $msg, 200, ['data' => $pricing] );
     }
 
     private function check_email( $email = '' ) {
