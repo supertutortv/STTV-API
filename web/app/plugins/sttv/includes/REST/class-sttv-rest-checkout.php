@@ -78,7 +78,7 @@ class Checkout extends \WP_REST_Controller {
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
-			WP_REST_Server::register_route( 'checkout', $route, $endpoint );
+			rest_get_server()->register_route( 'checkout', $route, $endpoint );
 		}
     }
 
