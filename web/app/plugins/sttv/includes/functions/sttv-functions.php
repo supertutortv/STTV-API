@@ -30,6 +30,10 @@ function sttv_uid ( $prefix = '', $random = '', $entropy = false, $length = 0 ){
 	return substr( $string, 0, ($length ?: strlen($string)) );
 }
 
+function sttv_id_converter( $hid ) {
+	return (int) trim( hexdec($hid), 0 );
+}
+
 function sttv_404_redirect() {
 	global $wp_query;
 	$wp_query->set_404();
