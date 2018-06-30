@@ -341,20 +341,24 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $id ) {
+        $pricing = $code = $msg = '';
         $course = get_post( $id );
 
+        return get_post_meta( $course->ID, 'sttv_course_data', true );
+
         if ( !$course ) {
-            return 'Invalid course id';
+            $code = 'checkout_pricing_course_invalid';
+            $msg = 'The course ID provided is invalid. Please try again.';
+        } else {
+
+            $code = 'checkout_pricing_success';
         }
 
         return sttv_rest_response(
-            'checkout',
-            'Here\'s your checkout, bitch!',
+            $code,
+            $msg,
             200,
-            [ 
-                'data' => $body,
-                'html' => ob_get_clean()
-            ]
+            ['data' => $pricing]
         );
     }
 
