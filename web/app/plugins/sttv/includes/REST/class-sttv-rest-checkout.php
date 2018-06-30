@@ -341,8 +341,11 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $id ) {
-        return get_post( $id );
-        //$course = get_post( $id );
+        $course = get_post( $id );
+
+        if ( !$course ) {
+            return 'Invalid course id';
+        }
 
         return sttv_rest_response(
             'checkout',
