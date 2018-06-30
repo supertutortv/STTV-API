@@ -92,7 +92,7 @@ class Checkout extends \WP_REST_Controller {
         $pars = $request->get_params();
 
         if ( isset( $pars['pricing'] ) ) {
-            return $pars;
+            return $this->_pricing($pars['pricing']);
         } elseif ( isset( $pars['email'] ) ) {
             return $this->check_email( sanitize_email($pars['email']) );
         } elseif ( isset( $pars['coupon'] ) ) {
@@ -340,16 +340,9 @@ class Checkout extends \WP_REST_Controller {
         }
     }
 
-    private function checkout_init( $body ) {
-        // save cart in db
-
-        ob_start();
-
-        sttv_get_template('checkout','checkout',[
-            'countrydd' => $this->countrydd,
-            'user' => wp_get_current_user(),
-            'type' => 'checkout'
-        ]);
+    private function _pricing( $id ) {
+        return get_post( $id );
+        //$course = get_post( $id );
 
         return sttv_rest_response(
             'checkout',
