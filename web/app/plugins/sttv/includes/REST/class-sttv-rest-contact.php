@@ -28,7 +28,7 @@ class Contact extends \WP_REST_Controller {
     public function register_routes() {
 
         $routes = [
-            '/form' => [
+            '/send' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'contact_form_processor' ],

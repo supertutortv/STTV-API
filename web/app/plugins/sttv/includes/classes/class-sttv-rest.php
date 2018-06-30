@@ -81,6 +81,8 @@ class API {
         require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-multiuser.php';
         require_once $path . 'class-sttv-rest-courses.php';
+        require_once $path . 'class-sttv-rest-feedback.php';
+        require_once $path . 'class-sttv-rest-reviews.php';
         require_once $path . 'class-sttv-rest-contact.php';
     }
 
@@ -90,6 +92,8 @@ class API {
             'STTV\REST\Checkout',
             'STTV\REST\MultiUser',
             'STTV\REST\Courses',
+            'STTV\REST\Feedback',
+            'STTV\REST\Reviews',
             'STTV\REST\Contact',
         ];
 

@@ -1,53 +1,61 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit;
+namespace STTV\REST;
+
+defined( 'ABSPATH' ) || exit;
+
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
+
 /**
- * SupertutorTV product page reviews.
+ * SupertutorTV course user reviews.
  *
- * REST endpoints for adding, displaying, and updating product reviews.
+ * REST endpoints for adding, displaying, and updating course reviews submitted by subscribed students.
  *
- * @class 		STTV_Product_Reviews
- * @version		1.1.0
+ * @class 		Reviews
+ * @version		2.0.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
  */
 
-class STTV_Product_Reviews extends \WP_REST_Controller {
+class Reviews extends \WP_REST_Controller {
 	
-	public function __construct() {
-		add_action( 'rest_api_init', array($this,'sttv_product_reviews_api') );
-	}
+	public function __construct() {}
 	
-	public function sttv_product_reviews_api() {
- 		register_rest_route( STTV_REST_NAMESPACE, '/reviews/(?P<id>[\d]+)', 
-			array(
-				array(
+	public function register_routes() {
+		$routes = [
+			'/reviews' => [
+				[
+					'methods' => 'PUT',
+					'callback' => [ $this, 'post_product_review' ],
+					'permission_callback' => [ $this, 'can_post_reviews' ]
+				],
+				[
+					'methods' => 'POST',
+					'callback' => [ $this, 'get_review_template' ],
+					'permission_callback' => 'is_user_logged_in'
+				]
+			],
+			'/reviews/(?P<id>[\d]+)' => [
+				[
 					'methods' => 'GET',
-					'callback' => array($this,'get_product_reviews'),
+					'callback' => [ $this, 'get_product_reviews' ],
 					'permission_callback' => 'is_user_logged_in',
-					'args' => array(
-						'id' => array(
+					'args' => [
+						'id' => [
 							'validate_callback' => 'absint',
 							'required' => true
-						)
-					)
-				)
-			)
-		);
-		register_rest_route( STTV_REST_NAMESPACE, '/reviews/',
-			array(
-				array(
-					'methods' => 'PUT',
-					'callback' => array($this,'post_product_review'),
-					'permission_callback' => array($this,'can_post_reviews')
-				),
-				array(
-					'methods' => 'POST',
-					'callback' => array($this,'get_review_template'),
-					'permission_callback' => 'is_user_logged_in'
-				)
-			)
-		);
+						]
+					]
+				]
+			]
+		];
+
+		foreach ( $routes as $route => $endpoint ) {
+			register_rest_route( 'courses', $route, $endpoint );
+		}
 	} // end sttv_product_reviews_api
 	
 	public function get_product_reviews($data) {
@@ -106,4 +114,3 @@ class STTV_Product_Reviews extends \WP_REST_Controller {
 	}
 	
 }
-new STTV_Product_Reviews;
