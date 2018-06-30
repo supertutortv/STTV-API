@@ -27,20 +27,14 @@ class Courses extends \WP_REST_Controller {
 
 	public function register_routes() {
 		$routes = [
-			'/data/(?P<patch>[\w]+)' => [
+			'/data' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token',
-					'args' => [
-						'patch' => [
-							'required' => false,
-							'type' => 'string'
-						]
-					]
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
-			'/udata/(?P<patch>[\w]+)' => [
+			'/data/(?P<patch>[\w]+)' => [
 				[
 					'methods' => 'PUT',
 					'callback' => [ $this, 'update_user_course_data' ],
