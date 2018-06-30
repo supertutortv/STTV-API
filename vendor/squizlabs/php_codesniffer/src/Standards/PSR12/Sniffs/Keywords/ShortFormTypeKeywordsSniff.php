@@ -1,18 +1,18 @@
 <?php
 /**
- * Checks the indenting used when an ob_start() call occurs.
+ * Verifies that the short form of type keywords is used (e.g., int, bool).
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Standards\Squiz\Sniffs\PHP;
+namespace PHP_CodeSniffer\Standards\PSR12\Sniffs\Keywords;
 
 use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
-class DisallowObEndFlushSniff implements Sniff
+class ShortFormTypeKeywordsSniff implements Sniff
 {
 
 
@@ -23,7 +23,10 @@ class DisallowObEndFlushSniff implements Sniff
      */
     public function register()
     {
-        return [T_STRING];
+        return [
+            T_BOOL_CAST,
+            T_INT_CAST,
+        ];
 
     }//end register()
 
@@ -41,8 +44,22 @@ class DisallowObEndFlushSniff implements Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        if ($tokens[$stackPtr]['content'] === 'ob_end_flush') {
-            $phpcsFile->addError('Use of ob_end_flush() is not allowed; use ob_get_contents() and ob_end_clean() instead', $stackPtr, 'Found');
+        if (($tokens[$stackPtr]['code'] === T_BOOL_CAST
+            && strtolower($tokens[$stackPtr]['content']) === '(bool)')
+            || ($tokens[$stackPtr]['code'] === T_INT_CAST
+            && strtolower($tokens[$stackPtr]['content']) === '(int)')
+        ) {
+            return;
+        }
+
+        $error = 'Short form type keywords must be used';
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'LongFound');
+        if ($fix === true) {
+            if ($tokens[$stackPtr]['code'] === T_BOOL_CAST) {
+                $phpcsFile->fixer->replaceToken($stackPtr, '(bool)');
+            } else {
+                $phpcsFile->fixer->replaceToken($stackPtr, '(int)');
+            }
         }
 
     }//end process()

@@ -1,17 +1,17 @@
 <?php
 /**
- * Unit test class for the ForbiddenFunctions sniff.
+ * Unit test class for the ShortFormTypeKeywords sniff.
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Standards\Squiz\Tests\PHP;
+namespace PHP_CodeSniffer\Standards\PSR12\Tests\Keywords;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
-class ForbiddenFunctionsUnitTest extends AbstractSniffUnitTest
+class ShortFormTypeKeywordsUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -26,10 +26,9 @@ class ForbiddenFunctionsUnitTest extends AbstractSniffUnitTest
     public function getErrorList()
     {
         return [
-            2 => 1,
             3 => 1,
-            4 => 1,
             5 => 1,
+            7 => 1,
         ];
 
     }//end getErrorList()

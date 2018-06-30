@@ -328,59 +328,6 @@
         ]
     },
     {
-        "name": "squizlabs/php_codesniffer",
-        "version": "3.2.3",
-        "version_normalized": "3.2.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-            "reference": "4842476c434e375f9d3182ff7b89059583aa8b27"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4842476c434e375f9d3182ff7b89059583aa8b27",
-            "reference": "4842476c434e375f9d3182ff7b89059583aa8b27",
-            "shasum": ""
-        },
-        "require": {
-            "ext-simplexml": "*",
-            "ext-tokenizer": "*",
-            "ext-xmlwriter": "*",
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
-        },
-        "time": "2018-02-20T21:35:23+00:00",
-        "bin": [
-            "bin/phpcs",
-            "bin/phpcbf"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Greg Sherwood",
-                "role": "lead"
-            }
-        ],
-        "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-        "homepage": "http://www.squizlabs.com/php-codesniffer",
-        "keywords": [
-            "phpcs",
-            "standards"
-        ]
-    },
-    {
         "name": "johnpbloch/wordpress-core",
         "version": "4.9.6",
         "version_normalized": "4.9.6.0",
@@ -486,18 +433,40 @@
         "homepage": "https://wordpress.org/plugins/members/"
     },
     {
-        "name": "stripe/stripe-php",
-        "version": "v6.7.4",
-        "version_normalized": "6.7.4.0",
+        "name": "wpackagist-plugin/advanced-custom-fields",
+        "version": "5.6.10",
+        "version_normalized": "5.6.10.0",
         "source": {
-            "type": "git",
-            "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "67fee13fcb344aa865076589888f4afef542dfd7"
+            "type": "svn",
+            "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
+            "reference": "tags/5.6.10"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/67fee13fcb344aa865076589888f4afef542dfd7",
-            "reference": "67fee13fcb344aa865076589888f4afef542dfd7",
+            "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.5.6.10.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "type": "wordpress-plugin",
+        "installation-source": "dist",
+        "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
+    },
+    {
+        "name": "stripe/stripe-php",
+        "version": "v6.10.0",
+        "version_normalized": "6.10.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stripe/stripe-php.git",
+            "reference": "be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d",
+            "reference": "be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d",
             "shasum": ""
         },
         "require": {
@@ -511,7 +480,7 @@
             "satooshi/php-coveralls": "~0.6.1",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2018-05-30T00:13:55+00:00",
+        "time": "2018-06-28T15:25:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -543,25 +512,56 @@
         ]
     },
     {
-        "name": "wpackagist-plugin/advanced-custom-fields",
-        "version": "5.6.10",
-        "version_normalized": "5.6.10.0",
+        "name": "squizlabs/php_codesniffer",
+        "version": "3.3.0",
+        "version_normalized": "3.3.0.0",
         "source": {
-            "type": "svn",
-            "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
-            "reference": "tags/5.6.10"
+            "type": "git",
+            "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+            "reference": "d86873af43b4aa9d1f39a3601cc0cfcf02b25266"
         },
         "dist": {
             "type": "zip",
-            "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.5.6.10.zip",
-            "reference": null,
-            "shasum": null
+            "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d86873af43b4aa9d1f39a3601cc0cfcf02b25266",
+            "reference": "d86873af43b4aa9d1f39a3601cc0cfcf02b25266",
+            "shasum": ""
         },
         "require": {
-            "composer/installers": "~1.0"
+            "ext-simplexml": "*",
+            "ext-tokenizer": "*",
+            "ext-xmlwriter": "*",
+            "php": ">=5.4.0"
         },
-        "type": "wordpress-plugin",
+        "require-dev": {
+            "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+        },
+        "time": "2018-06-06T23:58:19+00:00",
+        "bin": [
+            "bin/phpcs",
+            "bin/phpcbf"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.x-dev"
+            }
+        },
         "installation-source": "dist",
-        "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Greg Sherwood",
+                "role": "lead"
+            }
+        ],
+        "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+        "homepage": "http://www.squizlabs.com/php-codesniffer",
+        "keywords": [
+            "phpcs",
+            "standards"
+        ]
     }
 ]

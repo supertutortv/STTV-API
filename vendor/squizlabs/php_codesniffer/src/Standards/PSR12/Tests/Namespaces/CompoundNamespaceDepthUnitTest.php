@@ -1,17 +1,17 @@
 <?php
 /**
- * Unit test class for the DisallowObEndFlush sniff.
+ * Unit test class for the CompoundNamespaceDepth sniff.
  *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
 
-namespace PHP_CodeSniffer\Standards\Squiz\Tests\PHP;
+namespace PHP_CodeSniffer\Standards\PSR12\Tests\Namespaces;
 
 use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 
-class DisallowObEndFlushUnitTest extends AbstractSniffUnitTest
+class CompoundNamespaceDepthUnitTest extends AbstractSniffUnitTest
 {
 
 
@@ -25,7 +25,11 @@ class DisallowObEndFlushUnitTest extends AbstractSniffUnitTest
      */
     public function getErrorList()
     {
-        return [9 => 1];
+        return [
+            10 => 1,
+            18 => 1,
+            21 => 1,
+        ];
 
     }//end getErrorList()
 

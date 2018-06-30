@@ -355,16 +355,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.7.4",
+            "version": "v6.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "67fee13fcb344aa865076589888f4afef542dfd7"
+                "reference": "be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/67fee13fcb344aa865076589888f4afef542dfd7",
-                "reference": "67fee13fcb344aa865076589888f4afef542dfd7",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d",
+                "reference": "be46d55c4a67265d6fe3eaf2ff69f6cfffe0034d",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-05-30T00:13:55+00:00"
+            "time": "2018-06-28T15:25:46+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -502,16 +502,16 @@
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.2.3",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27"
+                "reference": "d86873af43b4aa9d1f39a3601cc0cfcf02b25266"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4842476c434e375f9d3182ff7b89059583aa8b27",
-                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d86873af43b4aa9d1f39a3601cc0cfcf02b25266",
+                "reference": "d86873af43b4aa9d1f39a3601cc0cfcf02b25266",
                 "shasum": ""
             },
             "require": {
@@ -549,7 +549,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-02-20T21:35:23+00:00"
+            "time": "2018-06-06T23:58:19+00:00"
         }
     ],
     "aliases": [],
