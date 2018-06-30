@@ -97,17 +97,11 @@ class Checkout extends \WP_REST_Controller {
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
-            return sttv_rest_response( 'bad_request', 'Request body cannot be empty', 400 );
+            return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
         }
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
-
-        return $body;
-
-        if ( isset($body['init']) && $body['init'] ) {
-            return $this->checkout_init( $body );
-        }
 
         if ( isset($body['muid']) ) {
             return $this->_mu_checkout( $body );
@@ -238,7 +232,7 @@ class Checkout extends \WP_REST_Controller {
                 return sttv_rest_response(
                     'user_insert_error',
                     'There was an error adding you as a user. Please check your registration form and try again.',
-                    400,
+                    200,
                     [ 'data' => $user_id ]
                 );
             }
@@ -271,7 +265,7 @@ class Checkout extends \WP_REST_Controller {
             if ( $body['shipping'] ) {
                 $items[100] = [
                     'customer' => $customer['id'],
-                    'amount' => 1285,
+                    'amount' => 705,
                     'currency' => 'usd',
                     'description' => 'Priority Shipping',
                     'discountable' => false
