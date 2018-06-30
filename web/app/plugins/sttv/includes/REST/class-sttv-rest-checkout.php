@@ -46,11 +46,11 @@ class Checkout extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
-			'/verify' => [
+			'/checkout' => [
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
-                    'permission_callback' => 'sttv_verify_rest_nonce',
+                    //'permission_callback' => 'sttv_verify_rest_nonce',
                     'args' => [
                         'email' => [
                             'required' => false,
@@ -68,23 +68,22 @@ class Checkout extends \WP_REST_Controller {
                             'description' => 'Postal code to check'
                         ]
                     ]
-                ]
-            ],
-            '/pay' => [
+                ],
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'sttv_checkout' ],
-                    'permission_callback' => 'sttv_verify_rest_nonce',
+                    //'permission_callback' => 'sttv_verify_rest_nonce',
                 ]
             ]
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
-			register_rest_route( 'checkout', $route, $endpoint );
+			register_rest_route( '', $route, $endpoint );
 		}
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
+        return $request->get_headers();
         $pars = $request->get_params();
 
         if ( isset( $pars['email'] ) ) {
@@ -101,6 +100,8 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
+        return $request->get_headers();
+
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
