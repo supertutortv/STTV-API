@@ -338,7 +338,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $id ) {
-        return hexdec( $id );
+        return sttv_id_converter( $id );
         $pricing = $code = $msg = '';
         $course = get_post( $id );
 
