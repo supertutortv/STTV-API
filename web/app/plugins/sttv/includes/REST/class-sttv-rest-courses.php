@@ -27,22 +27,10 @@ class Courses extends \WP_REST_Controller {
 
 	public function register_routes() {
 		$routes = [
-			'/alert' => [
-				[
-					'methods' => 'GET',
-					'callback' => [ $this, 'get_course_meta' ],
-					'permission_callback' => [ $this, 'course_permissions_check' ]
-				]
-			],
-			'/data' => [
+			'/data/(?P<patch>[\w]+)' => [
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token'
-				],
-				[
-					'methods' => 'DELETE',
-					'callback' => [ $this, 'delete_user_course_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
@@ -57,6 +45,11 @@ class Courses extends \WP_REST_Controller {
 							'type' => 'string'
 						]
 					]
+				],
+				[
+					'methods' => 'DELETE',
+					'callback' => [ $this, 'delete_user_course_data' ],
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
 			'/feedback' => [
