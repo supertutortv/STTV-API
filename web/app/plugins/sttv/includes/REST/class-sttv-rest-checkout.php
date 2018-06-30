@@ -344,13 +344,12 @@ class Checkout extends \WP_REST_Controller {
         $pricing = $code = $msg = '';
         $course = get_post( $id );
 
-        return get_post_meta( $course->ID, 'sttv_course_data', true );
-
         if ( !$course ) {
             $code = 'checkout_pricing_course_invalid';
             $msg = 'The course ID provided is invalid. Please try again.';
         } else {
-
+            $pricing = get_post_meta( $course->ID, 'sttv_course_data', true )['pricing'];
+            unset( $pricing['renewals'] );
             $code = 'checkout_pricing_success';
         }
 
