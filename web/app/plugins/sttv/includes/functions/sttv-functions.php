@@ -31,7 +31,7 @@ function sttv_uid ( $prefix = '', $random = '', $entropy = false, $length = 0 ){
 }
 
 function sttv_id_converter( $hid ) {
-	return (int) trim( hexdec($hid), 0 );
+	return hexdec($hid) / 100000;
 }
 
 function sttv_404_redirect() {
