@@ -336,7 +336,7 @@ class Checkout extends \WP_REST_Controller {
             $code = 'checkout_pricing_success';
         }
 
-        return sttv_rest_response( $code, $msg, 200, ['data' => $pricing] );
+        return sttv_rest_response( $code, $msg, 200, ['data' => ['pricing' => $pricing]]);
     }
 
     private function check_email( $email = '' ) {
