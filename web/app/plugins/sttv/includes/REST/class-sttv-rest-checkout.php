@@ -50,7 +50,7 @@ class Checkout extends \WP_REST_Controller {
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
-                    'permission_callback' => 'sttv_verify_rest_nonce',
+                    'permission_callback' => '__return_true',
                     'args' => [
                         'pricing' => [
                             'required' => false,
