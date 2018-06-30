@@ -43,7 +43,6 @@ class Checkout extends \WP_REST_Controller {
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
-                    'permission_callback' => '__return_true',
                     'args' => [
                         'pricing' => [
                             'required' => false,
@@ -68,8 +67,7 @@ class Checkout extends \WP_REST_Controller {
                 ],
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'sttv_checkout' ],
-                    //'permission_callback' => 'sttv_verify_rest_nonce',
+                    'callback' => [ $this, 'sttv_checkout' ]
                 ]
             ]
 		];
@@ -96,8 +94,6 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
-        return $request->get_headers();
-
         $body = json_decode($request->get_body(),true);
         
         if ( empty($body) ){
@@ -106,6 +102,8 @@ class Checkout extends \WP_REST_Controller {
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
+
+        return $body;
 
         if ( isset($body['init']) && $body['init'] ) {
             return $this->checkout_init( $body );
@@ -349,57 +347,48 @@ class Checkout extends \WP_REST_Controller {
 
     private function check_email( $email = '' ) {
         if ( !is_email( $email ) ) {
-            return $this->checkout_generic_response( 'bad_request', 'Email cannot be empty or blank, and must be a valid email address.', 400 );
+            return sttv_rest_response( 'bad_request', 'Email cannot be empty or blank, and must be a valid email address.', 400 );
         }
         
         if ( wp_get_current_user()->user_email === $email ) {
-            return $this->checkout_generic_response( 'email_current_user', 'Email address is the same as the currently logged in user', 200 );
+            return sttv_rest_response( 'email_current_user', 'Email address is the same as the currently logged in user', 200 );
         }
 
         if ( email_exists( $email ) ) {
-            return $this->checkout_generic_response( 'email_taken', 'Email address is already in use', 200 );
+            return sttv_rest_response( 'email_taken', 'Email address is already in use', 200 );
         }
         
-        return $this->checkout_generic_response( 'email_available', 'Email address available', 200 );
+        return sttv_rest_response( 'email_available', 'Email address available', 200 );
     }
 
     private function check_coupon( $coupon = '' ) {
         if ( empty( $coupon ) ) {
-            return $this->checkout_generic_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
+            return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         }
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
             if ( $coupon->valid ) {
-                return $this->checkout_generic_response( 'coupon_valid', 'valid coupon', 200, [
+                return sttv_rest_response( 'coupon_valid', 'valid coupon', 200, [
                     'percent_off' => $coupon->percent_off ?? 0,
                     'amount_off' => $coupon->amount_off ?? 0,
                     'id' => $coupon->id
                 ]);
             } else {
-                return $this->checkout_generic_response( 'coupon_expired', 'expired coupon', 200 );
+                return sttv_rest_response( 'coupon_expired', 'expired coupon', 200 );
             }
         } catch ( \Exception $e ) {
             $body = $e->getJsonBody();
-            return $this->checkout_generic_response( 'coupon_invalid', 'invalid coupon', 200, [
+            return sttv_rest_response( 'coupon_invalid', 'invalid coupon', 200, [
                 'error' => $body['error']
             ]);
         }
     }
 
-    private function check_zip( $zip = '' ) {
-        if ( empty( $zip ) ) {
-            return $this->checkout_generic_response( 'bad_request', 'ZIP/Postal code cannot be empty or blank.', 400 );
-        }
-
+    private function check_zip( $zip ) {
         $this->set_tax( $zip );
         $msg = ($this->tax > 0) ? "CA tax ($this->tax%)" : "";
 
-        return $this->checkout_generic_response(
-            'checkout_tax',
-            $msg,
-            200,
-            [ 'tax' => $this->tax ]
-        );
+        return sttv_rest_response( 'checkout_tax', $msg, 200, ['data' => ['tax' => $this->tax] ] );
     }
 
     private function set_tax( $zip ) {
@@ -414,22 +403,5 @@ class Checkout extends \WP_REST_Controller {
                 }
             }
         }
-    }
-
-    public function checkout_origin_verify( WP_REST_Request $request ) {
-        return true;
-        return !!wp_verify_nonce( $request->get_header('X-WP-Nonce'), STTV_REST_AUTH );
-    }
-
-    private function checkout_generic_response( $code = '', $msg = '', $status = 200, $extra = [] ) {
-        $data = [
-            'code'    => $code,
-            'message' => $msg,
-            'data'    => [ 
-                'status' => $status
-            ]
-        ];
-        $data = array_merge($data, (array) $extra);
-        return new WP_REST_Response( $data, $status );
     }
 }
