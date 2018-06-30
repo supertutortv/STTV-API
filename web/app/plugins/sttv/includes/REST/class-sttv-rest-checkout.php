@@ -87,17 +87,16 @@ class Checkout extends \WP_REST_Controller {
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
-        return $request->get_headers();
         $pars = $request->get_params();
 
-        if ( isset( $pars['email'] ) ) {
+        if ( isset( $pars['pricing'] ) ) {
+            return $pars;
+        } elseif ( isset( $pars['email'] ) ) {
             return $this->check_email( sanitize_email($pars['email']) );
         } elseif ( isset( $pars['coupon'] ) ) {
             return $this->check_coupon( sanitize_text_field($pars['coupon']) );
         } elseif ( isset( $pars['zip'] ) ) {
             return $this->check_zip( sanitize_text_field($pars['zip']) );
-        } elseif ( isset( $pars['sid'] ) ) {
-            //return (new MultiUserPermissions('1c74e69ef1f4f0388bc6da713a599142'))->roll_key()->get_current_key();
         } else {
             return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
