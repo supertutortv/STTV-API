@@ -53,10 +53,7 @@ class Checkout extends \WP_REST_Controller {
                     'permission_callback' => '__return_true',
                     'args' => [
                         'pricing' => [
-                            'required' => false,
-                            'sanitize_callback' => function( $p ) {
-                                return intval($p);
-                            }
+                            'required' => false
                         ],
                         'email' => [
                             'required' => false,
