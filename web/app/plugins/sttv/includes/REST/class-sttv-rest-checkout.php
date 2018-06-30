@@ -46,7 +46,7 @@ class Checkout extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
-			'/' => [
+			'/checkout' => [
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
@@ -78,7 +78,7 @@ class Checkout extends \WP_REST_Controller {
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
-			rest_get_server()->register_route( 'checkout', $route, $endpoint );
+			rest_get_server()->register_route( '', $route, $endpoint );
 		}
     }
 
