@@ -191,13 +191,13 @@ class Courses extends \WP_REST_Controller {
 			case 'userdata':
 			case 'settings':
 				if ( isset( $body['autoplay'] ) ) {
-					$updated[$body['autoplay']] = $umeta['user']['settings']['autoplay'] = !!$body['autoplay'];
+					$updated['autoplay'] = $umeta['user']['settings']['autoplay'] = !!$body['autoplay'];
 				}
 				if ( isset( $body['dark_mode'] ) ) {
-					$updated[$body['dark_mode']] = $umeta['user']['settings']['dark_mode'] = !!$body['dark_mode'];
+					$updated['dark_mode'] = $umeta['user']['settings']['dark_mode'] = !!$body['dark_mode'];
 				}
 				if ( isset( $body['default_course'] ) ) {
-					$updated[$body['default_course']] = $umeta['user']['settings']['default_course'] = sanitize_title_with_dashes($body['default_course']);
+					$updated['default_course'] = $umeta['user']['settings']['default_course'] = sanitize_title_with_dashes($body['default_course']);
 				}
 				update_user_meta( $userid, 'sttv_user_data', $umeta );
 				break;
