@@ -75,6 +75,7 @@ class Auth extends \WP_REST_Controller {
             'id' => $login->ID,
             'email' => $login->user_email
         ]);
+        do_action( 'wp_login' );
         
         return sttv_rest_response(
             'login_success',
