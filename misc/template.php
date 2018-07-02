@@ -8,6 +8,7 @@ http_response_code(401);
         <style type="text/css">
         body {
             font-size: 8px;
+			white-space: pre-line
         }
         </style>
     </head>
