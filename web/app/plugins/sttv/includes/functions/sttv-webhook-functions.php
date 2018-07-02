@@ -70,11 +70,19 @@ function trial_expiration_checker() {
 function customer_created( $data ) {
     $customer = $data['data']['object'];
     return update_user_meta( $customer['metadata']['wp_id'], 'sttv_user_data', [
-        'customer' => $customer['id'],
-        'uid' => $customer['invoice_prefix'],
-        'orders' => [],
-        'login_timestamps' => [],
-        'user' => [],
+        'user' => [
+            'settings' => [
+                'autoplay' => false,
+                'default_course' => '',
+                'dark_mode' => false
+            ],
+            'data' => [
+                'customer' => $customer['id'],
+                'uid' => $customer['invoice_prefix'],
+                'orders' => [],
+                'login_timestamps' => [],
+            ]
+        ],
         'courses' => []
     ]);
 }
@@ -154,7 +162,7 @@ function invoice_payment_succeeded( $data ) {
     }
 
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $umeta['orders'][] = $obj['id'];
+    $umeta['user']['data']['orders'][] = $obj['id'];
     $umeta['courses'][$course['slug']] = [];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
