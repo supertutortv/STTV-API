@@ -60,7 +60,7 @@ function __return_email_content_type() {
 /* Subscribe the user to SupertutorTV's Mailchimp mailing list */
 function sttv_mailinglist_subscribe( $email = '', $firstname = '', $lastname = '' ) {
 	if ( empty( $email ) || empty( $firstname ) || empty( $lastname ) ) {
-		return new WP_Error( 'no_body_nobody', 'The request parameters cannot be empty. You\'re doing it wrong.' );
+		return new WP_Error( 'no_body_nobody', 'The request parameters cannot be empty. You\'re doing it wrong.', 400 );
 	}
 	
 	return wp_remote_post( 'https://us7.api.mailchimp.com/3.0/lists/df497b5cbd/members/'.md5( strtolower( $email ) ),
