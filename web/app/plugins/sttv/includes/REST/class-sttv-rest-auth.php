@@ -23,10 +23,7 @@ use WP_REST_Server;
  */
 class Auth extends \WP_REST_Controller {
 
-    public function __construct() {
-        // Log all logins to our API
-        add_action( 'wp_login', [ $this, 'log_all_logins' ], 10, 2 );
-    }
+    public function __construct() {}
 
     public function register_routes() {
         $routes = [
@@ -100,11 +97,5 @@ class Auth extends \WP_REST_Controller {
                 ]
             ]
         );
-    }
-
-    public function log_all_logins( $username, $user ) {
-        $times = get_user_meta( $user->ID, 'sttv_user_data', true );
-        $times['login_timestamps'][] = time();
-        update_user_meta( $user->ID, 'sttv_user_data', $times );
     }
 }

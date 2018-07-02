@@ -54,11 +54,10 @@ class Log {
     }
     
     public static function access( $vars ) {
-        $user = wp_get_current_user();
-        $data = date( 'c' ).' | '.$_SERVER['REMOTE_ADDR'];
+        $data = date( 'c' ).' | '.$_SERVER['REMOTE_ADDR'].' | '.$vars['email'].' | '.$_SERVER['HTTP_USER_AGENT'].' | '.$_SERVER['HTTP_REFERER'];
         $path = STTV_LOGS_DIR . 'courses/';
         if ( !is_dir($path) ) mkdir( $path, 0777, true );
-		return self::put( $path . $user->ID . '.log', $data );
+		return self::put( $path . $vars['id'] . '.log', $data );
     }
 
     private static function put( $path, $data ) {
