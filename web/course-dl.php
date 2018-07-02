@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($_GET['checksum'])){
-	die;
+	die('Unauthorized');
 } else {
 	$test = strtolower(trim($_GET['test']));
 	$sec = trim($_GET['section']);
