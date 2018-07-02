@@ -20,8 +20,8 @@ function sttv_rest_response( $code = '', $msg = '', $status = 200, $extra = [] )
     return new WP_REST_Response( $data, $status );
 }
 
-function sttv_verify_web_token( $header ) {
-    $token = new \STTV\JWT( $header );
+function sttv_verify_web_token( WP_REST_Request $request ) {
+    $token = new \STTV\JWT( $request->get_header('Authorization') );
     if ( $token->error !== false ) return $token->error;
 
     $pieces = explode( '|', $token->payload->sub );
@@ -32,7 +32,7 @@ function sttv_verify_web_token( $header ) {
 }
 
 function sttv_verify_course_user( WP_REST_Request $request ) {
-    $token = sttv_verify_web_token( $request->get_header('Authorization') );
+    $token = sttv_verify_web_token( $request );
     if ( $token instanceof \WP_Error ) {
         return $token;
     }
