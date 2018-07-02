@@ -54,7 +54,7 @@ class Log {
     }
     
     public static function access( $vars ) {
-        $data = date( 'c' ).' | '.$_SERVER['REMOTE_ADDR'].' | '.$vars['email'].' | '.$_SERVER['HTTP_USER_AGENT'].' | '.$_SERVER['HTTP_REFERER'];
+        $data = date( 'c' ).' | '.@$_SERVER['REMOTE_ADDR'].' | '.$vars['email'].' | '.@$_SERVER['HTTP_USER_AGENT'].' | '.@$_SERVER['HTTP_REFERER'];
         $path = STTV_LOGS_DIR . 'courses/';
         if ( !is_dir($path) ) mkdir( $path, 0777, true );
 		return self::put( $path . $vars['id'] . '.log', $data );
