@@ -200,6 +200,7 @@ class Courses extends \WP_REST_Controller {
 					$updated[$body['default_course']] = $umeta['user']['settings']['default_course'] = sanitize_title_with_dashes($body['default_course']);
 				}
 				update_user_meta( $userid, 'sttv_user_data', $umeta );
+				break;
 			default:
 				return sttv_rest_response(
 					'invalid_patch_parameter',
