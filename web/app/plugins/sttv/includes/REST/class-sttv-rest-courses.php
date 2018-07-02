@@ -28,19 +28,19 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token'
+					'permission_callback' => 'sttv_verify_course_user'
 				],
 				[
 					'methods' => 'DELETE',
 					'callback' => [ $this, 'delete_user_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token'
+					'permission_callback' => 'sttv_verify_course_user'
 				]
 			],
 			'/data/(?P<patch>[\w]+)' => [
 				[
 					'methods' => 'PUT',
 					'callback' => [ $this, 'update_user_course_data' ],
-					'permission_callback' => 'sttv_verify_web_token',
+					'permission_callback' => 'sttv_verify_course_user',
 					'args' => [
 						'patch' => [
 							'required' => true,

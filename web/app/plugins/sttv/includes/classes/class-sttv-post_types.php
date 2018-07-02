@@ -23,7 +23,7 @@ class Post_Types {
                 ],
                 'description'			=>	'SupertutorTV courses',
                 'menu_position'			=>	56,
-                'menu_icon'				=> 'dashicons-welcome-learn-more',
+                'menu_icon'				=>  'dashicons-welcome-learn-more',
                 'public'				=>	true,
                 'hierarchical'			=>	true,
                 'exclude_from_search'	=>	true,
@@ -55,7 +55,7 @@ class Post_Types {
 				'hierarchical'			=>	false,
 				'exclude_from_search'	=>	true,
 				'show_in_nav_menus'		=>	false,
-				'show_in_rest'			=>	true,
+				'show_in_rest'			=>	false,
 				'delete_with_user'		=>	false,
 				'can_export'			=>	true,
 				'supports'				=>	$supports
