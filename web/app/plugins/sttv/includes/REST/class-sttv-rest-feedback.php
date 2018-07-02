@@ -73,17 +73,22 @@ class Feedback extends \WP_REST_Controller {
 		return [ 'templateHtml'=>ob_get_clean(),'user'=>$user ];
 	}
 
-	public function post_feedback(WP_REST_Request $req){
-		$body = json_decode($req->get_body());
-		if (get_transient('sttv_cfbrp:'.$body->student)){return false;}
+	public function post_feedback( WP_REST_Request $req ){
+		$body = json_decode( $req->get_body(), true );
+
+		if ( !isset( $body['student'] ) || !isset( $body['content'] ) || !isset( $body['course'] ) ) {
+			return new \WP_Error( 'no_body_nobody', 'The request body cannot be empty. You\'re doing it wrong.', 400 );
+		}
+
+		if ( get_transient( 'sttv_cfbrp:'.$body['student'] ) ) return false;
 
 		return !!wp_insert_post(
 			[
-				'post_type'=>'feedback',
-				'post_status'=>'publish',
-				'post_author'=>$body->student,
-				'post_content'=>sanitize_text_field($body->content),
-				'post_parent'=>$body->postID
+				'post_type' => 'feedback',
+				'post_status' => 'publish',
+				'post_author' => $body['student'],
+				'post_content' => sanitize_text_field( $body['content'] ),
+				'post_parent' => $body['course']
 			]
 		);
 	}
@@ -119,7 +124,7 @@ class Feedback extends \WP_REST_Controller {
 		endif;
 	}
 
-	public function delete_feedback_transient($id) {
+	public function delete_feedback_transient( $id ) {
 		$delete = get_post( $id );
 		return delete_transient( 'sttv_cfbrp:' . $delete->post_author );
 	}
