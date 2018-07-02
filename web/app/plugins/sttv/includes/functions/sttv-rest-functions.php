@@ -38,7 +38,7 @@ function sttv_verify_course_user( WP_REST_Request $request ) {
     }
     $perm = current_user_can( 'course_access_cap' );
     if (!$perm) {
-        return new WP_Error('unauthorized_course_user','You do not have access to our courses at this time.',403);
+        return new \WP_Error('unauthorized_course_user','You do not have access to our courses at this time.',['status'=>403]);
     }
     return $perm;
 }
