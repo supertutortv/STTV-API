@@ -58,7 +58,7 @@ class Log {
         $data = date( 'c' ).' | '.$_SERVER['REMOTE_ADDR'];
         $path = STTV_LOGS_DIR . 'courses/';
         if ( !is_dir($path) ) mkdir( $path, 0777, true );
-		return self::put( $path . get_current_user_id() . '.log', $data );
+		return self::put( $path . $user->ID . '.log', $data );
     }
 
     private static function put( $path, $data ) {
