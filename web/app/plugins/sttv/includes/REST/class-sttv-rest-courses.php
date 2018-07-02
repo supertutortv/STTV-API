@@ -64,6 +64,7 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+		return $umeta;
 
 		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
 			'course_data_invalid',
@@ -199,6 +200,13 @@ class Courses extends \WP_REST_Controller {
 				if ( isset( $body['default_course'] ) ) {
 					$umeta['user']['settings']['default_course'] = $updated['default_course'] = sanitize_title_with_dashes($body['default_course']);
 				}
+				$umeta['courses'] = ['the-best-act-prep-course-ever'=>[]];
+				$umeta['user']['data'] = [
+					'customer' => 'cus_D3tCIHbTmv09C8',
+					'uid' => '',
+					'orders' => [],
+					'login_timestamps' => []
+				]; 
 				update_user_meta( $userid, 'sttv_user_data', $umeta );
 				break;
 			default:
