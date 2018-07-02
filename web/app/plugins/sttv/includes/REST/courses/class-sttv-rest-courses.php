@@ -28,19 +28,19 @@ class Courses extends \WP_REST_Controller {
 				[
 					'methods' => 'GET',
 					'callback' => [ $this, 'get_course_data' ],
-					'permission_callback' => 'sttv_verify_course_user'
+					'permission_callback' => 'sttv_verify_web_token'
 				],
 				[
 					'methods' => 'DELETE',
 					'callback' => [ $this, 'delete_user_course_data' ],
-					'permission_callback' => 'sttv_verify_course_user'
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			],
 			'/data/(?P<patch>[\w]+)' => [
 				[
 					'methods' => 'PUT',
 					'callback' => [ $this, 'update_user_course_data' ],
-					'permission_callback' => 'sttv_verify_course_user',
+					'permission_callback' => 'sttv_verify_web_token',
 					'args' => [
 						'patch' => [
 							'required' => true,
@@ -61,7 +61,6 @@ class Courses extends \WP_REST_Controller {
 	##########################
 
 	public function get_course_data( $req ) {
-		global $wpdb;
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -71,90 +70,93 @@ class Courses extends \WP_REST_Controller {
 			400
 		);
 
-		$dbtable = $wpdb->prefix.'course_udata';
-		$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		if ( current_user_can('course_access_cap') ) {
+			global $wpdb;
+			$dbtable = $wpdb->prefix.'course_udata';
+			$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
 
-		foreach ($cu_data as $rec) {
-			$ind = (int) $rec['udata_timestamp'];
-			$umeta['user'][$rec['udata_type']][] = [
-				'id' => (int) $rec['id'],
-				'timestamp' => $ind,
-				'data' => json_decode($rec['udata_record'])
-			];
-		}
-
-		foreach( $umeta['courses'] as $slug => $data ) {
-			$course = get_posts([
-				'name' => $slug,
-				'post_status' => 'publish',
-				'posts_per_page' => 1,
-				'post_type' => 'courses'
-			]);
-			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
-			if ( ! $meta ) {
-				return sttv_rest_response(
-					'course_not_found',
-					'The course requested was not found or does not exist. Please try again.',
-					404
-				);
+			foreach ($cu_data as $rec) {
+				$ind = (int) $rec['udata_timestamp'];
+				$umeta['user'][$rec['udata_type']][] = [
+					'id' => (int) $rec['id'],
+					'timestamp' => $ind,
+					'data' => json_decode($rec['udata_record'])
+				];
 			}
 
-			$test_code = strtolower($meta['test']);
-			$trialing = current_user_can( "course_{$test_code}_trial" );
-			
-			$umeta['courses'][$slug] = [
-				'id' => $meta['id'],
-				'name' => $meta['name'],
-				'slug' => $meta['slug'],
-				'link' => $meta['link'],
-				'test' => $meta['test'],
-				'intro' => $meta['intro'],
-				'version' => STTV_VERSION,
-				'thumbUrls' => [
-					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
-					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-				],
-				'sections' => (function() use (&$meta,$trialing) {
-					$sections = [];
-					foreach ( $meta['sections'] as $sec => $val ) {
-						foreach ( $val['resources']['files'] as &$file ) {
-							if ( $file['in_trial'] === false && $trialing ) {
-								$file['file'] = 0;
-							}
-							unset( $file['in_trial'] );
-						}
-						foreach ( $val['subsec'] as $k => &$subsec ) {
-							if ( $subsec['in_trial'] === false && $trialing ) {
-								foreach ( $subsec['videos'] as &$vid ) {
-									$vid['ID'] = 0;
+			foreach( $umeta['courses'] as $slug => $data ) {
+				$course = get_posts([
+					'name' => $slug,
+					'post_status' => 'publish',
+					'posts_per_page' => 1,
+					'post_type' => 'courses'
+				]);
+				$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
+				if ( ! $meta ) {
+					return sttv_rest_response(
+						'course_not_found',
+						'The course requested was not found or does not exist. Please try again.',
+						404
+					);
+				}
+
+				$test_code = strtolower($meta['test']);
+				$trialing = current_user_can( "course_{$test_code}_trial" );
+				
+				$umeta['courses'][$slug] = [
+					'id' => $meta['id'],
+					'name' => $meta['name'],
+					'slug' => $meta['slug'],
+					'link' => $meta['link'],
+					'test' => $meta['test'],
+					'intro' => $meta['intro'],
+					'version' => STTV_VERSION,
+					'thumbUrls' => [
+						'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+						'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+					],
+					'sections' => (function() use (&$meta,$trialing) {
+						$sections = [];
+						foreach ( $meta['sections'] as $sec => $val ) {
+							foreach ( $val['resources']['files'] as &$file ) {
+								if ( $file['in_trial'] === false && $trialing ) {
+									$file['file'] = 0;
 								}
+								unset( $file['in_trial'] );
 							}
-							unset( $subsec['in_trial'] );
-						}
-						$sections[$sec] = $val;
-					}
-					foreach ( $meta['practice']['resources']['files'] as &$file ) {
-						if ( ! $file['in_trial'] && $trialing ) {
-							$file['file'] = 0;
-							unset( $file['in_trial'] );
-						}
-					}
-					foreach ( $meta['practice']['subsec'] as $k => &$book ) {
-						if ( ! $book['in_trial'] && $trialing ) {
-							foreach ( $book['subsec'] as $b => &$test ) {
-								foreach ( $test['subjects'] as $t => &$sec ) {
-									foreach ( $sec['videos'] as $s => &$vid ) {
+							foreach ( $val['subsec'] as $k => &$subsec ) {
+								if ( $subsec['in_trial'] === false && $trialing ) {
+									foreach ( $subsec['videos'] as &$vid ) {
 										$vid['ID'] = 0;
 									}
 								}
+								unset( $subsec['in_trial'] );
+							}
+							$sections[$sec] = $val;
+						}
+						foreach ( $meta['practice']['resources']['files'] as &$file ) {
+							if ( ! $file['in_trial'] && $trialing ) {
+								$file['file'] = 0;
+								unset( $file['in_trial'] );
 							}
 						}
-						unset( $book['in_trial'] );
-					}
-					$sections['practice'] = $meta['practice'];
-					return $sections;
-				})()
-			];
+						foreach ( $meta['practice']['subsec'] as $k => &$book ) {
+							if ( ! $book['in_trial'] && $trialing ) {
+								foreach ( $book['subsec'] as $b => &$test ) {
+									foreach ( $test['subjects'] as $t => &$sec ) {
+										foreach ( $sec['videos'] as $s => &$vid ) {
+											$vid['ID'] = 0;
+										}
+									}
+								}
+							}
+							unset( $book['in_trial'] );
+						}
+						$sections['practice'] = $meta['practice'];
+						return $sections;
+					})()
+				];
+			}
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
@@ -168,91 +170,95 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
-		global $wpdb;
-		$userid = get_current_user_id();
-		$body = json_decode( $request->get_body(), true );
-		$patch = $request->get_param( 'patch' );
-		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-		$updated = [];
-		$timestamp = time();
-		switch ( $patch ) {
-			case 'history':
-			case 'bookmarks':
-			case 'downloads':
-				$updated = [
-					'wp_id' => $userid,
-					'udata_type' => $patch,
-					'udata_timestamp' => $timestamp,
-					'udata_record' => json_encode($body)
-				];
-				$wpdb->insert( $wpdb->prefix.'course_udata', $updated, ['%d','%s','%d','%s'] );
-				$updated['udata_record'] = json_decode($updated['udata_record']);
-				break;
-			case 'userdata':
-			case 'settings':
-				if ( isset( $body['autoplay'] ) ) {
-					$umeta['user']['settings']['autoplay'] = $updated['autoplay'] = !!$body['autoplay'];
-				}
-				if ( isset( $body['dark_mode'] ) ) {
-					$umeta['user']['settings']['dark_mode'] = $updated['dark_mode'] = !!$body['dark_mode'];
-				}
-				if ( isset( $body['default_course'] ) ) {
-					$umeta['user']['settings']['default_course'] = $updated['default_course'] = sanitize_title_with_dashes($body['default_course']);
-				}
-				update_user_meta( $userid, 'sttv_user_data', $umeta );
-				break;
-			default:
-				return sttv_rest_response(
-					'invalid_patch_parameter',
-					'The route you are trying to reach was not found due to an invalid patch parameter.',
-					404
-				);
-		}
+		if ( current_user_can( 'course_access_cap' ) ) {
+			global $wpdb;
+			$userid = get_current_user_id();
+			$body = json_decode( $request->get_body(), true );
+			$patch = $request->get_param( 'patch' );
+			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+			$updated = [];
+			$timestamp = time();
+			switch ( $patch ) {
+				case 'history':
+				case 'bookmarks':
+				case 'downloads':
+					$updated = [
+						'wp_id' => $userid,
+						'udata_type' => $patch,
+						'udata_timestamp' => $timestamp,
+						'udata_record' => json_encode($body)
+					];
+					$wpdb->insert( $wpdb->prefix.'course_udata', $updated, ['%d','%s','%d','%s'] );
+					$updated['udata_record'] = json_decode($updated['udata_record']);
+					break;
+				case 'userdata':
+				case 'settings':
+					if ( isset( $body['autoplay'] ) ) {
+						$umeta['user']['settings']['autoplay'] = $updated['autoplay'] = !!$body['autoplay'];
+					}
+					if ( isset( $body['dark_mode'] ) ) {
+						$umeta['user']['settings']['dark_mode'] = $updated['dark_mode'] = !!$body['dark_mode'];
+					}
+					if ( isset( $body['default_course'] ) ) {
+						$umeta['user']['settings']['default_course'] = $updated['default_course'] = sanitize_title_with_dashes($body['default_course']);
+					}
+					update_user_meta( $userid, 'sttv_user_data', $umeta );
+					break;
+				default:
+					return sttv_rest_response(
+						'invalid_patch_parameter',
+						'The route you are trying to reach was not found due to an invalid patch parameter.',
+						404
+					);
+			}
 
-		return sttv_rest_response(
-			'resource_updated',
-			'The resource has been updated',
-			200,
-			['data' => $updated]
-		);
+			return sttv_rest_response(
+				'resource_updated',
+				'The resource has been updated',
+				200,
+				['data' => $updated]
+			);
+		}
 	}
 
 	public function delete_user_course_data( WP_REST_Request $request ) {
-		global $wpdb;
-		$body = json_decode($request->get_body(),true);
-		$deleted = [];
-		if ( ! isset($body['id'] ) ) return sttv_rest_response(
-			'resource_delete_no_id',
-			'You must provide a valid resource id to this endpoint.',
-			403
-		);
-		if ( !is_array($body['id']) ) $body['id'] = [$body['id']];
-		foreach( $body['id'] as $v ) {
-			$delete = [
-				'id' => $v
-			];
-			$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
-			if ( $result === false ) {
-				$deleted[] = [
-					'id' => 'There was an error. ID '.$v.' not deleted.'
+		if ( current_user_can( 'course_access_cap' ) ) {
+			global $wpdb;
+			$body = json_decode($request->get_body(),true);
+			$deleted = [];
+			if ( ! isset($body['id'] ) ) return sttv_rest_response(
+				'resource_delete_no_id',
+				'You must provide a valid resource id to this endpoint.',
+				403
+			);
+			if ( !is_array($body['id']) ) $body['id'] = [$body['id']];
+			foreach( $body['id'] as $v ) {
+				$delete = [
+					'id' => $v
 				];
-				continue;
-			};
-			if ( $result === 0 ) {
+				$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
+				if ( $result === false ) {
+					$deleted[] = [
+						'id' => 'There was an error. ID '.$v.' not deleted.'
+					];
+					continue;
+				};
+				if ( $result === 0 ) {
+					$deleted[] = [
+						'id' => 'ID '.$v.' could not be found. No action taken.'
+					];
+					continue;
+				}
 				$deleted[] = [
-					'id' => 'ID '.$v.' could not be found. No action taken.'
+					'id' => $v
 				];
-				continue;
 			}
-			$deleted[] = [
-				'id' => $v
-			];
+			return sttv_rest_response(
+				'resource_delete_success',
+				'The resource was deleted.',
+				200,
+				['data' => $deleted]
+			);
 		}
-		return sttv_rest_response(
-			'resource_delete_success',
-			'The resource was deleted.',
-			200,
-			['data' => $deleted]
-		);
 	}
 }
