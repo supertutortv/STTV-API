@@ -1,7 +1,7 @@
 <?php
 
 if ( !isset($_GET['checksum']) || strlen($_GET['checksum']) !== 32 ){
-	include '../misc/template.php' && die;
+	include_once '../misc/template.php';
 } else {
 	$test = strtolower(trim($_GET['test']));
 	$sec = trim($_GET['section']);
