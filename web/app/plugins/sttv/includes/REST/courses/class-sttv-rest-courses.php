@@ -255,18 +255,4 @@ class Courses extends \WP_REST_Controller {
 			['data' => $deleted]
 		);
 	}
-
-	#######################
-	##### LOG METHODS #####
-	#######################
-
-	public function course_access_log( WP_REST_Request $request ) {
-		$data = [
-			date('c',time()),
-			$_SERVER['REMOTE_ADDR']
-		];
-		$data = array_merge($data, json_decode($request->get_body(), true));
-		$data = implode(' | ',$data);
-		return file_put_contents( STTV_LOGS_DIR . get_current_user_id() . '.log', PHP_EOL . $data . PHP_EOL, FILE_APPEND );
-	}
 }

@@ -33,8 +33,7 @@ class Feedback extends \WP_REST_Controller {
 			'/feedback' => [
 				[
 					'methods' => 'GET',
-					'callback' => [ $this, 'get_user_feedback' ],
-					'permission_callback' => '__return_true'
+					'callback' => [ $this, 'get_user_feedback' ]
 				],
 				[
 					'methods' => 'POST',

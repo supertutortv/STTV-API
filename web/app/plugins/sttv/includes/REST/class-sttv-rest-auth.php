@@ -63,6 +63,7 @@ class Auth extends \WP_REST_Controller {
 
         // attempt login
         $login = wp_authenticate( $username, $password );
+        return $login;
 
         // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
@@ -74,7 +75,10 @@ class Auth extends \WP_REST_Controller {
 
         $token = new \STTV\JWT( $login );
 
-        //do_action( 'wp_login' );
+        \STTV\Log::access([
+            'id' => $login->ID,
+            'email' => ''
+        ]);
         
         return sttv_rest_response(
             'login_success',

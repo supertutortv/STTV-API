@@ -28,10 +28,7 @@ class Log {
         return $f;
     }
 
-    public static function webhook( $vars = [] ) {
-        if ( empty( $vars ) ) {
-            return null;
-        }
+    public static function webhook( $vars ) {
 
         $dir = STTV_LOGS_DIR . 'webhooks/' . $vars['direction'];
 
@@ -53,10 +50,18 @@ class Log {
             'data' => json_encode( $vars['data'] )
         ];
 
-        return file_put_contents( $dir . '/' . date('Y-m-d') . $ext,
-			implode( ' | ', $input ) . "\r\n",
-			FILE_APPEND | LOCK_EX
-		);
+        return self::put( $dir . '/' . date('Y-m-d') . $ext, implode( ' | ', $input ) );
     }
     
+    public static function access( $vars ) {
+        $user = wp_get_current_user();
+        $data = date( 'c' ).' | '.$_SERVER['REMOTE_ADDR'];
+        $path = STTV_LOGS_DIR . 'courses/';
+        if ( !is_dir($path) ) mkdir( $path, 0777, true );
+		return self::put( $path . get_current_user_id() . '.log', $data );
+    }
+
+    private static function put( $path, $data ) {
+        return file_put_contents( $path, $data . PHP_EOL, FILE_APPEND | LOCK_EX );
+    }
 }
