@@ -1,6 +1,6 @@
 <?php
 
-namespace STTV\REST;
+namespace STTV\REST\Courses;
 
 defined( 'ABSPATH' ) || exit;
 

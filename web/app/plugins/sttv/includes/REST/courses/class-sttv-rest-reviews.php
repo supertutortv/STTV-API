@@ -1,5 +1,5 @@
 <?php
-namespace STTV\REST;
+namespace STTV\REST\Courses;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -58,9 +58,11 @@ class Reviews extends \WP_REST_Controller {
 		}
 	} // end sttv_product_reviews_api
 	
-	public function get_product_reviews($data) {
-		$comments = get_comments(array('post_id'=>$data['id'],'status'=>'approve'));
-		return $comments;
+	public function get_product_reviews( $data ) {
+		return get_comments([
+			'post_id' => $data['id'],
+			'status' => 'approve'
+		]);
 	}
 	
 	public function post_product_review(WP_REST_Request $request) {
