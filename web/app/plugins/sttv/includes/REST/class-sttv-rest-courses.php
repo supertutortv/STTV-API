@@ -64,7 +64,6 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-		return $umeta;
 
 		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
 			'course_data_invalid',
