@@ -7,8 +7,9 @@ http_response_code(401);
         <title>Nope</title>
         <style type="text/css">
         body {
-            font-size: 8px;
-			white-space: pre-line
+            font-size: 6px;
+			line-height: 4px;
+			white-space: pre-line;
         }
         </style>
     </head>
