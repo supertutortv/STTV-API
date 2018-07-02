@@ -77,7 +77,7 @@ class Feedback extends \WP_REST_Controller {
 		$body = json_decode( $req->get_body(), true );
 
 		if ( !isset( $body['student'] ) || !isset( $body['content'] ) || !isset( $body['course'] ) ) {
-			return new \WP_Error( 'no_body_nobody', 'The request body cannot be empty. You\'re doing it wrong.', 400 );
+			return new \WP_Error( 'null_body', 'The request body cannot be empty for this endpoint.', 400 );
 		}
 
 		if ( get_transient( 'sttv_cfbrp:'.$body['student'] ) ) return false;
@@ -119,7 +119,7 @@ class Feedback extends \WP_REST_Controller {
 					$post->post_content,
 					$headers
 				);
-				set_transient('sttv_cfbrp:'.$post->post_author,true,DAY_IN_SECONDS);
+				set_transient( 'sttv_cfbrp:'.$post->post_author, true, DAY_IN_SECONDS );
 			}
 		endif;
 	}
