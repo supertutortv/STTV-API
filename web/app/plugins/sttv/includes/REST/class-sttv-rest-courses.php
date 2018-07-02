@@ -172,6 +172,7 @@ class Courses extends \WP_REST_Controller {
 		$userid = get_current_user_id();
 		$body = json_decode( $request->get_body(), true );
 		$patch = $request->get_param( 'patch' );
+		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 		$updated = [];
 		$timestamp = time();
 		switch ( $patch ) {
@@ -188,8 +189,16 @@ class Courses extends \WP_REST_Controller {
 				$updated['udata_record'] = json_decode($updated['udata_record']);
 				break;
 			case 'userdata':
-			case 'options':
-				$updated = get_user_meta( $userid, 'sttv_user_data', true );
+			case 'settings':
+				if ( isset( $body['autoplay'] ) ) {
+					$updated[$body['autoplay']] = $umeta['user']['settings']['autoplay'] = !!$body['autoplay'];
+				}
+				if ( isset( $body['dark_mode'] ) ) {
+					$updated[$body['dark_mode']] = $umeta['user']['settings']['dark_mode'] = !!$body['dark_mode'];
+				}
+				if ( isset( $body['default_course'] ) ) {
+					$updated[$body['default_course']] = $umeta['user']['settings']['default_course'] = sanitize_title_with_dashes($body['default_course']);
+				}
 				update_user_meta( $userid, 'sttv_user_data', $umeta );
 			default:
 				return sttv_rest_response(
