@@ -120,39 +120,39 @@ class Courses extends \WP_REST_Controller {
 					'collection' => (function() use (&$meta,$trialing) {
 						$sections = [];
 						foreach ( $meta['sections'] as $sec => $val ) {
-							foreach ( $val['resources']['files'] as &$file ) {
+							foreach ( $val['files'] as &$file ) {
 								if ( $file['in_trial'] === false && $trialing ) {
 									$file['file'] = 0;
 								}
 								unset( $file['in_trial'] );
 							}
-							foreach ( $val['subsec'] as $k => &$subsec ) {
-								if ( $subsec['in_trial'] === false && $trialing ) {
-									foreach ( $subsec['videos'] as &$vid ) {
+							foreach ( $val['collection'] as $k => &$subsec ) {
+								if ( $subsec['data']['in_trial'] === false && $trialing ) {
+									foreach ( $subsec['collection'] as &$vid ) {
 										$vid['ID'] = 0;
 									}
 								}
-								unset( $subsec['in_trial'] );
+								unset( $subsec['data']['in_trial'] );
 							}
 							$sections[$sec] = $val;
 						}
-						foreach ( $meta['practice']['resources']['files'] as &$file ) {
+						foreach ( $meta['practice']['files'] as &$file ) {
 							if ( ! $file['in_trial'] && $trialing ) {
 								$file['file'] = 0;
 								unset( $file['in_trial'] );
 							}
 						}
-						foreach ( $meta['practice']['subsec'] as $k => &$book ) {
-							if ( ! $book['in_trial'] && $trialing ) {
-								foreach ( $book['subsec'] as $b => &$test ) {
-									foreach ( $test['subjects'] as $t => &$sec ) {
-										foreach ( $sec['videos'] as $s => &$vid ) {
+						foreach ( $meta['practice']['collection'] as $k => &$book ) {
+							if ( ! $book['data']['in_trial'] && $trialing ) {
+								foreach ( $book['collection'] as $b => &$test ) {
+									foreach ( $test['collection'] as $t => &$sec ) {
+										foreach ( $sec['collection'] as $s => &$vid ) {
 											$vid['ID'] = 0;
 										}
 									}
 								}
 							}
-							unset( $book['in_trial'] );
+							unset( $book['data']['in_trial'] );
 						}
 						$sections['practice'] = $meta['practice'];
 						return $sections;

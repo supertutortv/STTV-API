@@ -119,7 +119,6 @@ class Admin {
 
 					$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
 						'data' => [
-							'id' => $calb['albumID'],
 							'name' => str_replace( ':', ' ', $calb['albumName'] ),
 							'type' => 'videos',
 							'in_trial' => (bool) $sub['in_trial'],
