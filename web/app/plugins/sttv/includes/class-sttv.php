@@ -113,7 +113,7 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             //print_r($_SERVER['SERVER_SOFTWARE']);
-            //print_r();
+            print_r($this->files());
         });
     }
 
