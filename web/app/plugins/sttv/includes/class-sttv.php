@@ -168,7 +168,7 @@ final class STTV {
 
     private function files() {
         $files = [
-            'sttv-cron.php' => __DIR__
+            'sttv-cron.php' => dirname(__FILE__)
         ];
 
         foreach ( $files as $file => $path ) {
