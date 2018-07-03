@@ -65,7 +65,7 @@ class API {
             }
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
-            header( 'Access-Control-Allow-Headers: Accept, Referrer, Origin, Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC' );
+            header( 'Access-Control-Allow-Headers: Accept, Referrer, Origin, Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC, X-RateLimit-Buster' );
             header( 'Content-Type: '.STTV_REST_CONTENT_TYPE );
             header( 'Host: ' . rest_url() );
     
