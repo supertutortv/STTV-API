@@ -23,6 +23,7 @@ final class STTV {
         $this->define_constants();
         $this->includes();
         $this->init_hooks();
+        $this->files();
 
         do_action( 'sttv_loaded' );
     }
@@ -163,6 +164,18 @@ final class STTV {
         if ( ! defined( $const ) ) {
 			define( $const, $value );
 		}
+    }
+
+    private function files() {
+        $files = [
+            'sttv-cron.php' => __DIR__
+        ];
+
+        foreach ( $files as $file => $path ) {
+            if ( ! is_file( $path . $file ) ) continue;
+
+            return ( !sttv_diff( $path . $file, STTV_CRON_DIR . $file ) ) ?: copy( $path . $file, STTV_CRON_DIR . $file );
+        }
     }
 
     public function sttv_loaded() {

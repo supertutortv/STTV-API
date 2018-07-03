@@ -58,7 +58,6 @@ class Install {
         self::tables();
         self::roles();
         self::dirs();
-        self::files();
     }
 
     public static function uninstall() {
@@ -105,17 +104,4 @@ class Install {
             }
         }
     }
-
-    private static function files() {
-        $files = [
-            'sttv-cron.php' => dirname( __DIR__ ) . '/'
-        ];
-
-        foreach ( $files as $file => $path ) {
-            if ( is_file( $path . $file ) ) {
-                copy( $path . $file, STTV_CRON_DIR . $file );
-            }
-        }
-    }
-
 }

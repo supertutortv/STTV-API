@@ -6,6 +6,10 @@ function sttv_lostpw_url(){
     return home_url().'/?lostpw';
 }
 
+function sttv_diff( $file1, $file2 ) {
+	return ( file_get_contents($file1) !== file_get_contents($file2) );
+}
+
 function sttv_get_template($temp,$dir='',$sgt=null) {
 	$dir = (!empty($dir))?"{$dir}/":"";
 	$path = STTV_TEMPLATE_DIR.$dir.$temp;
