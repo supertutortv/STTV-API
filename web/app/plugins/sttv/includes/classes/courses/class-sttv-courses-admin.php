@@ -190,6 +190,7 @@ class Admin {
 						$cache = [];
 						foreach ( $tests as $test ) {
 							$els = explode( ':', $test );
+							return $els;
 							if ( strpos( $els[3], '.cache' ) ) {
 								array_splice( $els, 3, 0, 'Test 1' );
 							}
