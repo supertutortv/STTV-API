@@ -113,7 +113,7 @@ final class STTV {
         add_action( 'sttv_loaded', [ $this, 'sttv_loaded' ], 999 );
         add_action( 'print_test', function() {
             //print_r($_SERVER['SERVER_SOFTWARE']);
-            print_r(sttv_diff( dirname(__FILE__) . 'sttv-cron.php', STTV_CRON_DIR . 'sttv-cron.php' ));
+            print_r(sttv_diff( dirname(__FILE__) . '/sttv-cron.php', STTV_CRON_DIR . 'sttv-cron.php' ));
         });
     }
 
@@ -168,7 +168,7 @@ final class STTV {
 
     private function files() {
         $files = [
-            'sttv-cron.php' => dirname(__FILE__)
+            'sttv-cron.php' => dirname(__FILE__).'/'
         ];
 
         foreach ( $files as $file => $path ) {
