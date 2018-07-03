@@ -197,7 +197,7 @@ class Admin {
 							$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
 								'data' => [
 									'name' => str_replace( '.cache', '', $els[4] ),
-									'type' => 'collection',
+									'type' => 'videos',
 									'color' => '#'.$pvideos['embedColor']
 								],
 								'collection' => $pvideos['videos']
