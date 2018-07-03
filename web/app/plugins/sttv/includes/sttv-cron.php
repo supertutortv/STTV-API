@@ -111,7 +111,7 @@ class Cron {
                             'slug' => $slug,
                             'time' => $vid['duration'],
                             'tags' => $tags,
-                            'text' => $vid['description'],
+                            'text' => $vid['description'] ?? '',
                             'thumb' => $out,
                             'views' => $vid['stats']['plays']
                         ];
