@@ -187,7 +187,6 @@ class Admin {
 					],
 					'collection' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . str_replace( ' ', '_', $book['book_name'] ) . "*.cache" );
-						return $tests;
 						$cache = [];
 						foreach ( $tests as $test ) {
 							$els = explode( ':', $test );
