@@ -100,7 +100,7 @@ class Admin {
 						$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 						if ( $fcopy ){
 							$resources[] = [
-								'title' => $file['file']['title'],
+								'name' => $file['file']['title'],
 								'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 								'size' => round($file['file']['filesize'] / 1024) . ' KB',
 								'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
@@ -115,31 +115,30 @@ class Admin {
 				foreach ( $sec['subsections'] as $sub ) {
 					$calb = json_decode( file_get_contents( $cache_dir.$sec['section_info']['section_name'].':'.$sub['subsection_name'].'.cache' ), true );
 
-					if ( empty( $color ) ) {
-						$color = $calb['embedColor'];
-					}
+					if ( empty( $color ) ) $color = $calb['embedColor'];
 
 					$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
-						'id' => $calb['albumID'],
-						'type' => 'collection',
-						'title' => str_replace( ':', ' ', $calb['albumName'] ),
-						'in_trial' => (bool) $sub['in_trial'],
-						'videos' => $calb['videos']
+						'data' => [
+							'id' => $calb['albumID'],
+							'name' => str_replace( ':', ' ', $calb['albumName'] ),
+							'type' => 'videos',
+							'in_trial' => (bool) $sub['in_trial'],
+						],
+						'collection' => $calb['videos']
 					];
 				}
 
 				$data['sections'][$aslug] = [
-					'name' => $sec['section_info']['section_name'],
-					'abbrev' => $sec['section_info']['section_code'],
-					'type' => 'collection',
-					'description' => esc_html( $sec['section_info']['description'] ),
-					'intro' => (int) $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
-					'color' => '#'.$color,
-					'resources' => [
-						'type' => 'file',
-						'files' => $resources
+					'data' => [
+						'name' => $sec['section_info']['section_name'],
+						'abbrev' => $sec['section_info']['section_code'],
+						'type' => 'collection',
+						'description' => esc_html( $sec['section_info']['description'] ),
+						'intro' => (int) $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
+						'color' => '#'.$color
 					],
-					'subsec' => $subsec
+					'collection' => $subsec,
+					'files' => $resources
 				];
 
 				$data['capabilities']['full'][] = "course_{$test}_{$aslug}";
@@ -159,7 +158,7 @@ class Admin {
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){
 						$presc[] = [
-							'title' => $file['file']['title'],
+							'name' => $file['file']['title'],
 							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
@@ -182,10 +181,12 @@ class Admin {
 		
 				// Main Practice Object
 				$psubsec[$title] = [
-					'name' => $book['book_name'],
-					'in_trial' => (bool) $book['in_trial'],
-					'type' => 'collection',
-					'subsec' => (function() use ( $cache_dir, $book ){
+					'data' => [
+						'name' => $book['book_name'],
+						'in_trial' => (bool) $book['in_trial'],
+						'type' => 'collection'
+					],
+					'collection' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 						$cache = [];
 						foreach ( $tests as $test ) {
@@ -195,15 +196,19 @@ class Admin {
 							}
 							$pvideos = json_decode( file_get_contents( $test ), true );
 							$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
-								'name' => str_replace( '.cache', '', $els[4] ),
-								'type' => 'collection',
-								'color' => '#'.$pvideos['embedColor'],
-								'videos' => $pvideos['videos']
+								'data' => [
+									'name' => str_replace( '.cache', '', $els[4] ),
+									'type' => 'collection',
+									'color' => '#'.$pvideos['embedColor']
+								],
+								'collection' => $pvideos['videos']
 							];
 							$cache[sanitize_title_with_dashes( $els[3] )] = [
-								'name' => $els[3],
-								'type' => 'collection',
-								'subjects' => $tsections
+								'data' => [
+									'name' => $els[3],
+									'type' => 'collection'
+								],
+								'collection' => $tsections
 							];
 						}
 						return $cache;
@@ -212,14 +217,13 @@ class Admin {
 			}
 
 			$data['practice'] = [
-				'name' => 'Practice Tests',
-				'description' => esc_html( $course['practice']['description'] ?? ''),
-				'type' => 'collection',
-				'resources' => [
-					'type' => 'file',
-					'files' => $presc
+				'data' => [
+					'name' => 'Practice Tests',
+					'description' => esc_html( $course['practice']['description'] ?? ''),
+					'type' => 'collection'
 				],
-				'subsec' => $psubsec
+				'collection' => $psubsec,
+				'files' => $presc
 			];
 			
 			$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
