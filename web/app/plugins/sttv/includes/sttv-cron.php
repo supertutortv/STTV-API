@@ -140,11 +140,11 @@ class Cron {
                         fwrite( $filew, $contents );
                         fclose( $filew );
 
-                    print_r( "Album ".$alb['name']." updated \r\n");
+                    print_r( "Album ".$alb['name']." has been updated \r\n" );
                 }
             }
 
-            print_r( 'The video data cache has been updated' );
+            print_r( "The video data cache has been updated \r\n" );
         } catch ( Exception $e ) {
 
             print_r( $e );
