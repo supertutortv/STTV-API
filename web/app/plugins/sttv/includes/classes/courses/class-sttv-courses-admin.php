@@ -186,7 +186,7 @@ class Admin {
 						'type' => 'collection'
 					],
 					'collection' => (function() use ( $cache_dir, $book ){
-						return $book;
+						return $cache_dir;
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
 						$cache = [];
 						foreach ( $tests as $test ) {
