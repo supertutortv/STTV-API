@@ -144,7 +144,7 @@ class Cron {
                 }
             }
 
-            print_r( "The video data cache has been updated \r\n" );
+            print_r( "The Vimeo JSON cache has been updated \r\n" );
         } catch ( Exception $e ) {
 
             print_r( $e );
