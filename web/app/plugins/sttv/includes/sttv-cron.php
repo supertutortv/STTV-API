@@ -106,13 +106,13 @@ class Cron {
                         }
                         $out = substr( substr( $vid['pictures']['sizes'][2]['link'], 0, strpos( $vid['pictures']['sizes'][2]['link'], '_' ) ), strpos( $vid['pictures']['sizes'][2]['link'], 'eo/' )+3 );
                         $vidobj[$slug] = [
-                            'id' => (int) $vidid,
+                            'id' => $vidid,
                             'name' => $vidname,
                             'slug' => $slug,
                             'time' => $vid['duration'],
                             'tags' => $tags,
                             'text' => $vid['description'],
-                            'thumb' => (int) $out,
+                            'thumb' => $out,
                             'views' => $vid['stats']['plays']
                         ];
                         if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
