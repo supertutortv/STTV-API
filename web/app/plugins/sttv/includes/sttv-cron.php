@@ -106,9 +106,8 @@ class Cron {
                         }
                         $out = substr( substr( $vid['pictures']['sizes'][2]['link'], 0, strpos( $vid['pictures']['sizes'][2]['link'], '_' ) ), strpos( $vid['pictures']['sizes'][2]['link'], 'eo/' )+3 );
                         $vidobj[$slug] = [
-                            'ID' => (int) $vidid,
+                            'id' => (int) $vidid,
                             'name' => $vidname,
-                            'type' => 'video',
                             'slug' => $slug,
                             'time' => $vid['duration'],
                             'tags' => $tags,
