@@ -187,10 +187,10 @@ class Admin {
 					],
 					'collection' => (function() use ( $cache_dir, $book ){
 						$tests = glob( $cache_dir . 'Practice:' . $book['book_name'] . "*.cache" );
+						return $tests;
 						$cache = [];
 						foreach ( $tests as $test ) {
 							$els = explode( ':', $test );
-							return $els;
 							if ( strpos( $els[3], '.cache' ) ) {
 								array_splice( $els, 3, 0, 'Test 1' );
 							}
