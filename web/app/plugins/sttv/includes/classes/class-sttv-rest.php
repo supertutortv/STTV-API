@@ -12,7 +12,8 @@ class API {
         'https://supertutortv.com',
         'https://courses.supertutortv.com',
         'https://api.supertutortv.com',
-        'http://localhost:8080' //remove in production
+        'http://localhost:8080', //remove in production
+        'http://localhost:8888' //remove in production
     ];
 
     private $origin;
