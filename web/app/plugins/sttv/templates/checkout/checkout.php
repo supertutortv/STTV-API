@@ -118,27 +118,23 @@ $ck4 = <<<HTML
         <h2>Almost there!</h2>
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
     </div>
-    <div id="st-checkout-items-table">
-        <div class="row">
-            <div id="cart-column" class="col s12">
-                <div class="row headings-row">
-                    <div class="col s2">Qty</div>
-                    <div class="col s8">Item</div>
-                    <div class="col s2 right-align">Price</div>
-                </div>
-                <div class="items-row"></div>
-                <div class="row totals-row">
-                    <div class="col s8">
-                        <div class="input-field coupon col s12">
-                            <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code"/>
-                        </div>
+    <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
+        <div id="st-checkout-items-table" class="col s12">
+            <div class="row headings-row">
+                <div class="col s2">Qty</div>
+                <div class="col s8">Item</div>
+                <div class="col s2 right-align">Price</div>
+            </div>
+            <div class="items-row"></div>
+            <div class="row totals-row">
+                <div class="col s8">
+                    <div class="input-field coupon col s12">
+                        <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code"/>
                     </div>
-                    <div id="total" class="col s4 right-align"><span id="ttltxt">Total: $<span>0</span></span></div>
                 </div>
+                <div id="total" class="col s4 right-align"><span id="ttltxt">Total: $<span>0</span></span></div>
             </div>
         </div>
-    </div>
-    <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default" type="text" name="st-customer-name" placeholder="Name on card" />
         </div>
