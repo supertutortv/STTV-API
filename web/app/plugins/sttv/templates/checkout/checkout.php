@@ -119,22 +119,7 @@ $ck4 = <<<HTML
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
     </div>
     <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
-        <div id="st-checkout-items-table" class="col s12">
-            <div class="row headings-row">
-                <div class="col s2">Qty</div>
-                <div class="col s8">Item</div>
-                <div class="col s2 right-align">Price</div>
-            </div>
-            <div class="items-row"></div>
-            <div class="row totals-row">
-                <div class="col s8">
-                    <div class="input-field coupon col s12">
-                        <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code"/>
-                    </div>
-                </div>
-                <div id="total" class="col s4 right-align"><span id="ttltxt">Total: $<span>0</span></span></div>
-            </div>
-        </div>
+        <div id="st-checkout-items-table" class="col s12"></div>
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default" type="text" name="st-customer-name" placeholder="Name on card" />
         </div>
@@ -143,19 +128,19 @@ $ck4 = <<<HTML
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
-        <div class="col s12">
-            <div class="input-field col s12" style="margin-top:0px">
-                <label>
-                    <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
-                    <span>Sign me up for promos, coupons, and giveaways from SupertutorTV</span>
-                </label>
-            </div>
-            <div class="input-field tandc col s12">
-                <label>
-                    <input class="filled-in" type="checkbox" name="st-customer-tandc"/>
-                    <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
-                </label>
-            </div>
+    </div>
+    <div class="col s12">
+        <div class="input-field col s12">
+            <label>
+                <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
+                <span>Sign me up for promos, coupons, and giveaways from SupertutorTV</span>
+            </label>
+        </div>
+        <div class="input-field tandc col s12">
+            <label>
+                <input class="filled-in" type="checkbox" name="st-customer-tandc"/>
+                <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
+            </label>
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
