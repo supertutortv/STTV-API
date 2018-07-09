@@ -1,5 +1,6 @@
 <?php
 function checkout_template(){
+$countrydd = get_option('sttv_country_options');
 $ck1 = <<<HTML
 <div id="pane-1" class="st-checkout-pane row">
     <div class="st-checkout-header col s12">
@@ -35,22 +36,25 @@ $ck2 = <<<HTML
     </div>
     <div id="st-checkout-billing" class="st-checkout-form col s12 l6 push-l3">
         <div class="input-field col s12">
-            <input class="browser-default" type="text" name="st-billing-address1" placeholder="Address 1" />
+            <input class="browser-default billing address1" type="text" name="st-billing-address1" placeholder="Address 1" />
         </div>
         <div class="input-field col s12">
-            <input class="browser-default" type="text" name="st-billing-address1" placeholder="Address 2" />
+            <input class="browser-default billing address2" type="text" name="st-billing-address1" placeholder="Address 2" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default" type="text" name="st-billing-city" placeholder="City" />
+            <input class="browser-default billing city" type="text" name="st-billing-city" placeholder="City" />
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default" type="text" name="st-billing-state" placeholder="State" />
+            <input class="browser-default billing state" type="text" name="st-billing-state" placeholder="State" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default" type="text" name="st-billing-postal-code" placeholder="Postal Code" />
+            <input class="browser-default billing pcode" type="text" name="st-billing-postal-code" placeholder="Postal Code" />
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default" type="text" name="st-billing-country" placeholder="Country" />
+            <select class='country-dd validate billing country' name='st-billing-country' required>
+                <option value disabled selected>Country...</option>
+                {$countrydd}
+            </select>
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
@@ -80,22 +84,25 @@ $ck3 = <<<HTML
             </label>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default" type="text" name="st-billing-address1" placeholder="Address 1" />
+            <input class="browser-default shipping address1" type="text" name="st-shipping-address1" placeholder="Address 1" />
         </div>
         <div class="input-field col s12">
-            <input class="browser-default" type="text" name="st-billing-address1" placeholder="Address 2" />
+            <input class="browser-default shipping address2" type="text" name="st-shipping-address2" placeholder="Address 2" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default" type="text" name="st-billing-city" placeholder="City" />
+            <input class="browser-default shipping city" type="text" name="st-shipping-city" placeholder="City" />
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default" type="text" name="st-billing-state" placeholder="State" />
+            <input class="browser-default shipping state" type="text" name="st-shipping-state" placeholder="State" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default" type="text" name="st-billing-postal-code" placeholder="Postal Code" />
+            <input class="browser-default shipping pcode" type="text" name="st-shipping-postal-code" placeholder="Postal Code" />
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default" type="text" name="st-billing-country" placeholder="Country" />
+            <select class='country-dd validate shipping country' name='st-shipping-country' required>
+                <option value disabled selected>Country...</option>
+                {$countrydd}
+            </select>
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
