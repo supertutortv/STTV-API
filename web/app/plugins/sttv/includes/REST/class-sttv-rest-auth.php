@@ -75,7 +75,9 @@ class Auth extends \WP_REST_Controller {
             'id' => $login->ID,
             'email' => $login->user_email
         ]);
-        do_action( 'wp_login' );
+        $umeta = get_user_meta( $login->ID, 'sttv_user_data', true );
+        $umeta['user']['data']['login_timestamps'][] = time();
+        update_user_meta( $login->ID, 'sttv_user_data', $umeta );
         
         return sttv_rest_response(
             'login_success',
