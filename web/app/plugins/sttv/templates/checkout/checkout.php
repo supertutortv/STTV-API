@@ -1,6 +1,5 @@
 <?php
-(function(){
-    $ck;
+function checkout_template(){
 $ck1 = <<<HTML
 <div id="pane-1" class="st-checkout-pane row">
     <div class="st-checkout-header col s12">
@@ -126,11 +125,11 @@ $ck4 = <<<HTML
 </div>
 HTML;
 
-return $ck = [
+return [
     '',
     $ck1,
     $ck2,
     $ck3,
     $ck4
 ];
-})();
+};

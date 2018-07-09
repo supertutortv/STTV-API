@@ -335,7 +335,7 @@ class Checkout extends \WP_REST_Controller {
             unset( $pricing['renewals'] );
             $code = 'checkout_pricing_success';
             include STTV_TEMPLATE_DIR.'checkout/checkout.php';
-            $html = $ck;
+            $html = checkout_template();
         }
 
         return sttv_rest_response(
