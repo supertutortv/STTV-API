@@ -52,7 +52,7 @@ $ck2 = <<<HTML
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
             <select class="validate billing country" name="st-billing-country" required>
-                <option value disabled selected>Country...</option>
+                <option value selected>Country...</option>
                 {$countrydd}
             </select>
         </div>
