@@ -118,6 +118,27 @@ $ck4 = <<<HTML
         <h2>Almost there!</h2>
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
     </div>
+    <div id="st-checkout-items-table">
+        <div class="row">
+            <div id="cart-column" class="col s12">
+                <div class="row headings-row">
+                    <div class="col s2">Qty</div>
+                    <div class="col s8">Item</div>
+                    <div class="col s2 right-align">Price</div>
+                </div>
+                <div class="items-row"></div>
+                <div class="row totals-row">
+                    <div class="col s8">
+                        <div class="input-field coupon col s12">
+                            <input id="sttv_coupon" name="sttv_coupon" type="text" placeholder="Coupon"/>
+                            <label for="sttv_coupon">Coupon Code</label>
+                        </div>
+                    </div>
+                    <div id="total" class="col s4 right-align"><span id="ttltxt">Total: $<span>0</span></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default" type="text" name="st-customer-name" placeholder="Name on card" />
@@ -127,6 +148,14 @@ $ck4 = <<<HTML
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
+        <div class="col s12">
+            <div class="input-field col s12" style="margin-top:0px">
+                <input class="filled-in" type="checkbox" name="sttv_mailinglist" id="sttv_mailinglist" checked/><label for="sttv_mailinglist">Sign me up for promos, coupons, and giveaways from SupertutorTV</label><br/>
+            </div>
+            <div class="tandc col s12">
+                <span>By submitting this payment, you agree to SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
+            </div>
+        </div>
     </div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
