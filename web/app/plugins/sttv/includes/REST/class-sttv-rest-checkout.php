@@ -331,8 +331,13 @@ class Checkout extends \WP_REST_Controller {
             $code = 'checkout_pricing_course_invalid';
             $msg = 'The course ID provided is invalid. Please try again.';
         } else {
-            $pricing = get_post_meta( $course->ID, 'sttv_course_data', true )['pricing'];
+            $course = get_post_meta( $course->ID, 'sttv_course_data', true );
+            $pricing = $course['pricing'];
             unset( $pricing['renewals'] );
+            $output = [
+                'name' => $course['name'],
+                'qty' => 1
+            ];
             $code = 'checkout_pricing_success';
             include STTV_TEMPLATE_DIR.'checkout/checkout.php';
             $html = checkout_template();
@@ -344,7 +349,7 @@ class Checkout extends \WP_REST_Controller {
             200,
             [
                 'data' => [
-                    'pricing' => $pricing,
+                    'pricing' => array_merge($output,$pricing),
                     'html' => $html
                 ]
             ]
