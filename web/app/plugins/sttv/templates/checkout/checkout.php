@@ -1,5 +1,6 @@
 <?php
 (function(){
+    $ck;
 $ck1 = <<<HTML
 <div id="pane-1" class="st-checkout-pane row">
     <div class="st-checkout-header col s12">
@@ -125,7 +126,7 @@ $ck4 = <<<HTML
 </div>
 HTML;
 
-return [
+return $ck = [
     '',
     $ck1,
     $ck2,
