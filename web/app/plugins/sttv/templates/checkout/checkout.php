@@ -119,10 +119,10 @@ $ck4 = <<<HTML
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
     </div>
     <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
-        <div class="input-field col s12">
+        <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default" type="text" name="st-card-name" placeholder="Name on card" />
         </div>
-        <div class="input-field col s12">
+        <div class="input-field col s12 l6 st-input-half-right">
             <input class="browser-default" type="tel" name="st-card-phone" placeholder="Phone Number" />
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
