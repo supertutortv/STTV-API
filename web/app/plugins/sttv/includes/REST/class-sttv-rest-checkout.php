@@ -324,7 +324,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $id ) {
-        $pricing = $code = $msg = '';
+        $pricing = $code = $msg = $html = '';
         $course = get_post( sttv_id_decode($id) );
 
         if ( !$course ) {
@@ -334,9 +334,20 @@ class Checkout extends \WP_REST_Controller {
             $pricing = get_post_meta( $course->ID, 'sttv_course_data', true )['pricing'];
             unset( $pricing['renewals'] );
             $code = 'checkout_pricing_success';
+            $html = sttv_get_template('checkout','checkout');
         }
 
-        return sttv_rest_response( $code, $msg, 200, ['data' => ['pricing' => $pricing]]);
+        return sttv_rest_response(
+            $code,
+            $msg,
+            200,
+            [
+                'data' => [
+                    'pricing' => $pricing,
+                    'template' => $html
+                ]
+            ]
+        );
     }
 
     private function check_email( $email = '' ) {
