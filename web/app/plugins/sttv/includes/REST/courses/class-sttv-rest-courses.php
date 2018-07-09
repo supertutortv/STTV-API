@@ -178,7 +178,7 @@ class Courses extends \WP_REST_Controller {
 			$body = json_decode( $request->get_body(), true );
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-			$updated = [];
+			$updated = $allowed = [];
 			$timestamp = time();
 			switch ( $patch ) {
 				case 'history':
@@ -194,26 +194,23 @@ class Courses extends \WP_REST_Controller {
 					$updated['udata_record'] = json_decode($updated['udata_record']);
 					break;
 				case 'userdata':
-				case 'settings':
-					$allowed = [
-						'settings' => [
-							'autoplay',
-							'dark_mode',
-							'default_course'
-						],
-						'userdata' => [
-							'firstname',
-							'lastname',
-							'address',
-							'tests'
-						]
+					$allowed['userdata'] = [
+						'firstname',
+						'lastname',
+						'address',
+						'tests'
 					];
-
+				case 'settings':
+					$allowed['settings'] = [
+						'autoplay',
+						'dark_mode',
+						'default_course'
+					];
 					foreach( $body as $key => $val) {
-						if ($allowed[$key]) {
+						if ($allowed[$patch]) {
 							foreach ($val as $k => $v) {
-								if ($allowed[$key][$k]) {
-									$umeta['user'][$key][$k] = $updated[$key][$k] = $v;
+								if ($allowed[$patch][$k]) {
+									$umeta['user'][$patch][$k] = $updated[$patch][$k] = $v;
 								}
 							}
 						}
