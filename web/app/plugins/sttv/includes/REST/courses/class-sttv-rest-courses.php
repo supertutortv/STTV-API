@@ -198,6 +198,7 @@ class Courses extends \WP_REST_Controller {
 						'firstname',
 						'lastname',
 						'address',
+						'orders',
 						'tests'
 					];
 				case 'settings':
@@ -206,13 +207,9 @@ class Courses extends \WP_REST_Controller {
 						'dark_mode',
 						'default_course'
 					];
-					foreach( $body as $key => $val) {
-						if ($allowed[$patch]) {
-							foreach ($val as $k => $v) {
-								if ($allowed[$patch][$k]) {
-									$umeta['user'][$patch][$k] = $updated[$patch][$k] = $v;
-								}
-							}
+					foreach( $body as $key => $val ) {
+						if ($allowed[$patch][$key]) {
+							$updated[$patch][$key] = $val;
 						}
 					}
 					update_user_meta( $userid, 'sttv_user_data', $umeta );
