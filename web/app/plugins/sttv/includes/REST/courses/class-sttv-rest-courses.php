@@ -208,9 +208,10 @@ class Courses extends \WP_REST_Controller {
 						'default_course'
 					];
 					foreach( $body as $key => $val ) {
-						if ($allowed[$patch][$key]) {
-							$updated[$patch][$key] = $val;
-						}
+						$updated[] = $allowed[$patch][$key];
+						/* if ($allowed[$patch][$key]) {
+							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;
+						} */
 					}
 					update_user_meta( $userid, 'sttv_user_data', $umeta );
 					break;
