@@ -334,7 +334,7 @@ class Checkout extends \WP_REST_Controller {
             $pricing = get_post_meta( $course->ID, 'sttv_course_data', true )['pricing'];
             unset( $pricing['renewals'] );
             $code = 'checkout_pricing_success';
-            //$html = sttv_get_template('checkout','checkout');
+            $html = include STTV_TEMPLATE_DIR.'checkout/checkout.php';
         }
 
         return sttv_rest_response(
@@ -344,7 +344,7 @@ class Checkout extends \WP_REST_Controller {
             [
                 'data' => [
                     'pricing' => $pricing,
-                    'html' => sttv_get_template('checkout','checkout')
+                    'html' => $html
                 ]
             ]
         );
