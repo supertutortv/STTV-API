@@ -7,7 +7,7 @@ $ck1 = <<<HTML
         <h2>Okay, let's get started!</h2>
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
-    <div id="st-checkout-account" class="st-checkout-form col s12 l6 push-l3">
+    <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default invalid" type="text" name="st-first-name" placeholder="First Name" required />
         </div>
@@ -34,7 +34,7 @@ $ck2 = <<<HTML
         <h2>What's your billing address?</h2>
         <span>This is the address associated with the card you are going to use for payment. We use this to verify your payment, so please check the accuracy of the information you provide.</span>
     </div>
-    <div id="st-checkout-billing" class="st-checkout-form col s12 l6 push-l3">
+    <div id="st-checkout-billing" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12">
             <input class="browser-default billing address1" type="text" name="st-billing-address1" placeholder="Address 1" />
         </div>
@@ -52,6 +52,7 @@ $ck2 = <<<HTML
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
             <select class="browser-default validate billing country" name="st-billing-country" required>
+                <option value selected>Country...</option>
                 {$countrydd}
             </select>
         </div>
@@ -69,7 +70,7 @@ $ck3 = <<<HTML
         <h2>Where are we sending your books?</h2>
         <span>Even if you're signing up for a course that doesn't ship books, we still collect this information to keep on file in your account. We never share this information with anyone.</span>
     </div>
-    <div id="st-checkout-shipping" class="st-checkout-form col s12 l6 push-l3">
+    <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
         <div class="st-checkout-spaced col s12">
             <label>
                 <input name="st-shipping-copy-billing" class="filled-in" type="checkbox" />
@@ -117,7 +118,7 @@ $ck4 = <<<HTML
         <h2>Almost there!</h2>
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
     </div>
-    <div id="st-checkout-shipping" class="st-checkout-form col s12 l6 push-l3">
+    <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12">
             <input class="browser-default" type="text" name="st-card-name" placeholder="Name on card" />
         </div>
