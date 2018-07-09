@@ -130,8 +130,7 @@ $ck4 = <<<HTML
                 <div class="row totals-row">
                     <div class="col s8">
                         <div class="input-field coupon col s12">
-                            <input id="sttv_coupon" name="sttv_coupon" type="text" placeholder="Coupon"/>
-                            <label for="sttv_coupon">Coupon Code</label>
+                            <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code"/>
                         </div>
                     </div>
                     <div id="total" class="col s4 right-align"><span id="ttltxt">Total: $<span>0</span></span></div>
@@ -150,10 +149,16 @@ $ck4 = <<<HTML
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
         <div class="col s12">
             <div class="input-field col s12" style="margin-top:0px">
-                <input class="filled-in" type="checkbox" name="sttv_mailinglist" id="sttv_mailinglist" checked/><label for="sttv_mailinglist">Sign me up for promos, coupons, and giveaways from SupertutorTV</label><br/>
+                <label>
+                    <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
+                    <span>Sign me up for promos, coupons, and giveaways from SupertutorTV</span>
+                </label>
             </div>
-            <div class="tandc col s12">
-                <span>By submitting this payment, you agree to SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
+            <div class="input-field tandc col s12">
+                <label>
+                    <input class="filled-in" type="checkbox" name="st-customer-tandc"/>
+                    <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
+                </label>
             </div>
         </div>
     </div>
