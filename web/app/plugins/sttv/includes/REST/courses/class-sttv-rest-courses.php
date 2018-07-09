@@ -207,10 +207,6 @@ class Courses extends \WP_REST_Controller {
 						'dark_mode',
 						'default_course'
 					];
-					if ($umeta['user']['data']){
-						$umeta['user']['userdata'] = $umeta['user']['data'];
-						unset($umeta['user']['data']);
-					}
 					foreach( $body as $key => $val ) {
 						if ( in_array($key,$allowed[$patch]) ) {
 							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;

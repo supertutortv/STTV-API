@@ -76,7 +76,7 @@ function customer_created( $data ) {
                 'default_course' => '',
                 'dark_mode' => false
             ],
-            'data' => [
+            'userdata' => [
                 'customer' => $customer['id'],
                 'uid' => $customer['invoice_prefix'],
                 'orders' => [],
