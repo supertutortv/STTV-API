@@ -216,7 +216,7 @@ class Courses extends \WP_REST_Controller {
 							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;
 						}
 					}
-					//update_user_meta( $userid, 'sttv_user_data', $umeta );
+					update_user_meta( $userid, 'sttv_user_data', $umeta );
 					break;
 				default:
 					return sttv_rest_response(
