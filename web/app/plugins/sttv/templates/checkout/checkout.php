@@ -51,7 +51,7 @@ $ck2 = <<<HTML
             <input class="browser-default billing pcode" type="text" name="st-billing-postal-code" placeholder="Postal Code" />
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class="validate billing country" name="st-billing-country" required>
+            <select class="browser-default validate billing country" name="st-billing-country" required>
                 <option value selected>Country...</option>
                 {$countrydd}
             </select>
