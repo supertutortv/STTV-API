@@ -208,7 +208,7 @@ class Courses extends \WP_REST_Controller {
 						'default_course'
 					];
 					foreach( $body as $key => $val ) {
-						$updated[] = $allowed[$patch][$key];
+						$updated[] = $allowed[$patch];
 						/* if ($allowed[$patch][$key]) {
 							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;
 						} */
