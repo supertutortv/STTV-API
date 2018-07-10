@@ -39,7 +39,7 @@ $ck2 = <<<HTML
             <input class="browser-default validate billing address1" type="text" name="st-customer-billing-address_line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default validate billing address2" type="text" name="st-customer-billing-address_line1" placeholder="Address 2"/>
+            <input class="browser-default validate billing address2" type="text" name="st-customer-billing-address_line2" placeholder="Address 2"/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default validate billing city" type="text" name="st-customer-billing-address_city" placeholder="City" required/>
@@ -51,7 +51,7 @@ $ck2 = <<<HTML
             <input class="browser-default validate billing pcode" type="text" name="st-customer-billing-address_zip" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class="browser-default validate validate billing country" name="st-customer-billing-address_country" required>
+            <select class="browser-default validate billing country" name="st-customer-billing-address_country" required>
                 <option value selected>Country...</option>
                 {$countrydd}
             </select>
@@ -84,22 +84,22 @@ $ck3 = <<<HTML
             </label>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default validate shipping address1" type="text" name="st-shipping-address-line1" placeholder="Address 1" required/>
+            <input class="browser-default validate shipping address_line1" type="text" name="st-shipping-address-line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default validate shipping address2" type="text" name="st-shipping-address-line2" placeholder="Address 2" />
+            <input class="browser-default validate shipping address_line2" type="text" name="st-shipping-address-line2" placeholder="Address 2" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default validate shipping city" type="text" name="st-shipping-address-city" placeholder="City" required/>
+            <input class="browser-default validate shipping address_city" type="text" name="st-shipping-address-city" placeholder="City" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default validate shipping state" type="text" name="st-shipping-address-state" placeholder="State" required/>
+            <input class="browser-default validate shipping address_state" type="text" name="st-shipping-address-state" placeholder="State" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default validate shipping pcode" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
+            <input class="browser-default validate shipping address_zip" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class='browser-default validate validate shipping country' name='st-shipping-address-country' required>
+            <select class='browser-default validate validate shipping address_country' name='st-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
             </select>
