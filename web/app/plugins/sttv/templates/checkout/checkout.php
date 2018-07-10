@@ -138,7 +138,7 @@ $ck4 = <<<HTML
         <div class="st-checkout-options row">
             <div class="st-checkout-spaced col s12">
                 <label>
-                    <input name="st-customer-terms" class="filled-in" type="checkbox" />
+                    <input name="st-customer-terms" class="filled-in" type="checkbox" required/>
                     <span>I have read SupertutorTV's Terms & Conditions</span>
                 </label>
             </div>
@@ -147,7 +147,8 @@ $ck4 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
+                <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
+                <label></label>
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
