@@ -135,7 +135,7 @@ $ck4 = <<<HTML
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
             </div>
         </div>
-        <div class="st-checkout-options col s12 l8 push-l2">
+        <div class="st-checkout-options row">
             Options
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
