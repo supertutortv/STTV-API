@@ -136,7 +136,12 @@ $ck4 = <<<HTML
             </div>
         </div>
         <div class="st-checkout-options row">
-            Options
+            <div class="st-checkout-spaced col s12">
+                <label>
+                    <input name="st-customer-terms" class="filled-in" type="checkbox" />
+                    <span>I have read SupertutorTV's Terms & Conditions</span>
+                </label>
+            </div>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
