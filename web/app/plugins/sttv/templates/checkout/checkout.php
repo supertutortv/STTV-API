@@ -144,20 +144,7 @@ $ck4 = <<<HTML
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
     </div>
-    <div class="st-checkout-options clearfix col s12">
-        <div class="input-field col s12 l6">
-            <label>
-                <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
-                <span>Sign me up for promos, coupons, and giveaways from SupertutorTV</span>
-            </label>
-        </div>
-        <div class="input-field tandc col s12 l6">
-            <label>
-                <input class="filled-in validate" type="checkbox" placeholder="Terms & Conditions" name="st-customer-tandc" required/>
-                <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
-            </label>
-        </div>
-    </div>
+    <div class="st-checkout-options clearfix col s12"></div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
         <a class="st-checkout-submit st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()" disabled>SUBMIT</a>
