@@ -150,7 +150,7 @@ $ck4 = <<<HTML
             </div>
         </div>
         <div class="input-field required col s12 l6 st-input-half-left">
-            <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
+            <input class="browser-default validate" type="text" name="st-customer-billing-name" placeholder="Name on card" required/>
         </div>
         <div class="input-field required col s12 l6 st-input-half-right">
                 <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
