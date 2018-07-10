@@ -79,27 +79,27 @@ $ck3 = <<<HTML
         </div>
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-priority-ship" class="filled-in" type="checkbox" />
+                <input name="st-customer-shipping-priority" class="filled-in" type="checkbox" />
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default validate shipping address_line1" type="text" name="st-shipping-address-line1" placeholder="Address 1" required/>
+            <input class="browser-default validate shipping address_line1" type="text" name="st-customer-shipping-address-line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default validate shipping address_line2" type="text" name="st-shipping-address-line2" placeholder="Address 2" />
+            <input class="browser-default validate shipping address_line2" type="text" name="st-customer-shipping-address-line2" placeholder="Address 2" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default validate shipping address_city" type="text" name="st-shipping-address-city" placeholder="City" required/>
+            <input class="browser-default validate shipping address_city" type="text" name="st-customer-shipping-address-city" placeholder="City" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default validate shipping address_state" type="text" name="st-shipping-address-state" placeholder="State" required/>
+            <input class="browser-default validate shipping address_state" type="text" name="st-customer-shipping-address-state" placeholder="State" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default validate shipping address_zip" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
+            <input class="browser-default validate shipping address_zip" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class='browser-default validate shipping address_country' name='st-shipping-address-country' required>
+            <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
             </select>
@@ -139,7 +139,7 @@ $ck4 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default validate" type="tel" name="st-shipping-phone" placeholder="Phone Number" required/>
+            <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
