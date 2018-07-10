@@ -144,7 +144,7 @@ $ck4 = <<<HTML
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
     </div>
-    <div class="st-checkout-options col s12">
+    <div class="st-checkout-options clearfix col s12">
         <div class="input-field col s12 l6">
             <label>
                 <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
