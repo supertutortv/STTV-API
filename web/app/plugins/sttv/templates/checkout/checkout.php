@@ -144,7 +144,7 @@ $ck4 = <<<HTML
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
     </div>
-    <div class="st-checkout-options clearfix col s12"></div>
+    <div class="st-checkout-options col s12 l8 push-l2"></div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
         <a class="st-checkout-submit st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()" disabled>SUBMIT</a>
