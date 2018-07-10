@@ -136,7 +136,7 @@ $ck4 = <<<HTML
             </div>
         </div>
         <div class="st-checkout-options row">
-            <div class="st-checkout-spaced col s12">
+            <div class="st-checkout-spaced input-field required col s12">
                 <label>
                     <input name="st-customer-terms" class="filled-in" type="checkbox" required/>
                     <span>I have read SupertutorTV's Terms & Conditions</span>
