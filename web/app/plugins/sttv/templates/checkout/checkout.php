@@ -73,13 +73,13 @@ $ck3 = <<<HTML
     <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-shipping-copy-billing" class="filled-in" type="checkbox" />
+                <input name="st-customer-shipping-copy-billing" class="filled-in" type="checkbox" />
                 <span>Same as billing address</span>
             </label>
         </div>
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-shipping-priority" class="filled-in" type="checkbox" />
+                <input name="st-customer-priority-ship" class="filled-in" type="checkbox" />
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
