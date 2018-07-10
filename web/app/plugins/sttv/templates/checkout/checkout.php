@@ -125,7 +125,7 @@ $ck4 = <<<HTML
                 <div class="col s8">Item</div>
                 <div class="col s2 right-align">Price</div>
             </div>
-            <div class="items-row">Yankee Doodle Doo</div>
+            <div class="items-row"></div>
             <div class="row totals-row valign-wrapper">
                 <div class="col s6">
                     <div class="input-field coupon col s12">
@@ -134,6 +134,9 @@ $ck4 = <<<HTML
                 </div>
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
             </div>
+        </div>
+        <div class="st-checkout-options col s12 l8 push-l2">
+            Options
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
@@ -144,7 +147,6 @@ $ck4 = <<<HTML
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
     </div>
-    <div class="st-checkout-options col s12 l8 push-l2"></div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
         <a class="st-checkout-submit st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()">SUBMIT</a>
