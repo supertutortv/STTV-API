@@ -99,7 +99,7 @@ $ck3 = <<<HTML
             <input class="browser-default validate shipping address_zip" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class='browser-default validate validate shipping address_country' name='st-shipping-address-country' required>
+            <select class='browser-default validate shipping address_country' name='st-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
             </select>
