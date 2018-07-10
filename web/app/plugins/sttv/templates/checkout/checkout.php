@@ -79,7 +79,7 @@ $ck3 = <<<HTML
         </div>
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-shipping-priority" class="filled-in" type="checkbox" />
+                <input name="st-customer-shipping-priority" class="filled-in" type="checkbox" onclick="_st.checkout.setShipping(this)"/>
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
