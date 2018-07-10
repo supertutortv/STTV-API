@@ -36,22 +36,22 @@ $ck2 = <<<HTML
     </div>
     <div id="st-checkout-billing" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12">
-            <input class="browser-default billing address1" type="text" name="st-customer-billing-address_line1" placeholder="Address 1" required/>
+            <input class="browser-default validate billing address1" type="text" name="st-customer-billing-address_line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default billing address2" type="text" name="st-customer-billing-address_line1" placeholder="Address 2"/>
+            <input class="browser-default validate billing address2" type="text" name="st-customer-billing-address_line1" placeholder="Address 2"/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default billing city" type="text" name="st-customer-billing-address_city" placeholder="City" required/>
+            <input class="browser-default validate billing city" type="text" name="st-customer-billing-address_city" placeholder="City" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default billing state" type="text" name="st-customer-billing-address_state" placeholder="State" required/>
+            <input class="browser-default validate billing state" type="text" name="st-customer-billing-address_state" placeholder="State" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default billing pcode" type="text" name="st-customer-billing-address_zip" placeholder="Postal Code" required/>
+            <input class="browser-default validate billing pcode" type="text" name="st-customer-billing-address_zip" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class="browser-default validate billing country" name="st-customer-billing-address_country" required>
+            <select class="browser-default validate validate billing country" name="st-customer-billing-address_country" required>
                 <option value selected>Country...</option>
                 {$countrydd}
             </select>
@@ -84,22 +84,22 @@ $ck3 = <<<HTML
             </label>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default shipping address1" type="text" name="st-shipping-address-line1" placeholder="Address 1" required/>
+            <input class="browser-default validate shipping address1" type="text" name="st-shipping-address-line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
-            <input class="browser-default shipping address2" type="text" name="st-shipping-address-line2" placeholder="Address 2" />
+            <input class="browser-default validate shipping address2" type="text" name="st-shipping-address-line2" placeholder="Address 2" />
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default shipping city" type="text" name="st-shipping-address-city" placeholder="City" required/>
+            <input class="browser-default validate shipping city" type="text" name="st-shipping-address-city" placeholder="City" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default shipping state" type="text" name="st-shipping-address-state" placeholder="State" required/>
+            <input class="browser-default validate shipping state" type="text" name="st-shipping-address-state" placeholder="State" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default shipping pcode" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
+            <input class="browser-default validate shipping pcode" type="text" name="st-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <select class='browser-default validate shipping country' name='st-shipping-address-country' required>
+            <select class='browser-default validate validate shipping country' name='st-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
             </select>
@@ -136,10 +136,10 @@ $ck4 = <<<HTML
             </div>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
-            <input class="browser-default" type="text" name="st-customer-name" placeholder="Name on card" required/>
+            <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
-            <input class="browser-default" type="tel" name="st-shipping-phone" placeholder="Phone Number" required/>
+            <input class="browser-default validate" type="tel" name="st-shipping-phone" placeholder="Phone Number" required/>
         </div>
         <div id="st-checkout-card-element" class="col s12"></div>
         <script>if (!_st.checkout.card) _st.checkout.setup()</script>
@@ -157,7 +157,7 @@ $ck4 = <<<HTML
         </div>
         <div class="input-field tandc col s12">
             <label>
-                <input class="filled-in" type="checkbox" name="st-customer-tandc"/>
+                <input class="filled-in validate" type="checkbox" placeholder="Terms & Conditions" name="st-customer-tandc" required/>
                 <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
             </label>
         </div>
