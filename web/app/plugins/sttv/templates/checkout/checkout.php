@@ -125,7 +125,7 @@ $ck4 = <<<HTML
                 <div class="col s8">Item</div>
                 <div class="col s2 right-align">Price</div>
             </div>
-            <div class="items-row"></div>
+            <div class="items-row">Yankee Doodle Doo</div>
             <div class="row totals-row">
                 <div class="col s8">
                     <div class="input-field coupon col s12">
@@ -147,6 +147,20 @@ $ck4 = <<<HTML
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
         <a class="st-checkout-submit st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()" disabled>SUBMIT</a>
+    </div>
+    <div class="col s12">
+        <div class="input-field col s12">
+            <label>
+                <input class="filled-in" type="checkbox" name="st-customer-mailinglist"/>
+                <span>Sign me up for promos, coupons, and giveaways from SupertutorTV</span>
+            </label>
+        </div>
+        <div class="input-field tandc col s12">
+            <label>
+                <input class="filled-in" type="checkbox" name="st-customer-tandc"/>
+                <span>I have read SupertutorTV's <a class="azure" href="<?php echo site_url('terms-and-conditions'); ?>" target="blank">Terms and Conditions</a>.</span>
+            </label>
+        </div>
     </div>
 </div>
 HTML;
