@@ -35,22 +35,22 @@ $ck2 = <<<HTML
         <span>This is the address associated with the card you are going to use for payment. We use this to verify your payment, so please check the accuracy of the information you provide.</span>
     </div>
     <div id="st-checkout-billing" class="st-checkout-form col s12 l8 push-l2">
-        <div class="input-field col s12">
+        <div class="input-field required col s12">
             <input class="browser-default validate billing address1" type="text" name="st-customer-billing-address_line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
             <input class="browser-default validate billing address2" type="text" name="st-customer-billing-address_line2" placeholder="Address 2"/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 l6 st-input-half-left">
             <input class="browser-default validate billing city" type="text" name="st-customer-billing-address_city" placeholder="City" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 l6 st-input-half-right">
             <input class="browser-default validate billing state" type="text" name="st-customer-billing-address_state" placeholder="State" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 l6 st-input-half-left">
             <input class="browser-default validate billing pcode" type="text" name="st-customer-billing-address_zip" placeholder="Postal Code" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 l6 st-input-half-right">
             <select class="browser-default validate billing country" name="st-customer-billing-address_country" required>
                 <option value selected>Country...</option>
                 {$countrydd}
@@ -83,22 +83,22 @@ $ck3 = <<<HTML
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
-        <div class="input-field col s12">
+        <div class="input-field required col s12">
             <input class="browser-default validate shipping address_line1" type="text" name="st-customer-shipping-address-line1" placeholder="Address 1" required/>
         </div>
         <div class="input-field col s12">
             <input class="browser-default validate shipping address_line2" type="text" name="st-customer-shipping-address-line2" placeholder="Address 2" />
         </div>
-        <div class="input-field col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 l6 st-input-half-left">
             <input class="browser-default validate shipping address_city" type="text" name="st-customer-shipping-address-city" placeholder="City" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 l6 st-input-half-right">
             <input class="browser-default validate shipping address_state" type="text" name="st-customer-shipping-address-state" placeholder="State" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 l6 st-input-half-left">
             <input class="browser-default validate shipping address_zip" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 l6 st-input-half-right">
             <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
@@ -143,10 +143,10 @@ $ck4 = <<<HTML
                 </label>
             </div>
         </div>
-        <div class="input-field col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 l6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-name" placeholder="Name on card" required/>
         </div>
-        <div class="input-field col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 l6 st-input-half-right">
                 <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
                 <label></label>
         </div>
