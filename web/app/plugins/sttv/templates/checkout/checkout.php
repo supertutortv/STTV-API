@@ -73,7 +73,7 @@ $ck3 = <<<HTML
     <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-shipping-copy-billing" class="filled-in" type="checkbox" />
+                <input name="st-customer-shipping-copy-billing" class="filled-in" type="checkbox" onclick="_st.checkout.copyAddress(this)"/>
                 <span>Same as billing address</span>
             </label>
         </div>
