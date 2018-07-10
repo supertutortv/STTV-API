@@ -10,6 +10,7 @@ $ck1 = <<<HTML
     <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field col s12 l6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-firstname" placeholder="First Name" required />
+            <label></label>
         </div>
         <div class="input-field col s12 l6 st-input-half-right">
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
