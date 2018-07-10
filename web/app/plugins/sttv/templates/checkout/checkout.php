@@ -127,12 +127,12 @@ $ck4 = <<<HTML
             </div>
             <div class="items-row">Yankee Doodle Doo</div>
             <div class="row totals-row valign-wrapper">
-                <div class="col s8">
+                <div class="col s6">
                     <div class="input-field coupon col s12">
                         <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code"/>
                     </div>
                 </div>
-                <div id="total" class="col s4 right-align"><span id="ttltxt">$<span>0</span></span></div>
+                <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
             </div>
         </div>
         <div class="input-field col s12 l6 st-input-half-left">
