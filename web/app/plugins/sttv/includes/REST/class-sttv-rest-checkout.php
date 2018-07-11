@@ -383,7 +383,7 @@ class Checkout extends \WP_REST_Controller {
 
                 return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'id' => $coupon->id, 'value' => $amt ] );
             } else {
-                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'id' => $coupon->id, 'val' => '0' ] );
+                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'id' => $coupon->id, 'value' => '0' ] );
             }
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
