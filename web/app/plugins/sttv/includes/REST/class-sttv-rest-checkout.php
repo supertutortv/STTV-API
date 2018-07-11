@@ -362,14 +362,14 @@ class Checkout extends \WP_REST_Controller {
         }
         
         if ( wp_get_current_user()->user_email === $email ) {
-            return sttv_rest_response( 'email_current_user', 'Email address is the same as the currently logged in user', 200 );
+            return sttv_rest_response( 'email_current_user', 'Email address is the same as the currently logged in user', 200, [ 'id' => '', 'value' => '' ] );
         }
 
         if ( email_exists( $email ) ) {
-            return sttv_rest_response( 'email_taken', 'Email address is already in use', 200 );
+            return sttv_rest_response( 'email_taken', 'Email address is already in use', 200, [ 'id' => '', 'value' => '' ] );
         }
         
-        return sttv_rest_response( 'email_available', 'Email address available', 200, [ 'value' => $email ] );
+        return sttv_rest_response( 'email_available', 'Email address available', 200, [ 'id' => $email, 'value' => $email ] );
     }
 
     private function check_coupon( $coupon, $sig ) {
@@ -379,23 +379,26 @@ class Checkout extends \WP_REST_Controller {
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
             if ( $coupon->valid ) {
-                return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'value' => $coupon ] );
+                $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
+
+                return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'id' => $coupon->id, 'value' => $amt ] );
             } else {
-                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'value' => $coupon ] );
+                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'id' => $coupon->id, 'val' => '0' ] );
             }
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
             list($UA,$platform,$product) = explode('|',$sig);
+            $signature = [
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'fwd' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '',
+                'ua' => $UA,
+                'platform' => $platform,
+                'product' => $product
+            ];
             return sttv_rest_response( 'coupon_invalid', 'Invalid coupon', 200, [
+                'id' => $coupon->id,
                 'value' => $coupon,
-                'error' => $e->getJsonBody()['error'],
-                'signature' => [
-                    'ip' => $_SERVER['REMOTE_ADDR'],
-                    'fwd' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '',
-                    'ua' => $UA,
-                    'platform' => $platform,
-                    'product' => $product
-                ]
+                'error' => $e->getJsonBody()['error']
             ]);
         }
     }
