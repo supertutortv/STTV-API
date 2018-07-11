@@ -373,8 +373,7 @@ class Checkout extends \WP_REST_Controller {
         return sttv_rest_response( 'email_available', 'Email address available', 200 );
     }
 
-    private function check_coupon( $coupon, $body ) {
-        return $body;
+    private function check_coupon( $coupon, $sig ) {
         if ( empty( $coupon ) ) {
             return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         }
@@ -392,7 +391,8 @@ class Checkout extends \WP_REST_Controller {
         } catch ( \Exception $e ) {
             $body = $e->getJsonBody();
             return sttv_rest_response( 'coupon_invalid', 'invalid coupon', 200, [
-                'error' => $body['error']
+                'error' => $body['error'],
+                'signature' => $sig
             ]);
         }
     }
