@@ -388,10 +388,16 @@ class Checkout extends \WP_REST_Controller {
                 return sttv_rest_response( 'coupon_expired', 'expired coupon', 200 );
             }
         } catch ( \Exception $e ) {
-            $body = $e->getJsonBody();
+            $sig = base64_decode($sig);
+            list($UA,$platform,$product) = explode('|',$sig);
             return sttv_rest_response( 'coupon_invalid', 'invalid coupon', 200, [
-                'error' => $body['error'],
-                'signature' => $sig
+                'error' => $e->getJsonBody()['error'],
+                'signature' => [
+                    'ip' => $_SERVER['REMOTE_ADDRESS'],
+                    'ua' => $UA,
+                    'platform' => $platform,
+                    'product' => $product
+                ]
             ]);
         }
     }
