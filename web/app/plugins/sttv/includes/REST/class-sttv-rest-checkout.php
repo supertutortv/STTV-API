@@ -79,14 +79,13 @@ class Checkout extends \WP_REST_Controller {
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
         $pars = $request->get_params();
-        $body = json_decode($request->get_body(),true);
 
         if ( isset( $pars['pricing'] ) && !empty($pars['pricing']) ) {
             return $this->_pricing( $pars['pricing'] );
         } elseif ( isset( $pars['email'] ) && !empty($pars['email']) ) {
             return $this->check_email( sanitize_email($pars['email']) );
         } elseif ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
-            return $this->check_coupon( sanitize_text_field($pars['coupon']), $body );
+            return $this->check_coupon( sanitize_text_field($pars['coupon']), sanitize_text_field($pars['sig']) );
         } elseif ( isset( $pars['tax'] ) && !empty($pars['tax']) ) {
             return $this->check_zip( sanitize_text_field($pars['tax']) );
         } else {
