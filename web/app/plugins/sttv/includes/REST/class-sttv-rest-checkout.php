@@ -393,7 +393,8 @@ class Checkout extends \WP_REST_Controller {
             return sttv_rest_response( 'coupon_invalid', 'invalid coupon', 200, [
                 'error' => $e->getJsonBody()['error'],
                 'signature' => [
-                    'ip' => $_SERVER['REMOTE_ADDRESS'],
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                    'fwd' => $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '',
                     'ua' => $UA,
                     'platform' => $platform,
                     'product' => $product
