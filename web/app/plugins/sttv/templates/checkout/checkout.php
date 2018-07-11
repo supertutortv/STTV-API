@@ -8,10 +8,10 @@ $ck1 = <<<HTML
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
     <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
-        <div class="input-field required col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-firstname" placeholder="First Name" required />
         </div>
-        <div class="input-field required col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 m6 st-input-half-right">
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
@@ -41,16 +41,16 @@ $ck2 = <<<HTML
         <div class="input-field col s12">
             <input class="browser-default validate billing address2" type="text" name="st-customer-billing-address_line2" placeholder="Address 2"/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate billing city" type="text" name="st-customer-billing-address_city" placeholder="City" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 m6 st-input-half-right">
             <input class="browser-default validate billing state" type="text" name="st-customer-billing-address_state" placeholder="State" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate billing pcode" type="text" name="st-customer-billing-address_zip" placeholder="Postal Code" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 m6 st-input-half-right">
             <select class="browser-default validate billing country" name="st-customer-billing-address_country" required>
                 <option value selected>Country...</option>
                 {$countrydd}
@@ -89,16 +89,16 @@ $ck3 = <<<HTML
         <div class="input-field col s12">
             <input class="browser-default validate shipping address_line2" type="text" name="st-customer-shipping-address-line2" placeholder="Address 2" />
         </div>
-        <div class="input-field required col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate shipping address_city" type="text" name="st-customer-shipping-address-city" placeholder="City" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 m6 st-input-half-right">
             <input class="browser-default validate shipping address_state" type="text" name="st-customer-shipping-address-state" placeholder="State" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-left">
+        <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate shipping address_zip" onblur="_st.checkout.setTaxRate(this)" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
-        <div class="input-field required col s12 l6 st-input-half-right">
+        <div class="input-field required col s12 m6 st-input-half-right">
             <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
                 {$countrydd}
