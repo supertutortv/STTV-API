@@ -379,14 +379,15 @@ class Checkout extends \WP_REST_Controller {
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
             if ( $coupon->valid ) {
-                return sttv_rest_response( 'coupon_valid', 'valid coupon', 200, [ 'value' => $coupon ] );
+                return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'value' => $coupon ] );
             } else {
-                return sttv_rest_response( 'coupon_expired', 'expired coupon', 200, [ 'value' => $coupon ] );
+                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'value' => $coupon ] );
             }
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
             list($UA,$platform,$product) = explode('|',$sig);
-            return sttv_rest_response( 'coupon_invalid', 'invalid coupon', 200, [
+            return sttv_rest_response( 'coupon_invalid', 'Invalid coupon', 200, [
+                'value' => $coupon,
                 'error' => $e->getJsonBody()['error'],
                 'signature' => [
                     'ip' => $_SERVER['REMOTE_ADDR'],
@@ -403,7 +404,7 @@ class Checkout extends \WP_REST_Controller {
         $this->set_tax( $zip );
         $msg = ($this->tax > 0) ? "CA tax ($this->tax%)" : "";
 
-        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'value' => $this->tax ] );
+        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'value' => (string)$this->tax ] );
     }
 
     private function set_tax( $zip ) {
