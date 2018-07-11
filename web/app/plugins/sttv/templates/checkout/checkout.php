@@ -15,7 +15,7 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate" type="email" name="st-customer-email" placeholder="Email Address" required/>
+            <input class="browser-default validate email" type="email" name="st-customer-email" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
         </div>
         <div class="input-field required col s12">
             <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
@@ -96,7 +96,7 @@ $ck3 = <<<HTML
             <input class="browser-default validate shipping address_state" type="text" name="st-customer-shipping-address-state" placeholder="State" required/>
         </div>
         <div class="input-field required col s12 m6 st-input-half-left">
-            <input class="browser-default validate shipping address_zip" onblur="_st.checkout.setTaxRate(this)" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
+            <input class="browser-default validate shipping address_zip tax" onblur="_st.checkout.setChecker(this)" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field required col s12 m6 st-input-half-right">
             <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
@@ -129,7 +129,7 @@ $ck4 = <<<HTML
             <div class="row totals-row valign-wrapper">
                 <div class="col s6">
                     <div class="input-field coupon col s12">
-                        <input class="browser-default" name="st-coupon" type="text" placeholder="Coupon code" onblur="_st.checkout.setCoupon(this)"/>
+                        <input class="browser-default coupon" name="st-coupon" type="text" placeholder="Coupon code" onblur="_st.checkout.setChecker(this)"/>
                     </div>
                 </div>
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
