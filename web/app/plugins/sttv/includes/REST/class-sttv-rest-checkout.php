@@ -107,7 +107,9 @@ class Checkout extends \WP_REST_Controller {
             return $this->_mu_checkout( $body );
         }
 
-        return $this->_checkout( $body );
+        return $body;
+
+        //return $this->_checkout( $body );
     }
 
     private function _mu_checkout( $body ) {
