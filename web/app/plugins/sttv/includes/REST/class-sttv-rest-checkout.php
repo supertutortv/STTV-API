@@ -369,7 +369,7 @@ class Checkout extends \WP_REST_Controller {
             return sttv_rest_response( 'email_taken', 'Email address is already in use', 200 );
         }
         
-        return sttv_rest_response( 'email_available', 'Email address available', 200 );
+        return sttv_rest_response( 'email_available', 'Email address available', 200, [ 'value' => $email ] );
     }
 
     private function check_coupon( $coupon, $sig ) {
@@ -379,13 +379,9 @@ class Checkout extends \WP_REST_Controller {
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
             if ( $coupon->valid ) {
-                return sttv_rest_response( 'coupon_valid', 'valid coupon', 200, [
-                    'percent_off' => $coupon->percent_off ?? 0,
-                    'amount_off' => $coupon->amount_off ?? 0,
-                    'id' => $coupon->id
-                ]);
+                return sttv_rest_response( 'coupon_valid', 'valid coupon', 200, [ 'value' => $coupon ] );
             } else {
-                return sttv_rest_response( 'coupon_expired', 'expired coupon', 200 );
+                return sttv_rest_response( 'coupon_expired', 'expired coupon', 200, [ 'value' => $coupon ] );
             }
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
