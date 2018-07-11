@@ -15,7 +15,7 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate email" type="email" name="st-email" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
+            <input class="browser-default validate email" type="email" name="st-email-val" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
         </div>
         <div class="input-field required col s12">
             <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
@@ -128,7 +128,7 @@ $ck4 = <<<HTML
             <div class="row totals-row valign-wrapper">
                 <div class="col s6">
                     <div class="input-field coupon col s12">
-                        <input class="browser-default coupon" name="st-coupon" type="text" placeholder="Coupon code" onblur="_st.checkout.setChecker(this)"/>
+                        <input class="browser-default coupon" name="st-coupon-val" type="text" placeholder="Coupon code" onblur="_st.checkout.setChecker(this)"/>
                     </div>
                 </div>
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
