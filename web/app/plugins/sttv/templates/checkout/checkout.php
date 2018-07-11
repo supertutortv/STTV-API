@@ -135,7 +135,7 @@ $ck4 = <<<HTML
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
             </div>
         </div>
-        <div class="st-checkout-options row">
+        <div class="st-checkout-options col s12">
             <div class="st-checkout-spaced input-field required col s12">
                 <label>
                     <input name="st-customer-terms" class="filled-in" type="checkbox" required/>
