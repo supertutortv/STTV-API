@@ -135,6 +135,12 @@ $ck4 = <<<HTML
             </div>
         </div>
         <div class="st-checkout-options col s12">
+            <div class="st-checkout-spaced col s12">
+                <label>
+                    <input name="st-skiptrial" class="filled-in" type="checkbox" />
+                    <span>Skip the trial period and start NOW!</span>
+                </label>
+            </div>
             <div class="st-checkout-spaced required col s12">
                 <label>
                     <input name="st-customer-terms" class="filled-in" type="checkbox" required/>
@@ -143,7 +149,7 @@ $ck4 = <<<HTML
             </div>
             <div class="st-checkout-spaced col s12">
                 <label>
-                    <input name="st-customer-terms" class="filled-in" type="checkbox" />
+                    <input name="st-customer-mailinglist" class="filled-in" type="checkbox" />
                     <span>Add me to the SupertutorTV mailing list for future discounts and offers</span>
                 </label>
             </div>
