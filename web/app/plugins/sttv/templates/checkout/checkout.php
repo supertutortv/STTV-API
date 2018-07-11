@@ -121,9 +121,8 @@ $ck4 = <<<HTML
     <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
         <div id="st-checkout-items-table" class="col s12">
             <div class="row headings-row">
-                <div class="col s2">Qty</div>
                 <div class="col s8">Item</div>
-                <div class="col s2 right-align">Price</div>
+                <div class="col s4 right-align">Price</div>
             </div>
             <div class="items-row"></div>
             <div class="row totals-row valign-wrapper">
