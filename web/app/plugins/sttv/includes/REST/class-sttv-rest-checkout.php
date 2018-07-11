@@ -396,7 +396,7 @@ class Checkout extends \WP_REST_Controller {
                 'product' => $product
             ];
             return sttv_rest_response( 'coupon_invalid', 'Invalid coupon', 200, [
-                'id' => $coupon->id,
+                'id' => '',
                 'value' => '',
                 'error' => $e->getJsonBody()['error']
             ]);
