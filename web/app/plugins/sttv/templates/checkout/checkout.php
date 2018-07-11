@@ -15,7 +15,7 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate email" type="email" name="st-customer-email" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
+            <input class="browser-default validate email" type="email" name="st-email" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
         </div>
         <div class="input-field required col s12">
             <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
