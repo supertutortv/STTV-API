@@ -8,7 +8,7 @@ if ( !isset($_GET['checksum']) || strlen($_GET['checksum']) !== 32 ){
 	$file = trim($_GET['res']);
 	$hash = trim($_GET['checksum']);
 	
-	$root_path = dirname(__DIR__).'/resources/'.$test.'/'.$sec.'/';
+	$root_path = dirname(dirname(__DIR__)).'/resources/'.$test.'/'.$sec.'/';
 	
 	if (is_file($root_path.$file) && $hash == md5_file($root_path.$file)) {
 		header("Pragma: public");
@@ -24,7 +24,7 @@ if ( !isset($_GET['checksum']) || strlen($_GET['checksum']) !== 32 ){
 		http_response_code(200);
 	} else {
 		http_response_code(404);
-		echo json_encode(array('fail'=>true));
+		echo json_encode(['fail'=>true]);
 	}
 }
 die;
