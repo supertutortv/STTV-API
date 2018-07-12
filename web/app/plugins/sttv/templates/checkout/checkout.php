@@ -73,13 +73,13 @@ $ck3 = <<<HTML
     <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-shipping-copy-billing" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.copyAddress(this)"/>
+                <input name="st-customer-options-copyAddress" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.copyAddress(this)"/>
                 <span>Same as billing address</span>
             </label>
         </div>
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-shipping-priority" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.setShipping(this)"/>
+                <input name="st-customer-options-priorityShip" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.setShipping(this)"/>
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
@@ -137,19 +137,19 @@ $ck4 = <<<HTML
         <div class="st-checkout-options col s12">
             <div class="st-checkout-spaced col s12">
                 <label>
-                    <input name="st-skiptrial" class="filled-in" value="1" type="checkbox" />
+                    <input name="st-customer-options-skipTrial" class="filled-in" value="1" type="checkbox" />
                     <span>Skip the trial period and start NOW!</span>
                 </label>
             </div>
             <div class="st-checkout-spaced required col s12">
                 <label>
-                    <input name="st-customer-terms" class="filled-in" value="1" type="checkbox" required/>
+                    <input name="st-customer-options-terms" class="filled-in" value="1" type="checkbox" required/>
                     <span>I have read SupertutorTV's Terms & Conditions</span>
                 </label>
             </div>
             <div class="st-checkout-spaced col s12">
                 <label>
-                    <input name="st-customer-mailinglist" class="filled-in" value="1" type="checkbox" />
+                    <input name="st-customer-options-mailinglist" class="filled-in" value="1" type="checkbox" />
                     <span>Add me to the SupertutorTV mailing list for future discounts and offers</span>
                 </label>
             </div>
