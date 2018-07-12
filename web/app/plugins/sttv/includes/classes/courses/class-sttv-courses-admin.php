@@ -58,7 +58,7 @@ class Admin {
 				'link' => get_post_permalink( $post_id ),
 				'created' => strtotime( $post->post_date ),
 				'modified' => strtotime( $post->post_modified ),
-				'intro' => $intros['videos'][$test.'-course-intro']['ID'],
+				'intro' => $intros['videos'][$test.'-course-intro']['id'],
 				'test' => strtoupper( $test ),
 				'pricing' => [
 					'price' => (int) $course['course_pricing']['price'],
