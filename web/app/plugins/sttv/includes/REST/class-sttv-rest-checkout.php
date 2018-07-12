@@ -106,8 +106,8 @@ class Checkout extends \WP_REST_Controller {
         if ( isset($body['muid']) ) {
             return $this->_mu_checkout( $body );
         }
-
-        return $this->_checkout( $body, $request );
+        return $body;
+        //return $this->_checkout( $body, $request );
     }
 
     private function _mu_checkout( $body ) {
@@ -195,49 +195,53 @@ class Checkout extends \WP_REST_Controller {
         if ($body['authToken']) $auth = sttv_verify_web_token($body['authToken']);
         if ($auth instanceof \WP_Error) return $auth;
         try {
-            $userdata = [
-                'user_login' => $body['email'],
-                'user_pass' => $body['password'],
-                'user_email' => $body['email'],
-                'first_name' => $body['firstname'],
-                'last_name' => $body['lastname'],
-                'display_name' => $body['firstname'].' '.$body['lastname'],
-                'show_admin_bar_front' => 'false',
-                'role' => 'student'
-            ];
+            if (!$auth) {
+                $userdata = [
+                    'user_login' => $body['email'],
+                    'user_pass' => $body['password'],
+                    'user_email' => $body['email'],
+                    'first_name' => $body['firstname'],
+                    'last_name' => $body['lastname'],
+                    'display_name' => $body['firstname'].' '.$body['lastname'],
+                    'show_admin_bar_front' => 'false',
+                    'role' => 'student'
+                ];
+        
+                $user_id = wp_insert_user( $userdata );
     
-            $user_id = wp_insert_user( $userdata );
-
-            $customer = new \STTV\Checkout\Customer( 'create', [
-                'description' => $body['firstname'].' '.$body['lastname'],
-                'source' => $body['source'] ?: null,
-                'email' => $body['email'],
-                'coupon' => $body['coupon'] ?: null,
-                'metadata' => [ 'wp_id' => $user_id ],
-                'shipping' => [
-                    "name" => "shipping",
-                    "address" => [
-                        "line1" => $body['shipping_address1'],
-                        "line2" => $body['shipping_address2'],
-                        "city" => $body['shipping_city'],
-                        "state" => $body['shipping_state'],
-                        "postal_code" => $body['shipping_pcode'],
-                        "country" => $body['shipping_country']
-                    ],
-                    'phone' => $body['phone']
-                ]
-            ]);
-            $customer = $customer->response();
-    
-            if ( is_wp_error( $user_id ) ) {
-                $customer->delete();
-                return sttv_rest_response(
-                    'user_insert_error',
-                    'There was an error adding you as a user and you have not been charged. Please check your registration form and try again.',
-                    200,
-                    [ 'data' => $user_id ]
-                );
+                $customer = new \STTV\Checkout\Customer( 'create', [
+                    'description' => $body['firstname'].' '.$body['lastname'],
+                    'source' => $body['source'] ?: null,
+                    'email' => $body['email'],
+                    'coupon' => $body['coupon'] ?: null,
+                    'metadata' => [ 'wp_id' => $user_id ],
+                    'shipping' => [
+                        "name" => "shipping",
+                        "address" => [
+                            "line1" => $body['shipping_address1'],
+                            "line2" => $body['shipping_address2'],
+                            "city" => $body['shipping_city'],
+                            "state" => $body['shipping_state'],
+                            "postal_code" => $body['shipping_pcode'],
+                            "country" => $body['shipping_country']
+                        ],
+                        'phone' => $body['phone']
+                    ]
+                ]);
+                $customer = $customer->response();
+        
+                if ( is_wp_error( $user_id ) ) {
+                    $customer->delete();
+                    return sttv_rest_response(
+                        'user_insert_error',
+                        'There was an error adding you as a user and you have not been charged. Please check your registration form and try again.',
+                        200,
+                        [ 'data' => $user_id ]
+                    );
+                }
+                wp_set_current_user($user_id);
             }
+            
             
             //Begin Order Processing
             $course = get_post_meta( $body['course'], 'sttv_course_data', true );
