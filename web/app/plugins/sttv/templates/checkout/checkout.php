@@ -9,10 +9,10 @@ $ck1 = <<<HTML
     </div>
     <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field required col s12 m6 st-input-half-left">
-            <input class="browser-default validate" type="text" name="st-customer-firstname|st-customer-shipping-name+" placeholder="First Name" required />
+            <input class="browser-default validate" type="text" name="st-customer-firstname|st-customer-shipping-name" placeholder="First Name" required />
         </div>
         <div class="input-field required col s12 m6 st-input-half-right">
-            <input class="browser-default validate" type="text" name="st-customer-lastname|st-customer-shipping-name+" placeholder="Last Name" required/>
+            <input class="browser-default validate" type="text" name="st-customer-lastname|st-customer-shipping-name" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
             <input class="browser-default validate email" type="email" name="st-email-val" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>

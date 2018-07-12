@@ -208,6 +208,15 @@ class Checkout extends \WP_REST_Controller {
                     'show_admin_bar_front' => 'false',
                     'role' => 'student'
                 ]);
+
+                if ( is_wp_error( $user_id ) ) {
+                    return sttv_rest_response(
+                        'user_insert_error',
+                        'There was an error adding you as a user and you have not been charged. Please check your registration form and try again.',
+                        200,
+                        [ 'data' => $user_id ]
+                    );
+                }
     
                 $customer = new \STTV\Checkout\Customer( 'create', [
                     'description' => $fullname,
@@ -222,16 +231,7 @@ class Checkout extends \WP_REST_Controller {
                     ]
                 ]);
                 $customer = $customer->response();
-        
-                if ( is_wp_error( $user_id ) ) {
-                    $customer->delete();
-                    return sttv_rest_response(
-                        'user_insert_error',
-                        'There was an error adding you as a user and you have not been charged. Please check your registration form and try again.',
-                        200,
-                        [ 'data' => $user_id ]
-                    );
-                }
+                
                 wp_set_current_user($user_id);
             }
             $umeta = get_user_meta( get_current_user_id(),'sttv_user_data', true );
