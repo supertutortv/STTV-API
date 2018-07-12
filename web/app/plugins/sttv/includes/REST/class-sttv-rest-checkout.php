@@ -194,37 +194,30 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         if ($body['authToken']) $auth = sttv_verify_web_token($body['authToken']);
         if ($auth instanceof \WP_Error) return $auth;
+        $cus = $body['customer'];
         try {
             if (!$auth) {
-                $userdata = [
-                    'user_login' => $body['email'],
+                $fullname = $body['firstname'].' '.$body['lastname'];
+                $user_id = wp_insert_user([
+                    'user_login' => $body['email']['val'],
                     'user_pass' => $body['password'],
-                    'user_email' => $body['email'],
-                    'first_name' => $body['firstname'],
-                    'last_name' => $body['lastname'],
-                    'display_name' => $body['firstname'].' '.$body['lastname'],
+                    'user_email' => $body['email']['val'],
+                    'first_name' => $cus['firstname'],
+                    'last_name' => $cus['lastname'],
+                    'display_name' => $fullname,
                     'show_admin_bar_front' => 'false',
                     'role' => 'student'
-                ];
-        
-                $user_id = wp_insert_user( $userdata );
+                ]);
     
                 $customer = new \STTV\Checkout\Customer( 'create', [
-                    'description' => $body['firstname'].' '.$body['lastname'],
-                    'source' => $body['source'] ?: null,
+                    'description' => $fullname,
+                    'source' => $cus['token'] ?? null,
                     'email' => $body['email'],
-                    'coupon' => $body['coupon'] ?: null,
+                    'coupon' => $body['coupon']['val'] ?? null,
                     'metadata' => [ 'wp_id' => $user_id ],
                     'shipping' => [
-                        "name" => "shipping",
-                        "address" => [
-                            "line1" => $body['shipping_address1'],
-                            "line2" => $body['shipping_address2'],
-                            "city" => $body['shipping_city'],
-                            "state" => $body['shipping_state'],
-                            "postal_code" => $body['shipping_pcode'],
-                            "country" => $body['shipping_country']
-                        ],
+                        'name' => $fullname,
+                        'address' => $cus['shipping']['address'],
                         'phone' => $body['phone']
                     ]
                 ]);
@@ -241,7 +234,7 @@ class Checkout extends \WP_REST_Controller {
                 }
                 wp_set_current_user($user_id);
             }
-            
+            $umeta = get_user_meta( get_current_user_id(),'sttv_user_data', true );
             
             //Begin Order Processing
             $course = get_post_meta( $body['course'], 'sttv_course_data', true );

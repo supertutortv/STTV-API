@@ -133,7 +133,7 @@ class Admin {
 						'abbrev' => $sec['section_info']['section_code'],
 						'type' => 'collection',
 						'description' => esc_html( $sec['section_info']['description'] ),
-						'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['ID'],
+						'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
 						'color' => '#'.$color
 					],
 					'collection' => $subsec,
