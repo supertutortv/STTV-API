@@ -101,7 +101,7 @@ class Admin {
 						if ( $fcopy ){
 							$resources[] = [
 								'name' => $file['file']['title'],
-								'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
+								'file' => $test .'/'. $aslug .'/' . $file['file']['filename'],
 								'size' => round($file['file']['filesize'] / 1024) . ' KB',
 								'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 								'hash' => md5_file( $root_path . $file['file']['filename'] ),
@@ -158,7 +158,7 @@ class Admin {
 					if ( $fcopy ){
 						$presc[] = [
 							'name' => $file['file']['title'],
-							'file' => '/' . $test .'/'. $aslug .'/' . $file['file']['filename'],
+							'file' => $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
