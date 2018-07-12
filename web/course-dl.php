@@ -1,12 +1,12 @@
 <?php
 
-if ( !isset($_GET['checksum']) || strlen($_GET['checksum']) !== 32 ){
+if ( !isset($_GET['hash']) || strlen($_GET['hash']) !== 32 ){
 	include_once '../misc/template.php';
 } else {
 	$test = strtolower(trim($_GET['test']));
 	$sec = trim($_GET['section']);
 	$file = trim($_GET['res']);
-	$hash = trim($_GET['checksum']);
+	$hash = trim($_GET['hash']);
 	
 	$root_path = dirname(dirname(__DIR__)).'/resources/'.$test.'/'.$sec.'/';
 	
