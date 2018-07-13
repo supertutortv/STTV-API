@@ -55,11 +55,10 @@ class JWT {
 
     private function verify( $auth = '' ) {
         $status = ['status'=>403];
-        if ( empty($auth) ) return new WP_Error('web_token_auth_header_missing','',$status);
+        if ( empty($auth) ) return new WP_Error('web_token_null','Auth token cannot be null or empty',$status);
 
         $timestamp = time();
-        list($token) = sscanf($auth, 'Bearer %s');
-        if (!$token) return new WP_Error('web_token_auth_header_malformed','',$status);
+        $token = str_replace('Bearer ',$auth);
 
         $this->token = $token;
 

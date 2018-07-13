@@ -90,9 +90,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function logout() {
-        while (!!wp_validate_auth_cookie()) {
-            wp_logout();
-        }
+        setcookie('_stAuthToken','',0);
         return sttv_rest_response(
             'logged_out',
             'Logout successful.',

@@ -21,7 +21,9 @@ function sttv_rest_response( $code = '', $msg = '', $status = 200, $extra = [] )
 }
 
 function sttv_verify_web_token( WP_REST_Request $request ) {
-    $token = new \STTV\JWT( $request->get_header('Authorization') );
+    $string = $request->get_header('Authorization') ?? $_COOKIE['_stAuthToken'] ?? '';
+    $token = json_decode(json_encode(new \STTV\JWT( $string )),true);
+    return $token;
     if ( $token->error !== false ) return $token->error;
 
     $pieces = explode( '|', $token->payload->sub );
