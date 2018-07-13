@@ -200,7 +200,7 @@ class Checkout extends \WP_REST_Controller {
                 $fullname = $cus['firstname'].' '.$cus['lastname'];
                 $user_id = wp_insert_user([
                     'user_login' => $body['email']['val'],
-                    'user_pass' => $body['password'],
+                    'user_pass' => $cus['password'],
                     'user_email' => $body['email']['val'],
                     'first_name' => $cus['firstname'],
                     'last_name' => $cus['lastname'],
@@ -227,6 +227,9 @@ class Checkout extends \WP_REST_Controller {
                 wp_set_current_user($user_id);
             }
             $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
+            do {
+                $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
+            } while (!$umeta);
 
             //$customer = \Stripe\Customer::retrieve();
 
