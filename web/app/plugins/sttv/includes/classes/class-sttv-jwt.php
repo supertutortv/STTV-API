@@ -63,8 +63,6 @@ class JWT {
         $this->token = $token;
 
         $pieces = explode('.', $token);
-        $this->payload = $pieces;
-        return false;
         if ( count($pieces) != 3 ) return new WP_Error('web_token_malformed',$pieces,$status);
 
         list( $header64, $payload64, $sig64 ) = $pieces;
