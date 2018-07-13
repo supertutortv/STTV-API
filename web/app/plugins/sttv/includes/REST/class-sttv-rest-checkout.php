@@ -194,7 +194,7 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         if ($body['authToken']) $auth = sttv_verify_web_token($body['authToken']);
         if ($auth instanceof \WP_Error) return $auth;
-        $cus = $body['customer'];
+        $cus = $body['customer']; $customer;
         try {
             if (!$auth) {
                 $fullname = $body['firstname'].' '.$body['lastname'];
@@ -218,23 +218,28 @@ class Checkout extends \WP_REST_Controller {
                     );
                 }
     
-                $customer = new \STTV\Checkout\Customer( 'create', [
+                $customer = (new \STTV\Checkout\Customer( 'create', [
                     'description' => $fullname,
-                    'source' => $cus['token'] ?? null,
-                    'email' => $body['email'],
-                    'coupon' => $body['coupon']['val'] ?? null,
-                    'metadata' => [ 'wp_id' => $user_id ],
-                    'shipping' => [
-                        'name' => $fullname,
-                        'address' => $cus['shipping']['address'],
-                        'phone' => $body['phone']
-                    ]
-                ]);
-                $customer = $customer->response();
+                    'email' => $body['email']['val'],
+                    'metadata' => [ 'wp_id' => $user_id ]
+                ]))->response();
                 
                 wp_set_current_user($user_id);
             }
-            $umeta = get_user_meta( get_current_user_id(),'sttv_user_data', true );
+            $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
+
+            $customer = \Stripe\Customer::retrieve($umeta['user']['userdata']['customer']);
+
+            return sttv_rest_response(
+                'customer_return',
+                'Returned customer',
+                200,
+                $customer
+            );
+
+           /*  'coupon' => $body['coupon']['val'] ?? null,
+                    'source' => $cus['token'] ?? null,
+                    'shipping' => $cus['shipping'] */
             
             //Begin Order Processing
             $course = get_post_meta( $body['course'], 'sttv_course_data', true );
