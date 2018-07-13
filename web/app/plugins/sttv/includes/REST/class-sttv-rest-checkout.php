@@ -106,8 +106,8 @@ class Checkout extends \WP_REST_Controller {
         if ( isset($body['muid']) ) {
             return $this->_mu_checkout( $body );
         }
-        return $body;
-        //return $this->_checkout( $body, $request );
+        
+        return $this->_checkout( $body, $request );
     }
 
     private function _mu_checkout( $body ) {
