@@ -106,7 +106,7 @@ class Checkout extends \WP_REST_Controller {
         if ( isset($body['muid']) ) {
             return $this->_mu_checkout( $body );
         }
-        
+
         return $this->_checkout( $body, $request );
     }
 
@@ -192,7 +192,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
-        if ($body['authToken']) $auth = sttv_verify_web_token($body['authToken']);
+        $auth = ($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
         $cus = $body['customer']; $customer;
         try {
