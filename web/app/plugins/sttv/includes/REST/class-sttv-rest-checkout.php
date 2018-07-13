@@ -243,7 +243,7 @@ class Checkout extends \WP_REST_Controller {
 
             $create_invoice = true;
             
-            sttv_set_auth_cookie(new \STTV\JWT( $login ),DAY_IN_SECONDS*5);
+            sttv_set_auth_cookie(new \STTV\JWT( $login ));
 
             return sttv_rest_response(
                 'checkout_success',

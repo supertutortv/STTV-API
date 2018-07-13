@@ -31,6 +31,6 @@ function sttv_verify_web_token( WP_REST_Request $request ) {
     return !!$user->ID;
 }
 
-function sttv_set_auth_cookie($token,$time) {
-    setcookie('_stAuthToken',$token,time().$time,STTV_API_DIR.'/app/web/','.supertutortv.com');
+function sttv_set_auth_cookie($token) {
+    setcookie('_stAuthToken',$token,time().DAY_IN_SECONDS*7,STTV_API_DIR.'/app/web/','.supertutortv.com');
 }
