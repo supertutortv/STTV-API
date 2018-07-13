@@ -229,7 +229,7 @@ class Checkout extends \WP_REST_Controller {
 
             global $wpdb;
             $user_id = get_current_user_id();
-            $umeta = $wpdb->query("SELECT meta_value FROM sttvapp_usermeta WHERE user_id = $userid AND meta_key = 'sttv_user_data'");
+            $umeta = $wpdb->query("SELECT meta_value FROM sttvapp_usermeta WHERE user_id = $user_id AND meta_key = 'sttv_user_data'");
             /* while ($umeta === '') {
                 $umeta = get_user_meta( $user_id, 'sttv_user_data', true );
             }; */
