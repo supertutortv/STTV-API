@@ -197,7 +197,7 @@ class Checkout extends \WP_REST_Controller {
         $cus = $body['customer']; $customer;
         try {
             if (!$auth) {
-                $fullname = $body['firstname'].' '.$body['lastname'];
+                $fullname = $cus['firstname'].' '.$cus['lastname'];
                 $user_id = wp_insert_user([
                     'user_login' => $body['email']['val'],
                     'user_pass' => $body['password'],
@@ -234,7 +234,7 @@ class Checkout extends \WP_REST_Controller {
                 'customer_return',
                 'Returned customer',
                 200,
-                $umeta['user']['userdata']['customer']
+                $umeta['user']['userdata']
             );
 
            /*  'coupon' => $body['coupon']['val'] ?? null,
