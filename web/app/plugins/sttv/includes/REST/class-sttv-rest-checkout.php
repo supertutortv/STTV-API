@@ -318,7 +318,7 @@ class Checkout extends \WP_REST_Controller {
                 [ 'data' => $e->getJsonBody() ]
             );
         } finally {
-            if (!$create_invoice) die();
+            //if (!$create_invoice) die();
         }
     }
 
