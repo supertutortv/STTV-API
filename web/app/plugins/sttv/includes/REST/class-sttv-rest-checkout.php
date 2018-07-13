@@ -226,10 +226,10 @@ class Checkout extends \WP_REST_Controller {
                 
                 wp_set_current_user($user_id);
             }
-            $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
+            /* $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
             do {
                 $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
-            } while (!$umeta);
+            } while (!$umeta); */
 
             //$customer = \Stripe\Customer::retrieve();
 
@@ -237,7 +237,7 @@ class Checkout extends \WP_REST_Controller {
                 'customer_return',
                 'Returned customer',
                 200,
-                $umeta
+                get_current_user_id()
             );
 
            /*  'coupon' => $body['coupon']['val'] ?? null,
