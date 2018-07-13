@@ -236,8 +236,8 @@ class Checkout extends \WP_REST_Controller {
 
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?? null;
-            return $customer;
             $customer->coupon = $body['coupon']['val'] ?? null;
+            return $customer;
             $customer->shipping = $cus['shipping'];
             
             $customer->save();
