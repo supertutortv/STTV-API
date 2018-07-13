@@ -228,13 +228,13 @@ class Checkout extends \WP_REST_Controller {
             }
             $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
 
-            $customer = \Stripe\Customer::retrieve($umeta['user']['userdata']['customer']);
+            //$customer = \Stripe\Customer::retrieve();
 
             return sttv_rest_response(
                 'customer_return',
                 'Returned customer',
                 200,
-                $customer
+                $umeta['user']['userdata']['customer']
             );
 
            /*  'coupon' => $body['coupon']['val'] ?? null,
