@@ -234,6 +234,8 @@ class Checkout extends \WP_REST_Controller {
                 $umeta = $wpdb->get_results("SELECT meta_value FROM sttvapp_usermeta WHERE user_id = $user_id AND meta_key = 'sttv_user_data'");
             };
 
+            $umeta = unserialize($umeta[0]['meta_value']);
+
             //$customer = \Stripe\Customer::retrieve();
 
             return sttv_rest_response(
