@@ -195,7 +195,7 @@ class Checkout extends \WP_REST_Controller {
         $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
         $cus = $body['customer']; 
-        $customer = $create_invoice = $cid = false;
+        $customer = $create_invoice = $cid = $login = false;
 
         try {
             if (!$auth) {
@@ -220,7 +220,7 @@ class Checkout extends \WP_REST_Controller {
                     );
                 }
 
-                wp_set_current_user($user_id);
+                $login = wp_set_current_user($user_id);
     
                 $customer = (new \STTV\Checkout\Customer( 'create', [
                     'description' => $fullname,
@@ -231,6 +231,7 @@ class Checkout extends \WP_REST_Controller {
                 $cid = $customer->id;
 
             } else {
+                $login = wp_get_current_user($user_id);
                 $cid = get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer'];
             }
 
@@ -239,9 +240,10 @@ class Checkout extends \WP_REST_Controller {
             $customer->coupon = $body['coupon']['val'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
-            return $customer;
 
             $create_invoice = true;
+            
+            sttv_set_auth_cookie(new \STTV\JWT( $login ),DAY_IN_SECONDS*5);
 
             return sttv_rest_response(
                 'checkout_success',
@@ -249,7 +251,6 @@ class Checkout extends \WP_REST_Controller {
                 200,
                 [
                     'redirect' => 'https://courses.supertutortv.com',
-                    'account' => $customer,
                     'data' => $body
                 ]
             );
