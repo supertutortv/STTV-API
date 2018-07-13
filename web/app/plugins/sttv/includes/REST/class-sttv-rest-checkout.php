@@ -192,7 +192,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _checkout( $body ){
-        $auth = ($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
+        $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
         $cus = $body['customer']; $customer;
         try {
