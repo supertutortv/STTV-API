@@ -234,7 +234,7 @@ class Checkout extends \WP_REST_Controller {
                 'customer_return',
                 'Returned customer',
                 200,
-                $umeta['user']['userdata']
+                $umeta
             );
 
            /*  'coupon' => $body['coupon']['val'] ?? null,
