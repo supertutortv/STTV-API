@@ -317,8 +317,8 @@ class Checkout extends \WP_REST_Controller {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
-                403,
-                [ 'data' => $e->getJsonBody() ]
+                200,
+                [ 'data' => $e ]
             );
         } finally {
             //if (!$create_invoice) die();
