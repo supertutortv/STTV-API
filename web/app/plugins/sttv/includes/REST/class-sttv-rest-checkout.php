@@ -234,8 +234,6 @@ class Checkout extends \WP_REST_Controller {
                 $cid = get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer'];
             }
 
-            return $cid;
-
             return \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?? null;
             $customer->coupon = $body['coupon']['val'] ?? null;
