@@ -303,17 +303,49 @@ class Checkout extends \WP_REST_Controller {
             $response = $order->response();
             //$response = ($body['trial']) ? $order : $order->pay();
 
-        } catch ( \Exception $e ) {
-            $err = $e->getJsonBody()['error'];
-            switch ( $err['code'] ) {
-                case 'resource_missing':
-                case 'card_declined':
-                    if ( ( $err['param'] == 'coupon' || $err['param'] == 'source' ) || isset($err['decline_code']) ) {
-                        require_once( ABSPATH.'wp-admin/includes/user.php' );
-                        wp_delete_user( $user_id );
-                    }
-                break;
-            }
+        } catch(\Stripe\Error\Card $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Stripe\Error\RateLimit $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Stripe\Error\InvalidRequest $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Stripe\Error\Authentication $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Stripe\Error\ApiConnection $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Stripe\Error\Base $e) {
+            return sttv_rest_response(
+                'stripe_error',
+                'There was an error',
+                200,
+                [ 'data' => $e ]
+            );
+        } catch (\Exception $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
