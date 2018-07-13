@@ -230,7 +230,7 @@ class Checkout extends \WP_REST_Controller {
             do {
                 $i++;
                 $umeta = get_user_meta( get_current_user_id(), 'sttv_user_data', true );
-            } while ($umeta === false);
+            } while ($umeta === '');
 
             //$customer = \Stripe\Customer::retrieve();
 
