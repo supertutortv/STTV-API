@@ -60,7 +60,7 @@ class JWT {
         $timestamp = time();
         $token = str_replace('Bearer ',$auth);
 
-        $this->token = $token;
+        $this->token = $auth;
 
         $pieces = explode('.', $token);
         $this->payload = $pieces;
