@@ -71,7 +71,7 @@ class Auth extends \WP_REST_Controller {
 
         $token = new \STTV\JWT( $login );
 
-        sttv_set_auth_cookie($token);
+        sttv_set_auth_cookie($token->token);
 
         \STTV\Log::access([
             'id' => $login->ID,
