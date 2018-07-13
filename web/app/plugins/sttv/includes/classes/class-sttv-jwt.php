@@ -58,7 +58,7 @@ class JWT {
         if ( empty($auth) ) return new WP_Error('web_token_null','Auth token cannot be null or empty',$status);
 
         $timestamp = time();
-        $token = str_replace('Bearer ',$auth);
+        $token = str_replace('Bearer ','',$auth);
 
         $this->token = $token;
 
