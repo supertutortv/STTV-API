@@ -227,11 +227,14 @@ class Checkout extends \WP_REST_Controller {
                     'email' => $body['email']['val'],
                     'metadata' => [ 'wp_id' => $user_id ]
                 ]))->response();
-                
+
+                $cid = $customer->id;
+
             } else {
-                $customer = \Stripe\Customer::retrieve(get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer']);
+                $cid = get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer'];
             }
 
+            $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?? null;
             $customer->coupon = $body['coupon']['val'] ?? null;
             $customer->shipping = $cus['shipping'];
