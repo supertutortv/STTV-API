@@ -23,9 +23,9 @@ function sttv_rest_response( $code = '', $msg = '', $status = 200, $extra = [] )
 function sttv_verify_web_token( WP_REST_Request $request ) {
     $string = $request->get_header('Authorization') ?? $_COOKIE['_stAuthToken'] ?? '';
     $token = json_decode(json_encode(new \STTV\JWT( $string )),true);
-    if ( $token->error !== false ) return $token->error;
+    if ( $token['error'] !== false ) return $token['error'];
 
-    $pieces = explode( '|', $token->payload->sub );
+    $pieces = explode( '|', $token['payload']['sub'] );
     list( $email, $id ) = $pieces;
 
     $user = wp_set_current_user( $id );
