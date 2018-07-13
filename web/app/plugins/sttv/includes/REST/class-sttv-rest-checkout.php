@@ -234,6 +234,8 @@ class Checkout extends \WP_REST_Controller {
                 $cid = get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer'];
             }
 
+            return $cid;
+
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?? null;
             $customer->coupon = $body['coupon']['val'] ?? null;
@@ -304,53 +306,67 @@ class Checkout extends \WP_REST_Controller {
             //$response = ($body['trial']) ? $order : $order->pay();
 
         } catch(\Stripe\Error\Card $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Stripe\Error\RateLimit $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Stripe\Error\InvalidRequest $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Stripe\Error\Authentication $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Stripe\Error\ApiConnection $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Stripe\Error\Base $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } catch (\Exception $e) {
+            $body = $e->getJsonBody();
+            $err  = $body['error'];
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e->getJsonBody() ]
+                [ 'data' => $err ]
             );
         } finally {
             //if (!$create_invoice) die();
