@@ -71,6 +71,8 @@ class Auth extends \WP_REST_Controller {
 
         $token = new \STTV\JWT( $login );
 
+        sttv_set_auth_cookie($token);
+
         \STTV\Log::access([
             'id' => $login->ID,
             'email' => $login->user_email
@@ -78,8 +80,6 @@ class Auth extends \WP_REST_Controller {
         $umeta = get_user_meta( $login->ID, 'sttv_user_data', true );
         $umeta['user']['userdata']['login_timestamps'][] = time();
         update_user_meta( $login->ID, 'sttv_user_data', $umeta );
-
-        sttv_set_auth_cookie($token);
         
         return sttv_rest_response(
             'login_success',
