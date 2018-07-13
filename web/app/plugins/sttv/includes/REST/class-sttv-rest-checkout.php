@@ -194,7 +194,9 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
-        $cus = $body['customer']; $customer;
+        $cus = $body['customer']; 
+        $customer = $create_invoice = $cid = false;
+
         try {
             if (!$auth) {
                 $fullname = $cus['firstname'].' '.$cus['lastname'];
@@ -217,6 +219,8 @@ class Checkout extends \WP_REST_Controller {
                         [ 'data' => $user_id ]
                     );
                 }
+
+                wp_set_current_user($user_id);
     
                 $customer = (new \STTV\Checkout\Customer( 'create', [
                     'description' => $fullname,
@@ -224,30 +228,27 @@ class Checkout extends \WP_REST_Controller {
                     'metadata' => [ 'wp_id' => $user_id ]
                 ]))->response();
                 
-                wp_set_current_user($user_id);
+            } else {
+                $customer = \Stripe\Customer::retrieve(get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer']);
             }
 
-            global $wpdb;
-            $user_id = get_current_user_id();
-            $umeta = $wpdb->get_results("SELECT meta_value FROM sttvapp_usermeta WHERE user_id = $user_id AND meta_key = 'sttv_user_data'");
-            while (!$umeta) {
-                $umeta = $wpdb->get_results("SELECT meta_value FROM sttvapp_usermeta WHERE user_id = $user_id AND meta_key = 'sttv_user_data'");
-            };
+            $customer->source = $cus['token'] ?? null;
+            $customer->coupon = $body['coupon']['val'] ?? null;
+            $customer->shipping = $cus['shipping'];
+            $customer->save();
 
-            $umeta = unserialize($umeta[0]['meta_value']);
-
-            //$customer = \Stripe\Customer::retrieve();
+            $create_invoice = true;
 
             return sttv_rest_response(
-                'customer_return',
-                'Returned customer',
+                'checkout_success',
+                'Thank you for signing up! You will be redirected shortly.',
                 200,
-                ['meta' => $umeta ]
+                [
+                    'redirect' => 'https://courses.supertutortv.com',
+                    'account' => $customer,
+                    'data' => $body
+                ]
             );
-
-           /*  'coupon' => $body['coupon']['val'] ?? null,
-                    'source' => $cus['token'] ?? null,
-                    'shipping' => $cus['shipping'] */
             
             //Begin Order Processing
             $course = get_post_meta( $body['course'], 'sttv_course_data', true );
@@ -299,22 +300,6 @@ class Checkout extends \WP_REST_Controller {
             $response = $order->response();
             //$response = ($body['trial']) ? $order : $order->pay();
 
-            if ( ! is_wp_error( wp_signon( [
-                'user_login'    => $body['email'],
-                'user_password' => $body['password'],
-                'remember'      => true
-            ], is_ssl() ) ) ) {
-                return sttv_rest_response(
-                    'checkout_success',
-                    'Thank you for signing up! You will be redirected shortly.',
-                    200,
-                    [
-                        'user' => get_userdata( $user_id ),
-                        'data' => $response
-                    ]
-                );
-            }
-
         } catch ( \Exception $e ) {
             $err = $e->getJsonBody()['error'];
             switch ( $err['code'] ) {
@@ -332,6 +317,8 @@ class Checkout extends \WP_REST_Controller {
                 403,
                 [ 'data' => $e->getJsonBody() ]
             );
+        } finally {
+            if (!$create_invoice) die();
         }
     }
 
