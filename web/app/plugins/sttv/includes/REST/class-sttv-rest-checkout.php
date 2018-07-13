@@ -308,49 +308,49 @@ class Checkout extends \WP_REST_Controller {
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Stripe\Error\RateLimit $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Stripe\Error\InvalidRequest $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Stripe\Error\Authentication $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Stripe\Error\ApiConnection $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Stripe\Error\Base $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } catch (\Exception $e) {
             return sttv_rest_response(
                 'stripe_error',
                 'There was an error',
                 200,
-                [ 'data' => $e ]
+                [ 'data' => $e->getJsonBody() ]
             );
         } finally {
             //if (!$create_invoice) die();
