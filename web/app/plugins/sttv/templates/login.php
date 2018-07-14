@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="st-login-buttons col s12">
-            <a class="st-login-next st-login-btn pmt-button btn waves-effect waves-light" onclick="_st.login.send()">Login</a>
+            <button class="st-login-btn pmt-button btn waves-effect waves-light" onclick="_st.login.send()">Login</button>
         </div>
     </div>
     <div id="pane-2" class="st-login-pane row">
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="st-login-buttons col s12">
-            <a class="st-login-next st-login-btn pmt-button btn waves-effect waves-light" onclick="_st.login.reset()">Reset</a>
+            <button class="st-login-next st-login-btn pmt-button btn waves-effect waves-light" onclick="_st.login.reset()">Reset</button>
         </div>
     </div>
 </div>

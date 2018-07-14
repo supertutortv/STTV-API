@@ -22,7 +22,7 @@ $ck1 = <<<HTML
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
-        <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.next()">Next >></a>
+        <button class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.next()">Next >></button>
     </div>
 </div>
 HTML;
