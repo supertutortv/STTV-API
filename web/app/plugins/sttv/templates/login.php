@@ -19,7 +19,7 @@
     <div id="pane-2" class="st-login-pane row">
         <div class="st-login-header col s12">
             <h2>Reset your password</h2>
-            <span>Here's some random text to tell everyone how awesome they are and what not. <a href="#" onclick="javascript:void(0)">Need to reset your password?</a></span>
+            <span>Enter the email associated with your account below. You will be sent an email with a link to reset your password, then you can just come back here and sign in again to access your account.</span>
         </div>
         <div id="st-login-rp-form" class="st-login-form col s12 l6 push-l3">
             <div class="input-field required col s12">
