@@ -6,10 +6,10 @@
         </div>
         <div id="st-login-credentials" class="st-login-form col s12 l6 push-l3">
             <div class="input-field required col s12">
-                <input class="browser-default validate email" type="email" name="st-username" placeholder="Email Address" required/>
+                <input class="browser-default validate email" type="email" name="st-username" placeholder="Email Address"/>
             </div>
             <div class="input-field required col s12">
-                <input class="browser-default validate" type="password" name="st-password" placeholder="Password" required/>
+                <input class="browser-default validate" type="password" name="st-password" placeholder="Password"/>
             </div>
         </div>
         <div class="st-login-buttons col s12">
