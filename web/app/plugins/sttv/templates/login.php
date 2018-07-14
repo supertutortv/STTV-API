@@ -5,10 +5,10 @@
             <span>You can access all of your test prep courses, as well as all of your account information, by logging in below. <br><a onclick="_st.login.next()">Need to reset your password?</a></span>
         </div>
         <div id="st-login-credentials" class="st-login-form col s12 l6 push-l3">
-            <div class="input-field required col s12">
+            <div class="input-field col s12">
                 <input class="browser-default validate email" type="email" name="st-username" placeholder="Email Address"/>
             </div>
-            <div class="input-field required col s12">
+            <div class="input-field col s12">
                 <input class="browser-default validate" type="password" name="st-password" placeholder="Password"/>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <span>Enter the email associated with your account below. You will be sent an email with a link to reset your password, then you can just come back here and sign in again to access your account.</span>
         </div>
         <div id="st-login-rp-form" class="st-login-form col s12 l6 push-l3">
-            <div class="input-field required col s12">
+            <div class="input-field col s12">
                 <input class="browser-default validate email" type="email" name="st-rp-username" placeholder="Email Address"/>
             </div>
         </div>
