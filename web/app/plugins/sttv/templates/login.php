@@ -4,7 +4,7 @@
             <h2>Please sign into your account!</h2>
             <span>Here's some random text to tell everyone how awesome they are and what not. <a onclick="javascript:void(0)">Need to reset your password?</a></span>
         </div>
-        <div id="st-login-credentials" class="st-login-form col s12 l8 push-l2">
+        <div id="st-login-credentials" class="st-login-form col s12 l6 push-l3">
             <div class="input-field required col s12">
                 <input class="browser-default validate email" type="email" name="st-username" placeholder="Email Address" required/>
             </div>
@@ -21,7 +21,7 @@
             <h2>Reset your password</h2>
             <span>Here's some random text to tell everyone how awesome they are and what not. <a href="#" onclick="javascript:void(0)">Need to reset your password?</a></span>
         </div>
-        <div id="st-login-rp-form" class="st-login-form col s12 l8 push-l2">
+        <div id="st-login-rp-form" class="st-login-form col s12 l6 push-l3">
             <div class="input-field required col s12">
                 <input class="browser-default validate email" type="email" name="st-rp-username" placeholder="Email Address" required/>
             </div>
