@@ -1,5 +1,5 @@
 <div id="st-checkout-wrapper" class="col s12">
-    <div id="pane-1" class="st-checkout-pane row active" style="displat:block;">
+    <div id="pane-1" class="st-checkout-pane row active" style="display:block;">
         <div class="st-checkout-header col s12">
             <h2>Log in to your account!</h2>
         </div>
