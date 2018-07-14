@@ -65,7 +65,7 @@ class Auth extends \WP_REST_Controller {
             'verification_result',
             'Burp',
             200,
-            [ 'data' => $verify ]
+            [ 'data' => is_wp_error($verify) ? !$verify : $verify ]
         );
     }
 
