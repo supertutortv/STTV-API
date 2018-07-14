@@ -13,7 +13,7 @@
         </div>
         <div class="st-checkout-errors col s12"></div>
         <div class="st-checkout-buttons col s12">
-            <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.logout.send()">Login</a>
+            <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.login.send()">Login</a>
         </div>
     </div>
 </div>
