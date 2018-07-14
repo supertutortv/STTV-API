@@ -54,7 +54,7 @@ class JWT {
     }
 
     private function verify( $auth = '' ) {
-        $status = ['status'=>403];
+        $status = ['status'=>200];
         if ( empty($auth) ) return new WP_Error('web_token_null','Auth token cannot be null or empty',$status);
 
         $timestamp = time();
