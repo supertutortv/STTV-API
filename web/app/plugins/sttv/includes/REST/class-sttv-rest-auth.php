@@ -27,6 +27,12 @@ class Auth extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
+            '/form' => [
+                [
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'form' ]
+                ]
+            ],
             '/token' => [
                 [
                     'methods' => 'POST',
@@ -86,6 +92,18 @@ class Auth extends \WP_REST_Controller {
             'Login successful!',
             200,
             [ 'token' => $token->token ]
+        );
+    }
+
+    public function form() {
+        ob_start();
+        include STTV_TEMPLATE_DIR.'checkout/checkout.php';
+
+        return sttv_rest_response(
+            'login_form',
+            'Here\'s your form',
+            200,
+            [ 'form' => ob_get_clean() ]
         );
     }
 
