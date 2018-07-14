@@ -61,11 +61,10 @@ class Auth extends \WP_REST_Controller {
 
     public function token( WP_REST_Request $request ) {
         // get username and password from request
-        $username = $request->get_param('username');
-        $password = $request->get_param('password');
+        $body = json_decode($request->get_body(),true);
 
         // attempt login
-        $login = wp_authenticate( $username, $password );
+        $login = wp_authenticate( $body['username'], $body['password'] );
 
         // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
