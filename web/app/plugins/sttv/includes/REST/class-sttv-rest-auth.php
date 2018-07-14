@@ -97,7 +97,7 @@ class Auth extends \WP_REST_Controller {
 
     public function form() {
         ob_start();
-        include STTV_TEMPLATE_DIR.'checkout/checkout.php';
+        include STTV_TEMPLATE_DIR.'login.php';
 
         return sttv_rest_response(
             'login_form',
