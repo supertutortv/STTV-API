@@ -42,7 +42,7 @@ class Auth extends \WP_REST_Controller {
             '/token/verify' => [
                 [
                     'methods' => 'POST',
-                    'callback' => 'sttv_verify_web_token'
+                    'callback' => [ $this, 'verify' ]
                 ]
             ],
             '/logout' => [
@@ -57,6 +57,11 @@ class Auth extends \WP_REST_Controller {
         foreach ( $routes as $route => $endpoint ) {
 			register_rest_route( 'auth', $route, $endpoint );
 		}
+    }
+
+    public function verify( WP_REST_Request $request ) {
+        $verify = sttv_verify_web_token($request);
+        return !is_wp_error($verify) && $verify;
     }
 
     public function token( WP_REST_Request $request ) {
