@@ -23,7 +23,7 @@
         </div>
         <div id="st-login-rp-form" class="st-login-form col s12 l6 push-l3">
             <div class="input-field required col s12">
-                <input class="browser-default validate email" type="email" name="st-rp-username" placeholder="Email Address" required/>
+                <input class="browser-default validate email" type="email" name="st-rp-username" placeholder="Email Address"/>
             </div>
         </div>
         <div class="st-login-buttons col s12">
