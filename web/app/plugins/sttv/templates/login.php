@@ -1,5 +1,5 @@
 <div id="st-login-wrapper" class="col s12">
-    <div id="pane-1" class="st-login-pane row active">
+    <div id="pane-1" class="st-login-pane row">
         <div class="st-login-header col s12">
             <h2>Please sign into your account!</h2>
             <span>You can access all of your test prep courses, as well as all of your account information, by logging in below. <br><a onclick="_st.login.next()">Need to reset your password?</a></span>
