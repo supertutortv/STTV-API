@@ -21,7 +21,6 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
         </div>
     </div>
-    <div class="st-checkout-errors col s12"></div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.next()">Next >></a>
     </div>

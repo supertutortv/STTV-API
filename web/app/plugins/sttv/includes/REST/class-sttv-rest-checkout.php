@@ -390,7 +390,7 @@ class Checkout extends \WP_REST_Controller {
                 'qty' => 1
             ];
             $code = 'checkout_pricing_success';
-            include STTV_TEMPLATE_DIR.'checkout/checkout.php';
+            include STTV_TEMPLATE_DIR.'checkout.php';
             $html = checkout_template();
         }
 
