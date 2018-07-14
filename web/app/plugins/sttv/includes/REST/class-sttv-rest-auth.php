@@ -61,7 +61,12 @@ class Auth extends \WP_REST_Controller {
 
     public function verify( WP_REST_Request $request ) {
         $verify = sttv_verify_web_token($request);
-        return !is_wp_error($verify) && $verify;
+        return sttv_rest_response(
+            'verification_result',
+            'Burp',
+            200,
+            [ 'data' => $verify ]
+        );
     }
 
     public function token( WP_REST_Request $request ) {
