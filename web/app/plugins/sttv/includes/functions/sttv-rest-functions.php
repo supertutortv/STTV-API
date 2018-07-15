@@ -38,5 +38,5 @@ function sttv_set_auth_cookie($token) {
 }
 
 function sttv_unset_auth_cookie() {
-    setcookie('_stAuthTokenDel','x',time()+DAY_IN_SECONDS*7,'/','.supertutortv.com',true,true);
+    setcookie('_stAuthToken','x',1,'/','.supertutortv.com',true,true);
 }
