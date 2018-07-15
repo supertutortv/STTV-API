@@ -113,7 +113,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function logout() {
-        setcookie('_stAuthToken','',0);
+        sttv_unset_auth_cookie();
         return sttv_rest_response(
             'logged_out',
             'Logout successful.',

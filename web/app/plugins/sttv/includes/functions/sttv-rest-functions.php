@@ -34,5 +34,9 @@ function sttv_verify_web_token( WP_REST_Request $request ) {
 }
 
 function sttv_set_auth_cookie($token) {
-    setcookie('_stAuthToken',$token,time()+DAY_IN_SECONDS*7,'/','.supertutortv.com',true,true); //change to secure cookie before production
+    setcookie('_stAuthToken',$token,time()+DAY_IN_SECONDS*7,'/','.supertutortv.com',true,true);
+}
+
+function sttv_unset_auth_cookie() {
+    setcookie('_stAuthTokenDel','',0,'/','.supertutortv.com',true,true);
 }
