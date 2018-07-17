@@ -1,13 +1,16 @@
-<?php
-if ( ! defined( 'ABSPATH' ) ) exit;
-
-get_header();
-?>
+<?php if ( ! defined( 'ABSPATH' ) ) exit; ?>
+<!DOCTYPE html>
+<html class="no-js" <?php language_attributes(); ?>>
+<head>
+	<meta charset="<?php bloginfo( 'charset' ); ?>"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+</head>
+<body>
 <div id="form-wrapper">
 	<div id="form-identity">
 		<img src="<?php print get_header_image(); ?>" alt="Login form header" />
 	</div>
 </div>
-<?php
-
-get_footer();
+</body>
+</html>
