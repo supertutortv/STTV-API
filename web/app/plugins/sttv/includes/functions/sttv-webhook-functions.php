@@ -102,7 +102,6 @@ function customer_deleted( $data ) {
 
 // invoice.created
 function invoice_created( $data ) {
-    global $wpdb;
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
@@ -110,14 +109,15 @@ function invoice_created( $data ) {
 
     $test = strtolower( $course['test'] );
 
-    foreach ( $course['capabilities']['trial'] as $cap ) {
+    foreach ( $course['capabilities'] as $cap ) {
         $user->add_cap( $cap );
     }
 
+    global $wpdb;
     return $wpdb->insert( $wpdb->prefix.'trial_reference',
         [
             'invoice_id' => $obj['id'],
-            'wp_id' => $obj['metadata']['wp_id'] ?? 1,
+            'wp_id' => $obj['metadata']['wp_id'] ?? 0,
             'exp_date' => $obj['due_date']
         ],
         [
@@ -157,10 +157,6 @@ function invoice_payment_succeeded( $data ) {
     $test = strtolower( $course['test'] );
     $user->remove_cap( "course_{$test}_trial" );
 
-    foreach ( $course['capabilities']['full'] as $cap ) {
-        $user->add_cap( $cap );
-    }
-
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $umeta['user']['data']['orders'][] = $obj['id'];
     $umeta['courses'][$course['slug']] = [];
@@ -184,7 +180,8 @@ function invoice_payment_failed( $data ) {
     $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
 
     $user = get_userdata( $record[0]['wp_id'] );
-    $user->remove_cap( 'course_access_cap' );
+    foreach(['course_act_access','course_sat_access'] as $thecap)
+        $user->remove_cap( $thecap );
 
     if ( $record[0]['retries'] < 2 ) {
         return $wpdb->update( $wpdb->prefix.'trial_reference',

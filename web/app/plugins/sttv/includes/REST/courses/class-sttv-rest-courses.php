@@ -64,108 +64,109 @@ class Courses extends \WP_REST_Controller {
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		if ( !isset( $umeta['courses'] ) ) return sttv_rest_response(
+		if ( empty( $umeta['courses'] ) ) return sttv_rest_response(
 			'course_data_invalid',
-			'The course data requested for this user is invalid or corrupted. Please contact SupertutorTV for further assistance.',
-			400
+			'We\'re building the course data for you. Please wait...',
+			200,
+			[ 'retry' => 5 ]
 		);
 
-		if ( current_user_can('course_access_cap') ) {
-			global $wpdb;
-			$dbtable = $wpdb->prefix.'course_udata';
-			$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		foreach( $umeta['courses'] as $slug => $data ) {
+			$course = get_posts([
+				'name' => $slug,
+				'post_status' => 'publish',
+				'posts_per_page' => 1,
+				'post_type' => 'courses'
+			]);
 
-			foreach ($cu_data as $rec) {
-				$ind = (int) $rec['udata_timestamp'];
-				$umeta['user'][$rec['udata_type']][] = [
-					'id' => (int) $rec['id'],
-					'timestamp' => $ind,
-					'data' => json_decode($rec['udata_record'])
-				];
-			}
+			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
+			if ( !$meta )
+				return sttv_rest_response(
+					'course_not_found',
+					'The course requested was not found or does not exist. Please try again.',
+					404
+				);
 
-			foreach( $umeta['courses'] as $slug => $data ) {
-				$course = get_posts([
-					'name' => $slug,
-					'post_status' => 'publish',
-					'posts_per_page' => 1,
-					'post_type' => 'courses'
-				]);
-				$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
-				if ( ! $meta ) {
-					return sttv_rest_response(
-						'course_not_found',
-						'The course requested was not found or does not exist. Please try again.',
-						404
-					);
-				}
+			$test_code = strtolower($meta['test']);
+			if ( !current_user_can( "course_{$test_code}_access" ) )
+				continue;
 
-				$test_code = strtolower($meta['test']);
-				$trialing = current_user_can( "course_{$test_code}_trial" );
-				
-				$umeta['courses'][$slug] = [
-					'data' => [
-						'id' => $meta['id'],
-						'name' => $meta['name'],
-						'slug' => $meta['slug'],
-						'link' => $meta['link'],
-						'test' => $meta['test'],
-						'intro' => $meta['intro'],
-						'version' => STTV_VERSION,
-						'thumbUrls' => [
-							'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
-							'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-						]
-					],
-					'collection' => (function() use (&$meta,$trialing) {
-						$sections = [];
-						foreach ( $meta['sections'] as $sec => $val ) {
-							foreach ( $val['files'] as &$file ) {
-								if ( $file['in_trial'] === false && $trialing ) {
-									$file['file'] = 0;
-								}
-								unset( $file['in_trial'] );
+			$trialing = current_user_can( "course_{$test_code}_trial" );
+			$umeta['courses'][$slug] = [
+				'data' => [
+					'id' => $meta['id'],
+					'name' => $meta['name'],
+					'slug' => $meta['slug'],
+					'link' => $meta['link'],
+					'test' => $meta['test'],
+					'intro' => $meta['intro'],
+					'version' => STTV_VERSION,
+					'thumbUrls' => [
+						'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+						'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+					]
+				],
+				'collection' => (function() use (&$meta,$trialing) {
+					$sections = [];
+					foreach ( $meta['sections'] as $sec => $val ) {
+						foreach ( $val['files'] as &$file ) {
+							if ( $file['in_trial'] === false && $trialing ) {
+								$file['file'] = 0;
 							}
-							foreach ( $val['collection'] as $k => &$subsec ) {
-								if ( $subsec['data']['in_trial'] === false && $trialing ) {
-									foreach ( $subsec['collection'] as &$vid ) {
+							unset( $file['in_trial'] );
+						}
+						foreach ( $val['collection'] as $k => &$subsec ) {
+							if ( $subsec['data']['in_trial'] === false && $trialing ) {
+								foreach ( $subsec['collection'] as &$vid ) {
+									$vid['ID'] = 0;
+								}
+							}
+							unset( $subsec['data']['in_trial'] );
+						}
+						$sections[$sec] = $val;
+					}
+					foreach ( $meta['practice']['files'] as &$file ) {
+						if ( ! $file['in_trial'] && $trialing ) {
+							$file['file'] = 0;
+							unset( $file['in_trial'] );
+						}
+					}
+					foreach ( $meta['practice']['collection'] as $k => &$book ) {
+						if ( ! $book['data']['in_trial'] && $trialing ) {
+							foreach ( $book['collection'] as $b => &$test ) {
+								foreach ( $test['collection'] as $t => &$sec ) {
+									foreach ( $sec['collection'] as $s => &$vid ) {
 										$vid['ID'] = 0;
 									}
 								}
-								unset( $subsec['data']['in_trial'] );
-							}
-							$sections[$sec] = $val;
-						}
-						foreach ( $meta['practice']['files'] as &$file ) {
-							if ( ! $file['in_trial'] && $trialing ) {
-								$file['file'] = 0;
-								unset( $file['in_trial'] );
 							}
 						}
-						foreach ( $meta['practice']['collection'] as $k => &$book ) {
-							if ( ! $book['data']['in_trial'] && $trialing ) {
-								foreach ( $book['collection'] as $b => &$test ) {
-									foreach ( $test['collection'] as $t => &$sec ) {
-										foreach ( $sec['collection'] as $s => &$vid ) {
-											$vid['ID'] = 0;
-										}
-									}
-								}
-							}
-							unset( $book['data']['in_trial'] );
-						}
-						$sections['practice'] = $meta['practice'];
-						return $sections;
-					})()
-				];
-			}
+						unset( $book['data']['in_trial'] );
+					}
+					$sections['practice'] = $meta['practice'];
+					return $sections;
+				})()
+			];
+		}
+
+		global $wpdb;
+		$dbtable = $wpdb->prefix.'course_udata';
+		$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+
+		foreach ($cu_data as $rec) {
+			$ind = (int) $rec['udata_timestamp'];
+			$umeta['user'][$rec['udata_type']][] = [
+				'id' => (int) $rec['id'],
+				'timestamp' => $ind,
+				'data' => json_decode($rec['udata_record'])
+			];
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
 		
 		return sttv_rest_response(
 			'user_course_data_success',
-			'Here is your data.',
+			'Boosh.',
 			200,
 			['data' => $umeta]
 		);

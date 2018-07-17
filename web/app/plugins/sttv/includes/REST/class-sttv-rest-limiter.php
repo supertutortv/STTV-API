@@ -89,7 +89,7 @@ class Limiter {
 	 *
 	 * @return $this
 	 */
-	public function load( $limit = 100, $interval = 900 ) {;
+	public function load( $limit = 250, $interval = 300 ) {;
 		$this
 			->set_rate_limit( $limit )
 			->set_interval( $interval )
@@ -113,8 +113,8 @@ class Limiter {
 		// No limiting if the IP address is whitelisted or the request is from an Admin
 		if ( $this->is_allowed( $this->get_ip_address() ) 
 			|| current_user_can( 'manage_options' )
-			|| ( isset( $_SERVER['HTTP_X-RateLimit-Buster'] ) && $_SERVER['HTTP_X-RateLimit-Buster'] == hash_hmac( 'sha256', 'doodoo@poopoo.com', 'poop' ) ) )
-				return $server->send_header( 'X-RateLimit-Busted', 'true' ) ?? $response; //C0ED0C923C20304CAE65E56E0DB9BBB20D14ADA67D6B478E64F500D0A3C4A2E0
+			|| ( null !== $request->get_header('HTTP_X-RateLimit-Buster') && $request->get_header('HTTP_X-RateLimit-Buster') === hash_hmac( 'sha256', 'doodoo@poopoo.com', 'poop' ) ) )
+				return $server->send_header( 'X-RateLimit-Busted', 'true' ) ?? $response; //bf6ca4f90c6f5dd48c7c289f34376e12765d315eb23b81a90701e18508610f52
 
 		// read the array from cache, or create it if it doesn't exist, then update object properties
 		$limiter = get_transient( $this->get_cache_key() );

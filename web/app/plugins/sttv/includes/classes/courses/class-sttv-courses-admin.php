@@ -10,30 +10,6 @@ class Admin {
         add_filter( 'query_vars', [ $this, 'sttv_course_query_vars' ], 10, 1 );
         add_action( 'save_post', [ $this, 'sttv_build_course' ], 999, 2 );
     }
-
-
-    public function sttv_course_endpoints() {
-		
-		add_rewrite_rule('^courses/(.*)/(.*)/(.*)/(.*)/(.*)?$','index.php?post_type=courses&name=$matches[1]&section=$matches[2]&subsection=$matches[3]&video=$matches[4]&q=$matches[5]','top' );
-		add_rewrite_rule('^courses/(.*)/(.*)/(.*)/(.*)?$','index.php?post_type=courses&name=$matches[1]&section=$matches[2]&subsection=$matches[3]&video=$matches[4]','top' );
-		add_rewrite_rule('^courses/(.*)/(.*)/(.*)?$','index.php?post_type=courses&name=$matches[1]&section=$matches[2]&subsection=$matches[3]','top' );
-		add_rewrite_rule('^courses/(.*)/(.*)?$','index.php?post_type=courses&name=$matches[1]&section=$matches[2]','top' );
-		add_rewrite_rule('^courses/(.*)?$','index.php?post_type=courses&name=$matches[1]','top' );
-		
-		add_rewrite_tag( '%section%', '([a-zA-Z0-9]+[_-])*', 'section=' );
-		add_rewrite_tag( '%subsection%', '([a-zA-Z0-9]+[_-])*', 'subsection=' );
-		add_rewrite_tag( '%video%', '([a-zA-Z0-9]+[_-])*', 'video=' );
-		add_rewrite_tag( '%question%', '([a-zA-Z0-9]+[_-])*', 'q=' );
-		
-	}
-	
-	public function sttv_course_query_vars( $vars ) {
-		$vars[] = 'section';
-		$vars[] = 'subsection';
-		$vars[] = 'video';
-		$vars[] = 'q';
-		return $vars;
-    }
     
     public function sttv_build_course( $post_id, $post ) {
 
@@ -68,16 +44,11 @@ class Admin {
 					'renewals' => $course['course_pricing']['renewals']
 				],
 				'capabilities' => [
-					'trial' => [
-						'course_access_cap',
-						"course_{$test}_trial"
-					],
-					'full' => [
-						'course_access_cap',
-						"course_{$test}_full",
-						'course_post_feedback',
-						'course_post_reviews'
-					]
+					'course_platform_access',
+					"course_{$test}_access",
+					"course_{$test}_trialing",
+					'course_post_feedback',
+					'course_post_reviews'
 				],
 				'sections' => [],
 				'practice' => []

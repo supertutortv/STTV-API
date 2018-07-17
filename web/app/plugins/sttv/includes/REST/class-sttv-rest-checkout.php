@@ -195,7 +195,7 @@ class Checkout extends \WP_REST_Controller {
         $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
         $cus = $body['customer']; 
-        $customer = $create_invoice = $cid = $login = false;
+        $customer = $create_invoice = $cid = $login = $items = false;
 
         try {
             if (!$auth) {
@@ -240,21 +240,6 @@ class Checkout extends \WP_REST_Controller {
             $customer->coupon = $body['coupon']['val'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
-
-            $create_invoice = true;
-            
-            $token = new \STTV\JWT( $login );
-            sttv_set_auth_cookie($token->token);
-
-            return sttv_rest_response(
-                'checkout_success',
-                'Thank you for signing up! You will be redirected shortly.',
-                200,
-                [
-                    'redirect' => 'https://courses.supertutortv.com',
-                    'data' => $body
-                ]
-            );
             
             //Begin Order Processing
             $course = get_post_meta( $body['course'], 'sttv_course_data', true );
@@ -305,6 +290,17 @@ class Checkout extends \WP_REST_Controller {
             ]);
             $response = $order->response();
             //$response = ($body['trial']) ? $order : $order->pay();
+            $token = new \STTV\JWT( $login );
+            sttv_set_auth_cookie($token->token);
+
+            return sttv_rest_response(
+                'checkout_success',
+                'Thank you for signing up! You will be redirected shortly.',
+                200,
+                [
+                    'redirect' => 'https://courses.supertutortv.com'
+                ]
+            );
 
         } catch(\Stripe\Error\Card $e) {
             $body = $e->getJsonBody();
@@ -369,8 +365,6 @@ class Checkout extends \WP_REST_Controller {
                 200,
                 [ 'data' => $err ]
             );
-        } finally {
-            //if (!$create_invoice) die();
         }
     }
 
