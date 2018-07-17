@@ -173,26 +173,30 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function update_user_course_data( WP_REST_Request $request ) {
-		if ( current_user_can( 'course_access_cap' ) ) {
+		$updated = $allowed = [];
+		$timestamp = time();
+		if ( current_user_can( 'course_platform_access' ) ) {
 			global $wpdb;
 			$userid = get_current_user_id();
 			$body = json_decode( $request->get_body(), true );
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
-			$updated = $allowed = [];
-			$timestamp = time();
 			switch ( $patch ) {
 				case 'history':
 				case 'bookmarks':
 				case 'downloads':
-					$updated = [
+					$allowed = [
 						'wp_id' => $userid,
 						'udata_type' => $patch,
 						'udata_timestamp' => $timestamp,
 						'udata_record' => json_encode($body)
 					];
-					$wpdb->insert( $wpdb->prefix.'course_udata', $updated, ['%d','%s','%d','%s'] );
-					$updated['udata_record'] = json_decode($updated['udata_record']);
+					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s'] );
+					$updated = [
+						'id' => (int) $wpdb->insert_id,
+						'timestamp' => $timestamp,
+						'data' => json_decode($allowed['udata_record'])
+					];
 					break;
 				case 'userdata':
 					$allowed['userdata'] = [
