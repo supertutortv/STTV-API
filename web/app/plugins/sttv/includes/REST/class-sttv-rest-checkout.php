@@ -372,6 +372,7 @@ class Checkout extends \WP_REST_Controller {
         $pricing = $code = $msg = $html = '';
         include_once STTV_TEMPLATE_DIR.'checkout.php';
         $courses = json_decode( base64_decode($ids), true);
+        return $courses;
 
         if ( !is_array($courses) ) {
             $code = 'checkout_pricing_course_invalid';
