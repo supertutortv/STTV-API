@@ -369,22 +369,23 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function _pricing( $ids ) {
-        $pricing = $code = $msg = $html = '';
-        include_once STTV_TEMPLATE_DIR.'checkout.php';
+        $pricing = [];
+        $code = $msg = $html = '';
         $courses = json_decode( base64_decode($ids), true);
+
+        require_once STTV_TEMPLATE_DIR.'checkout.php';
 
         if ( !is_array($courses) ) {
             $code = 'checkout_pricing_course_invalid';
             $msg = 'The course ID provided is invalid. Please try again.';
         } else {
             foreach ($courses as $course) {
-                $course = get_post( sttv_id_decode($course) );
-                $cmeta = get_post_meta( $course->ID, 'sttv_course_data', true );
+                $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
                 unset( $cmeta['pricing']['renewals'] );
-                $pricing[] = array_merge([
+                $pricing[] = array_merge($cmeta['pricing'],[
                     'name' => $cmeta['name'],
                     'qty' => 1
-                ],$cmeta['pricing']);
+                ]);
             }
             $code = 'checkout_pricing_success';
                 
