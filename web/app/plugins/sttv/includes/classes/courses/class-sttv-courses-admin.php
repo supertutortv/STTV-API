@@ -35,6 +35,7 @@ class Admin {
 				'intro' => $intros['videos'][$test.'-course-intro']['id'],
 				'test' => strtoupper( $test ),
 				'pricing' => [
+					'id' => sttv_id_encode($post_id),
 					'price' => (int) $course['course_pricing']['price'],
 					'taxable_amt' => (int) $course['course_pricing']['taxable_amt'],
 					'trial_period' => (int) $course['course_pricing']['trial_period'],

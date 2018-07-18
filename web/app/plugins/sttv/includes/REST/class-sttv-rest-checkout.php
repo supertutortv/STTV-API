@@ -368,23 +368,26 @@ class Checkout extends \WP_REST_Controller {
         }
     }
 
-    private function _pricing( $id ) {
+    private function _pricing( $ids ) {
         $pricing = $code = $msg = $html = '';
-        $course = get_post( sttv_id_decode($id) );
+        include_once STTV_TEMPLATE_DIR.'checkout.php';
+        $courses = json_decode( base64_decode($ids), true);
 
-        if ( !$course ) {
+        if ( !is_array($courses) ) {
             $code = 'checkout_pricing_course_invalid';
             $msg = 'The course ID provided is invalid. Please try again.';
         } else {
-            $course = get_post_meta( $course->ID, 'sttv_course_data', true );
-            $pricing = $course['pricing'];
-            unset( $pricing['renewals'] );
-            $output = [
-                'name' => $course['name'],
-                'qty' => 1
-            ];
+            foreach ($courses as $course) {
+                $course = get_post( sttv_id_decode($course) );
+                $cmeta = get_post_meta( $course->ID, 'sttv_course_data', true );
+                unset( $cmeta['pricing']['renewals'] );
+                $pricing[] = array_merge([
+                    'name' => $course['name'],
+                    'qty' => 1
+                ],$cmeta['pricing']);
+            }
             $code = 'checkout_pricing_success';
-            include STTV_TEMPLATE_DIR.'checkout.php';
+                
             $html = checkout_template();
         }
 
@@ -394,7 +397,7 @@ class Checkout extends \WP_REST_Controller {
             200,
             [
                 'data' => [
-                    'pricing' => array_merge($output,$pricing),
+                    'pricing' => $pricing,
                     'html' => $html
                 ]
             ]
