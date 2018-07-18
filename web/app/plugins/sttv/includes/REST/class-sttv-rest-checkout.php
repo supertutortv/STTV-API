@@ -255,6 +255,7 @@ class Checkout extends \WP_REST_Controller {
                 $course = get_post_meta( sttv_id_decode($item['id']), 'sttv_course_data', true );
                 $taxable += $course['pricing']['taxable_amt'];
                 $sublength += $course['pricing']['length'];
+                $courseids[] = $course['pricing']['id'];
                 $items[] = [
                     'customer' => $customer->id,
                     'currency' => 'usd',
