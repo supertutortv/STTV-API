@@ -382,7 +382,7 @@ class Checkout extends \WP_REST_Controller {
             foreach ($courses as $course) {
                 $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
                 unset( $cmeta['pricing']['renewals'] );
-                $pricing[] = array_merge($cmeta['pricing'],[
+                $pricing[$course] = array_merge($cmeta['pricing'],[
                     'name' => $cmeta['name'],
                     'qty' => 1
                 ]);

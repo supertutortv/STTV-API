@@ -110,7 +110,7 @@ class Admin {
 					'files' => $resources
 				];
 
-				$data['capabilities']['full'][] = "course_{$test}_{$aslug}";
+				$data['capabilities'][] = "course_{$test}_{$aslug}";
 			}
 				
 			// PRACTICE
@@ -144,9 +144,9 @@ class Admin {
 				$title = sanitize_title_with_dashes( $book['book_name'] );
 
 				if ( strpos( $book['book_name'], 'Free' ) !== false ) {
-					$data['capabilities']['trial'][] = "course_{$test}_{$title}";
+					$data['capabilities'][] = "course_{$test}_{$title}";
 				}
-				$data['capabilities']['full'][] = "course_{$test}_{$title}";
+				$data['capabilities'][] = "course_{$test}_{$title}";
 		
 				// Main Practice Object
 				$psubsec[$title] = [
