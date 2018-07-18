@@ -195,12 +195,12 @@ class Checkout extends \WP_REST_Controller {
         $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
         
-        $customer = $create_invoice = $cid = $login = $items = $sublength = false;
+        $customer = $create_invoice = $cid = $login = $items = false;
         $cus = $body['customer'];
         $skiptrial = isset($cus['options']['skipTrial']);
         $priship = isset($cus['options']['priorityShip']);
         $mailinglist = isset($cus['options']['mailinglist']);
-        $items = $taxable = $courseids = [];
+        $items = $courseids = [];
 
         try {
             if (!$auth) {
@@ -249,9 +249,12 @@ class Checkout extends \WP_REST_Controller {
             //Begin Order Processing
             $this->set_tax( $cus['shipping']['address']['postal_code'] );
 
+            $sublength = $taxable = 0;
+
             foreach($body['items'] as $item) {
                 $course = get_post_meta( sttv_id_decode($item['id']), 'sttv_course_data', true );
-                $taxable[] = $course['pricing']['taxable_amt'];
+                $taxable += $course['pricing']['taxable_amt'];
+                $sublength += $course['pricing']['length'];
                 $items[] = [
                     'customer' => $customer->id,
                     'currency' => 'usd',
@@ -264,7 +267,7 @@ class Checkout extends \WP_REST_Controller {
             if ( $this->tax > 0 ) {
                 $items[99] = [
                     'customer' => $customer->id,
-                    'amount' => round( array_sum($taxable) * ( $this->tax / 100 ) ),
+                    'amount' => round( $taxable * ( $this->tax / 100 ) ),
                     'currency' => 'usd',
                     'description' => 'Sales tax',
                     'discountable' => false
@@ -281,20 +284,20 @@ class Checkout extends \WP_REST_Controller {
                 ];
             }
 
-            $trial = ($body['trial']) ? $course['pricing']['trial_period'] : 0;
             $order = new \STTV\Checkout\Order( 'create', [
                 'customer' => $customer->id,
-                'trial' => $trial,
+                'trial' => $skiptrial ? 0 : 5,
                 'metadata' => [
                     'wp_id' => $user_id,
                     'course' => json_encode($courseids),
                     'start' => time(),
-                    'end' => time() + (MONTH_IN_SECONDS * 6)
+                    'end' => time() + (MONTH_IN_SECONDS * $sublength)
                 ],
                 'items' => $items
             ]);
             $response = $order->response();
-            //$response = ($body['trial']) ? $order : $order->pay();
+            if ($skiptrial) $order->pay();
+
             $token = new \STTV\JWT( $login );
             sttv_set_auth_cookie($token->token);
 
@@ -303,7 +306,8 @@ class Checkout extends \WP_REST_Controller {
                 'Thank you for signing up! You will be redirected shortly.',
                 200,
                 [
-                    'redirect' => 'https://courses.supertutortv.com'
+                    'redirect' => 'https://courses.supertutortv.com',
+                    'response' => $response
                 ]
             );
 
