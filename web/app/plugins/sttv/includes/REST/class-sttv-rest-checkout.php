@@ -296,7 +296,7 @@ class Checkout extends \WP_REST_Controller {
                 'items' => $items
             ]);
             $response = $order->response();
-            if ($skiptrial) $order->pay();
+            //if ($skiptrial) $order->pay();
 
             $token = new \STTV\JWT( $login );
             sttv_set_auth_cookie($token->token);
