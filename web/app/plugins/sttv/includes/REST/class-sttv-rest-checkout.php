@@ -289,6 +289,7 @@ class Checkout extends \WP_REST_Controller {
                 'customer' => $customer->id,
                 'trial' => $skiptrial ? 0 : 5,
                 'metadata' => [
+                    'checkout_id' => $body['id'],
                     'wp_id' => $user_id,
                     'course' => json_encode($courseids),
                     'start' => time(),
