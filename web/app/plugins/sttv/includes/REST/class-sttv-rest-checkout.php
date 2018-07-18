@@ -194,8 +194,13 @@ class Checkout extends \WP_REST_Controller {
     private function _checkout( $body ){
         $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
         if ($auth instanceof \WP_Error) return $auth;
-        $cus = $body['customer']; 
-        $customer = $create_invoice = $cid = $login = $items = false;
+        
+        $customer = $create_invoice = $cid = $login = $items = $sublength = false;
+        $cus = $body['customer'];
+        $skiptrial = isset($cus['options']['skipTrial']);
+        $priship = isset($cus['options']['priorityShip']);
+        $mailinglist = isset($cus['options']['mailinglist']);
+        $items = $taxable = $courseids = [];
 
         try {
             if (!$auth) {
@@ -242,33 +247,33 @@ class Checkout extends \WP_REST_Controller {
             $customer->save();
             
             //Begin Order Processing
-            $course = get_post_meta( $body['course'], 'sttv_course_data', true );
-        
-            $items = [
-                [
-                    'customer' => $customer['id'],
+            $this->set_tax( $cus['shipping']['address']['postal_code'] );
+
+            foreach($body['items'] as $item) {
+                $course = get_post_meta( sttv_id_decode($item['id']), 'sttv_course_data', true );
+                $taxable[] = $course['pricing']['taxable_amt'];
+                $items[] = [
+                    'customer' => $customer->id,
                     'currency' => 'usd',
                     'amount' => $course['pricing']['price'],
                     'description' => $course['name'],
                     'discountable' => true
-                ]
-            ];
-
-            $this->set_tax( $body['shipping_pcode'] );
+                ];
+            }
 
             if ( $this->tax > 0 ) {
                 $items[99] = [
-                    'customer' => $customer['id'],
-                    'amount' => round( $course['pricing']['taxable_amt'] * ( $this->tax / 100 ) ),
+                    'customer' => $customer->id,
+                    'amount' => round( array_sum($taxable) * ( $this->tax / 100 ) ),
                     'currency' => 'usd',
                     'description' => 'Sales tax',
                     'discountable' => false
                 ];
             }
 
-            if ( $body['shipping'] ) {
+            if ( $priship ) {
                 $items[100] = [
-                    'customer' => $customer['id'],
+                    'customer' => $customer->id,
                     'amount' => 705,
                     'currency' => 'usd',
                     'description' => 'Priority Shipping',
@@ -278,11 +283,11 @@ class Checkout extends \WP_REST_Controller {
 
             $trial = ($body['trial']) ? $course['pricing']['trial_period'] : 0;
             $order = new \STTV\Checkout\Order( 'create', [
-                'customer' => $customer['id'],
+                'customer' => $customer->id,
                 'trial' => $trial,
                 'metadata' => [
                     'wp_id' => $user_id,
-                    'course' => $course['id'],
+                    'course' => json_encode($courseids),
                     'start' => time(),
                     'end' => time() + (MONTH_IN_SECONDS * 6)
                 ],

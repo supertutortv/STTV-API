@@ -37,6 +37,7 @@ class Admin {
 				'pricing' => [
 					'id' => sttv_id_encode($post_id),
 					'price' => (int) $course['course_pricing']['price'],
+					'length' => (int) $course['course_pricing']['sub_length'],
 					'taxable_amt' => (int) $course['course_pricing']['taxable_amt'],
 					'trial_period' => (int) $course['course_pricing']['trial_period'],
 					'type' => 'subscription',
