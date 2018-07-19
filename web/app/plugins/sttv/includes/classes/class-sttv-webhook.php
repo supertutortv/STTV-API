@@ -28,7 +28,7 @@ class Webhook {
     }
 
     public function __toString() {
-        return "\n".json_encode( sttv_rest_response(
+        return "\n".date('Y/m/d H:i:s')."\t".json_encode( sttv_rest_response(
                 $this->event,
                 $this->message,
                 $this->http,
