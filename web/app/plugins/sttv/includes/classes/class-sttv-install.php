@@ -7,8 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) {exit;}
 class Install {
 
     private static $tables = [
-        //'mu_keys' => '',
-        //'nonce' => '',
+        'mu_keys' => '(
+            id int(10) NOT NULL AUTO_INCREMENT,
+            mu_key tinytext,
+            root_user int(10) UNSIGNED,
+            active_user int(10) UNSIGNED,
+            date_created int UNSIGNED,
+            date_activated int UNSIGNED NOT NULL DEFAULT 0,
+            date_expires int UNSIGNED,
+            course_id int(10) UNSIGNED,
+            UNIQUE KEY id (id)
+        )',
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
             invoice_id tinytext,
@@ -22,7 +31,6 @@ class Install {
             id int(10) NOT NULL AUTO_INCREMENT,
             exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
-
             is_trash boolean NOT NULL DEFAULT 0,
             UNIQUE KEY id (id)
         )',
@@ -52,7 +60,7 @@ class Install {
 		if ( 'yes' === get_transient( 'sttv_installing' ) ) {
 			return;
 		}
-		set_transient( 'sttv_installing', 'yes', MINUTE_IN_SECONDS );
+		set_transient( 'sttv_installing', 'yes', 10 );
 
         self::options();
         self::tables();

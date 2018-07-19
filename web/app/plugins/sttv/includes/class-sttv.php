@@ -79,6 +79,9 @@ final class STTV {
         require_once 'classes/courses/class-sttv-courses-admin.php';
         require_once 'classes/courses/class-sttv-courses-trial.php';
 
+        //multiuser
+        require_once 'classes/multiuser/class-sttv-multiuser-keys.php';
+
         new \STTV\Courses\Admin();
         new \STTV\REST\API();
     }
