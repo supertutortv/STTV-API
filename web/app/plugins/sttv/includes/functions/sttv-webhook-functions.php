@@ -136,9 +136,9 @@ function invoice_updated( $data ) {
     $umeta = get_user_meta( $obj['metadata']['wp_id'], 'sttv_user_data', true );
 
     if ( isset($data['data']['previous_attributes']['hosted_invoice_url']) )
-        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_url'] = $data['data']['previous_attributes']['hosted_invoice_url'];
+        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_url'] = $obj['hosted_invoice_url'] ?? '';
     if ( isset($data['data']['previous_attributes']['invoice_pdf']) )
-        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_pdf'] = $data['data']['previous_attributes']['invoice_pdf'];
+        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_pdf'] = $obj['invoice_pdf'] ?? '';
 
     if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 )
         return $wpdb->update( $wpdb->prefix.'trial_reference',
