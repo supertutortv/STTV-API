@@ -91,6 +91,7 @@ class Webhook {
     }
 
     private function respond( $data ) {
+        wp_mail('dave@supertutortv.com','Test','Test');
         //change event dot notation to underscores
         $this->event = str_replace( '.', '_', $data['type'] );
 
