@@ -88,9 +88,11 @@ class Auth extends \WP_REST_Controller {
             'id' => $login->ID,
             'email' => $login->user_email
         ]);
-        $umeta = get_user_meta( $login->ID, 'sttv_user_data', true );
-        $umeta['user']['userdata']['login_timestamps'][] = time();
-        update_user_meta( $login->ID, 'sttv_user_data', $umeta );
+        if ( !current_user_can('manage_options') ) {
+            $umeta = get_user_meta( $login->ID, 'sttv_user_data', true );
+            $umeta['user']['userdata']['login_timestamps'][] = time();
+            update_user_meta( $login->ID, 'sttv_user_data', $umeta );
+        }
         
         return sttv_rest_response(
             'login_success',

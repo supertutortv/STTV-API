@@ -80,7 +80,7 @@ function customer_created( $data ) {
                 'customer' => $customer['id'],
                 'uid' => $customer['invoice_prefix'],
                 'orders' => [],
-                'login_timestamps' => [],
+                'login_timestamps' => []
             ]
         ],
         'courses' => []
@@ -96,22 +96,23 @@ function customer_updated( $data ) {
 function customer_deleted( $data ) {
     require_once( ABSPATH.'wp-admin/includes/user.php' );
     $id = ($data['data']['object']['metadata']['wp_id'] == 1) ? 0 : $data['data']['object']['metadata']['wp_id'];
-    $user = get_userdata( $id );
-    return wp_delete_user( $user->ID );
+    return wp_delete_user( $id );
 }
 
 // invoice.created
 function invoice_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
-    $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
     $user = get_userdata( $meta['wp_id'] );
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $courses = json_decode($meta['course'],true);
 
-    $test = strtolower( $course['test'] );
-
-    foreach ( $course['capabilities'] as $cap ) {
-        $user->add_cap( $cap );
+    foreach ( $courses as $course ) {
+        $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
+        $umeta['courses'][$cmeta['slug']] = [];
+        foreach($cmeta['capabilities'] as $cap) $user->add_cap( $cap );
     }
+    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
     global $wpdb;
     return $wpdb->insert( $wpdb->prefix.'trial_reference',
@@ -132,7 +133,14 @@ function invoice_created( $data ) {
 function invoice_updated( $data ) {
     global $wpdb;
     $obj = $data['data']['object'];
-    if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 ) {
+    $umeta = get_user_meta( $obj['metadata']['wp_id'], 'sttv_user_data', true );
+
+    if ( isset($data['data']['previous_attributes']['hosted_invoice_url']) )
+        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_url'] = $data['data']['previous_attributes']['hosted_invoice_url'];
+    if ( isset($data['data']['previous_attributes']['invoice_pdf']) )
+        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_pdf'] = $data['data']['previous_attributes']['invoice_pdf'];
+
+    if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 )
         return $wpdb->update( $wpdb->prefix.'trial_reference',
             [
                 'exp_date' => time(),
@@ -142,7 +150,6 @@ function invoice_updated( $data ) {
                 'invoice_id' => $obj['id']
             ]
         );
-    }
     return false;
 }
 
@@ -151,15 +158,16 @@ function invoice_payment_succeeded( $data ) {
     global $wpdb;
 
     $meta = $data['data']['object']['metadata'];
-    $course = get_post_meta( $meta['course'], 'sttv_course_data', true );
     $user = get_userdata( $meta['wp_id'] );
-
-    $test = strtolower( $course['test'] );
-    $user->remove_cap( "course_{$test}_trial" );
-
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $umeta['user']['data']['orders'][] = $obj['id'];
-    $umeta['courses'][$course['slug']] = [];
+    $courses = json_decode($meta['course'],true);
+
+    foreach ( $courses as $course ) {
+        $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
+        $test = strtolower( $course['test'] );
+        $user->remove_cap( "course_{$test}_trial" );
+    }
+    $umeta['user']['data']['orders'][$obj['id']] = [];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
     return $wpdb->update( $wpdb->prefix.'trial_reference',
