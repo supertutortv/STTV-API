@@ -16,7 +16,7 @@ class Install {
             date_activated int UNSIGNED NOT NULL DEFAULT 0,
             date_expires int UNSIGNED,
             course_id int(10) UNSIGNED,
-            PRIMARY KEY id (id),
+            PRIMARY KEY (id),
             UNIQUE KEY mu_key (mu_key)
         )',
         'trial_reference' => '(

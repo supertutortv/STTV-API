@@ -42,14 +42,6 @@ class Keys {
         return $this;
     }
 
-    public static function pricing( $stuff = '[]' ){
-        $stuff = json_decode( $stuff );
-        foreach ( $stuff as $k => $v ){
-            $stuff = $k;
-        }
-        return $stuff;
-    }
-
     public static function getAllKeys() {
         if ( current_user_can( 'manage_options' ) ) {
             global $wpdb;
@@ -60,10 +52,7 @@ class Keys {
 
     public function keygen( $qty = 0 ) {
         $qty = (int) $qty;
-
-        if ( $qty < self::MIN_KEYS ){
-            return null;
-        }
+        if ( $qty < self::MIN_KEYS ) return null;
 
         $prefix = array_merge(range('A','Z'),range('a','z'));
         array_unshift($prefix,'\t');
