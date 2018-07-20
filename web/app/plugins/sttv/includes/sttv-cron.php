@@ -68,12 +68,11 @@ class Cron {
         try {
             
             $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
-            $path = dirname( __DIR__ ) . '/cache/';
-
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
+                $path = dirname( __DIR__ ) . '/cache/';
                 $pieces = explode(':',$alb['name']);
                 //if (!in_array($pieces[0], $this->tests)) continue;
 
