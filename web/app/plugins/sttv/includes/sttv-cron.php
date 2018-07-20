@@ -70,81 +70,78 @@ class Cron {
             $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
             $path = dirname( __DIR__ ) . '/cache/';
 
-            foreach ( $this->tests as $test ) {
-                $test_abbrev = strtolower( $test );
+            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
+            $albs = (array) $alb_data['body']['data'];
+            
+            foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
+                $pieces = explode(':',$alb['name']);
+                if (!in_array($pieces[0], $this->tests)) continue;
+
+                $test_abbrev = strtolower( $pieces[0] );
                 $path .= $test_abbrev . '/';
-                $alb_data = $vimeo->request( "/me/albums?query=$test&fields=uri,name&per_page=100" );
-                $albs = (array) $alb_data['body']['data'];
-                
-                foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                    $name = str_replace( ':', ' ', $alb['name'] );
-                    
-                    $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
-                    $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
-                    $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
+                $name = implode(' ', $pieces );
+                $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=alphabetical&direction=asc';
+                $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
+                $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
 
-                    $video_data_2 = $vids = [];
+                $video_data_2 = $vids = [];
 
-                    if ( intval( $video_data['body']['total'] ) > 75 ) {
-                        $video_data_2 = $vimeo->request( $video_data['body']['paging']['next'].'&'.$qstring );
-                        $vids = array_merge( $video_data['body']['data'], $video_data_2['body']['data'] );
-                    } else {
-                        $vids = $video_data['body']['data'];
-                    }
-
-                    $vidobj = $albobj = [];
-                    $embcolor = '';
-                    $i = 0;
-                    
-                    foreach ($vids as $vid) { // LOOP THROUGH VIDEOS PER ALBUM
-                        $vidid = str_replace('https://vimeo.com/','',$vid['link']);
-                        $vidname = $vid['name'];
-                        $slug = $this->sanitize_this_title($vidname);
-                        $tags = [];
-                        $stags = $vid['tags'];
-                        foreach ($stags as $tag) {
-                            $tags[] = $tag['tag'];
-                        }
-                        $out = substr( substr( $vid['pictures']['sizes'][2]['link'], 0, strpos( $vid['pictures']['sizes'][2]['link'], '_' ) ), strpos( $vid['pictures']['sizes'][2]['link'], 'eo/' )+3 );
-                        $vidobj[$slug] = [
-                            'id' => $vidid,
-                            'name' => $vidname,
-                            'slug' => $slug,
-                            'time' => $vid['duration'],
-                            'tags' => $tags,
-                            'text' => $vid['description'] ?? '',
-                            'thumb' => $out,
-                            'views' => $vid['stats']['plays']
-                        ];
-                        if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
-                        
-                    } // END VIDEO LOOP
-                    $albobj = [
-                        'timestamp' => date("F d, Y H:i:s"),
-                        'albumName' => $name,
-                        'albumID' => $albid,
-                        'embedColor' => $embcolor,
-                        'videos' => $vidobj,
-                    ];
-                    
-                    ##################################
-                    ##### WRITE RESULTS TO FILES #####
-                    ##################################
-
-                        if ( ! is_dir( $path ) ) {
-                            mkdir( $path, 0777, true );
-                        }
-                        
-                        $contents = json_encode( $albobj, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT );
-                        
-                        $filew = fopen( $path . str_replace( ' ', '-', $alb['name'] ) .'.cache', 'w+' );
-                        fwrite( $filew, $contents );
-                        fclose( $filew );
-
-                    print_r( "Album ".$alb['name']." has been updated \r\n" );
+                if ( intval( $video_data['body']['total'] ) > 75 ) {
+                    $video_data_2 = $vimeo->request( $video_data['body']['paging']['next'].'&'.$qstring );
+                    $vids = array_merge( $video_data['body']['data'], $video_data_2['body']['data'] );
+                } else {
+                    $vids = $video_data['body']['data'];
                 }
-            }
 
+                $vidobj = $albobj = [];
+                $embcolor = '';
+                $i = 0;
+                
+                foreach ($vids as $vid) { // LOOP THROUGH VIDEOS PER ALBUM
+                    $vidid = str_replace('https://vimeo.com/','',$vid['link']);
+                    $vidname = $vid['name'];
+                    $slug = $this->sanitize_this_title($vidname);
+                    $tags = [];
+                    $stags = $vid['tags'];
+                    foreach ($stags as $tag) {
+                        $tags[] = $tag['tag'];
+                    }
+                    $out = substr( substr( $vid['pictures']['sizes'][2]['link'], 0, strpos( $vid['pictures']['sizes'][2]['link'], '_' ) ), strpos( $vid['pictures']['sizes'][2]['link'], 'eo/' )+3 );
+                    $vidobj[$slug] = [
+                        'id' => $vidid,
+                        'name' => $vidname,
+                        'slug' => $slug,
+                        'time' => $vid['duration'],
+                        'tags' => $tags,
+                        'text' => $vid['description'] ?? '',
+                        'thumb' => $out,
+                        'views' => $vid['stats']['plays']
+                    ];
+                    if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
+                    
+                } // END VIDEO LOOP
+                $albobj = [
+                    'timestamp' => date("F d, Y H:i:s"),
+                    'albumName' => $name,
+                    'albumID' => $albid,
+                    'embedColor' => $embcolor,
+                    'videos' => $vidobj,
+                ];
+                
+                ##################################
+                ##### WRITE RESULTS TO FILES #####
+                ##################################
+
+                    if ( ! is_dir( $path ) ) mkdir( $path, 0755, true );
+                    
+                    $contents = json_encode( $albobj, JSON_FORCE_OBJECT | JSON_PRETTY_PRINT );
+                    
+                    $filew = fopen( $path . str_replace( ' ', '-', $alb['name'] ) .'.cache', 'w+' );
+                    fwrite( $filew, $contents );
+                    fclose( $filew );
+
+                print_r( "Album ".$alb['name']." has been updated \r\n" );
+            }
             print_r( "The Vimeo JSON cache has been updated \r\n" );
         } catch ( Exception $e ) {
 
