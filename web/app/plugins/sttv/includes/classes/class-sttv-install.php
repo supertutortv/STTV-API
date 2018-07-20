@@ -16,7 +16,8 @@ class Install {
             date_activated int UNSIGNED NOT NULL DEFAULT 0,
             date_expires int UNSIGNED,
             course_id int(10) UNSIGNED,
-            UNIQUE KEY id (id)
+            PRIMARY KEY id (id),
+            UNIQUE KEY mu_key (mu_key)
         )',
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
@@ -57,9 +58,7 @@ class Install {
     ];
 
     public static function install() {
-		if ( 'yes' === get_transient( 'sttv_installing' ) ) {
-			return;
-		}
+		if ( 'yes' === get_transient( 'sttv_installing' ) ) return;
 		set_transient( 'sttv_installing', 'yes', 10 );
 
         self::options();

@@ -20,22 +20,23 @@ class Keys {
 
     private $start_time;
 
-    private $root_user_id;
+    private $root_user;
 
     private $course_id;
 
     private $autosave;
 
+    private static $table_name = 'mu_keys';
+
     public function __construct( $user_id = 0, $course_id = 0, $autosave = true ) {
         $this->start_time = time();
-        $this->keys = json_decode( @file_get_contents( MU_FILE_PATH ) ?: '[]', true );
 
         if ( is_string( $user_id ) ) {
             $this->set_current_key( $user_id );
             $user_id = 0;
         }
         
-        $this->root_user_id = $user_id;
+        $this->root_user = $user_id;
         $this->course_id = $course_id;
         $this->autosave = $autosave;
         return $this;
@@ -51,7 +52,9 @@ class Keys {
 
     public static function getAllKeys() {
         if ( current_user_can( 'manage_options' ) ) {
-            return @file_get_contents( MU_FILE_PATH ) ?: '[]';
+            global $wpdb;
+            $table = $wpdb->prefix.self::$table_name;
+            return $wpdb->get_results("SELECT * FROM $table", ARRAY_A);
         }
     }
 
