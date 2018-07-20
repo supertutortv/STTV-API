@@ -6,7 +6,8 @@ use Vimeo\Vimeo;
 class Cron {
 
     private $tests = [
-        'ACT'
+        'ACT',
+        'SAT'
     ];
 
     private $seckeys = [];
