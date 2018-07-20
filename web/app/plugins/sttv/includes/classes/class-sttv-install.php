@@ -9,11 +9,11 @@ class Install {
     private static $tables = [
         'mu_keys' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
-            mu_key varchar(255),
+            mu_key varchar(255) NOT NULL DEFAULT 0,
             root_user int(10) UNSIGNED,
             active_user int(10) UNSIGNED,
             date_created int UNSIGNED,
-            date_activated int UNSIGNED NOT NULL DEFAULT 0,
+            date_activated int UNSIGNED,
             date_expires int UNSIGNED,
             course_id int(10) UNSIGNED,
             PRIMARY KEY (id),
