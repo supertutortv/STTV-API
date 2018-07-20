@@ -9,7 +9,7 @@ class Install {
     private static $tables = [
         'mu_keys' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
-            mu_key tinytext,
+            mu_key varchar(255),
             root_user int(10) UNSIGNED,
             active_user int(10) UNSIGNED,
             date_created int UNSIGNED,
@@ -17,7 +17,7 @@ class Install {
             date_expires int UNSIGNED,
             course_id int(10) UNSIGNED,
             PRIMARY KEY (id),
-            UNIQUE KEY mu_key (mu_key)
+            UNIQUE KEY (mu_key)
         )',
         'trial_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
