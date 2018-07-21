@@ -15,87 +15,70 @@ class MultiUser extends \WP_REST_Controller {
 
     private $price_table;
 
-    /**
-     * Instantiates the Multi User REST class.
-     *
-     * @since 1.4.0
-     */
     public function __construct() {
         $this->countrydd = get_option( 'sttv_country_options' );
-        $this->price_table = get_option( 'sttv_mu_pricing_table' );
     }
 
-    /**
-     * Sets up the 'multi-user' endpoint and its transport methods.
-     *
-     * @since 1.4.0
-     */
     public function register_routes() {
-        register_rest_route( STTV_REST_NAMESPACE , '/multi-user', [
-            [
-                'methods' => WP_REST_Server::ALLMETHODS,
-                'callback' => [ $this, 'init' ],
-                'permission_callback' => 'sttv_verify_rest_nonce',
-                'args' => [
-                    'key' => [
-                        'required' => false,
-                        'type' => 'string',
-                        'description' => 'Can be a mukey or user id'
+        $routes = [
+            '/keys' => [
+                [
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'get_teacher_keys' ],
+                    'args' => [
+                        'uid' => [
+                            'required' => true,
+                            'type' => 'integer',
+                            'description' => 'Please provide the teacher uid'
+                        ]
                     ]
+                ],
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'keygen' ]
+                ],
+                [
+                    'methods' => 'PATCH',
+                    'callback' => [ $this, 'reset' ]
+                ]
+            ],
+            '/signup' => [
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'mu_signup' ]
                 ]
             ]
-        ]);
+        ];
+
+        foreach ( $routes as $route => $endpoint ) {
+			register_rest_route( 'multiuser', $route, $endpoint );
+		}
     }
 
-    /**
-     * Catch-all class method for routing the request based on transport method. All request methods are passed here.
-     *
-     * @since 1.4.0
-     *
-     * @param WP_REST_Request $request The current request, an instance of WP_REST_Request
-     * 
-     * @return WP_REST_Response All matching methods and the default case return an instance of WP_REST_Response
-     *
-     */
-    public function init( WP_REST_Request $request ) {
-		switch ( $request->get_method() ) {
-			case 'GET' :
-				return $this->roll_key( $request[ 'key' ] );
-			case 'POST' :
-                return $this->multi_user_verify( $request );
-			case 'PUT' :
-				return $this->multi_user_keygen( $request );
-            case 'PATCH' :
-                return $this->reset_key( $request[ 'key' ] );
-			case 'DELETE' :
-				break;
-			default:
-                return sttv_rest_invalid_method( $request->get_method() );
+    public function get_teacher_keys( WP_REST_Request $req ) {
+        return (new STTV\Multiuser\Keys( $req->get_param('uid') ))->get_keys();
+    }
+
+    public function multi_user_keygen( WP_REST_Request $req ) {
+        $body = json_decode($req->get_body(),true);
+        $mu = new MultiUser(  );
+        $keys = (new STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
+        $msg = "\r\n";
+
+        foreach ( $keys as $key ) {
+            $msg .= $key."\r\n";
         }
+
+        wp_mail(
+            $params[ 'email' ],
+            'Your SupertutorTV multi-user keys',
+            "The keys below were generated for you. Thank you for your purchase! Sign into your SupertutorTV account to see more info on the keys, including their active status and expiration dates.".$msg,
+            ['Bcc: info@supertutortv.com']
+        );
+
+        return $keys;
     }
 
-    /**
-     * Deletes the supplied multi-user master invitation key and generates new a new one.
-     *
-     * @since 1.4.0
-     *
-     * @param string $key Existing MD5 hashed invitation key.
-     * @return string|null Returns a new MD5 hash string from class MultiUserPermissions, null if hash failed
-     *
-     */
-    private function roll_key( $key ) {
-        return (new MultiUserPermissions( $key ))->keygen()->get_current_key();
-    }
-
-    /**
-     * Resets the supplied multi-user student key to default status and demotes the student to basic account privileges.
-     *
-     * @since 1.4.0
-     *
-     * @param string $key Multi-user student key.
-     * @return WP_REST_Response Includes the reset key data.
-     *
-     */
     private function reset_key( $token ) {
         $k = new MultiUser( $token );
         $key = $k->get_current_key();
@@ -110,29 +93,6 @@ class MultiUser extends \WP_REST_Controller {
             200,
             [ 'key' => $k->reset_key() ]
         );
-    }
-
-    private function multi_user_keygen( WP_REST_Request $req ) {
-        $params = json_decode($req->get_body(),true);
-        $mu = new MultiUser( $params[ 'user' ], $params[ 'course' ] );
-        $keys = $mu->keygen( $params['qty'] );
-        $msg = "\r\n";
-
-        foreach ( $keys as $key ) {
-            $msg .= $key."\r\n";
-        }
-
-        $saved = get_user_meta( $params[ 'user' ], 'mu_keys' ) ?: [];
-        update_user_meta( $params[ 'user' ], 'mu_keys', array_merge( $saved, $keys ) );
-
-        wp_mail(
-            $params[ 'email' ],
-            'Your generated multi-user keys',
-            "The keys below were generated for you. Thank you for your purchase! Sign into your SupertutorTV account to see more info on the keys, including their active status and expiration dates.".$msg,
-            ['Bcc: info@supertutortv.com']
-        );
-
-        return $keys;
     }
 
     public function multi_user_verify( WP_REST_Request $req ) {
