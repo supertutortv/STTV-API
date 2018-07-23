@@ -93,17 +93,20 @@ class MultiUser extends \WP_REST_Controller {
     public function reset( WP_REST_Request $req ) {
         $k = new \STTV\Multiuser\Keys( $req->get_param('mu_key') );
         $key = $k->get_current_key();
+        $user = null;
         if ( 0 === $key['active_user'] ) return false;
 
-        $user = get_userdata( $key['active_user'] );
-        $user->remove_all_caps();
-        $user->set_role( 'Student' );
+        if ( !user_can( $key['active_user'], 'manage_options' ) ) {
+            $user = get_userdata( $key['active_user'] );
+            $user->remove_all_caps();
+            $user->set_role( 'Student' );
+        }
 
         return sttv_rest_response(
             'key_reset',
             $key['mu_key'].' was reset to default status.',
             200,
-            [ 'key' => $k->reset() ]
+            [ 'key' => $k->reset(), 'user' => $user ]
         );
     }
 
