@@ -62,7 +62,7 @@ class MultiUser extends \WP_REST_Controller {
             200,
             [
                 'data' => [
-                    'keys' => (new STTV\Multiuser\Keys( $req->get_param('uid') ))->get_keys()
+                    'keys' => (new \STTV\Multiuser\Keys( $req->get_param('uid') ))->get_keys()
                 ]
             ]
         );
@@ -70,7 +70,7 @@ class MultiUser extends \WP_REST_Controller {
 
     public function keygen( WP_REST_Request $req ) {
         $body = json_decode($req->get_body(),true);
-        $keys = (new STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
+        $keys = (new \STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
         $msg = "\r\n";
 
         foreach ( $keys as $key ) {
@@ -91,7 +91,7 @@ class MultiUser extends \WP_REST_Controller {
     }
 
     public function reset( WP_REST_Request $req ) {
-        $k = new STTV\Multiuser\Keys( $req->get_param('mu_key') );
+        $k = new \STTV\Multiuser\Keys( $req->get_param('mu_key') );
         $key = $k->get_current_key();
         if ( 0 === $key['active_user'] ) return false;
 
@@ -109,7 +109,7 @@ class MultiUser extends \WP_REST_Controller {
 
     public function signup( WP_REST_Request $req ) {
         $body = json_decode( $req->get_body(), true );
-        $key = new STTV\Multiuser\Keys( $body['mu_key'] );
+        $key = new \STTV\Multiuser\Keys( $body['mu_key'] );
 
         return $key->is_subscribed(814);
 
