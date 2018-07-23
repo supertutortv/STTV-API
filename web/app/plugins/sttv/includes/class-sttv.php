@@ -189,6 +189,23 @@ final class STTV {
             add_action( 'shutdown', 'flush_rewrite_rules');
             set_transient( 'sttv_flush_rewrite_once', true, time() + DAY_IN_SECONDS );
         }
+
+        global $wpdb;
+        $keys = json_decode(file_get_contents(STTV_API_DIR.'/sttv_mu_keys.json'),true);
+
+        foreach($keys as $k => $v) {
+            $insert = [
+                'mu_key' => $k,
+                'root_user' => $v['root_user'],
+                'active_user' => $v['active_user'],
+                'date_created' => $v['created'],
+                'date_activated' => $v['activated'],
+                'date_expires' => $v['expires'],
+                'course_id' => (int) $v['course_id']
+            ];
+    
+            $wpdb->insert('sttvapp_mu_keys',$insert);
+        }
     }
     
 }
