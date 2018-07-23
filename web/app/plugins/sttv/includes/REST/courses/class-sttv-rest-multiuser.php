@@ -111,6 +111,7 @@ class MultiUser extends \WP_REST_Controller {
         $body = json_decode( $req->get_body(), true );
         $key = new \STTV\Multiuser\Keys( $body['mu_key'] );
 
+        return $key->get_current_key();
         return $key->is_subscribed(814);
 
         if ( !$key->validate() ) return sttv_rest_response(
