@@ -16,7 +16,7 @@ class Keys {
 
     private $token = '';
 
-    private $current_key;
+    private $current_key = [];
 
     private $start_time;
 
@@ -24,11 +24,11 @@ class Keys {
 
     private $course_id;
 
-    private $autosave;
+    private $valid = false;
 
     private static $table = 'sttvapp_mu_keys';
 
-    public function __construct( $user_id = 0, $course_id = 0, $autosave = true ) {
+    public function __construct( $user_id = 0, $course_id = 0 ) {
         $this->start_time = time();
 
         if ( is_string( $user_id ) ) {
@@ -41,7 +41,7 @@ class Keys {
         return $this;
     }
 
-    public static function getAllKeys() {
+    public static function getAll() {
         if ( current_user_can( 'manage_options' ) ) {
             global $wpdb;
             $table = self::$table;
@@ -49,7 +49,7 @@ class Keys {
         }
     }
 
-    public function get_keys() {
+    public function get() {
         global $wpdb;
         return $wpdb->get_results("SELECT * self::FROM $table WHERE root_user = $this->root_user", ARRAY_A);
     }
@@ -84,35 +84,57 @@ class Keys {
         return $this->get_tokens();
     }
 
-    public function activate_key( $user_id = 0, $time = MONTH_IN_SECONDS * 6 ) {
-        return $this->set_active_user( $user_id )
-            ->set_activated_time()
-            ->set_access_expiration( $time )
+    public function activate( $user_id = 0, $time = MONTH_IN_SECONDS * 6 ) {
+        if ( $this->valid )
+            return $this->set_active_user( $user_id )
+                ->set_activated_time()
+                ->set_access_expiration( $time )
+                ->update()
+                ->get_current_key();
+        else
+            return $this->valid;
+    }
+
+    public function validate() {
+        if ( $this->current_key['date_expires'] < $this->start_time ) 
+            $this->invalidate()->update();
+        elseif ( $this->current_key[ 'date_activated' ] === 0 && $this->current_key['active_user'] === 0 )
+            $this->valid = true;
+        return $this->valid;
+    }
+
+    public function reset() {
+        if ( empty($this->current_key) || $this->current_key[ 'date_activated' ] < 1 ) return false;
+
+        return $this->set_active_user()
+            ->set_access_expiration(YEAR_IN_SECONDS)
+            ->set_activated_time(0)
             ->update()
             ->get_current_key();
     }
 
-    public function validate_key( $key = '' ) {
-        $this->set_current_key( $key );
-        if ( empty( $this->current_key ) || !$this->current_key ) return null;
-
-        if ( $this->current_key['date_expires'] < time() ) {
-            $this->invalidate_key()->update();
-            return 'expired';
-        }
-
-        return $this->current_key;
+    private function invalidate() {
+        $this->current_key['date_expires'] = 0;
+        $this->valid = false;
+        return $this;
     }
 
-    public function is_subscribed( $active_user = 0, $course_id = 0 ) {
+    private function update() {
+        global $wpdb;
+        $wpdb->update(self::$table,$this->current_key,['mu_key'=>$this->token]);
+        return $this;
+    }
+
+    private function delete( $key ){
+        global $wpdb;
+        return $wpdb->delete(self::$table,['mu_key'=>$key]);
+    }
+
+    public function is_subscribed( $active_user = 0 ) {
         global $wpdb;
         $table = self::$table;
-        $course_id = $course_id ?: $this->course_id;
-        return !!$wpdb->get_results("SELECT * FROM $table WHERE active_user = $active_user AND course_id = $course_id;",ARRAY_A);
-    }
-
-    public function reset_key( $key = '' ) {
-        if ( !empty( $key ) ) return $this->set_current_key( $key )->_reset();
+        $courses = $wpdb->get_results("SELECT course_id FROM $table WHERE active_user = $active_user;",OBJECT_K);
+        return $courses;
     }
 
     public function get_tokens() {
@@ -123,27 +145,12 @@ class Keys {
         return $this->current_key;
     }
 
-    private function invalidate_key() {
-        $this->current_key['date_expires'] = 0;
-        return $this;
-    }
-
     private function set_current_key( $key ) {
         global $wpdb;
         $this->token = $key;
         $table = self::$table;
         $this->current_key = $wpdb->get_results("SELECT * FROM $table WHERE mu_key = '$key';", ARRAY_A)[0] ?? [];
         return $this;
-    }
-
-    private function _reset() {
-        if ( !$this->current_key[ 'date_activated' ] ) return;
-
-        return $this->set_active_user()
-            ->set_access_expiration(YEAR_IN_SECONDS)
-            ->set_activated_time(0)
-            ->update()
-            ->get_current_key();
     }
 
     private function set_active_user( $active_user = 0 ){
@@ -161,14 +168,8 @@ class Keys {
         return $this;
     }
 
-    private function update() {
+    private function errors() {
         global $wpdb;
-        $wpdb->update(self::$table,$this->current_key,['mu_key'=>$this->token]);
-        return $this;
-    }
-
-    private function delete( $key ){
-        global $wpdb;
-        return $wpdb->delete(self::$table,['mu_key'=>$key]);
+        return $wpdb->last_error;
     }
 }

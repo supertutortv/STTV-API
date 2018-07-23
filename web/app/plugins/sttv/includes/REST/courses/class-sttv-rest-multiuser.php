@@ -45,7 +45,7 @@ class MultiUser extends \WP_REST_Controller {
             '/signup' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'mu_signup' ]
+                    'callback' => [ $this, 'signup' ]
                 ]
             ]
         ];
@@ -56,12 +56,20 @@ class MultiUser extends \WP_REST_Controller {
     }
 
     public function get_teacher_keys( WP_REST_Request $req ) {
-        return (new STTV\Multiuser\Keys( $req->get_param('uid') ))->get_keys();
+        return sttv_rest_response(
+            'mu_keys_requested',
+            'Here are the requested multi-user keys.',
+            200,
+            [
+                'data' => [
+                    'keys' => (new STTV\Multiuser\Keys( $req->get_param('uid') ))->get_keys()
+                ]
+            ]
+        );
     }
 
-    public function multi_user_keygen( WP_REST_Request $req ) {
+    public function keygen( WP_REST_Request $req ) {
         $body = json_decode($req->get_body(),true);
-        $mu = new MultiUser(  );
         $keys = (new STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
         $msg = "\r\n";
 
@@ -76,65 +84,64 @@ class MultiUser extends \WP_REST_Controller {
             ['Bcc: info@supertutortv.com']
         );
 
-        return $keys;
+        return sttv_rest_response(
+            'mu_keys_generated',
+            'The multi-user keys were succesfully generated.'
+        );
     }
 
-    private function reset_key( $token ) {
-        $k = new MultiUser( $token );
+    public function reset( WP_REST_Request $req ) {
+        $k = new STTV\Multiuser\Keys( $req->get_param('mu_key') );
         $key = $k->get_current_key();
-        if ( 0 === $key[$token]['active_user'] ) {
-            return false;
-        }
+        if ( 0 === $key['active_user'] ) return false;
 
-        get_userdata( $key[$token]['active_user'] )->set_role( sttv_default_role() );
+        $user = get_userdata( $key['active_user'] );
+        $user->remove_all_caps();
+        $user->set_role( 'Student' );
+
         return sttv_rest_response(
             'key_reset',
-            $token.' was reset to default status.',
+            $key['mu_key'].' was reset to default status.',
             200,
-            [ 'key' => $k->reset_key() ]
+            [ 'key' => $k->reset() ]
         );
     }
 
-    public function multi_user_verify( WP_REST_Request $req ) {
-        $params = json_decode($req->get_body(),true);
-        if ( !isset( $params[ 'mukey' ] ) ) {
-            return sttv_rest_response( 'null_key', 'You must provide an invitation code with this request.', 400 );
-        }
+    public function signup( WP_REST_Request $req ) {
+        $body = json_decode( $req->get_body(), true );
+        $key = new STTV\Multiuser\Keys( $body['mu_key'] );
 
-        if ( !isset( $params[ 'email' ] ) ) {
-            return sttv_rest_response( 'null_email', 'You must provide the email associated with the invitation code.', 400 );
-        }
+        return $key->is_subscribed(814);
 
-        $mup = new MultiUserPermissions( $params[ 'mukey' ] );
-
-        if ( !$mup->verify_key( $params[ 'email' ] )->is_valid ) {
-            return sttv_rest_response( 'invalid_key', 'The invitation code provided is invalid.', 403 );
-        }
-
-        $usekey = $mup->usekey()->output;
-        ob_start();
-
-        sttv_get_template('checkout','checkout',[
-            'countrydd' => $this->countrydd,
-            'user' => $mup->get_current_user()
-        ]);
-
-        return sttv_rest_response(
-            'success',
-            'Permission granted.',
-            200,
-            [
-                'data' => [
-                    'id' => $mup->get_current_key(),
-                    'type' => 'multi-user',
-                    'price' => $this->price_table[ $params[ 'license' ][ 'id' ] ][ $params[ 'license' ][ 'qty' ] ],
-                    'qty' => $params[ 'license' ][ 'qty' ],
-                    'course_id' => $params[ 'license' ][ 'id' ],
-                    'name' => $params[ 'license' ][ 'title' ],
-                    'taxable' => false
-                ],
-                'html' => ob_get_clean()
-            ]
+        if ( !$key->validate() ) return sttv_rest_response(
+            'mu_key_invalid',
+            'The multi-user key is invalid. Please contact your teacher/tutor for assistance.'
         );
+
+        $student = wp_set_current_user(null,$body['email']);
+        if ( false === $student ) {
+            $user_id = wp_insert_user([
+                'user_login' => $body['email'],
+                'user_pass' => $body['password'],
+                'user_email' => $body['email'],
+                'first_name' => $body['firstname'],
+                'last_name' => $body['lastname'],
+                'display_name' => $body['firstname'].' '.$body['lastname'],
+                'show_admin_bar_front' => 'false',
+                'role' => 'student'
+            ]);
+    
+            if ( is_wp_error( $user_id ) ) {
+                return sttv_rest_response(
+                    'user_insert_error',
+                    'There was an error adding you as a user in our system. Please check with your teacher/tutor for further instructions.',
+                    200,
+                    [ 'data' => $user_id ]
+                );
+            }
+            $student = wp_set_current_user( $user_id );
+        }
+
+        $key->activate();
     }
 }
