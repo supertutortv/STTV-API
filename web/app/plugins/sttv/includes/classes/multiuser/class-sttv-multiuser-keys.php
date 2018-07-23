@@ -149,10 +149,8 @@ class Keys {
     private function set_current_key( $key ) {
         global $wpdb; $table = self::$table; $this->token = $key;
         $this->current_key = $wpdb->get_results("SELECT * FROM $table WHERE mu_key = '$key';", ARRAY_A)[0] ?? [];
-        foreach ($this->current_key as $k => $v) {
-            if ($k === 'mu_key') continue;
-            $this->current_key[$k] = (int) $v;
-        }
+        foreach ($this->current_key as $k => $v)
+            if ($k !== 'mu_key') $this->current_key[$k] = (int) $v;
         return $this;
     }
 
