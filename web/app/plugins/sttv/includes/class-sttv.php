@@ -190,7 +190,7 @@ final class STTV {
             set_transient( 'sttv_flush_rewrite_once', true, time() + DAY_IN_SECONDS );
         }
 
-        global $wpdb;
+        /* global $wpdb;
         $keys = json_decode(file_get_contents(STTV_API_DIR.'/sttv_mu_keys.json'),true);
 
         foreach($keys as $k => $v) {
@@ -205,7 +205,7 @@ final class STTV {
             ];
     
             $wpdb->insert('sttvapp_mu_keys',$insert);
-        }
+        } */
     }
     
 }
