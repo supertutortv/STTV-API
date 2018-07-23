@@ -141,17 +141,59 @@ class MultiUser extends \WP_REST_Controller {
             $student = wp_set_current_user( $user_id );
         }
 
+        // check if this user is already subscribed to this course
         if ( $key->is_subscribed( $student->ID ) ) return sttv_rest_response(
             'user_course_exists',
             'You are already subscribed to this course. Please log in to access your account.'
         );
 
+        // activate mukey
         $active = $key->activate( $student->ID );
+        if (!$active) return sttv_rest_response(
+            'mukey_not_activated',
+            'Something went wrong activating your key. Please try again or contact your teacher/tutor.'
+        );
 
-        return $active;
+        // add course capabilities to user (if they're not an admin... avoids altering admin privs during testing)
+        $cmeta = get_post_meta($active['course_id'],'sttv_course_data',true);
+        if ( !user_can( $active['active_user'], 'manage_options' ) )
+            foreach($cmeta['capabilities'] as $cap) $student->add_cap( $cap );
 
+        // setup user meta
+        $umeta = get_user_meta( $student->ID, 'sttv_user_data', $umeta);
+        if (empty($umeta))
+            $umeta = [
+                'user' => [
+                    'settings' => [
+                        'autoplay' => false,
+                        'dark_mode' => false
+                    ],
+                    'userdata' => [
+                        'type' => 'multiuser',
+                        'customer' => $active['active_user'],
+                        'uid' => $active['root_user'],
+                        'orders' => [],
+                        'login_timestamps' => []
+                    ]
+                ],
+                'courses' => []
+            ];
+
+        $umeta['courses'][] = $cmeta['slug'];
+        $umeta['user']['userdata']['orders'][] = $active['mu_key'];
+        update_user_meta( $student->ID, 'sttv_user_data', $umeta);
+
+        // set auth token for the user
         $token = new \STTV\JWT( $student );
         sttv_set_auth_cookie($token->token);
 
+        return sttv_rest_response(
+            'multiuser_signup_success',
+            'Thank you for signing up! You will be redirected shortly.',
+            200,
+            [
+                'redirect' => 'https://courses.supertutortv.com'
+            ]
+        );
     }
 }
