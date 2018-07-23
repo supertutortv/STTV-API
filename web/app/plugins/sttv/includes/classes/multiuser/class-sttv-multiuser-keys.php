@@ -131,12 +131,11 @@ class Keys {
     }
 
     public function is_subscribed( $active_user = 0 ) {
-        global $wpdb;
-        $table = self::$table;
+        global $wpdb; $sub = false; $table = self::$table;
         $courses = $wpdb->get_results("SELECT course_id FROM $table WHERE active_user = $active_user;",OBJECT_K);
         foreach ( $courses as $k => $v )
-            if ($k === $this->current_key['course_id']) return true;
-        return false;
+            if ((int)$k === $this->current_key['course_id']) $sub = true;
+        return $sub;
     }
 
     public function get_tokens() {
@@ -148,10 +147,12 @@ class Keys {
     }
 
     private function set_current_key( $key ) {
-        global $wpdb;
-        $this->token = $key;
-        $table = self::$table;
+        global $wpdb; $table = self::$table; $this->token = $key;
         $this->current_key = $wpdb->get_results("SELECT * FROM $table WHERE mu_key = '$key';", ARRAY_A)[0] ?? [];
+        foreach ($this->current_key as $k => $v) {
+            if ($k === 'mu_key') continue;
+            $this->current_key[$k] = (int) $v;
+        }
         return $this;
     }
 
