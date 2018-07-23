@@ -134,7 +134,9 @@ class Keys {
         global $wpdb;
         $table = self::$table;
         $courses = $wpdb->get_results("SELECT course_id FROM $table WHERE active_user = $active_user;",OBJECT_K);
-        return $courses;
+        foreach ( $courses as $k => $v )
+            if ($k === $this->current_key['course_id']) return true;
+        return false;
     }
 
     public function get_tokens() {
