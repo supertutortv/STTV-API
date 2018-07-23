@@ -132,9 +132,9 @@ class Keys {
 
     public function is_subscribed( $active_user = 0 ) {
         global $wpdb; $sub = false; $table = self::$table;
-        $courses = $wpdb->get_results("SELECT course_id FROM $table WHERE active_user = $active_user;",OBJECT_K);
-        foreach ( $courses as $k => $v )
-            if ((int)$k === $this->current_key['course_id']) $sub = true;
+        $courses = $wpdb->get_results("SELECT course_id FROM $table WHERE active_user = $active_user;",ARRAY_N);
+        foreach ( $courses as $v )
+            if ((int)$v[0] === $this->current_key['course_id']) $sub = true;
         return $sub;
     }
 
