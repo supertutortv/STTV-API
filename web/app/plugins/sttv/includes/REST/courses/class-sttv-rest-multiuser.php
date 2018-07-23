@@ -111,8 +111,6 @@ class MultiUser extends \WP_REST_Controller {
         $body = json_decode( $req->get_body(), true );
         $key = new \STTV\Multiuser\Keys( $body['mu_key'] );
 
-        return $key->is_subscribed(814);
-
         if ( !$key->validate() ) return sttv_rest_response(
             'mu_key_invalid',
             'The multi-user key is invalid. Please contact your teacher/tutor for assistance.'
@@ -131,17 +129,26 @@ class MultiUser extends \WP_REST_Controller {
                 'role' => 'student'
             ]);
     
-            if ( is_wp_error( $user_id ) ) {
-                return sttv_rest_response(
-                    'user_insert_error',
-                    'There was an error adding you as a user in our system. Please check with your teacher/tutor for further instructions.',
-                    200,
-                    [ 'data' => $user_id ]
-                );
-            }
+            if ( is_wp_error( $user_id ) ) return sttv_rest_response(
+                'user_insert_error',
+                'There was an error adding you as a user in our system. Please check with your teacher/tutor for further instructions.',
+                200,
+                [ 'data' => $user_id ]
+            );
             $student = wp_set_current_user( $user_id );
         }
 
-        $key->activate();
+        if ( $key->is_subscribed( $student->ID ) ) return sttv_rest_response(
+            'user_course_exists',
+            'You are already subscribed to this course. Please log in to access your account.'
+        );
+
+        $active = $key->activate( $student->ID );
+
+        return $active;
+
+        $token = new \STTV\JWT( $student );
+        sttv_set_auth_cookie($token->token);
+
     }
 }
