@@ -78,7 +78,7 @@ class MultiUser extends \WP_REST_Controller {
         }
 
         wp_mail(
-            $params[ 'email' ],
+            $body[ 'email' ],
             'Your SupertutorTV multi-user keys',
             "The keys below were generated for you. Thank you for your purchase! Sign into your SupertutorTV account to see more info on the keys, including their active status and expiration dates.".$msg,
             ['Bcc: info@supertutortv.com']
