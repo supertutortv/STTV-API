@@ -68,6 +68,7 @@ class Admin {
             </div>
         </div>
         <script>
+        (function($){
             $('#keygen > .button').on('click', function(e){
                 e.preventDefault();
                 var data = {
@@ -89,6 +90,7 @@ class Admin {
                     }
                 })
             })
+        })(jQuery)
         </script>
 HTML;
         print $html;
