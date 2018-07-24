@@ -82,7 +82,7 @@ class Admin {
                 $.ajax({
                     url : $resturl,
                     method : 'POST',
-                    data : data,
+                    data : JSON.stringify(data),
                     contentType : 'application/json',
                     success : function(d) {
                         console.log(d)
