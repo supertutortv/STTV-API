@@ -42,6 +42,7 @@ class Admin {
         foreach ( $users as $user ) {
             $uselect .= "<option value='{$user->ID}'>{$user->user_email}</option>";
         }
+        $resturl = rest_url().'/multiuser/keys';
         $html = <<<HTML
         <style type="text/css">
             header h1 {
@@ -78,7 +79,7 @@ class Admin {
                     email : $('select[name=master_user] option:selected','#keygen').text()
                 }
                 $.ajax({
-                    url : "{rest_url()}/multiuser/keys",
+                    url : $resturl,
                     method : 'POST',
                     data : data,
                     success : function(d) {
