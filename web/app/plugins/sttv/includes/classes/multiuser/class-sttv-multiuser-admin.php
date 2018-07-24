@@ -79,7 +79,7 @@ class Admin {
                 _st.request({
                     route : '/multiuser/keys',
                     method : 'POST',
-                    cdata : data,,
+                    cdata : data,
                     success : function(d) {
                         console.log(d)
                         window.location.reload(false)
