@@ -42,7 +42,7 @@ class Admin {
         foreach ( $users as $user ) {
             $uselect .= "<option value='{$user->ID}'>{$user->user_email}</option>";
         }
-        $resturl = rest_url().'multiuser/keys';
+        $resturl = '"'.rest_url().'multiuser/keys"';
         $html = <<<HTML
         <style type="text/css">
             header h1 {
