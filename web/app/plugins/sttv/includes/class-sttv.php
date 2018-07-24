@@ -80,9 +80,11 @@ final class STTV {
         require_once 'classes/courses/class-sttv-courses-trial.php';
 
         //multiuser
+        require_once 'classes/multiuser/class-sttv-multiuser-admin.php';
         require_once 'classes/multiuser/class-sttv-multiuser-keys.php';
 
         new \STTV\Courses\Admin();
+        new \STTV\Multiuser\Admin();
         new \STTV\REST\API();
     }
 
@@ -95,16 +97,9 @@ final class STTV {
         add_action( 'init', [ $this, 'emergency_access' ] );
         add_action( 'wp_enqueue_scripts', [ __NAMESPACE__ . '\\Scripts', 'init' ] );
         add_action( 'admin_init', function() {
-			if( defined('DOING_AJAX') && DOING_AJAX ) {
-				//Allow ajax calls
-				return;
-			}
-			if( ! current_user_can( 'manage_options' ) || ! defined( 'REST_REQUEST' ) ) {
-			   //Redirect to main page if the user is not an Editor or higher
-			   //wp_redirect( get_site_url( ) );
-               //wp_die();
-			}
-        } );
+			if( defined('DOING_AJAX') && DOING_AJAX ) return;
+			
+        });
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
