@@ -64,7 +64,7 @@ class Keys {
         global $wpdb; 
         
         for ($i = 1; $i <= $qty;) {
-            $key = sttv_ukey( $prefix[ date( 'n' ) ].$prefix[ date( 'y' ) ].'-', openssl_random_pseudo_bytes( 32 ), true, 32 );
+            $key = sttv_uid( $prefix[ date( 'n' ) ].$prefix[ date( 'y' ) ].'-', openssl_random_pseudo_bytes( 32 ), true, 32 );
 
             $insert = [
                 'mu_key' => $key,
