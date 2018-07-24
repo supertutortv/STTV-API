@@ -78,7 +78,8 @@ class Admin {
                     course : $('select[name=course_id]','#keygen').val(),
                     email : $('select[name=master_user] option:selected','#keygen').text()
                 }
-                $.ajax({
+                console.log(data)
+                /* $.ajax({
                     url : $resturl,
                     method : 'POST',
                     data : data,
@@ -89,7 +90,7 @@ class Admin {
                     error : function(x) {
                         console.log(x)
                     }
-                })
+                }) */
             })
         })(jQuery)
         </script>
