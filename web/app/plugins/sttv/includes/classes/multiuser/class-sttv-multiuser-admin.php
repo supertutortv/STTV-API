@@ -68,7 +68,7 @@ class Admin {
             </div>
         </div>
         <script>
-        (function($,_st){
+        (function($){
             $('#keygen > .button').on('click', function(e){
                 e.preventDefault();
                 var data = {
@@ -77,10 +77,10 @@ class Admin {
                     course : $('select[name=course_id]','#keygen').val(),
                     email : $('select[name=master_user] option:selected','#keygen').text()
                 }
-                _st.request({
-                    route : '/multiuser/keys',
+                $.ajax({
+                    url : '<?php echo rest_url(); ?>/multiuser/keys',
                     method : 'POST',
-                    cdata : data,
+                    data : data,
                     success : function(d) {
                         console.log(d)
                         window.location.reload(false)
@@ -90,7 +90,7 @@ class Admin {
                     }
                 })
             })
-        })(jQuery,_st)
+        })(jQuery)
         </script>
 HTML;
         print $html;
