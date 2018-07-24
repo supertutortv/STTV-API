@@ -79,10 +79,11 @@ class Admin {
                     email : $('select[name=master_user] option:selected','#keygen').text()
                 }
                 console.log(data)
-                /* $.ajax({
+                $.ajax({
                     url : $resturl,
                     method : 'POST',
                     data : data,
+                    contentType : 'application/json',
                     success : function(d) {
                         console.log(d)
                         //window.location.reload(false)
@@ -90,7 +91,7 @@ class Admin {
                     error : function(x) {
                         console.log(x)
                     }
-                }) */
+                })
             })
         })(jQuery)
         </script>
