@@ -78,7 +78,7 @@ class Admin {
                     email : $('select[name=master_user] option:selected','#keygen').text()
                 }
                 $.ajax({
-                    url : '<?php echo rest_url(); ?>/multiuser/keys',
+                    url : "{rest_url()}/multiuser/keys",
                     method : 'POST',
                     data : data,
                     success : function(d) {
