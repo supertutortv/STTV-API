@@ -70,7 +70,6 @@ class MultiUser extends \WP_REST_Controller {
 
     public function keygen( WP_REST_Request $req ) {
         $body = json_decode($req->get_body(),true);
-        return $body;
         $keys = (new \STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
         
         $msg = "\r\n";
