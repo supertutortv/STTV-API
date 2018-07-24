@@ -72,10 +72,10 @@ class MultiUser extends \WP_REST_Controller {
         $body = json_decode($req->get_body(),true);
         $keys = (new \STTV\Multiuser\Keys( $body[ 'user' ], $body[ 'course' ] ))->keygen( $body['qty'] );
         
-        $msg = "\r\n";
+        $msg = '<br/>';
 
         foreach ( $keys as $key ) {
-            $msg .= $key."\r\n";
+            $msg .= $key.'<br/>';
         }
 
         wp_mail(
