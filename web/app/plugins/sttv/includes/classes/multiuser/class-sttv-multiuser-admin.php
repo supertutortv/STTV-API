@@ -86,7 +86,7 @@ class Admin {
                     contentType : 'application/json',
                     success : function(d) {
                         console.log(d)
-                        //window.location.reload(false)
+                        window.location.reload(false)
                     },
                     error : function(x) {
                         console.log(x)
