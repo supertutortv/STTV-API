@@ -209,8 +209,6 @@ class MultiUser extends \WP_REST_Controller {
         $umeta['user']['userdata']['orders'][] = $active['mu_key'];
         update_user_meta( $student->ID, 'sttv_user_data', $umeta);
 
-        return get_user_meta( $student->ID, 'sttv_user_data', $umeta);
-
         // set auth token for the user
         $token = new \STTV\JWT( $student );
         sttv_set_auth_cookie($token->token);
