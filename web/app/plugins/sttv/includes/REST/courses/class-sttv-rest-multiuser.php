@@ -103,9 +103,10 @@ class MultiUser extends \WP_REST_Controller {
 
         if ( !user_can( $key['active_user'], 'manage_options' ) ) {
             $user = get_userdata( $key['active_user'] );
-            return $user;
-            $user->remove_all_caps();
-            $user->set_role( 'Student' );
+            if ($user) {
+                $user->remove_all_caps();
+                $user->set_role( 'Student' );
+            }
         }
 
         return sttv_rest_response(
