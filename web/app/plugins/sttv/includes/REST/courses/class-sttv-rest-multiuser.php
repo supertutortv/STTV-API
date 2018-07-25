@@ -163,7 +163,6 @@ class MultiUser extends \WP_REST_Controller {
             );
             $student = wp_set_current_user( $user_id );
         }
-        return $student;
 
         // check if this user is already subscribed to this course
         if ( $key->is_subscribed( $student->ID ) ) return sttv_rest_response(
