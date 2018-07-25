@@ -205,7 +205,7 @@ class MultiUser extends \WP_REST_Controller {
                 'courses' => []
             ];
 
-        $umeta['courses'][] = $cmeta['slug'];
+        $umeta['courses'][$cmeta['slug']] = [];
         $umeta['user']['userdata']['orders'][] = $active['mu_key'];
         update_user_meta( $student->ID, 'sttv_user_data', $umeta);
 
