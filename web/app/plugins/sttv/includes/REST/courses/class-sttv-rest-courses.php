@@ -79,7 +79,6 @@ class Courses extends \WP_REST_Controller {
 				'post_type' => 'courses'
 			]);
 			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
-			return $meta;
 			if ( !$meta )
 				return sttv_rest_response(
 					'course_not_found',
