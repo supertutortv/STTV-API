@@ -99,10 +99,10 @@ class MultiUser extends \WP_REST_Controller {
         $k = new \STTV\Multiuser\Keys( $req->get_param('mukey') );
         $key = $k->get_current_key();
         $user = null;
-        if ( 0 === $key['active_user'] ) return false;
+        if ( 0 === (int)$key['active_user'] ) return false;
 
-        if ( !user_can( $key['active_user'], 'manage_options' ) ) {
-            $user = get_userdata( $key['active_user'] );
+        if ( !user_can( (int)$key['active_user'], 'manage_options' ) ) {
+            $user = get_userdata( (int)$key['active_user'] );
             $user->remove_all_caps();
             $user->set_role( 'Student' );
         }
