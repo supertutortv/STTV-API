@@ -129,6 +129,7 @@ class MultiUser extends \WP_REST_Controller {
 
     public function signup( WP_REST_Request $req ) {
         $body = json_decode( $req->get_body(), true );
+        $umeta = $cmeta;
 
         $auth = sttv_verify_web_token($req);
         if ( email_exists($body['email']) && $auth !== true ) return sttv_rest_response(
