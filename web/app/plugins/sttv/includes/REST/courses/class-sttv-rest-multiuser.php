@@ -137,6 +137,7 @@ class MultiUser extends \WP_REST_Controller {
         );
 
         $student = wp_set_current_user(null,$body['email']);
+        return $student;
         if ( false === $student ) {
             $user_id = wp_insert_user([
                 'user_login' => $body['email'],
