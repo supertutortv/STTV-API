@@ -106,8 +106,8 @@ class Checkout extends \WP_REST_Controller {
         return $this->_checkout( $body, $request );
     }
 
-    private function _checkout( $body ){
-        $auth = isset($body['authToken']) ? sttv_verify_web_token($body['authToken']) : false;
+    private function _checkout( $body, $request ){
+        $auth = sttv_verify_web_token($request);
         if ($auth instanceof \WP_Error) return $auth;
         
         $customer = $create_invoice = $cid = $login = $items = false;

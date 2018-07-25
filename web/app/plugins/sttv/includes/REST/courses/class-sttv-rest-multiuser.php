@@ -129,14 +129,22 @@ class MultiUser extends \WP_REST_Controller {
 
     public function signup( WP_REST_Request $req ) {
         $body = json_decode( $req->get_body(), true );
-        $key = new \STTV\Multiuser\Keys( $body['mukey'] );
 
+        $auth = sttv_verify_web_token($req);
+        if ($auth instanceof \WP_Error) return $auth;
+        if ( email_exists($body['email']) && !$auth ) return sttv_rest_response(
+            'email_in_use',
+            'This email address is already in use. If this is you, please login first and then register your multi-user key.'
+        );
+
+        $key = new \STTV\Multiuser\Keys( $body['mukey'] );
         if ( !$key->validate() ) return sttv_rest_response(
             'mu_key_invalid',
             'The multi-user key is invalid. Please contact your teacher/tutor for assistance.'
         );
 
-        $student = wp_set_current_user(null,$body['email']);
+        $student = wp_get_current_user();
+        return $student;
         if ( 0 === $student->ID ) {
             $user_id = wp_insert_user([
                 'user_login' => $body['email'],
