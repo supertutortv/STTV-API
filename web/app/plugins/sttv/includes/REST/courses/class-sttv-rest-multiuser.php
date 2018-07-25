@@ -97,7 +97,7 @@ class MultiUser extends \WP_REST_Controller {
 
     public function reset( WP_REST_Request $req ) {
         $k = new \STTV\Multiuser\Keys( $req->get_param('mukey') );
-        $key = $k->get_current_key();
+        $key = $k->get_current_key(); return $key;
         $user = null;
         if ( 0 === (int)$key['active_user'] ) return false;
 
