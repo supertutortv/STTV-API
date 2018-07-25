@@ -131,8 +131,7 @@ class MultiUser extends \WP_REST_Controller {
         $body = json_decode( $req->get_body(), true );
 
         $auth = sttv_verify_web_token($req);
-        if ($auth instanceof \WP_Error) return $auth;
-        if ( email_exists($body['email']) && !$auth ) return sttv_rest_response(
+        if ( email_exists($body['email']) && $auth !== true ) return sttv_rest_response(
             'email_in_use',
             'This email address is already in use. If this is you, please login first and then register your multi-user key.'
         );
