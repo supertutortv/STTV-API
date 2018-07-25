@@ -187,7 +187,7 @@ class MultiUser extends \WP_REST_Controller {
 
         // setup user meta
         $umeta = get_user_meta( $student->ID, 'sttv_user_data', $umeta);
-        if (empty($umeta))
+        if (!$umeta)
             $umeta = [
                 'user' => [
                     'settings' => [
@@ -208,6 +208,8 @@ class MultiUser extends \WP_REST_Controller {
         $umeta['courses'][] = $cmeta['slug'];
         $umeta['user']['userdata']['orders'][] = $active['mu_key'];
         update_user_meta( $student->ID, 'sttv_user_data', $umeta);
+
+        return get_user_meta( $student->ID, 'sttv_user_data', $umeta);
 
         // set auth token for the user
         $token = new \STTV\JWT( $student );
