@@ -137,8 +137,7 @@ class MultiUser extends \WP_REST_Controller {
         );
 
         $student = wp_set_current_user(null,$body['email']);
-        return $student;
-        if ( false === $student ) {
+        if ( 0 === $student->ID ) {
             $user_id = wp_insert_user([
                 'user_login' => $body['email'],
                 'user_pass' => $body['password'],
@@ -158,6 +157,7 @@ class MultiUser extends \WP_REST_Controller {
             );
             $student = wp_set_current_user( $user_id );
         }
+        return $student;
 
         // check if this user is already subscribed to this course
         if ( $key->is_subscribed( $student->ID ) ) return sttv_rest_response(
