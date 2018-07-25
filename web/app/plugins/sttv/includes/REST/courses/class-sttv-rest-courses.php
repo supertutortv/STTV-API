@@ -78,6 +78,7 @@ class Courses extends \WP_REST_Controller {
 				'posts_per_page' => 1,
 				'post_type' => 'courses'
 			]);
+			return $course;
 			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
 			if ( !$meta )
 				return sttv_rest_response(
