@@ -13,8 +13,6 @@ class MultiUser extends \WP_REST_Controller {
 
     private $countrydd;
 
-    private $price_table;
-
     public function __construct() {
         $this->countrydd = get_option( 'sttv_country_options' );
     }
@@ -40,6 +38,12 @@ class MultiUser extends \WP_REST_Controller {
                 [
                     'methods' => 'PATCH',
                     'callback' => [ $this, 'reset' ]
+                ]
+            ],
+            '/form' => [
+                [
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'form' ]
                 ]
             ],
             '/signup' => [
@@ -111,9 +115,21 @@ class MultiUser extends \WP_REST_Controller {
         );
     }
 
+    public function form() {
+        ob_start();
+        include STTV_TEMPLATE_DIR.'mu-signup.php';
+
+        return sttv_rest_response(
+            'mu_form',
+            'Here\'s your form',
+            200,
+            [ 'form' => ob_get_clean() ]
+        );
+    }
+
     public function signup( WP_REST_Request $req ) {
         $body = json_decode( $req->get_body(), true );
-        $key = new \STTV\Multiuser\Keys( $body['mu_key'] );
+        $key = new \STTV\Multiuser\Keys( $body['mukey'] );
 
         if ( !$key->validate() ) return sttv_rest_response(
             'mu_key_invalid',

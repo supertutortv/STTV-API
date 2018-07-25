@@ -115,7 +115,7 @@ $ck4 = <<<HTML
 <div id="pane-4" class="st-checkout-pane">
     <div class="st-checkout-header col s12">
         <h2>Almost there!</h2>
-        <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your {{trial}} day trial period is up.)</span>
+        <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your trial period expires. If you'd like to have full access right away, you can skip the trial by checking the box below.)</span>
     </div>
     <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
         <div id="st-checkout-items-table" class="col s12">
