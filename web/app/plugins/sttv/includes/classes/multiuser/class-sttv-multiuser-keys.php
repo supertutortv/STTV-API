@@ -96,10 +96,13 @@ class Keys {
     }
 
     public function validate() {
-        if ( $this->current_key['date_expires'] < $this->start_time ) 
+        if ( empty($this->current_key) ) return $this->valid;
+
+        if ( $this->current_key['date_expires'] < $this->start_time )
             $this->invalidate()->update();
         elseif ( $this->current_key[ 'date_activated' ] === 0 && $this->current_key['active_user'] === 0 )
             $this->valid = true;
+
         return $this->valid;
     }
 

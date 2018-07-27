@@ -4,17 +4,12 @@ namespace STTV\REST\Courses;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_Error;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
-
 /**
  * SupertutorTV feedback mechanism.
  *
  * All REST routes and endpoints for user feedback on SupertutorTV's prep courses.
  *
- * @class 		\STTV\REST\Feedback
+ * @class 		\STTV\REST\Courses\Feedback
  * @version		2.0.0
  * @package		STTV
  * @category	Class
@@ -92,9 +87,9 @@ class Feedback extends \WP_REST_Controller {
 		);
 	}
 
-	public function update_feedback_with_uniqueid($post_ID,$post,$update) {
+	public function update_feedback_with_uniqueid( $post_ID, $post, $update ) {
 		$parent = get_post($post->post_parent);
-		if (!$update && $parent) :
+		if (!$update && $parent) {
 			global $wpdb;
 			$uid = sttvhashit(STTV_PREFIX.'/'.STTV_VERSION.'/'.$post->post_author.'/'.$post_ID.'/'.$post->post_parent,12);
 			$title = 'Feedback - '.$parent->post_title.' ('.$uid.')';
@@ -120,7 +115,7 @@ class Feedback extends \WP_REST_Controller {
 				);
 				set_transient( 'sttv_cfbrp:'.$post->post_author, true, DAY_IN_SECONDS );
 			}
-		endif;
+		}
 	}
 
 	public function delete_feedback_transient( $id ) {

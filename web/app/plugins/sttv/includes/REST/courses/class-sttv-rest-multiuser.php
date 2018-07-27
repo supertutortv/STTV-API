@@ -4,11 +4,6 @@ namespace STTV\REST\Courses;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_Error;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
-
 class MultiUser extends \WP_REST_Controller {
 
     private $countrydd;
@@ -190,12 +185,12 @@ class MultiUser extends \WP_REST_Controller {
         if (!$umeta)
             $umeta = [
                 'user' => [
+                    'type' => 'multiuser',
                     'settings' => [
                         'autoplay' => false,
                         'dark_mode' => false
                     ],
                     'userdata' => [
-                        'type' => 'multiuser',
                         'customer' => $active['active_user'],
                         'uid' => $active['root_user'],
                         'orders' => [],

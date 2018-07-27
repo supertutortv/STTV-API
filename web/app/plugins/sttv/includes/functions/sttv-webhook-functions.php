@@ -71,13 +71,13 @@ function customer_created( $data ) {
     $customer = $data['data']['object'];
     return update_user_meta( $customer['metadata']['wp_id'], 'sttv_user_data', [
         'user' => [
+            'type' => 'standard',
             'settings' => [
                 'autoplay' => false,
                 'default_course' => '',
                 'dark_mode' => false
             ],
             'userdata' => [
-                'type' => 'standard',
                 'customer' => $customer['id'],
                 'uid' => $customer['invoice_prefix'],
                 'orders' => [],
