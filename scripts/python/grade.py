@@ -1,6 +1,6 @@
 import json, argparse, ast
 
-RUBRIC_FILE = 'sttv_rubrics.py'
+RUBRIC_FILE = './sttv_rubrics.py'
 
 parser = argparse.ArgumentParser(description='Grades a submission')
 parser.add_argument('submission', metavar='submission', type=str, nargs=1,
