@@ -8,7 +8,7 @@ parser.add_argument('submission', metavar='submission', type=str, nargs=1,
 
 args = parser.parse_args()
 
-userSubmission = args.submission[0]
+userSubmission = ast.literal_eval(args.submission[0])
 
 # Shows the format of a submission.
 example_submission = {
