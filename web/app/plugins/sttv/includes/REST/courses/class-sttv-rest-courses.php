@@ -287,6 +287,6 @@ class Courses extends \WP_REST_Controller {
 		$body = $request->get_body();
 		$file = STTV_SCRIPTS_DIR . 'python/grade.py';
 		//return "python $file $body";
-		return shell_exec("python3 $file $body");
+		print_r(shell_exec("python3 $file $body"));
 	}
 }
