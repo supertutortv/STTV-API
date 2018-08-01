@@ -1,4 +1,4 @@
 def testfunc():
-     return 'Hello World!'
+     print( 'Hello World!' )
      exit()
 testfunc()
