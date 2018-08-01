@@ -22,7 +22,7 @@ example_submission = {
 # Grades a submission. This is designed to be imported by another file for use
 # in another script.
 def grade(submission):
-    return submission
+    return 'Hello World!'
     # Try to get the grading rubric from the RUBRIC_FILE
     try:
         with open(RUBRIC_FILE, 'r') as file:
