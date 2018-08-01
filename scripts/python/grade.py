@@ -1,5 +1,7 @@
 import json, argparse, ast
 
+return 'Hello World!'
+
 RUBRIC_FILE = 'sttv_rubrics.py'
 
 parser = argparse.ArgumentParser(description='Grades a submission')

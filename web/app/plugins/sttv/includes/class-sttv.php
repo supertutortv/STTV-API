@@ -38,8 +38,8 @@ final class STTV {
         $this->define( 'STTV_RESOURCE_DIR', STTV_API_DIR . '/resources/' );
         $this->define( 'STTV_LOGS_DIR', STTV_API_DIR . '/sttvlogs/' );
         $this->define( 'STTV_CRON_DIR', STTV_API_DIR . '/cron/' );
+        $this->define( 'STTV_SCRIPTS_DIR', STTV_API_DIR . '/app/scripts/' );
         $this->define( 'STTV_TEMPLATE_DIR', dirname( __DIR__ ) . '/templates/' );
-        $this->define( 'STTV_SCRIPTS_DIR', dirname( __DIR__ ) . '/scripts/' );
 
         //multi-user
         $this->define( 'MU_FILE_PATH', dirname(ABSPATH).'/sttv_mu_keys.json' );
