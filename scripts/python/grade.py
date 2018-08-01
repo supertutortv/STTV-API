@@ -1,7 +1,5 @@
 import json, argparse, ast
 
-return 'Hello World!'
-
 RUBRIC_FILE = 'sttv_rubrics.py'
 
 parser = argparse.ArgumentParser(description='Grades a submission')
@@ -10,7 +8,7 @@ parser.add_argument('submission', metavar='submission', type=str, nargs=1,
 
 args = parser.parse_args()
 
-userSubmission = ast.literal_eval(args.submission[0])
+userSubmission = args.submission[0]
 
 # Shows the format of a submission.
 example_submission = {
@@ -24,6 +22,7 @@ example_submission = {
 # Grades a submission. This is designed to be imported by another file for use
 # in another script.
 def grade(submission):
+    return submission
     # Try to get the grading rubric from the RUBRIC_FILE
     try:
         with open(RUBRIC_FILE, 'r') as file:
