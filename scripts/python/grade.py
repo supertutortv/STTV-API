@@ -1,11 +1,6 @@
 import json, argparse, ast
 
-def testfunc():
-     return 'Hello World!'
-     exit()
-testfunc()
-
-""" RUBRIC_FILE = 'sttv_rubrics.py'
+RUBRIC_FILE = 'sttv_rubrics.py'
 
 parser = argparse.ArgumentParser(description='Grades a submission')
 parser.add_argument('submission', metavar='submission', type=str, nargs=1,
@@ -105,6 +100,6 @@ def grade(submission):
     for key in report['playlist']:
         report['playlist'][key] = list(set(report['playlist'][key]))
 
-    return report
+    print(report)
 
-#grade(userSubmission) """
+grade(userSubmission)
