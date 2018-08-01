@@ -284,9 +284,9 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function parse_practice_data( WP_REST_Request $request ) {
-		$body = $request->get_body();
+		//$body = $request->get_body();
 		$file = STTV_SCRIPTS_DIR . 'python/blahblah.py';
 		//return "python $file $body";
-		print_r(shell_exec("sudo python3 $file 2>&1"));
+		print_r(shell_exec("python3 $file 2>&1"));
 	}
 }
