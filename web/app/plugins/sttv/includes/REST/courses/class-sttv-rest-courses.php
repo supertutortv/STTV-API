@@ -48,6 +48,13 @@ class Courses extends \WP_REST_Controller {
 						]
 					]
 				]
+			],
+			'/practice' => [
+				[
+					'methods' => 'POST',
+					'callback' => [ $this, 'parse_practice_data' ],
+					'permission_callback' => 'sttv_verify_web_token'
+				]
 			]
 		];
 
@@ -274,5 +281,11 @@ class Courses extends \WP_REST_Controller {
 				['data' => $deleted]
 			);
 		}
+	}
+
+	public function parse_practice_data( WP_REST_Request $request ) {
+		$body = $request->get_body();
+		$file = STTV_SCRIPTS_DIR . 'python/grade.py';
+		return shell_exec("python3 $file $body");
 	}
 }
