@@ -34,13 +34,6 @@ class Contact extends \WP_REST_Controller {
                     'callback' => [ $this, 'contact_form_processor' ],
                     'permission_callback' => [ $this, 'verify_form_submit' ]
                 ]
-            ],
-            '/subscribe' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'sttv_subscribe_processor' ],
-                    'permission_callback' => [ $this, 'verify_form_submit' ]
-                ]
             ]
         ];
 
