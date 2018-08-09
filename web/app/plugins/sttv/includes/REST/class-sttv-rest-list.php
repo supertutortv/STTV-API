@@ -35,10 +35,9 @@ class Mailinglist extends \WP_REST_Controller {
         // use sttv API mailinglist function
         $response = sttv_mailinglist_subscribe( $body['email'], $body['firstname'], $body['lastname'] );
 
-        if ( is_wp_error($response) ){
-            return sttv_rest_response( 'sub_error', 'There was an error subscribing you to our list. Please try again later.', 400, ['response'=>$response] );
-        } else {
+        if ( is_wp_error($response) )
+            return sttv_rest_response( 'sub_error', 'There was an error subscribing you to our list. Please try again later.', 200, ['response'=>$response] );
+        else
             return sttv_rest_response( 'sub_success', 'Success! Thank you for subscribing to SupertutorTV!', 200, ['response'=>$response] );
-        }
     }
 }
