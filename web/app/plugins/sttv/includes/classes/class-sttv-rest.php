@@ -81,13 +81,13 @@ class API {
         require_once $path . 'class-sttv-rest-auth.php';
         require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-contact.php';
+        require_once $path . 'class-sttv-rest-list.php';
         
         //courses
         require_once $path . 'courses/class-sttv-rest-courses.php';
         require_once $path . 'courses/class-sttv-rest-feedback.php';
         require_once $path . 'courses/class-sttv-rest-reviews.php';
         require_once $path . 'courses/class-sttv-rest-multiuser.php';
-        require_once $path . 'courses/class-sttv-rest-list.php';
     }
 
     public function register_rest_routes() {
