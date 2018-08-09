@@ -19,7 +19,7 @@ class Mailinglist extends \WP_REST_Controller {
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'sttv_subscribe_processor' ],
-                    'permission_callback' => 'sttv_verify_recap'
+                    //'permission_callback' => 'sttv_verify_recap'
                 ]
             ]
         ];
