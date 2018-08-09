@@ -87,6 +87,7 @@ class API {
         require_once $path . 'courses/class-sttv-rest-feedback.php';
         require_once $path . 'courses/class-sttv-rest-reviews.php';
         require_once $path . 'courses/class-sttv-rest-multiuser.php';
+        require_once $path . 'courses/class-sttv-rest-list.php';
     }
 
     public function register_rest_routes() {
