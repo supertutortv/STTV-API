@@ -95,6 +95,7 @@ class API {
             'STTV\REST\Auth',
             'STTV\REST\Checkout',
             'STTV\REST\Contact',
+            'STTV\REST\Mailinglist',
             'STTV\REST\Courses',
             'STTV\REST\Courses\Feedback',
             'STTV\REST\Courses\Reviews',
