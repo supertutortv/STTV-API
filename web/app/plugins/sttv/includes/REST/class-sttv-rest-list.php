@@ -32,7 +32,6 @@ class Mailinglist extends \WP_REST_Controller {
     public function sttv_subscribe_processor( WP_REST_Request $request ) {
         $body = json_decode($request->get_body(),true);
         
-        // use sttv API mailinglist function
         $response = sttv_mailinglist_subscribe( $body['email'], $body['firstname'], $body['lastname'] );
 
         if ( is_wp_error($response) )
