@@ -62,15 +62,4 @@ class Contact extends \WP_REST_Controller {
             return sttv_rest_response( 'contact_form_fail', 'There was an issue sending your message. Please try again later.', 200 );
         }
     }
-
-    public function verify_form_submit( WP_REST_Request $request ){
-        $token = json_decode($request->get_body(),true);
-        $token = $token['g_recaptcha_response'];
-
-        if ( empty($token) ) {
-            return new \WP_Error( 'no_recaptcha', 'Shoo bot, shoo!', [ 'status' => 403 ] );
-        }
-        $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true);
-        return $response['success'] ?: new \WP_Error( 'recaptcha_failed', 'Shoo bot, shoo!', [ 'status' => 403 ] );
-    }
 }
