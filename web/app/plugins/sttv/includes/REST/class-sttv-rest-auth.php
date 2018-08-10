@@ -79,6 +79,8 @@ class Auth extends \WP_REST_Controller {
                 200,
                 [ 'err' => $login ]
             );
+        
+        wp_set_current_user($login->ID);
 
         $token = new \STTV\JWT( $login );
 
