@@ -84,6 +84,8 @@ class Auth extends \WP_REST_Controller {
 
         sttv_set_auth_cookie($token->token);
 
+        return wp_get_current_user();
+
         \STTV\Log::access([
             'id' => $login->ID,
             'email' => $login->user_email
