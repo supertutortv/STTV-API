@@ -80,8 +80,7 @@ class API {
         require_once $path . 'class-sttv-rest-limiter.php';
         require_once $path . 'class-sttv-rest-auth.php';
         require_once $path . 'class-sttv-rest-checkout.php';
-        require_once $path . 'class-sttv-rest-contact.php';
-        require_once $path . 'class-sttv-rest-list.php';
+        require_once $path . 'class-sttv-rest-forms.php';
         
         //courses
         require_once $path . 'courses/class-sttv-rest-courses.php';
@@ -94,8 +93,7 @@ class API {
         $controllers = [
             'STTV\REST\Auth',
             'STTV\REST\Checkout',
-            'STTV\REST\Contact',
-            'STTV\REST\Mailinglist',
+            'STTV\REST\Forms',
             'STTV\REST\Courses',
             'STTV\REST\Courses\Feedback',
             'STTV\REST\Courses\Reviews',
