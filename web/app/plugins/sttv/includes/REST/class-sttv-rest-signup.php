@@ -104,7 +104,8 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stSignupForm( WP_REST_Request $request ) {
-        return sttv_rest_response('ok','ok',200);
+        require_once STTV_TEMPLATE_DIR.'checkout.php';
+        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => checkout_template() ]);
     }
 
     public function stSignupAccount( WP_REST_Request $request ) {
