@@ -50,3 +50,72 @@ function sttv_verify_recap( WP_REST_Request $request ){
     $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true);
     return $response['success'] ?: new \WP_Error( 'recaptcha_failed', 'Shoo bot, shoo!', [ 'status' => 200 ] );
 }
+
+function sttv_stripe_errors($cb) {
+    try {
+        return is_callable($cb) && $cb();
+    } catch(\Stripe\Error\Card $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Stripe\Error\RateLimit $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Stripe\Error\InvalidRequest $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Stripe\Error\Authentication $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Stripe\Error\ApiConnection $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Stripe\Error\Base $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    } catch (\Exception $e) {
+        $body = $e->getJsonBody();
+        $err  = $body['error'];
+        return sttv_rest_response(
+            'stripe_error',
+            'There was an error',
+            200,
+            [ 'data' => $err ]
+        );
+    }
+}

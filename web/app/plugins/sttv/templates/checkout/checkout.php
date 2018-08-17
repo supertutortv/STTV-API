@@ -2,7 +2,7 @@
 function checkout_template(){
 $countrydd = get_option('sttv_country_options');
 $ck1 = <<<HTML
-<div id="pane-1" class="st-checkout-pane row">
+<div id="step-1" class="st-checkout-pane row">
     <div class="st-checkout-header col s12">
         <h2>Okay, let's get started!</h2>
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
@@ -15,7 +15,7 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate email" type="email" name="st-email-val" placeholder="Email Address" onblur="_st.checkout.setChecker(this)" required/>
+            <input class="browser-default validate email" type="email" name="st-customer-email" placeholder="Email Address" required/>
         </div>
         <div class="input-field required col s12">
             <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
@@ -28,7 +28,7 @@ $ck1 = <<<HTML
 HTML;
 
 $ck2 = <<<HTML
-<div id="pane-2" class="st-checkout-pane">
+<div id="step-2" class="st-checkout-pane">
     <div class="st-checkout-header col s12">
         <h2>What's your billing address?</h2>
         <span>This is the address associated with the card you are going to use for payment. We use this to verify your payment, so please check the accuracy of the information you provide.</span>
@@ -64,7 +64,7 @@ $ck2 = <<<HTML
 HTML;
 
 $ck3 = <<<HTML
-<div id="pane-3" class="st-checkout-pane">
+<div id="step-3" class="st-checkout-pane">
     <div class="st-checkout-header col s12">
         <h2>Where are we sending your books?</h2>
         <span>Even if you're signing up for a course that doesn't ship books, we still collect this information to keep on file in your account. We never share this information with anyone.</span>
@@ -112,7 +112,7 @@ $ck3 = <<<HTML
 HTML;
 
 $ck4 = <<<HTML
-<div id="pane-4" class="st-checkout-pane">
+<div id="step-4" class="st-checkout-pane">
     <div class="st-checkout-header col s12">
         <h2>Almost there!</h2>
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your trial period expires. If you'd like to have full access right away, you can skip the trial by checking the box below.)</span>

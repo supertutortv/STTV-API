@@ -10,18 +10,18 @@ use WP_REST_Response;
 use WP_REST_Server;
 
 /**
- * SupertutorTV checkout class.
+ * SupertutorTV signup class.
  *
- * Properties, methods, and endpoints for the frontend checkout form to interact with.
+ * Properties, methods, and endpoints for the frontend signup form to interact with.
  *
- * @class 		STTV_Checkout
+ * @class 		STTV\REST\Signup
  * @version		2.0.0
  * @package		STTV
  * @category	Class
  * @author		Supertutor Media, inc.
  */
 
-class Checkout extends \WP_REST_Controller {
+class Signup extends \WP_REST_Controller {
 
     private $zips = [];
 
@@ -39,19 +39,21 @@ class Checkout extends \WP_REST_Controller {
 
     public function register_routes() {
         $routes = [
-			'/checkout' => [
+            '/init' => [
+                [
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'stSignupForm' ]
+                ]
+            ],
+			'/check' => [
 				[
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
                     'args' => [
                         'pricing' => [
                             'required' => false,
-                            'description' => 'Course ID to retrieve pricing'
-                        ],
-                        'email' => [
-                            'required' => false,
                             'type' => 'string',
-                            'description' => 'Email to check'
+                            'description' => 'Course pricing'
                         ],
                         'coupon' => [
                             'required' => false,
@@ -64,16 +66,24 @@ class Checkout extends \WP_REST_Controller {
                             'description' => 'Postal code to check for tax rate'
                         ]
                     ]
-                ],
+                ]
+            ],
+            '/account' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'sttv_checkout' ]
+                    'callback' => [ $this, 'stSignupAccount' ]
+                ]
+            ],
+            '/pay' => [
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'sttv_signup' ]
                 ]
             ]
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
-			rest_get_server()->register_route( '', $route, $endpoint );
+			register_rest_route( 'signup', $route, $endpoint );
 		}
     }
 
@@ -91,6 +101,64 @@ class Checkout extends \WP_REST_Controller {
         } else {
             return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
+    }
+
+    public function stSignupForm( WP_REST_Request $request ) {
+        return sttv_rest_response('ok','ok',200);
+    }
+
+    public function stSignupAccount( WP_REST_Request $request ) {
+        return sttv_stripe_errors(function() use ($request) {
+            $loggedin = sttv_verify_web_token($request);
+            extract(json_decode($request->get_body(),true));
+
+            if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
+    
+            if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signup_error', 'Email address is already in use. Is this you? <a href="/login">Sign in</a>', 200, [ 'id' => '', 'value' => '' ] );
+
+            $fullname = $firstname.' '.$lastname;
+            $creds = [
+                'user_pass' => $password,
+                'user_email' => $email,
+                'first_name' => $firstname,
+                'last_name' => $lastname,
+                'display_name' => $fullname,
+                'show_admin_bar_front' => 'false'
+            ];
+
+            $login = wp_get_current_user();
+            if ($login->ID === 0) {
+                $creds = $creds + [
+                    'user_login' => 'st',
+                    'role' => 'student'
+                ];
+                $user_id = wp_insert_user($creds);
+            } else {
+                $creds = $creds + [
+                    'ID' => $login->ID
+                ];
+                $user_id = wp_update_user($creds);
+            }
+
+            if ( is_wp_error( $user_id ) ) {
+                return sttv_rest_response(
+                    'signup_error',
+                    'Cannot update your account. Please check back again later.',
+                    200,
+                    [ 'data' => $user_id ]
+                );
+            }
+
+            $login = wp_set_current_user($user_id);
+
+            $customer = (new \STTV\Checkout\Customer( 'create', [
+                'description' => $fullname,
+                'email' => $email,
+                'metadata' => [ 'wp_id' => $user_id ]
+            ]))->response();
+
+            return sttv_rest_response( 'signup_success', 'Account created', 200, ['user_id'=>$user_id] );
+        });
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
@@ -119,36 +187,6 @@ class Checkout extends \WP_REST_Controller {
 
         try {
             if (!$auth) {
-                $fullname = $cus['firstname'].' '.$cus['lastname'];
-                $user_id = wp_insert_user([
-                    'user_login' => $body['email']['val'],
-                    'user_pass' => $cus['password'],
-                    'user_email' => $body['email']['val'],
-                    'first_name' => $cus['firstname'],
-                    'last_name' => $cus['lastname'],
-                    'display_name' => $fullname,
-                    'show_admin_bar_front' => 'false',
-                    'role' => 'student'
-                ]);
-
-                if ( is_wp_error( $user_id ) ) {
-                    return sttv_rest_response(
-                        'user_insert_error',
-                        'There was an error adding you as a user and you have not been charged. Please check your registration form and try again.',
-                        200,
-                        [ 'data' => $user_id ]
-                    );
-                }
-
-                $login = wp_set_current_user($user_id);
-    
-                $customer = (new \STTV\Checkout\Customer( 'create', [
-                    'description' => $fullname,
-                    'email' => $body['email']['val'],
-                    'metadata' => [ 'wp_id' => $user_id ]
-                ]))->response();
-
-                $cid = $customer->id;
 
             } else {
                 $login = wp_get_current_user($user_id);
@@ -332,19 +370,7 @@ class Checkout extends \WP_REST_Controller {
     }
 
     private function check_email( $email = '' ) {
-        if ( !is_email( $email ) ) {
-            return sttv_rest_response( 'bad_request', 'Email cannot be empty or blank, and must be a valid email address.', 400 );
-        }
-        
-        if ( wp_get_current_user()->user_email === $email ) {
-            return sttv_rest_response( 'email_current_user', 'Email address is the same as the currently logged in user', 200, [ 'id' => '', 'value' => '' ] );
-        }
 
-        if ( email_exists( $email ) ) {
-            return sttv_rest_response( 'email_taken', 'Email address is already in use', 200, [ 'id' => '', 'value' => '' ] );
-        }
-        
-        return sttv_rest_response( 'email_available', 'Email address available', 200, [ 'id' => $email, 'value' => $email ] );
     }
 
     private function check_coupon( $coupon, $sig ) {

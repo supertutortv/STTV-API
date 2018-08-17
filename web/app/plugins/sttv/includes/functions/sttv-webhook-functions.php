@@ -69,7 +69,14 @@ function trial_expiration_checker() {
 // customer.created
 function customer_created( $data ) {
     $customer = $data['data']['object'];
-    return update_user_meta( $customer['metadata']['wp_id'], 'sttv_user_data', [
+    $user_id = wp_update_user([
+        'ID' => $customer['metadata']['wp_id'],
+        'user_login' => str_replace('cus_','',$customer['id'])
+    ]);
+
+    if ( is_wp_error( $user_id ) ) return $user_id;
+
+    return update_user_meta( $user_id, 'sttv_user_data', [
         'user' => [
             'type' => 'standard',
             'settings' => [
