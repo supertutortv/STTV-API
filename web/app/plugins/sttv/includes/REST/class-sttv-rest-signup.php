@@ -4,23 +4,6 @@ namespace STTV\REST;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_Error;
-use WP_REST_Request;
-use WP_REST_Response;
-use WP_REST_Server;
-
-/**
- * SupertutorTV signup class.
- *
- * Properties, methods, and endpoints for the frontend signup form to interact with.
- *
- * @class 		STTV\REST\Signup
- * @version		2.0.0
- * @package		STTV
- * @category	Class
- * @author		Supertutor Media, inc.
- */
-
 class Signup extends \WP_REST_Controller {
 
     private $zips = [];
@@ -50,11 +33,6 @@ class Signup extends \WP_REST_Controller {
                     'methods' => 'GET',
                     'callback' => [ $this, 'sttv_parameter_checker' ],
                     'args' => [
-                        'pricing' => [
-                            'required' => false,
-                            'type' => 'string',
-                            'description' => 'Course pricing'
-                        ],
                         'coupon' => [
                             'required' => false,
                             'type' => 'string',
@@ -68,6 +46,19 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
+            '/plan' => [
+                [
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'stSignupPlan' ],
+                    'args' => [
+                        'id' => [
+                            'required' => false,
+                            'type' => 'string',
+                            'description' => 'Subscription plan id'
+                        ]
+                    ]
+                ]
+            ],
             '/account' => [
                 [
                     'methods' => 'POST',
@@ -77,7 +68,7 @@ class Signup extends \WP_REST_Controller {
             '/pay' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'sttv_signup' ]
+                    'callback' => [ $this, 'stSignupPay' ]
                 ]
             ]
 		];
@@ -172,6 +163,14 @@ class Signup extends \WP_REST_Controller {
                 ]
             );
         });
+    }
+
+    public function stSignupPlan( WP_REST_Request $request ) {
+        $id = get_param('id');
+        if ( !$id || !$plan = get_post_meta( sttv_id_decode($id), 'pricing_data', true ) )
+            return sttv_rest_response( 'signup_error', 'Invalid subscription plan id', 200 );
+        else
+            return sttv_rest_response( 'signup_success', 'Pricing retrieved', 200, ['updated'=>$plan] );
     }
 
     public function sttv_checkout( WP_REST_Request $request ) {
