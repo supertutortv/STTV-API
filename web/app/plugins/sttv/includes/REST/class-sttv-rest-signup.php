@@ -111,6 +111,7 @@ class Signup extends \WP_REST_Controller {
     public function stSignupAccount( WP_REST_Request $request ) {
         return sttv_stripe_errors(function() use ($request) {
             $loggedin = sttv_verify_web_token($request);
+            return $loggedin;
             extract(json_decode($request->get_body(),true));
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
