@@ -70,6 +70,7 @@ function trial_expiration_checker() {
 function customer_created( $data ) {
     global $wpdb;
     $customer = $data['data']['object'];
+    $user_id = $customer['metadata']['wp_id'];
     $wpdb->update($wpdb->users, ['user_login' => str_replace('cus_','',$customer['id'])], ['ID' => $customer['metadata']['wp_id']]);
 
     return update_user_meta( $user_id, 'sttv_user_data', [
