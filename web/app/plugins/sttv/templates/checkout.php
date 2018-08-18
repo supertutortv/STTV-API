@@ -9,16 +9,16 @@ $ck1 = <<<HTML
     </div>
     <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
         <div class="input-field required col s12 m6 st-input-half-left">
-            <input class="browser-default validate" type="text" name="st-customer-firstname" placeholder="First Name" required />
+            <input class="browser-default validate" type="text" name="st-customer-account-firstname" placeholder="First Name" required />
         </div>
         <div class="input-field required col s12 m6 st-input-half-right">
-            <input class="browser-default validate" type="text" name="st-customer-lastname" placeholder="Last Name" required/>
+            <input class="browser-default validate" type="text" name="st-customer-account-lastname" placeholder="Last Name" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate email" type="email" name="st-customer-email" placeholder="Email Address" required/>
+            <input class="browser-default validate email" type="email" name="st-customer-account-email" placeholder="Email Address" required/>
         </div>
         <div class="input-field required col s12">
-            <input class="browser-default validate" type="password" name="st-customer-password" placeholder="Password" required/>
+            <input class="browser-default validate" type="password" name="st-customer-account-password" placeholder="Password" required/>
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
