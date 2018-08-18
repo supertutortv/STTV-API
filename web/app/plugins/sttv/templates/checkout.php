@@ -175,7 +175,7 @@ $ck5 = <<<HTML
                 <label></label>
         </div>
         <div id="stSignupCardElement" class="col s12"></div>
-        <script>if (_st.signup.card === false) _st.signup.setup()</script>
+        <script>if (_st.signup.card === false) _st.signup.cardSetup()</script>
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
