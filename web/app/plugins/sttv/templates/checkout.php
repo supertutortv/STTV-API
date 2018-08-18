@@ -3,7 +3,7 @@ function checkout_template(){
 $countrydd = get_option('sttv_country_options');
 $ck1 = <<<HTML
 <div id="step-1" class="stFormStep row">
-    <div class="st-checkout-header col s12">
+    <div class="stFormHeader col s12">
         <h2>Okay, let's get started!</h2>
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
@@ -21,8 +21,8 @@ $ck1 = <<<HTML
             <input class="browser-default validate" type="password" name="st-customer-account-password" placeholder="Password" required/>
         </div>
     </div>
-    <div class="st-checkout-buttons col s12">
-        <button id="stBtn_account" class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></button>
+    <div class="stFormButtons col s12">
+        <button id="stBtn_account" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></button>
     </div>
 </div>
 HTML;
