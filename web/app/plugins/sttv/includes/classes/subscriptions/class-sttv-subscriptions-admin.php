@@ -19,6 +19,8 @@ class Admin {
 
         $pricing = get_fields( $post_id );
 
+        if (!$pricing['sub_pricing']) return false;
+
         $data[sttv_id_encode($post_id)] = array_merge( $pricing['sub_pricing'], ['courses'=>$pricing['courses']]);
         
         update_post_meta( $post_id, 'pricing_data', $data );
