@@ -53,7 +53,7 @@ function sttv_verify_recap( WP_REST_Request $request ){
 
 function sttv_stripe_errors($cb) {
     try {
-        return is_callable($cb) && $cb();
+        return $cb();
     } catch(\Stripe\Error\Card $e) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
