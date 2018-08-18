@@ -9,7 +9,7 @@ class Admin {
         add_action( 'save_post_subscriptions', [ $this, 'sttv_sub_plan' ], 999, 2 );
     }
 
-    public function sttv_build_course( $post_id, $post ) {
+    public function sttv_sub_plan( $post_id, $post ) {
 
 		// Stop WP from clearing custom fields on autosave
 		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
