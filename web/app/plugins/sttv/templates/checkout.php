@@ -5,7 +5,7 @@ $ck1 = <<<HTML
 <div id="step-1" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>Okay, let's get started!</h2>
-        <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
+        <span>You're very close to getting expert tutoring from Brooke Hanson. Create your account below.</span>
     </div>
     <div id="stSignupAccount" class="stFormBody col s12">
         <div class="input-field required col s12 m6 st-input-half-left">
@@ -30,13 +30,13 @@ HTML;
 $ck2 = <<<HTML
 <div id="step-2" class="stFormStep row">
     <div class="stFormHeader col s12">
-        <h2>Okay, let's get started!</h2>
-        <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
+        <h2>Cool, now select a plan.</h2>
+        <span>All plans come with a 5 day free trial. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
-    <div id="stSignupCourses" class="stFormBody col s12"></div>
+    <div id="stSignupPlans" class="stFormBody col s12"></div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
-        <a id="stBtn_void" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
+        <a id="stBtn_plan" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
 HTML;
@@ -174,8 +174,8 @@ $ck5 = <<<HTML
                 <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
                 <label></label>
         </div>
-        <div id="st-checkout-card-element" class="col s12"></div>
-        <script>if (_st.checkout.card === false) _st.checkout.setup()</script>
+        <div id="stSignupCardElement" class="col s12"></div>
+        <script>if (_st.signup.card === false) _st.signup.setup()</script>
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
