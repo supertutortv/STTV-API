@@ -161,7 +161,16 @@ class Signup extends \WP_REST_Controller {
                 'metadata' => [ 'wp_id' => $user_id ]
             ]))->response();
 
-            return sttv_rest_response( 'signup_success', 'Account created', 200, ['user_id'=>$user_id] );
+            return sttv_rest_response(
+                'signup_success',
+                'Account created',
+                200,
+                [
+                    'update' => [
+                        'userID' => $user_id
+                    ]
+                ]
+            );
         });
     }
 
