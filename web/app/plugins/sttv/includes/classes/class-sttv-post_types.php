@@ -96,6 +96,14 @@ class Post_Types {
              'normal', // $context
              'low' // $priority
         );
+        add_meta_box(
+            'subscription_data', // $id
+            'Subscription Data', // $title
+            [ __CLASS__ , 'sttv_display_course_meta' ], // $callback
+            'courses', // $post_type
+            'normal', // $context
+            'low' // $priority
+       );
     }
     
     public static function sttv_display_course_meta() {
@@ -104,6 +112,11 @@ class Post_Types {
         $meta = json_encode( get_post_meta( $post->ID, 'sttv_course_data', true ), JSON_PRETTY_PRINT ); ?>
         <pre><?php print_r( $meta ); ?></pre>
     <?php }
+
+    public static function sttv_sub_data() {
+        global $post, $wp_rewrite;
+        print_r(get_fields( $post->ID )); 
+    }
 
 }
 Post_Types::init();
