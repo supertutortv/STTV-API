@@ -12,16 +12,14 @@ class Admin {
     public function sttv_build_course( $post_id, $post ) {
 
 		// Stop WP from clearing custom fields on autosave
-		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-			return;
+		if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
 
 		// Prevent quick edit from clearing custom fields
-		if (defined('DOING_AJAX') && DOING_AJAX)
-			return;
+		if (defined('DOING_AJAX') && DOING_AJAX) return;
 		
 		$course = get_fields( $post_id );
 		if (!$course['course_meta']['course_abbrev']) return false;
-		
+
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
 		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
 		$intros = json_decode( file_get_contents( $cache_dir . 'Intro-Videos.cache' ), true );
@@ -35,15 +33,6 @@ class Admin {
 			'modified' => strtotime( $post->post_modified ),
 			'intro' => $intros['videos'][$test.'-course-intro']['id'],
 			'test' => strtoupper( $test ),
-			'pricing' => [
-				'id' => sttv_id_encode($post_id),
-				'price' => (int) $course['course_pricing']['price'],
-				'length' => (int) $course['course_pricing']['sub_length'],
-				'taxable_amt' => (int) $course['course_pricing']['taxable_amt'],
-				'trial_period' => (int) $course['course_pricing']['trial_period'],
-				'type' => 'subscription',
-				'renewals' => $course['course_pricing']['renewals']
-			],
 			'capabilities' => [
 				'course_platform_access',
 				"course_{$test}_access",
