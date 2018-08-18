@@ -7,7 +7,7 @@ $ck1 = <<<HTML
         <h2>Okay, let's get started!</h2>
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
-    <div id="st-checkout-account" class="st-checkout-form col s12 l8 push-l2">
+    <div id="st-checkout-account" class="st-checkout-form col s12">
         <div class="input-field required col s12 m6 st-input-half-left">
             <input class="browser-default validate" type="text" name="st-customer-account-firstname" placeholder="First Name" required />
         </div>
@@ -22,7 +22,7 @@ $ck1 = <<<HTML
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
-        <button class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.next()">Next >></button>
+        <button id="stBtn_account" class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></button>
     </div>
 </div>
 HTML;
@@ -33,7 +33,7 @@ $ck2 = <<<HTML
         <h2>What's your billing address?</h2>
         <span>This is the address associated with the card you are going to use for payment. We use this to verify your payment, so please check the accuracy of the information you provide.</span>
     </div>
-    <div id="st-checkout-billing" class="st-checkout-form col s12 l8 push-l2">
+    <div id="st-checkout-billing" class="st-checkout-form col s12">
         <div class="input-field required col s12">
             <input class="browser-default validate billing address1" type="text" name="st-customer-billing-address_line1" placeholder="Address 1" required/>
         </div>
@@ -57,8 +57,8 @@ $ck2 = <<<HTML
         </div>
     </div>
     <div class="st-checkout-buttons col s12">
-        <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
-        <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.next()">Next >></a>
+        <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
+        <a id="stBtn_void" class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
 HTML;
@@ -69,16 +69,16 @@ $ck3 = <<<HTML
         <h2>Where are we sending your books?</h2>
         <span>Even if you're signing up for a course that doesn't ship books, we still collect this information to keep on file in your account. We never share this information with anyone.</span>
     </div>
-    <div id="st-checkout-shipping" class="st-checkout-form col s12 l8 push-l2">
+    <div id="st-checkout-shipping" class="st-checkout-form col s12">
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-options-copyAddress" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.copyAddress(this)"/>
+                <input name="st-customer-options-copyAddress" class="filled-in" value="1" type="checkbox" onclick="_st.signup.copyAddress(this)"/>
                 <span>Same as billing address</span>
             </label>
         </div>
         <div class="st-checkout-spaced col s12">
             <label>
-                <input name="st-customer-options-priorityShip" class="filled-in" value="1" type="checkbox" onclick="_st.checkout.setShipping(this)"/>
+                <input name="st-customer-options-priorityShip" class="filled-in" value="1" type="checkbox" onclick="_st.signup.setShipping(this)"/>
                 <span>I want Priority Shipping (+$7.05, U.S. only)</span>
             </label>
         </div>
@@ -106,7 +106,7 @@ $ck3 = <<<HTML
     </div>
     <div class="st-checkout-buttons col s12">
         <a class="st-checkout-prev st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
-        <a class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.checkout.next()">Next >></a>
+        <a id="stBtn_shipping" class="st-checkout-next st-checkout-btn pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
 HTML;
@@ -117,7 +117,7 @@ $ck4 = <<<HTML
         <h2>Almost there!</h2>
         <span>Your total is below. Does everything look correct? If so, enter your credit card info and then hit submit! It's that easy! (Remember, you will not be charged until your trial period expires. If you'd like to have full access right away, you can skip the trial by checking the box below.)</span>
     </div>
-    <div id="st-checkout-payment" class="st-checkout-form col s12 l8 push-l2">
+    <div id="st-checkout-payment" class="st-checkout-form col s12">
         <div id="st-checkout-items-table" class="col s12">
             <div class="row headings-row">
                 <div class="col s8">Item</div>
