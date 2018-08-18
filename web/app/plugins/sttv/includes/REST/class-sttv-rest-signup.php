@@ -167,7 +167,7 @@ class Signup extends \WP_REST_Controller {
                 200,
                 [
                     'update' => [
-                        'userID' => $user_id
+                        'id' => $user_id
                     ]
                 ]
             );
