@@ -179,7 +179,7 @@ $ck5 = <<<HTML
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
-        <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()">SUBMIT</a>
+        <a id="stSignupSubmit" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()">SUBMIT</a>
     </div>
 </div>
 HTML;
