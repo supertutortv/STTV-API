@@ -25,7 +25,7 @@ class Post_Types {
                 'menu_position'			=>	55,
                 'menu_icon'				=>  'dashicons-clock',
                 'public'				=>	true,
-                'hierarchical'			=>	true,
+                'hierarchical'			=>	false,
                 'exclude_from_search'	=>	true,
                 'show_in_nav_menus'		=>	false,
                 'show_in_rest'			=>	false,
