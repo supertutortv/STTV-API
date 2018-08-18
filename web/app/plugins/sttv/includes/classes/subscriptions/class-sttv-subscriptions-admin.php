@@ -6,7 +6,9 @@ defined( 'ABSPATH' ) || exit;
 
 class Admin {
     public function __construct() {
-        add_action( 'save_post_subscriptions', [ $this, 'sttv_sub_plan' ], 999, 2 );
+        add_action('admin_init',function(){
+            add_action( 'save_post_subscriptions', [ $this, 'sttv_sub_plan' ], 999, 2 );
+        });
     }
 
     public function sttv_sub_plan( $post_id, $post ) {
