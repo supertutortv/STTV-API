@@ -99,8 +99,8 @@ class Post_Types {
         add_meta_box(
             'subscription_data', // $id
             'Subscription Data', // $title
-            [ __CLASS__ , 'sttv_display_course_meta' ], // $callback
-            'courses', // $post_type
+            [ __CLASS__ , 'sttv_sub_data' ], // $callback
+            'subscriptions', // $post_type
             'normal', // $context
             'low' // $priority
        );
