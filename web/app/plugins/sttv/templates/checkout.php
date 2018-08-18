@@ -1,7 +1,13 @@
 <?php
 function checkout_template(){
-$countrydd = get_option('sttv_country_options');
-$ck1 = <<<HTML
+    $countrydd = get_option('sttv_country_options');
+    $plans = (function(){
+        return 'Hello World';
+    })();
+
+    return [
+        '',
+<<<HTML
 <div id="step-1" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>Okay, let's get started!</h2>
@@ -25,23 +31,21 @@ $ck1 = <<<HTML
         <button id="stBtn_account" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></button>
     </div>
 </div>
-HTML;
-
-$ck2 = <<<HTML
+HTML
+,<<<HTML
 <div id="step-2" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>Cool, now select a plan.</h2>
         <span>All plans come with a 5 day free trial. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
     </div>
-    <div id="stSignupPlans" class="stFormBody col s12"></div>
+    <div id="stSignupPlans" class="stFormBody col s12">$plans</div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
         <a id="stBtn_plan" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
-HTML;
-
-$ck3 = <<<HTML
+HTML
+,<<<HTML
 <div id="step-3" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>What's your billing address?</h2>
@@ -75,9 +79,8 @@ $ck3 = <<<HTML
         <a id="stBtn_void" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
-HTML;
-
-$ck4 = <<<HTML
+HTML
+,<<<HTML
 <div id="step-4" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>Where are we sending your books?</h2>
@@ -123,9 +126,8 @@ $ck4 = <<<HTML
         <a id="stBtn_shipping" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
     </div>
 </div>
-HTML;
-
-$ck5 = <<<HTML
+HTML
+,<<<HTML
 <div id="step-5" class="stFormStep">
     <div class="stFormHeader col s12">
         <h2>Almost there!</h2>
@@ -182,14 +184,6 @@ $ck5 = <<<HTML
         <a id="stSignupSubmit" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.submit()">SUBMIT</a>
     </div>
 </div>
-HTML;
-
-return [
-    '',
-    $ck1,
-    $ck2,
-    $ck3,
-    $ck4,
-    $ck5
-];
+HTML
+    ];
 };
