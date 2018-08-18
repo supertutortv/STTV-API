@@ -2,7 +2,7 @@
 function checkout_template(){
 $countrydd = get_option('sttv_country_options');
 $ck1 = <<<HTML
-<div id="step-1" class="st-checkout-pane row">
+<div id="step-1" class="stFormStep row">
     <div class="st-checkout-header col s12">
         <h2>Okay, let's get started!</h2>
         <span>You're very close to getting expert tutoring from Brooke Hanson. <strong>NOTE:</strong> Your card will not be charged until your trial period is over, and you're free to cancel at any time. If your course comes with free books, they will not ship until your trial has expired.</span>
@@ -64,7 +64,7 @@ $ck2 = <<<HTML
 HTML;
 
 $ck3 = <<<HTML
-<div id="step-3" class="st-checkout-pane">
+<div id="step-3" class="stFormStep">
     <div class="st-checkout-header col s12">
         <h2>Where are we sending your books?</h2>
         <span>Even if you're signing up for a course that doesn't ship books, we still collect this information to keep on file in your account. We never share this information with anyone.</span>
