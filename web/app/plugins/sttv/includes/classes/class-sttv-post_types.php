@@ -114,7 +114,7 @@ class Post_Types {
     <?php }
 
     public static function sttv_sub_data() {
-        global $post, $wp_rewrite;
+        global $post;
         print_r( get_post_meta( $post->ID, 'pricing_data', true) ); 
     }
 
