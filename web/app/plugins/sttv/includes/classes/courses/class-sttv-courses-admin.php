@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 class Admin {
     public function __construct() {
 		add_action('admin_init',function(){
-            add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 999, 2 );
+            add_action( 'save_post_courses', [ $this, 'sttv_build_course' ] );
         });
     }
     
