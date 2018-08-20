@@ -91,7 +91,7 @@ class Signup extends \WP_REST_Controller {
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
-        return is_callable([$this, $ep]) && $ep($body);
+        return is_callable([$this, $ep]) && $this->$ep($body);
     }
 
     private function _account($body) {
