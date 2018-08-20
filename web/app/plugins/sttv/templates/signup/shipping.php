@@ -29,7 +29,7 @@
             <input class="browser-default validate shipping address_state" type="text" name="st-customer-shipping-address-state" placeholder="State" required/>
         </div>
         <div class="input-field required col s12 m6 st-input-half-left">
-            <input class="browser-default validate shipping address_zip tax" onblur="_st.checkout.setChecker(this)" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
+            <input class="browser-default validate shipping address_zip tax" onblur="_st.signup.setChecker(this)" type="text" name="st-customer-shipping-address-postal_code" placeholder="Postal Code" required/>
         </div>
         <div class="input-field required col s12 m6 st-input-half-right">
             <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
