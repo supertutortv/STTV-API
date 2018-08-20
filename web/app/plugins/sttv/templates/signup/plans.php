@@ -6,11 +6,13 @@
     <div id="stSignupPlans" class="stFormBody col s12">
     <?php 
         $subs = get_posts(['post_type' => 'subscriptions','numberposts' => -1]);
-        print_r($subs);
+        foreach ($subs as $sub) { ?>
+            <a id="stBtn_plan-<?php echo $sub->ID; ?>" class="stPlan <?php echo $sub->post_name; ?>" onclick="_st.signup.plan(this.id)"><?php echo $sub->post_title; ?></a>
+       <?php }
     ?>
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
-        <a id="stBtn_plan" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id)">Next >></a>
+        <a id="stBtn_plan" class="stFormButton pmt-button btn waves-effect waves-light" >Next >></a>
     </div>
 </div>

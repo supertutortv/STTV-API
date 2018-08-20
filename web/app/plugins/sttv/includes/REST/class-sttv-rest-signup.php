@@ -178,7 +178,7 @@ class Signup extends \WP_REST_Controller {
 
     private function _plan( $body, $loggedin ) {
         extract($body);
-        return get_post($id);
+        return get_post_meta($id,'pricing_data',true);
     }
 
     public function stSignupPlan( WP_REST_Request $request ) {
