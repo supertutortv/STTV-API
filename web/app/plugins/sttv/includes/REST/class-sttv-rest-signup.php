@@ -203,7 +203,7 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_rest_response( 'signup_success', 'Billing saved', 200, [
             'html' => $html,
-            'update' => new stdClass
+            'update' => ['obj'=>'obj']
         ]);
     }
 
@@ -214,7 +214,7 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_rest_response( 'signup_success', 'Shipping saved', 200, [
             'html' => $html,
-            'update' => new stdClass
+            'update' => ['obj'=>'obj']
         ]);
     }
 
