@@ -13,15 +13,12 @@ class Signup extends \WP_REST_Controller {
 
     private $zips = [];
 
-    private $countrydd = '';
-
     private $tax = 0;
 
     private $timestamp;
 
     public function __construct() {
         $this->zips = json_decode( get_option( 'sttv_ca_zips' ) );
-        $this->countrydd = get_option( 'sttv_country_options' );
         $this->timestamp = time();
     }
 
@@ -390,11 +387,7 @@ class Signup extends \WP_REST_Controller {
     public function sttv_parameter_checker( WP_REST_Request $request ) {
         $pars = $request->get_params();
 
-        if ( isset( $pars['pricing'] ) && !empty($pars['pricing']) ) {
-            return $this->_pricing( $pars['pricing'] );
-        } elseif ( isset( $pars['email'] ) && !empty($pars['email']) ) {
-            return $this->check_email( sanitize_email($pars['email']) );
-        } elseif ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
+        if ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
             return $this->check_coupon( sanitize_text_field($pars['coupon']), sanitize_text_field($pars['sig']) );
         } elseif ( isset( $pars['tax'] ) && !empty($pars['tax']) ) {
             return $this->check_zip( sanitize_text_field($pars['tax']) );
@@ -403,60 +396,14 @@ class Signup extends \WP_REST_Controller {
         }
     }
 
-    private function _pricing( $ids ) {
-        $pricing = [];
-        $code = $msg = $html = '';
-        $courses = json_decode( base64_decode($ids), true);
-
-        require_once STTV_TEMPLATE_DIR.'checkout.php';
-
-        if ( !is_array($courses) ) {
-            $code = 'checkout_pricing_course_invalid';
-            $msg = 'The course ID provided is invalid. Please try again.';
-        } else {
-            foreach ($courses as $course) {
-                $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
-                unset( $cmeta['pricing']['renewals'] );
-                $pricing[] = array_merge($cmeta['pricing'],[
-                    'name' => $cmeta['name'],
-                    'qty' => 1
-                ]);
-            }
-            $code = 'checkout_pricing_success';
-                
-            $html = checkout_template();
-        }
-
-        return sttv_rest_response(
-            $code,
-            $msg,
-            200,
-            [
-                'data' => [
-                    'pricing' => $pricing,
-                    'html' => $html
-                ]
-            ]
-        );
-    }
-
-    private function check_email( $email = '' ) {
-
-    }
-
     private function check_coupon( $coupon, $sig ) {
-        if ( empty( $coupon ) ) {
-            return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
-        }
+        if ( empty( $coupon ) ) return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
-            if ( $coupon->valid ) {
-                $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
+            if ( !$coupon->valid ) return sttv_rest_response( 'signup_error', 'Expired coupon', 200 );
 
-                return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'id' => $coupon->id, 'value' => $amt ] );
-            } else {
-                return sttv_rest_response( 'coupon_expired', 'Expired coupon', 200, [ 'id' => $coupon->id, 'value' => '0' ] );
-            }
+            $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
+            return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'update' => ['id' => $coupon->id, 'value' => $amt ]] );
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
             list($UA,$platform,$product) = explode('|',$sig);
@@ -467,10 +414,7 @@ class Signup extends \WP_REST_Controller {
                 'platform' => $platform,
                 'product' => $product
             ];
-            return sttv_rest_response( 'coupon_invalid', $e->getJsonBody()['error']['message'], 200, [
-                'id' => '',
-                'value' => ''
-            ]);
+            return sttv_rest_response( 'signup_error', $e->getJsonBody()['error']['message'], 200);
         }
     }
 
@@ -478,7 +422,7 @@ class Signup extends \WP_REST_Controller {
         $this->set_tax( $zip );
         $msg = ($this->tax > 0) ? "CA tax ($this->tax%)" : "";
 
-        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'id' => $msg, 'value' => (string)$this->tax ] );
+        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'update' => ['id' => $msg, 'value' => (string)$this->tax ]]);
     }
 
     private function set_tax( $zip ) {
