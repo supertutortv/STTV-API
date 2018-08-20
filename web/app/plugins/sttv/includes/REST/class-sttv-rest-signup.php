@@ -30,7 +30,7 @@ class Signup extends \WP_REST_Controller {
             '/init' => [
                 [
                     'methods' => 'GET',
-                    'callback' => [ $this, 'stSignupForm' ]
+                    'callback' => [ $this, 'stSignupInit' ]
                 ]
             ],
 			'/check' => [
@@ -53,21 +53,20 @@ class Signup extends \WP_REST_Controller {
             ],
             '/plan' => [
                 [
-                    'methods' => 'GET',
-                    'callback' => [ $this, 'stSignupPlan' ],
-                    'args' => [
-                        'id' => [
-                            'required' => false,
-                            'type' => 'string',
-                            'description' => 'Subscription plan id'
-                        ]
-                    ]
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'stSignupPlan' ]
                 ]
             ],
             '/account' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupAccount' ]
+                    'callback' => [ $this, 'stSignupPost' ]
+                ]
+            ],
+            '/shipping' => [
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'stSignupShipping' ]
                 ]
             ],
             '/pay' => [
@@ -81,6 +80,17 @@ class Signup extends \WP_REST_Controller {
 		foreach ( $routes as $route => $endpoint ) {
 			register_rest_route( 'signup', $route, $endpoint );
 		}
+    }
+
+    public function stSignupPost( WP_REST_Request $request ) {
+        return get_route();
+        $body = json_decode($request->get_body(),true);
+        
+        
+        if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
+
+        $body = sttv_array_map_recursive( 'rawurldecode', $body );
+        $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
@@ -99,9 +109,10 @@ class Signup extends \WP_REST_Controller {
         }
     }
 
-    public function stSignupForm( WP_REST_Request $request ) {
-        require_once STTV_TEMPLATE_DIR.'checkout.php';
-        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => checkout_template() ]);
+    public function stSignupInit( WP_REST_Request $request ) {
+        ob_start();
+        require_once STTV_TEMPLATE_DIR.'signup/account.php';
+        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => ob_get_clean() ]);
     }
 
     public function stSignupAccount( WP_REST_Request $request ) {

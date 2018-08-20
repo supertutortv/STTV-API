@@ -11,7 +11,7 @@ function checkout_template(){
 <div id="step-1" class="stFormStep row">
     <div class="stFormHeader col s12">
         <h2>Okay, let's get started!</h2>
-        <span>You're very close to getting expert tutoring from Brooke Hanson. Create your account below.</span>
+        <span>Create your account below. Don't worry, we do not and will not abuse, misuse, or sell your information. In fact, we don't even store it on our servers! Read our privacy policy for more info.</span>
     </div>
     <div id="stSignupAccount" class="stFormBody col s12">
         <div class="input-field required col s12 m6 st-input-half-left">
