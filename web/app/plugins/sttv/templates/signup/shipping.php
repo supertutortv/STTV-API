@@ -34,7 +34,7 @@
         <div class="input-field required col s12 m6 st-input-half-right">
             <select class='browser-default validate shipping address_country' name='st-customer-shipping-address-country' required>
                 <option value disabled selected>Country...</option>
-                {$countrydd}
+                <?php print get_option('sttv_country_options'); ?>
             </select>
         </div>
     </div>
