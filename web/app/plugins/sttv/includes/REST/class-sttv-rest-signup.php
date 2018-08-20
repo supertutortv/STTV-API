@@ -58,7 +58,7 @@ class Signup extends \WP_REST_Controller {
             '/plan' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPlan' ]
+                    'callback' => [ $this, 'stSignupPost' ]
                 ]
             ],
             '/account' => [
@@ -169,6 +169,11 @@ class Signup extends \WP_REST_Controller {
                 ]
             );
         });
+    }
+
+    private function _plan( $body, $loggedin ) {
+        extract($body);
+        return get_post($id);
     }
 
     public function stSignupPlan( WP_REST_Request $request ) {
