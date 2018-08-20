@@ -25,6 +25,10 @@ class Signup extends \WP_REST_Controller {
         $this->timestamp = time();
     }
 
+    public function __call($a,$b) {
+        return false;
+    }
+
     public function register_routes() {
         $routes = [
             '/init' => [
@@ -82,6 +86,12 @@ class Signup extends \WP_REST_Controller {
 		}
     }
 
+    public function stSignupInit( WP_REST_Request $request ) {
+        ob_start();
+        require_once STTV_TEMPLATE_DIR.'signup/account.php';
+        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => ob_get_clean() ]);
+    }
+
     public function stSignupPost( WP_REST_Request $request ) {
         $body = json_decode($request->get_body(),true);
         $ep = str_replace('/signup/','_',$request->get_route());
@@ -91,42 +101,17 @@ class Signup extends \WP_REST_Controller {
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
-        return !is_callable([$this, $ep]) ?: $this->$ep($body);
-    }
-
-    private function _account($body) {
-        return 'It works!';
-    }
-
-    public function sttv_parameter_checker( WP_REST_Request $request ) {
-        $pars = $request->get_params();
-
-        if ( isset( $pars['pricing'] ) && !empty($pars['pricing']) ) {
-            return $this->_pricing( $pars['pricing'] );
-        } elseif ( isset( $pars['email'] ) && !empty($pars['email']) ) {
-            return $this->check_email( sanitize_email($pars['email']) );
-        } elseif ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
-            return $this->check_coupon( sanitize_text_field($pars['coupon']), sanitize_text_field($pars['sig']) );
-        } elseif ( isset( $pars['tax'] ) && !empty($pars['tax']) ) {
-            return $this->check_zip( sanitize_text_field($pars['tax']) );
-        } else {
-            return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
-        }
-    }
-
-    public function stSignupInit( WP_REST_Request $request ) {
-        ob_start();
-        require_once STTV_TEMPLATE_DIR.'signup/account.php';
-        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => ob_get_clean() ]);
-    }
-
-    public function stSignupAccount( WP_REST_Request $request ) {
         $verify = sttv_verify_web_token($request);
         $loggedin = is_wp_error($verify) ? !$verify : $verify;
 
-        return sttv_stripe_errors(function() use ($request,$loggedin) {
+        return $this->$ep($body,$loggedin,$request);
+    }
 
-            extract(json_decode($request->get_body(),true));
+    private function _account( $body, $loggedin ) {
+
+        return sttv_stripe_errors(function() use ($body,$loggedin) {
+
+            extract($body);
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
@@ -362,6 +347,22 @@ class Signup extends \WP_REST_Controller {
                 200,
                 [ 'data' => $err ]
             );
+        }
+    }
+
+    public function sttv_parameter_checker( WP_REST_Request $request ) {
+        $pars = $request->get_params();
+
+        if ( isset( $pars['pricing'] ) && !empty($pars['pricing']) ) {
+            return $this->_pricing( $pars['pricing'] );
+        } elseif ( isset( $pars['email'] ) && !empty($pars['email']) ) {
+            return $this->check_email( sanitize_email($pars['email']) );
+        } elseif ( isset( $pars['coupon'] ) && !empty($pars['coupon']) ) {
+            return $this->check_coupon( sanitize_text_field($pars['coupon']), sanitize_text_field($pars['sig']) );
+        } elseif ( isset( $pars['tax'] ) && !empty($pars['tax']) ) {
+            return $this->check_zip( sanitize_text_field($pars['tax']) );
+        } else {
+            return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
     }
 
