@@ -55,13 +55,19 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
+            '/account' => [
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'stSignupPost' ]
+                ]
+            ],
             '/plan' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'stSignupPost' ]
                 ]
             ],
-            '/account' => [
+            '/billing' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'stSignupPost' ]
@@ -70,13 +76,13 @@ class Signup extends \WP_REST_Controller {
             '/shipping' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupShipping' ]
+                    'callback' => [ $this, 'stSignupPost' ]
                 ]
             ],
             '/pay' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPay' ]
+                    'callback' => [ $this, 'stSignupPost' ]
                 ]
             ]
 		];
@@ -101,13 +107,12 @@ class Signup extends \WP_REST_Controller {
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
-        $verify = sttv_verify_web_token($request);
-        $loggedin = is_wp_error($verify) ? !$verify : $verify;
-
-        return $this->$ep($body,$loggedin,$request);
+        return $this->$ep($body,$request);
     }
 
-    private function _account( $body, $loggedin ) {
+    private function _account( $body, $request ) {
+        $verify = sttv_verify_web_token($request);
+        $loggedin = is_wp_error($verify) ? !$verify : $verify;
 
         return sttv_stripe_errors(function() use ($body,$loggedin) {
 
@@ -176,30 +181,52 @@ class Signup extends \WP_REST_Controller {
         });
     }
 
-    private function _plan( $body, $loggedin ) {
+    private function _plan( $body ) {
         extract($body);
-        return get_post_meta($id,'pricing_data',true);
+        $plan = get_post(sttv_id_decode($id));
+        $meta = get_post_meta(sttv_id_decode($id),'pricing_data',true);
+
+        ob_start();
+        include_once STTV_TEMPLATE_DIR.'signup/billing.php';
+        $html = ob_get_clean();
+
+        return sttv_rest_response( 'signup_success', 'Pricing retrieved', 200, [
+            'html' => $html,
+            'updated' => $plan
+        ]);
     }
 
-    public function stSignupPlan( WP_REST_Request $request ) {
-        $id = get_param('id');
-        if ( !$id || !$plan = get_post_meta( sttv_id_decode($id), 'pricing_data', true ) )
-            return sttv_rest_response( 'signup_error', 'Invalid subscription plan id', 200 );
-        else
-            return sttv_rest_response( 'signup_success', 'Pricing retrieved', 200, ['updated'=>$plan] );
+    private function _billing( $body ) {
+        ob_start();
+        include_once STTV_TEMPLATE_DIR.'signup/shipping.php';
+        $html = ob_get_clean();
+
+        return sttv_rest_response( 'signup_success', 'Billing saved', 200, [
+            'html' => $html,
+            'updated' => new stdClass
+        ]);
     }
 
-    public function sttv_checkout( WP_REST_Request $request ) {
-        $body = json_decode($request->get_body(),true);
-        
-        if ( empty($body) ){
-            return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
-        }
+    private function _shipping( $body ) {
+        ob_start();
+        include_once STTV_TEMPLATE_DIR.'signup/pay.php';
+        $html = ob_get_clean();
 
-        $body = sttv_array_map_recursive( 'rawurldecode', $body );
-        $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
+        return sttv_rest_response( 'signup_success', 'Shipping saved', 200, [
+            'html' => $html,
+            'updated' => new stdClass
+        ]);
+    }
 
-        return $this->_checkout( $body, $request );
+    private function _pay( $body, $request ) {
+        if ( empty($body) ) return sttv_rest_response( 'signup_error', 'Request body cannot be empty', 200 );
+
+        $verify = sttv_verify_web_token($request);
+        $loggedin = is_wp_error($verify) ? !$verify : $verify;
+
+        return sttv_stripe_errors(function() use ($body,$loggedin) {
+            return wp_get_current_user();
+        });
     }
 
     private function _checkout( $body, $request ){

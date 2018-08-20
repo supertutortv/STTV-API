@@ -7,7 +7,7 @@
     <?php 
         $subs = get_posts(['post_type' => 'subscriptions','numberposts' => -1]);
         foreach ($subs as $sub) { ?>
-            <a id="stBtn_plan-<?php echo $sub->ID; ?>" class="stPlan <?php echo $sub->post_name; ?>" onclick="_st.signup.plan(this.id)"><?php echo $sub->post_title; ?></a>
+            <a id="stBtn_plan-<?php echo sttv_id_encode($sub->ID); ?>" class="stPlan <?php echo $sub->post_name; ?>" onclick="_st.signup.plan(this.id)"><?php echo $sub->post_title; ?></a>
        <?php }
     ?>
     </div>
