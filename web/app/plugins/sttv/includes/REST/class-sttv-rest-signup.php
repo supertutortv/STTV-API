@@ -83,14 +83,19 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stSignupPost( WP_REST_Request $request ) {
-        return $request->get_route();
         $body = json_decode($request->get_body(),true);
-        
+        $ep = str_replace('/signup/','_',$request->get_route());
         
         if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
+
+        return is_callable([$this, $ep]) && $ep($body);
+    }
+
+    private function _account($body) {
+        return 'It works!';
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
