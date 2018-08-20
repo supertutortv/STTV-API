@@ -83,7 +83,7 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stSignupPost( WP_REST_Request $request ) {
-        return get_route();
+        return $request->get_route();
         $body = json_decode($request->get_body(),true);
         
         
