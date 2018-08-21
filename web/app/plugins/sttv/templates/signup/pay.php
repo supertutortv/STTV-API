@@ -13,7 +13,7 @@
             <div class="row totals-row valign-wrapper">
                 <div class="col s6">
                     <div class="input-field coupon col s12">
-                        <input class="browser-default coupon" name="st-pricing-coupon-val" type="text" placeholder="Coupon code" onblur="_st.signup.setChecker(this)"/>
+                        <input class="browser-default coupon" name="st-pricing-coupon-value" type="text" placeholder="Coupon code" onblur="_st.signup.setChecker(this)"/>
                     </div>
                 </div>
                 <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
