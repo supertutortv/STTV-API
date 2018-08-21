@@ -47,7 +47,7 @@
                 <label></label>
         </div>
         <div id="stSignupCardElement" class="col s12"></div>
-        <script>if (_st.signup.card === false) _st.signup.cardSetup()</script>
+        <script>if (_st.signup.state.card === false) _st.signup.cardSetup()</script>
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
