@@ -162,8 +162,7 @@ class Signup extends \WP_REST_Controller {
 
     private function _plan( $body ) {
         extract($body);
-        $plan = get_post(sttv_id_decode($id));
-        $meta = get_post_meta(sttv_id_decode($id),'pricing_data',true);
+        $meta = get_post_meta(sttv_id_decode($id),'pricing_data',true)[$id];
 
         ob_start();
         include_once STTV_TEMPLATE_DIR.'signup/billing.php';
@@ -171,7 +170,11 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_rest_response( 'signup_success', 'Pricing retrieved', 200, [
             'html' => $html,
-            'update' => $meta
+            'update' => [
+                'name' => $meta['name'],
+                'price' => $meta['price'],
+                'taxable' => $meta['taxable']
+            ]
         ]);
     }
 
