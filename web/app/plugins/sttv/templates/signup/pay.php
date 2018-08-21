@@ -28,7 +28,7 @@
             </div>
             <div class="st-checkout-spaced required col s12">
                 <label>
-                    <input id="stTermsBox" name="st-customer-options-terms" class="filled-in" value="1" type="checkbox" onchange="_st.signup.setOutcome(this)" required/>
+                    <input id="stTermsBox" name="st-customer-options-terms" class="filled-in" value="1" type="checkbox" onchange="_st.signup.setOutcome()" required/>
                     <span>I have read SupertutorTV's Terms & Conditions</span>
                 </label>
             </div>
