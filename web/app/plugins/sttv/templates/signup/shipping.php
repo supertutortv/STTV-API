@@ -40,6 +40,6 @@
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.checkout.prev()"><< Back</a>
-        <a id="stBtn_shipping" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id,'cardSetup')">Next >></a>
+        <a id="stBtn_shipping" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.next(this.id,'renderPayment')">Next >></a>
     </div>
 </div>
