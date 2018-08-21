@@ -322,7 +322,7 @@ class Signup extends \WP_REST_Controller {
         $this->set_tax( $zip );
         $msg = ($this->tax > 0) ? "CA tax ($this->tax%)" : "";
 
-        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'update' => ['id' => $msg, 'value' => (string)$this->tax ]]);
+        return sttv_rest_response( 'checkout_tax', $msg, 200, [ 'update' => ['id' => $msg, 'value' => $this->tax ]]);
     }
 
     private function set_tax( $zip ) {
