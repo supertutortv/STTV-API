@@ -16,7 +16,7 @@
                         <input class="browser-default coupon" name="st-pricing-coupon-value" type="text" placeholder="Coupon code" onblur="_st.signup.setChecker(this)"/>
                     </div>
                 </div>
-                <div id="total" class="col s6 right-align"><span id="ttltxt">$<span>0</span></span></div>
+                <div id="total" class="col s6 right-align"><span>$<span id="stTotal">0</span></span></div>
             </div>
         </div>
         <div class="st-checkout-options col s12">
