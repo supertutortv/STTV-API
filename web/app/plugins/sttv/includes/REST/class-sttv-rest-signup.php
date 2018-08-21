@@ -226,7 +226,7 @@ class Signup extends \WP_REST_Controller {
             $items[] = [
                 'customer' => $customer->id,
                 'currency' => 'usd',
-                'amount' => $price['price'],
+                'amount' => $plan['price'],
                 'description' => $plan['name'],
                 'discountable' => true
             ];
@@ -256,7 +256,7 @@ class Signup extends \WP_REST_Controller {
                 'trial' => $skiptrial ? 0 : 5,
                 'metadata' => [
                     'checkout_id' => $body['id'],
-                    'wp_id' => $user_id,
+                    'wp_id' => $user->ID,
                     'plan' => json_encode($plan['courses']),
                     'start' => time(),
                     'end' => time() + (MONTH_IN_SECONDS * $sublength)
