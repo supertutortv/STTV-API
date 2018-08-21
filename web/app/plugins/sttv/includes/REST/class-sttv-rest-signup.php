@@ -182,7 +182,7 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_rest_response( 'signup_success', 'Billing saved', 200, [
             'html' => $html,
-            'update' => ['obj'=>'obj']
+            'update' => new stdClass
         ]);
     }
 
@@ -193,7 +193,7 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_rest_response( 'signup_success', 'Shipping saved', 200, [
             'html' => $html,
-            'update' => ['obj'=>'obj']
+            'update' => new stdClass
         ]);
     }
 
@@ -220,16 +220,14 @@ class Signup extends \WP_REST_Controller {
             $this->set_tax( $cus['shipping']['address']['postal_code'] );
 
             $sublength = $taxable = 0;
-
-            $course = get_post_meta( sttv_id_decode($cus['plan']['id']), 'pricing_data', true )[$cus['plan']['id']];
-            $taxable += $course['pricing']['taxable_amt'];
-            $sublength += $course['pricing']['length'];
-            $courseids[] = $course['pricing']['id'];
+            $plan = get_post_meta( sttv_id_decode($cus['plan']['id']), 'pricing_data', true )[$cus['plan']['id']];
+            $taxable += $plan['taxable'];
+            $sublength += $plan['length'];
             $items[] = [
                 'customer' => $customer->id,
                 'currency' => 'usd',
-                'amount' => $course['price'],
-                'description' => $course['name'],
+                'amount' => $price['price'],
+                'description' => $plan['name'],
                 'discountable' => true
             ];
 
@@ -259,14 +257,14 @@ class Signup extends \WP_REST_Controller {
                 'metadata' => [
                     'checkout_id' => $body['id'],
                     'wp_id' => $user_id,
-                    'course' => json_encode($courseids),
+                    'plan' => json_encode($plan['courses']),
                     'start' => time(),
                     'end' => time() + (MONTH_IN_SECONDS * $sublength)
                 ],
                 'items' => $items
             ]);
             $response = $order->response();
-            //if ($skiptrial) $order->pay();
+            if ($skiptrial) $order->pay();
 
             $token = new \STTV\JWT( $user );
             sttv_set_auth_cookie($token->token);
