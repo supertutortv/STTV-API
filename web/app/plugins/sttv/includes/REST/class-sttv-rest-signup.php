@@ -201,28 +201,14 @@ class Signup extends \WP_REST_Controller {
         if ( empty($body) ) return sttv_rest_response( 'signup_error', 'Request body cannot be empty', 200 );
 
         return sttv_stripe_errors(function() use ($body) {
-            return wp_set_current_user($body['customer']['account']['id']);
-        });
-    }
-
-    private function _checkout( $body, $request ){
-        $auth = sttv_verify_web_token($request);
-        if ($auth instanceof \WP_Error) return $auth;
-        
-        $customer = $create_invoice = $cid = $login = $items = false;
-        $cus = $body['customer'];
-        $skiptrial = isset($cus['options']['skipTrial']);
-        $priship = isset($cus['options']['priorityShip']);
-        $mailinglist = isset($cus['options']['mailinglist']);
-        $items = $courseids = [];
-
-        try {
-            if (!$auth) {
-
-            } else {
-                $login = wp_get_current_user($user_id);
-                $cid = get_user_meta(get_current_user_id(),'sttv_user_data',true)['user']['userdata']['customer'];
-            }
+            $customer = $create_invoice = $cid = $login = $items = $user = false;
+            $cus = $body['customer'];
+            $user = wp_set_current_user($cus['account']['id']);
+            $cid = 'cus_'.$user->user_login;
+            $skiptrial = isset($cus['options']['skipTrial']);
+            $priship = isset($cus['options']['priorityShip']);
+            $mailinglist = isset($cus['options']['mailinglist']);
+            $items = $courseids = [];
 
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?: null;
@@ -235,19 +221,17 @@ class Signup extends \WP_REST_Controller {
 
             $sublength = $taxable = 0;
 
-            foreach($body['items'] as $item) {
-                $course = get_post_meta( sttv_id_decode($item['id']), 'sttv_course_data', true );
-                $taxable += $course['pricing']['taxable_amt'];
-                $sublength += $course['pricing']['length'];
-                $courseids[] = $course['pricing']['id'];
-                $items[] = [
-                    'customer' => $customer->id,
-                    'currency' => 'usd',
-                    'amount' => $course['pricing']['price'],
-                    'description' => $course['name'],
-                    'discountable' => true
-                ];
-            }
+            $course = get_post_meta( sttv_id_decode($cus['plan']['id']), 'pricing_data', true )[$cus['plan']['id']];
+            $taxable += $course['pricing']['taxable_amt'];
+            $sublength += $course['pricing']['length'];
+            $courseids[] = $course['pricing']['id'];
+            $items[] = [
+                'customer' => $customer->id,
+                'currency' => 'usd',
+                'amount' => $course['price'],
+                'description' => $course['name'],
+                'discountable' => true
+            ];
 
             if ( $this->tax > 0 ) {
                 $items[99] = [
@@ -284,7 +268,7 @@ class Signup extends \WP_REST_Controller {
             $response = $order->response();
             //if ($skiptrial) $order->pay();
 
-            $token = new \STTV\JWT( $login );
+            $token = new \STTV\JWT( $user );
             sttv_set_auth_cookie($token->token);
 
             return sttv_rest_response(
@@ -296,71 +280,7 @@ class Signup extends \WP_REST_Controller {
                     'response' => $response
                 ]
             );
-
-        } catch(\Stripe\Error\Card $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Stripe\Error\RateLimit $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Stripe\Error\InvalidRequest $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Stripe\Error\Authentication $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Stripe\Error\ApiConnection $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Stripe\Error\Base $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        } catch (\Exception $e) {
-            $body = $e->getJsonBody();
-            $err  = $body['error'];
-            return sttv_rest_response(
-                'stripe_error',
-                'There was an error',
-                200,
-                [ 'data' => $err ]
-            );
-        }
+        });
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {

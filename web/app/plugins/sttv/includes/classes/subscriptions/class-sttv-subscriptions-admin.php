@@ -23,7 +23,10 @@ class Admin {
 
         if (!$pricing['sub_pricing']) return false;
 
-        $data[sttv_id_encode($post_id)] = array_merge( $pricing['sub_pricing'], ['courses'=>$pricing['courses']]);
+        $data[sttv_id_encode($post_id)] = array_merge( $pricing['sub_pricing'], [
+            'courses' => $pricing['courses'],
+            'name' => $post->post_title
+        ]);
         
         update_post_meta( $post_id, 'pricing_data', $data );
     }
