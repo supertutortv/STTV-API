@@ -200,11 +200,8 @@ class Signup extends \WP_REST_Controller {
     private function _pay( $body, $request ) {
         if ( empty($body) ) return sttv_rest_response( 'signup_error', 'Request body cannot be empty', 200 );
 
-        $verify = sttv_verify_web_token($request);
-        $loggedin = is_wp_error($verify) ? !$verify : $verify;
-
-        return sttv_stripe_errors(function() use ($body,$loggedin) {
-            return wp_get_current_user();
+        return sttv_stripe_errors(function() use ($body) {
+            return wp_set_current_user($body['customer']['account']['id']);
         });
     }
 
