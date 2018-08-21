@@ -51,6 +51,6 @@
     </div>
     <div class="stFormButtons col s12">
         <a class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.prev()"><< Back</a>
-        <a id="stBtn_pay" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.pay()" disabled>Pay</a>
+        <a id="stSignupSubmit" class="stFormButton pmt-button btn waves-effect waves-light" onclick="_st.signup.pay()" disabled>Pay</a>
     </div>
 </div>
