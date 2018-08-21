@@ -27,6 +27,13 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function register_routes() {
+        $steps = [
+            [
+                'methods' => 'POST',
+                'callback' => [ $this, 'stSignupPost' ]
+            ]
+        ];
+
         $routes = [
             '/init' => [
                 [
@@ -52,36 +59,11 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
-            '/account' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPost' ]
-                ]
-            ],
-            '/plan' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPost' ]
-                ]
-            ],
-            '/billing' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPost' ]
-                ]
-            ],
-            '/shipping' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPost' ]
-                ]
-            ],
-            '/pay' => [
-                [
-                    'methods' => 'POST',
-                    'callback' => [ $this, 'stSignupPost' ]
-                ]
-            ]
+            '/account' => $steps,
+            '/plan' => $steps,
+            '/billing' => $steps,
+            '/shipping' => $steps,
+            '/pay' => $steps
 		];
 
 		foreach ( $routes as $route => $endpoint ) {
