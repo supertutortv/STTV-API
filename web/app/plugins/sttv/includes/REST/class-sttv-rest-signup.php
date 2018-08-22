@@ -215,7 +215,7 @@ class Signup extends \WP_REST_Controller {
 
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?: null;
-            $customer->coupon = $body['pricing']['coupon']['val'] ?: null;
+            $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
             
