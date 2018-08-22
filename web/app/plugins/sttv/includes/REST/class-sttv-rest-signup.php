@@ -96,12 +96,15 @@ class Signup extends \WP_REST_Controller {
         return sttv_stripe_errors(function() use ($body,$loggedin) {
 
             extract($body);
+            $firstname = ucfirst(strtolower($firstname));
+            $lastname = ucfirst(strtolower($lastname));
+            $email = strtotlower($email);
+            $fullname = $firstname.' '.$lastname;
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
             if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signup_error', 'Email address is already in use. Is this you? <a href="/login">Sign in</a>', 200 );
 
-            $fullname = $firstname.' '.$lastname;
             $creds = [
                 'user_pass' => $password,
                 'user_email' => $email,

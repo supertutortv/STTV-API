@@ -110,10 +110,10 @@ function invoice_created( $data ) {
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $courses = json_decode($meta['course'],true);
+    $courses = json_decode($meta['plan'],true);
 
     foreach ( $courses as $course ) {
-        $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
+        $cmeta = get_post_meta( $course, 'sttv_course_data', true );
         $umeta['courses'][$cmeta['slug']] = [];
         foreach($cmeta['capabilities'] as $cap) $user->add_cap( $cap );
     }
