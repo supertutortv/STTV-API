@@ -40,10 +40,10 @@
             </div>
         </div>
         <div class="input-field required col s12 m6 st-input-half-left">
-            <input class="browser-default validate" type="text" name="st-customer-billing-name" placeholder="Name on card" required/>
+            <input class="browser-default validate" type="text" name="st-customer-billing-name" placeholder="Name on card" onblur="_st.signup.setOutcome()" required/>
         </div>
         <div class="input-field required col s12 m6 st-input-half-right">
-                <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" required/>
+                <input class="browser-default validate" type="tel" name="st-customer-shipping-phone" placeholder="Phone Number" onblur="_st.signup.setOutcome()" required/>
                 <label></label>
         </div>
         <div id="stSignupCardElement" class="col s12"></div>
