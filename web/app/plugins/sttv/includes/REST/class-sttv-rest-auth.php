@@ -39,7 +39,7 @@ class Auth extends \WP_REST_Controller {
                     'callback' => [ $this, 'token' ]
                 ]
             ],
-            '/token/verify' => [
+            '/verify' => [
                 [
                     'methods' => 'POST',
                     'callback' => [ $this, 'verify' ]
