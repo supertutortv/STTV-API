@@ -98,7 +98,7 @@ class Signup extends \WP_REST_Controller {
             extract($body);
             $firstname = ucfirst(strtolower($firstname));
             $lastname = ucfirst(strtolower($lastname));
-            $email = strtotlower($email);
+            $email = strtolower($email);
             $fullname = $firstname.' '.$lastname;
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
