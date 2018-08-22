@@ -222,10 +222,8 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $this->set_tax( $cus['shipping']['address']['postal_code'] );
 
-            $sublength = $taxable = 0;
             $plan = get_post_meta( sttv_id_decode($cus['plan']['id']), 'pricing_data', true )[$cus['plan']['id']];
-            $taxable += $plan['taxable'];
-            $sublength += $plan['length'];
+ 
             $items[] = [
                 'customer' => $customer->id,
                 'currency' => 'usd',
@@ -237,7 +235,7 @@ class Signup extends \WP_REST_Controller {
             if ( $this->tax > 0 ) {
                 $items[99] = [
                     'customer' => $customer->id,
-                    'amount' => round( $taxable * ( $this->tax / 100 ) ),
+                    'amount' => round( (int)$plan['taxable'] * ( $this->tax / 100 ) ),
                     'currency' => 'usd',
                     'description' => 'Sales tax',
                     'discountable' => false
@@ -262,7 +260,7 @@ class Signup extends \WP_REST_Controller {
                     'wp_id' => $user->ID,
                     'plan' => json_encode($plan['courses']),
                     'start' => time(),
-                    'end' => time() + (MONTH_IN_SECONDS * $sublength)
+                    'end' => time() + (MONTH_IN_SECONDS * (int)$plan['length'])
                 ],
                 'items' => $items
             ]);
