@@ -1,6 +1,7 @@
 <?php
 
 if (strpos($_SERVER['REQUEST_URI'],'/auth/verify') > -1 && !isset($_COOKIE['stAuth'])) {
+    header( 'Access-Control-Allow-Origin: https://courses.supertutortv.com' );
     header( 'Content-Type: application/vnd.sttv.app+json' );
     echo json_encode(['data' => false]);
     die;
