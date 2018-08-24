@@ -1,6 +1,6 @@
 <?php
 
-echo $_SERVER['REQUEST_URI'];
+echo strpos($_SERVER['REQUEST_URI'],'/auth/verify');
 die;
 
 if (strpos($_SERVER['REQUEST_URI'],'/auth/verify') > -1 && !isset($_COOKIE['stAuth'])) echo json_encode(['data' => false]) && die;
