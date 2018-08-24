@@ -1,5 +1,7 @@
 <?php
 
+require_once '../misc/flashCheckAuth.php';
+
 /** @var string Directory containing all of the site's files */
 $root_dir = dirname(__DIR__);
 
