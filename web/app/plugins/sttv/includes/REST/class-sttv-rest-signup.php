@@ -101,9 +101,9 @@ class Signup extends \WP_REST_Controller {
             $email = strtolower($email);
             $fullname = $firstname.' '.$lastname;
 
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signup_error', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
+            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
-            if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signup_error', 'Email address is already in use. Is this you? <a href="/login">Sign in</a>', 200 );
+            if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? <a href="/login">Sign in</a>', 200 );
 
             $creds = [
                 'user_pass' => $password,
@@ -130,7 +130,7 @@ class Signup extends \WP_REST_Controller {
 
             if ( is_wp_error( $user_id ) ) {
                 return sttv_rest_response(
-                    'signup_error',
+                    'signupError',
                     'Cannot update your account. Please check back again later.',
                     200,
                     [ 'data' => $user_id ]
@@ -150,14 +150,13 @@ class Signup extends \WP_REST_Controller {
             $html = ob_get_clean();
 
             return sttv_rest_response(
-                'signup_success',
+                'signupSuccess',
                 'Account created',
                 200,
                 [
                     'update' => [
                         'id' => $user_id
-                    ],
-                    'html' => $html
+                    ]
                 ]
             );
         });
