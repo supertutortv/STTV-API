@@ -103,7 +103,7 @@ class Signup extends \WP_REST_Controller {
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
-            if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? <a href="/login">Sign in</a>', 200 );
+            if ( email_exists( $email ) && !$loggedin ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
 
             $creds = [
                 'user_pass' => $password,
