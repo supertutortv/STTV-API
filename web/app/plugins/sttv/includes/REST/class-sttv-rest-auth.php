@@ -74,7 +74,7 @@ class Auth extends \WP_REST_Controller {
         // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
             return sttv_rest_response(
-                'login_fail',
+                'loginFail',
                 'The username or password you entered is incorrect',
                 200,
                 [ 'err' => $login ]
@@ -97,7 +97,7 @@ class Auth extends \WP_REST_Controller {
         }
         
         return sttv_rest_response(
-            'login_success',
+            'loginSuccess',
             'Login successful!',
             200,
             [ 'token' => $token->token ]
@@ -119,7 +119,7 @@ class Auth extends \WP_REST_Controller {
     public function logout() {
         sttv_unset_auth_cookie();
         return sttv_rest_response(
-            'logged_out',
+            'loggedOut',
             'Logout successful.',
             200,
             [ 'redirect' => 'https://supertutortv.com' ]
