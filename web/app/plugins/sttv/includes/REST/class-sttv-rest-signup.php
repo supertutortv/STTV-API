@@ -185,7 +185,7 @@ class Signup extends \WP_REST_Controller {
         $verify = sttv_verify_web_token($request);
 
         if (is_wp_error($verify) || !$verify) {
-            wp_set_current_user($cus['account']['id']);
+            wp_set_current_user($cus['id']);
         }
 
         $cid = 'cus_'.$user->user_login;
