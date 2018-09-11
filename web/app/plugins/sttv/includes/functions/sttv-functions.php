@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) {exit;}
 
 function sttv_lostpw_url(){
-    return home_url().'/?lostpw';
+    return 'https://courses.supertutortv.com/password/reset';
 }
 
 function sttv_diff( $file1, $file2 ) {

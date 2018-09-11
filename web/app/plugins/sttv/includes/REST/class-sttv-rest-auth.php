@@ -51,6 +51,16 @@ class Auth extends \WP_REST_Controller {
                     'callback' => [ $this, 'logout' ],
                     'permission_callback' => 'sttv_verify_web_token'
                 ]
+            ],
+            '/reset' => [
+                [
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'requestPwChange']
+                ],
+                [
+                    'methods' => 'PUT',
+                    'callback' => [ $this, 'changePw' ]
+                ]
             ]
         ];
 
@@ -124,5 +134,42 @@ class Auth extends \WP_REST_Controller {
             200,
             [ 'redirect' => 'https://supertutortv.com' ]
         );
+    }
+
+    public function requestPwChange( WP_REST_Request $request ) {
+        list($email,$token) = json_decode($request->get_body(),true);
+
+        $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true);
+
+        $id = email_exists($email);
+
+        if (!$id) return sttv_rest_response(
+            'resetError',
+            'That email address is not associated with a SupertutorTV account.',
+            200
+        );
+
+        $user = new WP_User($id);
+        $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'.'.$user->user_login;
+
+        $message = new \STTV\Email([
+            'to' => $email,
+            'subject' => 'SupertutorTV account password reset',
+            'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!"
+        ]);
+
+        $message->send();
+
+        return sttv_rest_response(
+            'resetSuccess',
+            'Check your email for a link to reset password.',
+            200,
+            $response
+        );
+    }
+
+    public function changePw( WP_REST_Request $request ) {
+        list($email,$token) = json_decode($request->get_body(),true);
+
     }
 }
