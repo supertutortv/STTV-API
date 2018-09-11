@@ -180,22 +180,22 @@ class Signup extends \WP_REST_Controller {
     private function _pay( $body, $request ) {
         if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
-        $customer = $create_invoice = $cid = $login = $items = $user = false;
-        $cus = $body['customer'];
         $verify = sttv_verify_web_token($request);
 
         if (is_wp_error($verify) || !$verify) {
-            wp_set_current_user($cus['id']);
+            wp_set_current_user($body['customer']['id']);
         }
 
-        $user = wp_get_current_user();
-        $cid = 'cus_'.$user->user_login;
-        $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
-        $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-        $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-        $items = $courseids = [];
-
         return sttv_stripe_errors(function() use ($body) {
+            $customer = $create_invoice = $cid = $login = $items = $user = false;
+            $cus = $body['customer'];
+            $user = wp_get_current_user();
+            $cid = 'cus_'.$user->user_login;
+            $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
+            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
+            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
+            $items = $courseids = [];
+            
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?: null;
             $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
