@@ -177,43 +177,24 @@ class Signup extends \WP_REST_Controller {
         ]);
     }
 
-    private function _billing( $body ) {
-        ob_start();
-        include_once STTV_TEMPLATE_DIR.'signup/shipping.php';
-        $html = ob_get_clean();
-
-        return sttv_rest_response( 'signup_success', 'Billing saved', 200, [
-            'html' => $html,
-            'update' => new \stdClass()
-        ]);
-    }
-
-    private function _shipping( $body ) {
-        ob_start();
-        include_once STTV_TEMPLATE_DIR.'signup/pay.php';
-        $html = ob_get_clean();
-
-        return sttv_rest_response( 'signup_success', 'Shipping saved', 200, [
-            'html' => $html,
-            'update' => new \stdClass()
-        ]);
-    }
-
     private function _pay( $body, $request ) {
         if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
-        return $body;
+        $customer = $create_invoice = $cid = $login = $items = $user = false;
+        $cus = $body['customer'];
+        $verify = sttv_verify_web_token($request);
+
+        if (is_wp_error($verify) || !$verify) {
+            wp_set_current_user($cus['account']['id']);
+        }
+
+        $cid = 'cus_'.$user->user_login;
+        $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
+        $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
+        $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
+        $items = $courseids = [];
 
         return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = false;
-            $cus = $body['customer'];
-            $user = wp_set_current_user($cus['account']['id']);
-            $cid = 'cus_'.$user->user_login;
-            $skiptrial = isset($cus['options']['skipTrial']);
-            $priship = isset($cus['options']['priorityShip']);
-            $mailinglist = isset($cus['options']['mailinglist']);
-            $items = $courseids = [];
-
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?: null;
             $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
@@ -255,9 +236,9 @@ class Signup extends \WP_REST_Controller {
 
             $order = new \STTV\Checkout\Order( 'create', [
                 'customer' => $customer->id,
-                'trial' => $skiptrial ? 0 : 5,
+                'trial' => $skiptrial ? 0 : (int)$plan['trial'],
                 'metadata' => [
-                    'checkout_id' => $body['id'],
+                    'checkout_id' => $body['session']['id'],
                     'wp_id' => $user->ID,
                     'plan' => json_encode($plan['courses']),
                     'start' => time(),
@@ -276,7 +257,6 @@ class Signup extends \WP_REST_Controller {
                 'Thank you for signing up! You will be redirected shortly.',
                 200,
                 [
-                    'redirect' => 'https://courses.supertutortv.com',
                     'response' => $response
                 ]
             );
