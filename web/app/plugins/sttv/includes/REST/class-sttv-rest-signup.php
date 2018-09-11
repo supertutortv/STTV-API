@@ -60,9 +60,6 @@ class Signup extends \WP_REST_Controller {
                 ]
             ],
             '/account' => $steps,
-            '/plan' => $steps,
-            '/billing' => $steps,
-            '/shipping' => $steps,
             '/pay' => $steps
 		];
 
@@ -203,7 +200,9 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signup_error', 'Request body cannot be empty', 200 );
+        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
+
+        return $body;
 
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = false;
@@ -300,7 +299,7 @@ class Signup extends \WP_REST_Controller {
         if ( empty( $coupon ) ) return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         try {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
-            if ( !$coupon->valid ) return sttv_rest_response( 'signup_error', 'Expired coupon', 200 );
+            if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
             $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
             return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'update' => ['id' => $coupon->id, 'value' => $amt ]] );
@@ -314,7 +313,7 @@ class Signup extends \WP_REST_Controller {
                 'platform' => $platform,
                 'product' => $product
             ];
-            return sttv_rest_response( 'signup_error', $e->getJsonBody()['error']['message'], 200);
+            return sttv_rest_response( 'signupError', $e->getJsonBody()['error']['message'], 200);
         }
     }
 
