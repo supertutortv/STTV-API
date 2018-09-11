@@ -188,6 +188,7 @@ class Signup extends \WP_REST_Controller {
             wp_set_current_user($cus['id']);
         }
 
+        $user = wp_get_current_user();
         $cid = 'cus_'.$user->user_login;
         $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
         $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
