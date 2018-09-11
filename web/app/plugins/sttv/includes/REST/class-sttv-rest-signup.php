@@ -205,7 +205,7 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $this->set_tax( $cus['shipping']['address']['postal_code'] );
 
-            $plan = get_post_meta( sttv_id_decode($cus['plan']['id']), 'pricing_data', true )[$cus['plan']['id']];
+            $plan = get_post_meta( sttv_id_decode($body['plan']['id']), 'pricing_data', true )[$body['plan']['id']];
  
             $items[] = [
                 'customer' => $customer->id,
