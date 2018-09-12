@@ -189,10 +189,9 @@ class Auth extends \WP_REST_Controller {
 
         $check = check_password_reset_key($key,$login);
         return sttv_rest_response(
-            'passwordChecker',
-            'Your reset key has been checked',
-            200,
-            $check
+            (is_wp_error($check)) ? 'pwError' : 'pwSuccess',
+            'Password check',
+            200
         );
     }
 
