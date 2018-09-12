@@ -142,6 +142,7 @@ class Auth extends \WP_REST_Controller {
         $email = $body['email'];
 
         /* $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true); */
+        $response = [];
 
         $id = email_exists($email);
 
