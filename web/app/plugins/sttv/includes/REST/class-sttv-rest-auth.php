@@ -55,6 +55,17 @@ class Auth extends \WP_REST_Controller {
             ],
             '/reset' => [
                 [
+                    'methods' => 'GET',
+                    'callback' => [ $this, '???' ],
+                    'args' => [
+                        'key' => [
+                            'required' => true,
+                            'type' => 'string',
+                            'description' => 'Password reset validation key'
+                        ]
+                    ]
+                ],
+                [
                     'methods' => 'POST',
                     'callback' => [ $this, 'requestPwChange']
                 ],
@@ -170,6 +181,18 @@ class Auth extends \WP_REST_Controller {
             'Check your email for a link to reset password.',
             200,
             $response
+        );
+    }
+
+    public function verifyPwChange( WP_REST_Request $request ) {
+        list($key,$login) = $request->get_param('key');
+
+        $check = check_password_reset_key($key,$login);
+        return sttv_rest_response(
+            'passwordChecker',
+            'Your reset key has been checked',
+            200,
+            $check
         );
     }
 
