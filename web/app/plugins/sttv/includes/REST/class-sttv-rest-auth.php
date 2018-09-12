@@ -198,8 +198,6 @@ class Auth extends \WP_REST_Controller {
     public function changePw( WP_REST_Request $request ) {
         extract(json_decode($request->get_body(),true));
 
-        return get_defined_vars();
-
         if ($password1 !== $password2) {
             return sttv_rest_response(
                 'resetError',
@@ -212,9 +210,20 @@ class Auth extends \WP_REST_Controller {
 
         $check = check_password_reset_key($key,$login);
 
-        if (!is_wp_error($check)) {
-            
+        if (is_wp_error($check)) {
+            return sttv_rest_response(
+                'resetError',
+                'Reset link invalid or expired',
+                200
+            );
         }
+
+        reset_password($check,$password2);
+        return sttv_rest_response(
+            'resetSuccess',
+            'Your password has been reset. Please ',
+            200
+        );
 
     }
 }
