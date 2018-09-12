@@ -56,7 +56,7 @@ class Auth extends \WP_REST_Controller {
             '/reset' => [
                 [
                     'methods' => 'GET',
-                    'callback' => [ $this, '???' ],
+                    'callback' => [ $this, 'verifyPwChange' ],
                     'args' => [
                         'key' => [
                             'required' => true,
