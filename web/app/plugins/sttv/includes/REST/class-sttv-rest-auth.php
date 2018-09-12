@@ -170,11 +170,11 @@ class Auth extends \WP_REST_Controller {
             $message = new \STTV\Email([
                 'to' => $email,
                 'subject' => 'SupertutorTV account password reset',
-                'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/><br/><br/>"
+                'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/><br/>"
             ]);
     
             $message->send();
-        });
+        }, 999);
 
         return sttv_rest_response(
             'resetSuccess',
@@ -196,7 +196,25 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function changePw( WP_REST_Request $request ) {
-        list($email,$token) = json_decode($request->get_body(),true);
+        extract(json_decode($request->get_body(),true));
+
+        return get_defined_vars();
+
+        if ($password1 !== $password2) {
+            return sttv_rest_response(
+                'resetError',
+                'Passwords not equal',
+                200
+            );
+        }
+
+        list($key,$login) = explode('.',$key);
+
+        $check = check_password_reset_key($key,$login);
+
+        if (!is_wp_error($check)) {
+            
+        }
 
     }
 }
