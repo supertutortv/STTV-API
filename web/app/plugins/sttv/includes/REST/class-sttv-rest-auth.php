@@ -185,9 +185,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function verifyPwChange( WP_REST_Request $request ) {
-        list($key,$login) = $request->get_param('key');
-
-        return [$key,$login];
+        list($key,$login) = explode('.',$request->get_param('key'));
 
         $check = check_password_reset_key($key,$login);
         return sttv_rest_response(
