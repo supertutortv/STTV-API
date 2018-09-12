@@ -137,9 +137,10 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function requestPwChange( WP_REST_Request $request ) {
-        list($email,$token) = json_decode($request->get_body(),true);
+        $body = json_decode($request->get_body(),true);
+        $email = $body['email'];
 
-        $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true);
+        /* $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true); */
 
         $id = email_exists($email);
 
