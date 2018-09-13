@@ -215,6 +215,8 @@ class Auth extends \WP_REST_Controller {
             );
         }
 
+        return $password2;
+
         reset_password($check,$password2);
         return sttv_rest_response(
             'resetSuccess',
