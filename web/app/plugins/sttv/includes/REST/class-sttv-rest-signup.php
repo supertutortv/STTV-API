@@ -88,7 +88,7 @@ class Signup extends \WP_REST_Controller {
 
     private function _account( $body, $request ) {
         $verify = sttv_verify_web_token($request);
-        $loggedin = is_wp_error($verify) ? !$verify : $verify;
+        $loggedin = !is_wp_error($verify);
 
         return sttv_stripe_errors(function() use ($body,$loggedin) {
 
