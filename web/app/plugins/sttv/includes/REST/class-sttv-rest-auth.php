@@ -207,8 +207,6 @@ class Auth extends \WP_REST_Controller {
 
         $check = check_password_reset_key($key,$login);
 
-        return $check;
-
         if (is_wp_error($check)) {
             return sttv_rest_response(
                 'resetError',
@@ -217,7 +215,7 @@ class Auth extends \WP_REST_Controller {
             );
         }
         
-        reset_password($check,$password2);
+        wp_set_password($password2,$check->ID);
         return sttv_rest_response(
             'resetSuccess',
             'Your password has been reset. Please ',
