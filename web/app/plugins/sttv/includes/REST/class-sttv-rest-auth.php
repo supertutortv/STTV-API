@@ -90,7 +90,7 @@ class Auth extends \WP_REST_Controller {
             'type' => 'pageload'
         ]);
         
-        return [ 'data' => !is_wp_error($verify) ];
+        return [ 'data' => $verify ];
     }
 
     public function token( WP_REST_Request $request ) {
