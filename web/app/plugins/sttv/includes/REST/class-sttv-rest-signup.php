@@ -250,7 +250,7 @@ class Signup extends \WP_REST_Controller {
             $response = $order->response();
             if ($skiptrial) $order->pay();
 
-            $token = new \STTV\JWT( $user );
+            $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);
 
             return sttv_rest_response(

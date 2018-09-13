@@ -21,7 +21,10 @@ class JWT {
         'HS256' => 'sha256'
     ];
 
-    public function __construct( $arg ) {
+    private $exp;
+
+    public function __construct( $arg, $exp = DAY_IN_SECONDS*5 ) {
+        $this->exp = $exp;
         if ( $arg instanceof \WP_User ) {
             $this->token = $this->generate( $arg );
         } elseif ( is_string( $arg ) ) {
@@ -41,7 +44,7 @@ class JWT {
             'iss' => STTV_JWT_ISSUER,
             'iat' => $issued,
             'nbf' => $issued,
-            'exp' => $issued + 3600,//(DAY_IN_SECONDS*5),
+            'exp' => $issued + $this->exp,
             'sub' => $user->data->user_email.'|'.$user->data->ID
         ];
 

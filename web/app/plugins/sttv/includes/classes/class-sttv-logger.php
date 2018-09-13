@@ -12,7 +12,7 @@ class Log {
         }
 
         $files = scandir( $dir );
-        $allow = time() - (DAY_IN_SECONDS * 7);
+        $allow = time() - (DAY_IN_SECONDS * 14);
         $f = [];
         foreach ( $files as $file ) {
             if ( !is_file( $dir . '/' . $file ) ) {
@@ -54,10 +54,13 @@ class Log {
     }
     
     public static function access( $vars ) {
-        $data = date( 'c' ).' | '.@$_SERVER['REMOTE_ADDR'].' | '.$vars['email'].' | '.@$_SERVER['HTTP_USER_AGENT'].' | '.@$_SERVER['HTTP_REFERER'];
+        extract($vars);
         $path = STTV_LOGS_DIR . 'courses/';
         if ( !is_dir($path) ) mkdir( $path, 0777, true );
-		return self::put( $path . $vars['id'] . '.log', $data );
+        return self::put(
+            $path . $id . '.log',
+            $data = date( 'c' ).' | '.@$_SERVER['REMOTE_ADDR'].' | '.$email.' | '.@$_SERVER['HTTP_USER_AGENT'].' | '.@$_SERVER['HTTP_REFERER'].' | '.$type
+        );
     }
 
     private static function put( $path, $data ) {

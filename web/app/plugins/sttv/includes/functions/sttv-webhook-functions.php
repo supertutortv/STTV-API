@@ -82,6 +82,7 @@ function customer_created( $data ) {
     return update_user_meta( $user_id, 'sttv_user_data', [
         'user' => [
             'type' => 'standard',
+            'trialing' => 0,
             'settings' => [
                 'autoplay' => false,
                 'default_course' => '',

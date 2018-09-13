@@ -83,7 +83,14 @@ class Auth extends \WP_REST_Controller {
 
     public function verify( WP_REST_Request $request ) {
         $verify = sttv_verify_web_token($request);
-        return [ 'data' => is_wp_error($verify) ? !$verify : $verify ];
+
+        if (!is_wp_error($verify)) \STTV\Log::access([
+            'id' => $verify->ID,
+            'email' => $verify->user_email,
+            'type' => 'pageload'
+        ]);
+        
+        return [ 'data' => !is_wp_error($verify) ];
     }
 
     public function token( WP_REST_Request $request ) {
@@ -101,28 +108,24 @@ class Auth extends \WP_REST_Controller {
                 200,
                 [ 'err' => $login ]
             );
-        
-        wp_set_current_user($login->ID);
 
-        $token = new \STTV\JWT( $login );
+        $umeta = get_user_meta($login->ID, 'sttv_user_data', true);
 
-        sttv_set_auth_cookie($token->token);
+        $exp = (isset($umeta['user']['trialing']) && (time() < $umeta['user']['trialing']) && ($umeta['user']['trialing'] > 0)) ? $umeta['user']['trialing']-time() : DAY_IN_SECONDS*30 ;
+
+        $token = new \STTV\JWT( $login, $exp );
 
         \STTV\Log::access([
             'id' => $login->ID,
-            'email' => $login->user_email
+            'email' => $login->user_email,
+            'type' => 'login'
         ]);
-        if ( !current_user_can('manage_options') ) {
-            $umeta = get_user_meta( $login->ID, 'sttv_user_data', true ) ?: [];
-            $umeta['user']['userdata']['login_timestamps'][] = time();
-            update_user_meta( $login->ID, 'sttv_user_data', $umeta );
-        }
         
         return sttv_rest_response(
             'loginSuccess',
             'Login successful!',
             200,
-            [ 'token' => $token->token ]
+            [ 'token' => sttv_set_auth_cookie($token->token) ]
         );
     }
 

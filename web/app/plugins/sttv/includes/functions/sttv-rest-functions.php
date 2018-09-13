@@ -30,11 +30,12 @@ function sttv_verify_web_token( WP_REST_Request $request ) {
     list( $email, $id ) = $pieces;
 
     $user = wp_set_current_user( $id );
-    return !!$user->ID;
+    return $user;
 }
 
 function sttv_set_auth_cookie($token) {
     setcookie('_stAuthToken',$token,time()+DAY_IN_SECONDS*7,'/','.supertutortv.com',true,true);
+    return $token;
 }
 
 function sttv_unset_auth_cookie() {
