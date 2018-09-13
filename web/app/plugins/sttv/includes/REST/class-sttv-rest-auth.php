@@ -84,13 +84,13 @@ class Auth extends \WP_REST_Controller {
     public function verify( WP_REST_Request $request ) {
         $verify = sttv_verify_web_token($request);
 
-        if (!is_wp_error($verify)) \STTV\Log::access([
+        if ($verify->ID > 0) \STTV\Log::access([
             'id' => $verify->ID,
             'email' => $verify->user_email,
             'type' => 'pageload'
         ]);
         
-        return [ 'data' => $verify ];
+        return [ 'data' => !(is_wp_error($verify) || $verify->ID === 0) ];
     }
 
     public function token( WP_REST_Request $request ) {
