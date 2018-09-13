@@ -163,7 +163,7 @@ class Auth extends \WP_REST_Controller {
             200
         );
 
-        $user = new WP_User($id);
+        $user = wp_set_current_user($id);
         $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'.'.$user->user_login;
 
         return sttv_rest_response(
