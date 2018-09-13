@@ -170,15 +170,15 @@ class Auth extends \WP_REST_Controller {
             'resetSuccess',
             'Check your email for a link to reset password.',
             200,
-            function() use ($email,$link) {
+            (function() use ($email,$link) {
                 $message = new \STTV\Email([
                     'to' => $email,
                     'subject' => 'SupertutorTV account password reset',
-                    'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/><br/>"
+                    'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/>"
                 ]);
         
                 return $message->send();
-            }
+            })()
         );
     }
 
