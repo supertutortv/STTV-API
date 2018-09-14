@@ -182,9 +182,11 @@ class Signup extends \WP_REST_Controller {
 
         $verify = sttv_verify_web_token($request);
 
-        if (is_wp_error($verify) || !$verify) {
+        if (is_wp_error($verify) || !$verify->ID) {
             wp_set_current_user($body['customer']['id']);
         }
+
+        return wp_get_current_user();
 
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = false;
