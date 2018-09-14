@@ -186,8 +186,6 @@ class Signup extends \WP_REST_Controller {
             wp_set_current_user($body['customer']['id']);
         }
 
-        return wp_get_current_user();
-
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = false;
             $cus = $body['customer'];
