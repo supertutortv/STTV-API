@@ -9,6 +9,7 @@ class Post_Types {
     public static function init() {
         add_action( 'init', [ __CLASS__, 'register_post_types' ], 5 );
         add_action( 'add_meta_boxes', [ __CLASS__, 'add_meta_boxes' ] );
+        add_filter('acf/load_value/key=playlists', [ __CLASS__, 'preload_course_data' ], 10, 3);
     }
 
     public static function register_post_types() {
@@ -116,6 +117,11 @@ class Post_Types {
     public static function sttv_sub_data() {
         global $post;
         print_r( get_post_meta( $post->ID, 'pricing_data', true ) ); 
+    }
+
+    public static function preload_course_data($value, $post_id, $field) {
+        print_r($value);
+        return $value;
     }
 
 }
