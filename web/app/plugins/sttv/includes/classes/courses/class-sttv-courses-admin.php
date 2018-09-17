@@ -6,9 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Admin {
     public function __construct() {
-		add_action('admin_init',function(){
-            add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
-        });
+		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
     }
     
     public function sttv_build_course( $post_id, $post ) {
@@ -30,7 +28,6 @@ class Admin {
 			'id' => $post_id,
 			'name' => $post->post_title,
 			'slug' => $post->post_name,
-			'link' => get_post_permalink( $post_id ),
 			'created' => strtotime( $post->post_date ),
 			'modified' => strtotime( $post->post_modified ),
 			'intro' => $intros['videos'][$test.'-course-intro']['id'],

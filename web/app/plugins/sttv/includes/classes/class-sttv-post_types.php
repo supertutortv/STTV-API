@@ -120,7 +120,7 @@ class Post_Types {
     }
 
     public static function preload_course_data($value, $post_id, $field) {
-        print_r($value);
+        
         return $value;
     }
 

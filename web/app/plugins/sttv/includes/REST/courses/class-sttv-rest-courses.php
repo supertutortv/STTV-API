@@ -92,25 +92,23 @@ class Courses extends \WP_REST_Controller {
 					'The course requested was not found or does not exist. Please try again.',
 					404
 				);
+			return $meta;
 
 			$test_code = strtolower($meta['test']);
-			if ( !current_user_can( "course_{$test_code}_access" ) )
-				continue;
+			if ( !current_user_can( "course_{$test_code}_access" ) ) continue;
 
 			$trialing = current_user_can( "course_{$test_code}_trial" );
 			$umeta['courses'][$slug] = [
-				'data' => [
-					'id' => $meta['id'],
-					'name' => $meta['name'],
-					'slug' => $meta['slug'],
-					'link' => $meta['link'],
-					'test' => $meta['test'],
-					'intro' => $meta['intro'],
-					'version' => STTV_VERSION,
-					'thumbUrls' => [
-						'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
-						'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-					]
+				'id' => $meta['id'],
+				'name' => $meta['name'],
+				'slug' => $meta['slug'],
+				'test' => $meta['test'],
+				'intro' => $meta['intro'],
+				'type' => 'collection',
+				'version' => STTV_VERSION,
+				'thumbUrls' => [
+					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
 				],
 				'collection' => (function() use (&$meta,$trialing) {
 					$sections = [];
