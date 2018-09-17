@@ -32,6 +32,11 @@ class Admin {
 			'modified' => strtotime( $post->post_modified ),
 			'intro' => $intros['videos'][$test.'-course-intro']['id'],
 			'test' => strtoupper( $test ),
+			'type' => 'collection',
+			'thumbUrls' => [
+				'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
+				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
+			],
 			'capabilities' => [
 				'course_platform_access',
 				"course_{$test}_access",
@@ -40,8 +45,7 @@ class Admin {
 				'course_post_reviews'
 			],
 			'downloads' => [],
-			'sections' => [],
-			'practice' => []
+			'collections' => []
 		];
 		
 		// SECTIONS
@@ -79,25 +83,25 @@ class Admin {
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
 				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
-					'data' => [
-						'name' => str_replace( ':', ' ', $calb['albumName'] ),
-						'type' => 'videos',
-						'in_trial' => (bool) $sub['in_trial'],
-					],
-					'collection' => $calb['videos']
+					'name' => str_replace( ':', ' ', $calb['albumName'] ),
+					'type' => 'playlist',
+					'in_trial' => (bool) $sub['in_trial'],
+					'videos' => $calb['videos']
 				];
 			}
 
-			$data['sections'][$aslug] = [
-				'data' => [
-					'name' => $sec['section_info']['section_name'],
-					'abbrev' => $sec['section_info']['section_code'],
-					'type' => 'collection',
-					'description' => esc_html( $sec['section_info']['description'] ),
-					'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
-					'color' => '#'.$color
-				],
-				'collection' => $subsec,
+			$data['collections'][$aslug] = [
+				'name' => $sec['section_info']['section_name'],
+				'abbrev' => $sec['section_info']['section_code'],
+				'type' => 'collection',
+				'description' => esc_html( $sec['section_info']['description'] ),
+				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
+				'color' => '#'.$color,
+				'collection' => $subsec
+			];
+
+			$data['downloads'][] = [
+				'name' => $sec['section_info']['section_name'],
 				'files' => $resources
 			];
 
@@ -141,34 +145,24 @@ class Admin {
 	
 			// Main Practice Object
 			$psubsec[$title] = [
-				'data' => [
-					'name' => $book['book_name'],
-					'in_trial' => (bool) $book['in_trial'],
-					'type' => 'collection'
-				],
-				'collection' => (function() use ( $cache_dir, $book ){
+				'name' => $book['book_name'],
+				'in_trial' => (bool) $book['in_trial'],
+				'type' => 'collection',
+				'videos' => (function() use ( $cache_dir, $book ){
 					$tests = glob( $cache_dir . 'Practice:' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 					foreach ( $tests as $test ) {
 						$els = explode( ':', $test );
-						if ( strpos( $els[3], '.cache' ) ) {
-							array_splice( $els, 3, 0, 'Test 1' );
-						}
+
 						$pvideos = json_decode( file_get_contents( $test ), true );
-						$tsections[sanitize_title_with_dashes( str_replace( '.cache', '', $els[4] ) )] = [
+
+						$cache[sanitize_title_with_dashes( str_replace( '.cache', '', $els[3] ) )] = [
 							'data' => [
-								'name' => str_replace( '.cache', '', $els[4] ),
-								'type' => 'videos',
+								'name' => str_replace( '.cache', '', $els[3] ),
+								'type' => 'playlist',
 								'color' => '#'.$pvideos['embedColor']
 							],
-							'collection' => $pvideos['videos']
-						];
-						$cache[sanitize_title_with_dashes( $els[3] )] = [
-							'data' => [
-								'name' => $els[3],
-								'type' => 'collection'
-							],
-							'collection' => $tsections
+							'questions' => $pvideos['videos']
 						];
 					}
 					return $cache;
@@ -176,13 +170,15 @@ class Admin {
 			];
 		}
 
-		$data['practice'] = [
-			'data' => [
-				'name' => 'Practice Tests',
-				'description' => esc_html( $course['practice']['description'] ?? ''),
-				'type' => 'collection'
-			],
-			'collection' => $psubsec,
+		$data['collections']['practice'] = [
+			'name' => 'Practice Tests',
+			'description' => esc_html( $course['practice']['description'] ?? ''),
+			'type' => 'collection',
+			'collection' => $psubsec
+		];
+
+		$data['downloads'][] = [
+			'name' => 'Practice Tests',
 			'files' => $presc
 		];
 		

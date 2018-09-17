@@ -97,7 +97,6 @@ class Courses extends \WP_REST_Controller {
 			if ( !current_user_can( "course_{$test_code}_access" ) ) continue;
 
 			$trialing = current_user_can( "course_{$test_code}_trialing" );
-			return $trialing;
 			$umeta['courses'][$slug] = [
 				'id' => $meta['id'],
 				'name' => $meta['name'],
@@ -105,12 +104,7 @@ class Courses extends \WP_REST_Controller {
 				'test' => $meta['test'],
 				'intro' => $meta['intro'],
 				'type' => 'collection',
-				'version' => STTV_VERSION,
-				'thumbUrls' => [
-					'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
-					'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-				],
-				'collection' => (function() use (&$meta,$trialing) {
+				'collections' => (function() use (&$meta,$trialing) {
 					$sections = [];
 					foreach ( $meta['sections'] as $sec => $val ) {
 						foreach ( $val['files'] as &$file ) {
