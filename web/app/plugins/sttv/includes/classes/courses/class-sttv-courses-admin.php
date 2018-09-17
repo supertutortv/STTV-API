@@ -39,6 +39,7 @@ class Admin {
 				'course_post_feedback',
 				'course_post_reviews'
 			],
+			'downloads' => [],
 			'sections' => [],
 			'practice' => []
 		];
@@ -55,7 +56,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					if ( ! is_dir( $root_path ) ) {
-						mkdir( $root_path, 0777, true );
+						mkdir( $root_path, 0755, true );
 					}
 					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 					if ( $fcopy ){

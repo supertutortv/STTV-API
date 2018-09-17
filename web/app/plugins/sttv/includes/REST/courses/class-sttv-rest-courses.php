@@ -92,7 +92,7 @@ class Courses extends \WP_REST_Controller {
 					'The course requested was not found or does not exist. Please try again.',
 					404
 				);
-			return $meta;
+			return wp_get_current_user();
 
 			$test_code = strtolower($meta['test']);
 			if ( !current_user_can( "course_{$test_code}_access" ) ) continue;
