@@ -97,7 +97,42 @@ class Courses extends \WP_REST_Controller {
 			if ( !current_user_can( "course_{$test_code}_access" ) ) continue;
 
 			$trialing = current_user_can( "course_{$test_code}_trialing" );
-			$umeta['courses'][$slug] = [
+			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
+				foreach ( $meta['collections'] as $sec => $val ) {
+					if ( $sec === 'practice' ) continue;
+					foreach ( $val['collection'] as $k => &$subsec ) {
+						if ( $subsec['in_trial'] === false && $trialing ) {
+							foreach ( $subsec['videos'] as &$vid ) {
+								$vid['id'] = 0;
+							}
+						}
+						unset( $subsec['data']['in_trial'] );
+					}
+				}
+
+				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
+					if ( $book['in_trial'] === false && $trialing ) {
+						foreach ( $book['videos'] as $test => &$video ) {
+							foreach ( $video['questions'] as $qname => &$qval ) {
+								$qval['id'] = 0;
+							}
+						}
+					}
+					unset($book['in_trial']);
+				}
+
+				foreach ( $meta['downloads'] as $dlObj ) {
+					foreach ( $dlObj['files'] as &$dl ) {
+						if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
+						unset( $dl['in_trial'] );
+					}
+				}
+
+				unset($meta['capabilities']);
+
+				return $meta;
+			})();
+			/* $umeta['courses'][$slug] = [
 				'id' => $meta['id'],
 				'name' => $meta['name'],
 				'slug' => $meta['slug'],
@@ -144,7 +179,7 @@ class Courses extends \WP_REST_Controller {
 					$sections['practice'] = $meta['practice'];
 					return $sections;
 				})()
-			];
+			]; */
 		}
 
 		global $wpdb;
