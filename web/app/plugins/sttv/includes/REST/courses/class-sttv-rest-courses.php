@@ -106,7 +106,7 @@ class Courses extends \WP_REST_Controller {
 								$vid['id'] = 0;
 							}
 						}
-						unset( $subsec['data']['in_trial'] );
+						unset( $subsec['in_trial'] );
 					}
 				}
 
