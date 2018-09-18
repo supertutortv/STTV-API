@@ -92,6 +92,8 @@ class Cron {
                     $vids = $video_data['body']['data'];
                 }
 
+                throw $vids;
+
                 $vidobj = $albobj = [];
                 $embcolor = '';
                 $i = 0;
