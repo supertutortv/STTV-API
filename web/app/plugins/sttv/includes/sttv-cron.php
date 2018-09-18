@@ -79,7 +79,7 @@ class Cron {
                 $test_abbrev = strtolower( $pieces[0] );
                 $path .= $test_abbrev . '/';
                 $name = implode(' ', $pieces );
-                $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=arranged';
+                $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=manual';
                 $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
                 $video_data = $vimeo->request( '/me/albums/'.$albid.'/videos?'.$qstring );
 
