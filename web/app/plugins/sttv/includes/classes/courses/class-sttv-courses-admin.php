@@ -84,7 +84,7 @@ class Admin {
 
 				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
 					'name' => str_replace( ':', ' ', $calb['albumName'] ),
-					'type' => 'playlist',
+					'type' => 'videos',
 					'in_trial' => (bool) $sub['in_trial'],
 					'videos' => $calb['videos']
 				];
@@ -93,7 +93,7 @@ class Admin {
 			$data['collections'][$aslug] = [
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
-				'type' => 'collection',
+				'type' => 'playlist',
 				'description' => esc_html( $sec['section_info']['description'] ),
 				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
 				'color' => '#'.$color,
@@ -114,7 +114,7 @@ class Admin {
 		if ( $course['practice']['uploads'] ) {
 			$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
 			if ( ! is_dir( $root_path ) ) {
-				mkdir( $root_path, 0777, true );
+				mkdir( $root_path, 0755, true );
 			}
 
 			foreach ( $course['practice']['uploads'] as $file ) {
