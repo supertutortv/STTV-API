@@ -85,14 +85,14 @@ class Cron {
 
                 $video_data_2 = $vids = [];
 
+                print_r($video_data); return null;
+
                 if ( intval( $video_data['body']['total'] ) > 75 ) {
                     $video_data_2 = $vimeo->request( $video_data['body']['paging']['next'].'&'.$qstring );
                     $vids = array_merge( $video_data['body']['data'], $video_data_2['body']['data'] );
                 } else {
                     $vids = $video_data['body']['data'];
                 }
-
-                throw $vids;
 
                 $vidobj = $albobj = [];
                 $embcolor = '';
