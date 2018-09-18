@@ -154,14 +154,14 @@ class Admin {
 					foreach ( $tests as $test ) {
 						$els = explode( ':', $test );
 
+						$aTitle = str_replace( '.cache', '', $els[3] );
+
 						$pvideos = json_decode( file_get_contents( $test ), true );
 
-						$cache[sanitize_title_with_dashes( str_replace( '.cache', '', $els[3] ) )] = [
-							'data' => [
-								'name' => str_replace( '.cache', '', $els[3] ),
-								'type' => 'playlist',
-								'color' => '#'.$pvideos['embedColor']
-							],
+						$cache[sanitize_title_with_dashes( $aTitle )] = [
+							'name' => str_replace('-',' ',$aTitle),
+							'type' => 'playlist',
+							'color' => '#'.$pvideos['embedColor'],
 							'questions' => $pvideos['videos']
 						];
 					}
