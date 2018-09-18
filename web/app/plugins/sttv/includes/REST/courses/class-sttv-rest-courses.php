@@ -98,7 +98,7 @@ class Courses extends \WP_REST_Controller {
 
 			$trialing = current_user_can( "course_{$test_code}_trialing" );
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
-				foreach ( $meta['collections'] as $sec => $val ) {
+				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
 					foreach ( $val['collection'] as $k => &$subsec ) {
 						if ( $subsec['in_trial'] === false && $trialing ) {
@@ -121,7 +121,7 @@ class Courses extends \WP_REST_Controller {
 					unset($book['in_trial']);
 				}
 
-				foreach ( $meta['downloads'] as $dlObj ) {
+				foreach ( $meta['downloads'] as &$dlObj ) {
 					foreach ( $dlObj['files'] as &$dl ) {
 						if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
 						unset( $dl['in_trial'] );
