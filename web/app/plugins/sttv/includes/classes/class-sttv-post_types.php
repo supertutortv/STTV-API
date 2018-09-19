@@ -109,9 +109,9 @@ class Post_Types {
     
     public static function sttv_display_course_meta() {
         global $post, $wp_rewrite;
-        //$fields = get_fields( $post->ID ); 
-        $meta = json_encode( get_post_meta( $post->ID, 'sttv_course_data', true ), JSON_PRETTY_PRINT ); ?>
-        <pre><?php print_r( $meta ); ?></pre>
+        $fields = get_fields( $post->ID ); 
+        // $meta = json_encode( get_post_meta( $post->ID, 'sttv_course_data', true ), JSON_PRETTY_PRINT ); ?>
+        <pre><?php print_r( $fields ); ?></pre>
     <?php }
 
     public static function sttv_sub_data() {
