@@ -116,7 +116,7 @@ class Post_Types {
 
     public static function sttv_sub_data() {
         global $post;
-        print_r( get_post_meta( $post->ID, 'pricing_data', true ) ); 
+        print_r( get_post_meta( $post->ID, 'pricing_data', true ) );
     }
 
     public static function preload_course_data($value, $post_id, $field) {

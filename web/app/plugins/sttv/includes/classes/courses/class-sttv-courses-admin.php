@@ -83,7 +83,7 @@ class Admin {
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
 				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
-					'name' => str_replace( ':', ' ', $calb['albumName'] ),
+					'name' => $sub['subsection_name'],
 					'type' => 'videos',
 					'in_trial' => (bool) $sub['in_trial'],
 					'videos' => $calb['videos']
