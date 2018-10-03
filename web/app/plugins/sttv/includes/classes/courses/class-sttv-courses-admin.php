@@ -148,21 +148,28 @@ class Admin {
 				'name' => $book['book_name'],
 				'in_trial' => (bool) $book['in_trial'],
 				'type' => 'collection',
-				'videos' => (function() use ( $cache_dir, $book ){
+				'tests' => (function() use ( $cache_dir, $book ){
 					$tests = glob( $cache_dir . 'Practice:' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 					foreach ( $tests as $test ) {
 						$els = explode( ':', $test );
+						if ( strpos( $els[3], '.cache' ) ) {	
+							array_splice( $els, 3, 0, 'Test 1' );	
+						}
 
-						$aTitle = str_replace( '.cache', '', $els[3] );
+						$aTitle = str_replace( '.cache', '', $els[4] );
 
 						$pvideos = json_decode( file_get_contents( $test ), true );
-
-						$cache[sanitize_title_with_dashes( $aTitle )] = [
+						$tsections[sanitize_title_with_dashes( $aTitle )] = [
 							'name' => str_replace('-',' ',$aTitle),
+							'videos' => $pvideos['videos']
+						];
+
+						$cache[sanitize_title_with_dashes( $els[3] )] = [
+							'name' => $els[3],
 							'type' => 'playlist',
-							'color' => '#'.$pvideos['embedColor'],
-							'questions' => $pvideos['videos']
+							'color' => '#dddddd',
+							'collection' => $tsections
 						];
 					}
 					return $cache;
