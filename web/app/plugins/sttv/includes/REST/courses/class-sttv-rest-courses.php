@@ -111,7 +111,7 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( ! $book['in_trial'] === false && $trialing ) {
+					if ( $book['in_trial'] === false && $trialing ) {
 						foreach ( $book['tests'] as $b => &$test ) {
 							foreach ( $test['collection'] as $t => &$sec ) {
 								foreach ( $sec['videos'] as $s => &$vid ) {
