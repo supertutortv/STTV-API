@@ -162,6 +162,7 @@ class Admin {
 						$pvideos = json_decode( file_get_contents( $test ), true );
 						$tsections[sanitize_title_with_dashes( $aTitle )] = [
 							'name' => str_replace('-',' ',$aTitle),
+							'parent' => str_replace('-',' ',$els[3]),
 							'videos' => $pvideos['videos']
 						];
 
