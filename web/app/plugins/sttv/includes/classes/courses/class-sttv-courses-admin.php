@@ -166,7 +166,7 @@ class Admin {
 						];
 
 						$cache[sanitize_title_with_dashes( $els[3] )] = [
-							'name' => $els[3],
+							'name' => str_replace('-',' ',$els[3]),
 							'type' => 'playlist',
 							'color' => '#dddddd',
 							'collection' => $tsections
