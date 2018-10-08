@@ -97,12 +97,8 @@ class Admin {
 				'description' => esc_html( $sec['section_info']['description'] ),
 				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
 				'color' => '#'.$color,
-				'collection' => $subsec
-			];
-
-			$data['downloads'][] = [
-				'name' => $sec['section_info']['section_name'],
-				'files' => $resources
+				'collection' => $subsec,
+				'downloads' => $resources
 			];
 
 			$data['capabilities'][] = "course_{$test}_{$aslug}";
@@ -182,12 +178,8 @@ class Admin {
 			'name' => 'Practice Tests',
 			'description' => esc_html( $course['practice']['description'] ?? ''),
 			'type' => 'collection',
-			'collection' => $psubsec
-		];
-
-		$data['downloads'][] = [
-			'name' => 'Practice Tests',
-			'files' => $presc
+			'collection' => $psubsec,
+			'downloads' => $presc
 		];
 		
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
