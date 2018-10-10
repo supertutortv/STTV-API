@@ -218,7 +218,7 @@ class Courses extends \WP_REST_Controller {
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 			switch ( $patch ) {
 				case 'history':
-				case 'bookmarks':
+				case 'playlist':
 				case 'downloads':
 					$allowed = [
 						'wp_id' => $userid,
