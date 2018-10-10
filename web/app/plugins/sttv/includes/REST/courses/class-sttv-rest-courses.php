@@ -186,7 +186,7 @@ class Courses extends \WP_REST_Controller {
 
 		global $wpdb;
 		$dbtable = $wpdb->prefix.'course_udata';
-		$cu_data = $wpdb->get_results("SELECT id,udata_type,udata_timestamp,udata_record FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
+		$cu_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
 
 		foreach ($cu_data as $rec) {
 			$ind = (int) $rec['udata_timestamp'];
