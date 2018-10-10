@@ -22,8 +22,8 @@ if (!defined('CURL_SSLVERSION_TLSv1_2')) {
 }
 // @codingStandardsIgnoreEnd
 
-if (!defined('CURL_HTTP_VERSION_2_0')) {
-    define('CURL_HTTP_VERSION_2_0', 3);
+if (!defined('CURL_HTTP_VERSION_2TLS')) {
+    define('CURL_HTTP_VERSION_2TLS', 4);
 }
 
 class CurlClient implements ClientInterface
@@ -127,6 +127,8 @@ class CurlClient implements ClientInterface
             $opts = $this->defaultOptions;
         }
 
+        $params = Util\Util::objectsToIds($params);
+
         if ($method == 'get') {
             if ($hasFile) {
                 throw new Error\Api(
@@ -135,16 +137,16 @@ class CurlClient implements ClientInterface
             }
             $opts[CURLOPT_HTTPGET] = 1;
             if (count($params) > 0) {
-                $encoded = Util\Util::urlEncode($params);
+                $encoded = Util\Util::encodeParameters($params);
                 $absUrl = "$absUrl?$encoded";
             }
         } elseif ($method == 'post') {
             $opts[CURLOPT_POST] = 1;
-            $opts[CURLOPT_POSTFIELDS] = $hasFile ? $params : Util\Util::urlEncode($params);
+            $opts[CURLOPT_POSTFIELDS] = $hasFile ? $params : Util\Util::encodeParameters($params);
         } elseif ($method == 'delete') {
             $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
             if (count($params) > 0) {
-                $encoded = Util\Util::urlEncode($params);
+                $encoded = Util\Util::encodeParameters($params);
                 $absUrl = "$absUrl?$encoded";
             }
         } else {
@@ -160,7 +162,7 @@ class CurlClient implements ClientInterface
         }
 
         // Create a callback to capture HTTP headers for the response
-        $rheaders = [];
+        $rheaders = new Util\CaseInsensitiveArray();
         $headerCallback = function ($curl, $header_line) use (&$rheaders) {
             // Ignore the HTTP request line (HTTP/1.1 200 OK)
             if (strpos($header_line, ":") === false) {
@@ -197,8 +199,8 @@ class CurlClient implements ClientInterface
             $opts[CURLOPT_SSL_VERIFYPEER] = false;
         }
 
-        // Enable HTTP/2, if supported
-        $opts[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_2_0;
+        // For HTTPS requests, enable HTTP/2, if supported
+        $opts[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_2TLS;
 
         list($rbody, $rcode) = $this->executeRequestWithRetries($opts, $absUrl);
 
