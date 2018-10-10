@@ -213,7 +213,7 @@ class Courses extends \WP_REST_Controller {
 		if ( current_user_can( 'course_platform_access' ) ) {
 			global $wpdb;
 			$userid = get_current_user_id();
-			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_SAME, 'udata');
+			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 			switch ( $patch ) {
