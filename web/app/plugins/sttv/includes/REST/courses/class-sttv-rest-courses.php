@@ -225,7 +225,9 @@ class Courses extends \WP_REST_Controller {
 						'udata_type' => $patch,
 						'udata_timestamp' => $timestamp,
 						'udata_id' => $udata_id,
-						'udata_name' => $udata_name
+						'udata_name' => $udata_name,
+						'udata_thumb' => $udata_thumb,
+						'udata_path' => $udata_path
 					];
 					return $allowed;
 					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s'] );
