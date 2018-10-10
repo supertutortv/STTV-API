@@ -229,12 +229,12 @@ class Courses extends \WP_REST_Controller {
 						'udata_thumb' => $udata_thumb,
 						'udata_path' => $udata_path
 					];
-					return $allowed;
-					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s'] );
+					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s','%s','%s','%s'] );
 					$updated = [
-						'id' => (int) $wpdb->insert_id,
-						'timestamp' => $timestamp,
-						'data' => json_decode($allowed['udata_record'])
+						$udata_id => [
+							'id' => (int) $wpdb->insert_id,
+							'timestamp' => $timestamp
+						]
 					];
 					break;
 				case 'userdata':
