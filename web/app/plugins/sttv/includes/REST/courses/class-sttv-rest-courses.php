@@ -137,7 +137,7 @@ class Courses extends \WP_REST_Controller {
 			})();
 
 			$dbtable = $wpdb->prefix.'course_udata';
-			$cu_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid AND udata_test = {$meta['test']};",ARRAY_A);
+			$cu_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid AND udata_test = '{$meta['test']}'';",ARRAY_A);
 
 			foreach ($cu_data as $rec) {
 				$ind = (int) $rec['udata_timestamp'];
