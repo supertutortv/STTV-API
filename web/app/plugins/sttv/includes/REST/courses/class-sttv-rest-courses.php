@@ -214,7 +214,6 @@ class Courses extends \WP_REST_Controller {
 			global $wpdb;
 			$userid = get_current_user_id();
 			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_SAME, 'udata');
-			return get_defined_vars();
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 			switch ( $patch ) {
@@ -227,6 +226,7 @@ class Courses extends \WP_REST_Controller {
 						'udata_timestamp' => $timestamp,
 						'udata_id' => $udata_id
 					];
+					return $allowed;
 					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s'] );
 					$updated = [
 						'id' => (int) $wpdb->insert_id,
