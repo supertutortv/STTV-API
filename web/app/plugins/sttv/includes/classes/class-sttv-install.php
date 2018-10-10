@@ -40,7 +40,10 @@ class Install {
             wp_id int(10) UNSIGNED,
             udata_type tinytext,
             udata_timestamp int UNSIGNED,
-            udata_record text,
+            udata_id tinytext,
+            udata_name tinytext,
+            udata_thumb tinytext,
+            udata_path tinytext,
             UNIQUE KEY id (id)
         )'
     ];
