@@ -68,6 +68,7 @@ class Courses extends \WP_REST_Controller {
 	##########################
 
 	public function get_course_data( $req ) {
+		global $wpdb;
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -134,6 +135,17 @@ class Courses extends \WP_REST_Controller {
 
 				return $meta;
 			})();
+
+			$dbtable = $wpdb->prefix.'course_udata';
+			$cu_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid AND udata_test = {$meta['test']};",ARRAY_A);
+
+			foreach ($cu_data as $rec) {
+				$ind = (int) $rec['udata_timestamp'];
+				$umeta['courses'][$slug][$rec['udata_type']][$rec['udata_id']] = [
+					'id' => (int) $rec['id'],
+					'timestamp' => $ind
+				];
+			}
 			/* $umeta['courses'][$slug] = [
 				'id' => $meta['id'],
 				'name' => $meta['name'],
@@ -182,18 +194,6 @@ class Courses extends \WP_REST_Controller {
 					return $sections;
 				})()
 			]; */
-		}
-
-		global $wpdb;
-		$dbtable = $wpdb->prefix.'course_udata';
-		$cu_data = $wpdb->get_results("SELECT * FROM $dbtable WHERE wp_id = $userid;",ARRAY_A);
-
-		foreach ($cu_data as $rec) {
-			$ind = (int) $rec['udata_timestamp'];
-			$umeta['user'][$rec['udata_type']][$rec['udata_id']] = [
-				'id' => (int) $rec['id'],
-				'timestamp' => $ind
-			];
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';

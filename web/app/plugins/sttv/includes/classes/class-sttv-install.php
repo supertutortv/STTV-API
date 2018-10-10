@@ -44,6 +44,7 @@ class Install {
             udata_name tinytext,
             udata_thumb tinytext,
             udata_path tinytext,
+            udata_test tinytext,
             UNIQUE KEY id (id)
         )'
     ];
