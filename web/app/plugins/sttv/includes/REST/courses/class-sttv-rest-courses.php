@@ -226,7 +226,7 @@ class Courses extends \WP_REST_Controller {
 				case 'history':
 				case 'playlist':
 					$wpdb->get_results("SELECT * FROM $table WHERE udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
-					return $wpdb->num_rows;
+					$exists = $wpdb->num_rows;
 				case 'downloads':
 					$allowed = [
 						'wp_id' => $userid,
@@ -238,7 +238,7 @@ class Courses extends \WP_REST_Controller {
 						'udata_path' => $udata_path,
 						'udata_test' => $udata_test
 					];
-					
+					return $exists;
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
 					$updated = [
 						$udata_id => [
