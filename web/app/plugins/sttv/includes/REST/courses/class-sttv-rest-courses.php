@@ -232,8 +232,9 @@ class Courses extends \WP_REST_Controller {
 						'udata_path' => $udata_path,
 						'udata_test' => $udata_test
 					];
-					return $allowed;
+					
 					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s','%s','%s','%s'] );
+					return $wpdb->last_query;
 					$updated = [
 						$udata_id => [
 							'id' => (int) $wpdb->insert_id,
