@@ -225,7 +225,8 @@ class Courses extends \WP_REST_Controller {
 			switch ( $patch ) {
 				case 'history':
 				case 'playlist':
-					return $wpdb->get_results("SELECT * FROM $table WHERE udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
+					$wpdb->get_results("SELECT * FROM $table WHERE udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
+					return $wpdb->num_rows;
 				case 'downloads':
 					$allowed = [
 						'wp_id' => $userid,
