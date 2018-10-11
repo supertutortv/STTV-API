@@ -55,6 +55,11 @@ class Courses extends \WP_REST_Controller {
 					'callback' => [ $this, 'parse_practice_data' ],
 					'permission_callback' => 'sttv_verify_web_token'
 				]
+			],
+			'/playlist' => [
+				[
+
+				]
 			]
 		];
 
@@ -295,6 +300,7 @@ class Courses extends \WP_REST_Controller {
 	public function delete_user_course_data( WP_REST_Request $request ) {
 		if ( current_user_can( 'course_access_cap' ) ) {
 			global $wpdb;
+			$userid = get_current_user_id();
 			$body = json_decode($request->get_body(),true);
 			$deleted = [];
 			if ( ! isset($body['id'] ) ) return sttv_rest_response(
@@ -302,34 +308,29 @@ class Courses extends \WP_REST_Controller {
 				'You must provide a valid resource id to this endpoint.',
 				403
 			);
-			if ( !is_array($body['id']) ) $body['id'] = [$body['id']];
-			foreach( $body['id'] as $v ) {
-				$delete = [
-					'id' => $v
-				];
-				$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
-				if ( $result === false ) {
-					$deleted[] = [
-						'id' => 'There was an error. ID '.$v.' not deleted.'
-					];
-					continue;
-				};
-				if ( $result === 0 ) {
-					$deleted[] = [
-						'id' => 'ID '.$v.' could not be found. No action taken.'
-					];
-					continue;
-				}
-				$deleted[] = [
-					'id' => $v
-				];
+
+			$delete = [
+				'id' => $body['id'],
+				'wp_id' => $userid
+			];
+			$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
+
+			if ( !$result ) {
+				return sttv_rest_response(
+					'resourceDeleteFail',
+					'Delete error. No action taken.',
+					200
+				);
+			} else {
+				return sttv_rest_response(
+					'resourceDeleteSuccess',
+					'The resource was deleted.',
+					200,
+					['data' => [
+						'id' => $body['id']
+					]]
+				);
 			}
-			return sttv_rest_response(
-				'resource_delete_success',
-				'The resource was deleted.',
-				200,
-				['data' => $deleted]
-			);
 		}
 	}
 
