@@ -114,6 +114,12 @@ class Courses extends \WP_REST_Controller {
 						}
 						unset( $subsec['in_trial'] );
 					}
+
+					foreach ( $val['downloads'] as &$dl ) {
+						if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
+						unset( $dl['in_trial'] );
+					}
+
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
@@ -129,11 +135,9 @@ class Courses extends \WP_REST_Controller {
 					unset( $book['in_trial'] );
 				}
 
-				foreach ( $meta['downloads'] as &$dlObj ) {
-					foreach ( $dlObj['files'] as &$dl ) {
-						if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
-						unset( $dl['in_trial'] );
-					}
+				foreach ( $meta['collections']['practice']['downloads'] as &$dl ) {
+					if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
+					unset( $dl['in_trial'] );
 				}
 
 				unset($meta['capabilities']);
