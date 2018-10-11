@@ -216,6 +216,7 @@ class Courses extends \WP_REST_Controller {
 			global $wpdb;
 			$userid = get_current_user_id();
 			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
+			return json_decode( $request->get_body(), true );
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 			switch ( $patch ) {
