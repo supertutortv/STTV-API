@@ -223,10 +223,12 @@ class Courses extends \WP_REST_Controller {
 			$exists = false;
 
 			switch ( $patch ) {
-				case 'history':
 				case 'playlist':
-					$wpdb->get_results("SELECT * FROM $table WHERE udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
-					$exists = $wpdb->num_rows;
+					return $wpdb->get_row("SELECT * FROM $table WHERE wp_id = $userid AND udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
+					if ($wpdb->num_rows > 0 || $res) {
+
+					}
+				case 'history':
 				case 'downloads':
 					$allowed = [
 						'wp_id' => $userid,
@@ -238,14 +240,16 @@ class Courses extends \WP_REST_Controller {
 						'udata_path' => $udata_path,
 						'udata_test' => $udata_test
 					];
-					return $exists;
+					
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
-					$updated = [
+
+					return $wpdb->insert_id;
+					/* $updated = [
 						$udata_id => [
 							'id' => (int) $wpdb->insert_id,
 							'timestamp' => $timestamp
 						]
-					];
+					]; */
 					break;
 				case 'userdata':
 					$allowed['userdata'] = [
