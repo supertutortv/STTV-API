@@ -214,13 +214,18 @@ class Courses extends \WP_REST_Controller {
 		$timestamp = time();
 		if ( current_user_can( 'course_platform_access' ) ) {
 			global $wpdb;
-			$userid = get_current_user_id();
+
 			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
+			$userid = get_current_user_id();
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+			$table = $wpdb->prefix.'course_udata';
+			$exists = false;
+
 			switch ( $patch ) {
 				case 'history':
 				case 'playlist':
+					return $wpdb->get_results("SELECT * FROM $table WHERE udata_type = '".$udata_type."' AND udata_id = '".$udata_id."';");
 				case 'downloads':
 					$allowed = [
 						'wp_id' => $userid,
@@ -233,7 +238,7 @@ class Courses extends \WP_REST_Controller {
 						'udata_test' => $udata_test
 					];
 					
-					$wpdb->insert( $wpdb->prefix.'course_udata', $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
+					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
 					$updated = [
 						$udata_id => [
 							'id' => (int) $wpdb->insert_id,
