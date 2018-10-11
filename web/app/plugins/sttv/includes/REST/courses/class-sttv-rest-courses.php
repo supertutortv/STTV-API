@@ -271,7 +271,7 @@ class Courses extends \WP_REST_Controller {
 			}
 
 			return sttv_rest_response(
-				'resource_updated',
+				'resourceUpdated',
 				'The resource has been updated',
 				200,
 				['data' => $updated]
