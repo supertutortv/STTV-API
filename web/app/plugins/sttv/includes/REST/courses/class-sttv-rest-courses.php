@@ -220,16 +220,20 @@ class Courses extends \WP_REST_Controller {
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 			$table = $wpdb->prefix.'course_udata';
-			$exists = false;
+			$exists = null;
 
 			switch ( $patch ) {
 				case 'playlist':
-					return $wpdb->get_row("SELECT * FROM $table WHERE wp_id = $userid AND udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
-					if ($wpdb->num_rows > 0 || $res) {
-
-					}
+					$exists = $wpdb->get_row("SELECT * FROM $table WHERE wp_id = $userid AND udata_type = '".$patch."' AND udata_id = '".$udata_id."';");
 				case 'history':
 				case 'downloads':
+					if ($exists) return sttv_rest_response(
+						'resourceExists',
+						'The resource already exists and cannot be duplicated.',
+						200,
+						['data' => $updated]
+					);
+
 					$allowed = [
 						'wp_id' => $userid,
 						'udata_type' => $patch,
@@ -243,13 +247,12 @@ class Courses extends \WP_REST_Controller {
 					
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
 
-					return $wpdb->insert_id;
-					/* $updated = [
+					$updated = [
 						$udata_id => [
 							'id' => (int) $wpdb->insert_id,
 							'timestamp' => $timestamp
 						]
-					]; */
+					];
 					break;
 				case 'userdata':
 					$allowed['userdata'] = [
