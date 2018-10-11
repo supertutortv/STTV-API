@@ -298,39 +298,37 @@ class Courses extends \WP_REST_Controller {
 	}
 
 	public function delete_user_course_data( WP_REST_Request $request ) {
-		if ( current_user_can( 'course_access_cap' ) ) {
-			global $wpdb;
-			$userid = get_current_user_id();
-			$body = json_decode($request->get_body(),true);
-			$deleted = [];
-			if ( ! isset($body['id'] ) ) return sttv_rest_response(
-				'resource_delete_no_id',
-				'You must provide a valid resource id to this endpoint.',
-				403
+		global $wpdb;
+		$userid = get_current_user_id();
+		$body = json_decode($request->get_body(),true);
+		$deleted = [];
+		if ( ! isset($body['id'] ) ) return sttv_rest_response(
+			'resource_delete_no_id',
+			'You must provide a valid resource id to this endpoint.',
+			403
+		);
+
+		$delete = [
+			'id' => $body['id'],
+			'wp_id' => $userid
+		];
+		$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
+
+		if ( !$result ) {
+			return sttv_rest_response(
+				'resourceDeleteFail',
+				'Delete error. No action taken.',
+				200
 			);
-
-			$delete = [
-				'id' => $body['id'],
-				'wp_id' => $userid
-			];
-			$result = $wpdb->delete( $wpdb->prefix.'course_udata', $delete, ['%d'] );
-
-			if ( !$result ) {
-				return sttv_rest_response(
-					'resourceDeleteFail',
-					'Delete error. No action taken.',
-					200
-				);
-			} else {
-				return sttv_rest_response(
-					'resourceDeleteSuccess',
-					'The resource was deleted.',
-					200,
-					['data' => [
-						'id' => $body['id']
-					]]
-				);
-			}
+		} else {
+			return sttv_rest_response(
+				'resourceDeleteSuccess',
+				'The resource was deleted.',
+				200,
+				['data' => [
+					'id' => $body['id']
+				]]
+			);
 		}
 	}
 
