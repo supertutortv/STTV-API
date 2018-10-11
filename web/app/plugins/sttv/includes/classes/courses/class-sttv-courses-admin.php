@@ -44,6 +44,9 @@ class Admin {
 				'course_post_feedback',
 				'course_post_reviews'
 			],
+			'history' => [
+
+			],
 			'playlist' => [
 				$intros['videos'][$test.'-course-intro']['id'] => [
 					'id' => 0,
