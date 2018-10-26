@@ -44,13 +44,13 @@ class Admin {
 				'course_post_feedback',
 				'course_post_reviews'
 			],
-			'history' => [
-
-			],
+			'history' => [],
 			'playlist' => [
 				$intros['videos'][$test.'-course-intro']['id'] => [
 					'id' => 0,
-					'timestamp' => time()
+					'timestamp' => time(),
+					'name' => strtoupper( $test ).' Course Intro',
+					'thumb' => '665232086'
 				]
 			],
 			'collections' => []
