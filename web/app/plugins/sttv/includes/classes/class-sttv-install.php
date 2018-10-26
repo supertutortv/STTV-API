@@ -45,7 +45,8 @@ class Install {
             udata_thumb tinytext,
             udata_path tinytext,
             udata_test tinytext,
-            UNIQUE KEY id (id)
+            UNIQUE KEY id (id),
+            INDEX wp_id (wp_id)
         )'
     ];
 

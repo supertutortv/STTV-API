@@ -259,7 +259,9 @@ class Courses extends \WP_REST_Controller {
 					$updated = [
 						$udata_id => [
 							'id' => (int) $wpdb->insert_id,
-							'timestamp' => $timestamp
+							'timestamp' => $timestamp,
+							'name' => $udata_name,
+							'thumb' => $udata_thumb,
 						]
 					];
 					break;
