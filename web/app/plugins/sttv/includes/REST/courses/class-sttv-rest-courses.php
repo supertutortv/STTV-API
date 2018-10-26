@@ -154,7 +154,9 @@ class Courses extends \WP_REST_Controller {
 				$ind = (int) $rec['udata_timestamp'];
 				$umeta['courses'][$slug][$rec['udata_type']][$rec['udata_id']] = [
 					'id' => (int) $rec['id'],
-					'timestamp' => $ind
+					'timestamp' => $ind,
+					'name' => $rec['udata_name'],
+					'thumb' => $rec['udata_thumb']
 				];
 			}
 			/* $umeta['courses'][$slug] = [
