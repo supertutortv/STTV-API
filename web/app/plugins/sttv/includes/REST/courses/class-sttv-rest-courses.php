@@ -260,12 +260,11 @@ class Courses extends \WP_REST_Controller {
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
 
 					$updated = [
-						$udata_id => [
-							'id' => (int) $wpdb->insert_id,
-							'timestamp' => $timestamp,
-							'name' => $udata_name,
-							'thumb' => $udata_thumb,
-						]
+						'id' => (int) $wpdb->insert_id,
+						'vidid' => $udata_id,
+						'timestamp' => $timestamp,
+						'name' => $udata_name,
+						'thumb' => $udata_thumb
 					];
 					break;
 				case 'userdata':

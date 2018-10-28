@@ -46,8 +46,9 @@ class Admin {
 			],
 			'history' => [],
 			'playlist' => [
-				$intros['videos'][$test.'-course-intro']['id'] => [
+				[
 					'id' => 0,
+					'vidid' => $intros['videos'][$test.'-course-intro']['id'],
 					'timestamp' => time(),
 					'name' => strtoupper( $test ).' Course Intro',
 					'thumb' => '665232086'
