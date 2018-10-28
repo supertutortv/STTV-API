@@ -154,11 +154,12 @@ class Courses extends \WP_REST_Controller {
 				$ind = (int) $rec['udata_timestamp'];
 				$darray = $rec['udata_type'] !== 'playlist' ? $ind : [
 					'id' => (int) $rec['id'],
+					'vidid' => $rec['udata_id'],
 					'timestamp' => $ind,
 					'name' => $rec['udata_name'],
 					'thumb' => $rec['udata_thumb']
 				];
-				$umeta['courses'][$slug][$rec['udata_type']][$rec['udata_id']] = $darray;
+				$umeta['courses'][$slug][$rec['udata_type']][] = $darray;
 			}
 			/* $umeta['courses'][$slug] = [
 				'id' => $meta['id'],
