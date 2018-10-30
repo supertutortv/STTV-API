@@ -87,7 +87,8 @@ class Admin {
 			}
 
 			foreach ( $sec['subsections'] as $sub ) {
-				$calb = json_decode( file_get_contents( $cache_dir.$sec['section_info']['section_name'].':'.$sub['subsection_name'].'.cache' ), true );
+				$newtitle = str_replace(' ','-',$sec['section_info']['section_name']);
+				$calb = json_decode( file_get_contents( $cache_dir.$newtitle.':'.$sub['subsection_name'].'.cache' ), true );
 
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
