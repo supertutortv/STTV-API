@@ -78,6 +78,7 @@ require(dirname(__FILE__) . '/lib/Event.php');
 require(dirname(__FILE__) . '/lib/ExchangeRate.php');
 require(dirname(__FILE__) . '/lib/File.php');
 require(dirname(__FILE__) . '/lib/FileLink.php');
+require(dirname(__FILE__) . '/lib/FileUpload.php');
 require(dirname(__FILE__) . '/lib/Invoice.php');
 require(dirname(__FILE__) . '/lib/InvoiceItem.php');
 require(dirname(__FILE__) . '/lib/InvoiceLineItem.php');
@@ -94,6 +95,7 @@ require(dirname(__FILE__) . '/lib/OrderItem.php');
 require(dirname(__FILE__) . '/lib/OrderReturn.php');
 require(dirname(__FILE__) . '/lib/PaymentIntent.php');
 require(dirname(__FILE__) . '/lib/Payout.php');
+require(dirname(__FILE__) . '/lib/Person.php');
 require(dirname(__FILE__) . '/lib/Plan.php');
 require(dirname(__FILE__) . '/lib/Product.php');
 require(dirname(__FILE__) . '/lib/Recipient.php');
@@ -123,4 +125,5 @@ require(dirname(__FILE__) . '/lib/OAuth.php');
 
 // Webhooks
 require(dirname(__FILE__) . '/lib/Webhook.php');
+require(dirname(__FILE__) . '/lib/WebhookEndpoint.php');
 require(dirname(__FILE__) . '/lib/WebhookSignature.php');
