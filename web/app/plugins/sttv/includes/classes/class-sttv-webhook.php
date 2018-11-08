@@ -101,7 +101,7 @@ class Webhook {
             $email = new \STTV\Email([
                 'to' => 'enlightenedpie@gmail.com',
                 'subject' => 'Webhook data',
-                'message' => json_encode($data,JSON_PRETTY_PRINT)
+                'message' => '<pre>'.json_encode($data,JSON_PRETTY_PRINT).'</pre>'
             ]);
             $email->send();
             $this->http = 418;
