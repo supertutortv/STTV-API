@@ -99,7 +99,7 @@ class Webhook {
             $this->message = $this->response ? 'Webhook executed' : 'Valid webhook, but no action taken. Thank you!';
         } else {
             $email = new \STTV\Email([
-                'to' => 'dave@supertutortv.com',
+                'to' => 'enlightenedpie@gmail.com',
                 'subject' => 'Webhook data',
                 'message' => json_encode($data,JSON_PRETTY_PRINT)
             ]);
