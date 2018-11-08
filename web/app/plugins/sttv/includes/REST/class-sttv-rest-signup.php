@@ -142,10 +142,6 @@ class Signup extends \WP_REST_Controller {
                 'metadata' => [ 'wp_id' => $user_id ]
             ]))->response();
 
-            ob_start();
-            include_once STTV_TEMPLATE_DIR.'signup/plans.php';
-            $html = ob_get_clean();
-
             return sttv_rest_response(
                 'signupSuccess',
                 'Account created',

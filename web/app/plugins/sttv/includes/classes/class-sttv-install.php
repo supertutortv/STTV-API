@@ -19,19 +19,13 @@ class Install {
             PRIMARY KEY (id),
             UNIQUE KEY (mu_key)
         )',
-        'trial_reference' => '(
+        'sub_reference' => '(
             id int(10) NOT NULL AUTO_INCREMENT,
             invoice_id tinytext,
             exp_date int UNSIGNED,
             wp_id int(10) UNSIGNED,
+            is_trialing boolean NOT NULL DEFAULT 0,
             retries tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-            is_trash boolean NOT NULL DEFAULT 0,
-            UNIQUE KEY id (id)
-        )',
-        'subscription_ref' => '(
-            id int(10) NOT NULL AUTO_INCREMENT,
-            exp_date int UNSIGNED,
-            wp_id int(10) UNSIGNED,
             is_trash boolean NOT NULL DEFAULT 0,
             UNIQUE KEY id (id)
         )',

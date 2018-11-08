@@ -91,7 +91,6 @@ class Webhook {
     }
 
     private function respond( $data ) {
-        //wp_mail('dave@supertutortv.com','Test','Test');
         //change event dot notation to underscores
         $this->event = str_replace( '.', '_', $data['type'] );
 
@@ -99,6 +98,12 @@ class Webhook {
             $this->response = ($this->event)( $data );
             $this->message = $this->response ? 'Webhook executed' : 'Valid webhook, but no action taken. Thank you!';
         } else {
+            $email = new Email([
+                'to' => 'dave@supertutortv.com',
+                'subject' => 'Webhook data',
+                'message' => $data
+            ]);
+            $email->send();
             $this->http = 418;
             $this->message = 'invalid_webhook';
             $this->response = [
