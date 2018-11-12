@@ -23,6 +23,14 @@ class Admin {
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
 		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
 		$intros = json_decode( file_get_contents( $cache_dir . 'Intro-Videos.cache' ), true );
+
+		$caps = [
+			'course_platform_access' => true,
+			"course_{$test}_access" => true,
+			"course_{$test}_trialing" => true,
+			"course_{$test}_feedback" => true,
+			"course_{$test}_reviews" => true
+		];
 		
 		$data = [
 			'id' => $post_id,
@@ -36,13 +44,6 @@ class Admin {
 			'thumbUrls' => [
 				'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
 				'withPlayButton' => 'https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F||ID||_295x166.jpg&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png'
-			],
-			'capabilities' => [
-				'course_platform_access',
-				"course_{$test}_access",
-				"course_{$test}_trialing",
-				'course_post_feedback',
-				'course_post_reviews'
 			],
 			'history' => [],
 			'playlist' => [
@@ -111,7 +112,7 @@ class Admin {
 				'downloads' => $resources
 			];
 
-			$data['capabilities'][] = "course_{$test}_{$aslug}";
+			$caps["course_{$test}_{$aslug}"] = true;
 		}
 			
 		// PRACTICE
@@ -147,7 +148,7 @@ class Admin {
 			if ( strpos( $book['book_name'], 'Free' ) !== false ) {
 				$data['capabilities'][] = "course_{$test}_{$title}";
 			}
-			$data['capabilities'][] = "course_{$test}_{$title}";
+			$caps["course_{$test}_{$title}"] = true;
 	
 			// Main Practice Object
 			$psubsec[$title] = [
@@ -195,5 +196,11 @@ class Admin {
 		$data['size'] = ( mb_strlen( json_encode( $data ), '8bit' )/1000 ) . 'KB';
 		
 		update_post_meta( $post_id, 'sttv_course_data', $data );
+
+		$role = add_role(str_replace(' ','_',strtolower($post->post_title)),$post->post_title) ?? get_role(str_replace(' ','_',strtolower($post->post_title)));
+
+		foreach( $caps as $cap => $grant ) {
+			$role->add_cap($cap,$grant);
+		}
 	}
 }

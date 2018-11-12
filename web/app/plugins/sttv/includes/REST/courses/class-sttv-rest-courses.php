@@ -140,8 +140,6 @@ class Courses extends \WP_REST_Controller {
 					unset( $dl['in_trial'] );
 				}
 
-				unset($meta['capabilities']);
-
 				return $meta;
 			})();
 
