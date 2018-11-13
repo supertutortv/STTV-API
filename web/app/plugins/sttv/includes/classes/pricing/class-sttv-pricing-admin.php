@@ -6,6 +6,10 @@ defined( 'ABSPATH' ) || exit;
 
 class Admin {
     public function __construct() {
+        add_action( 'admin_init', [ $this, 'makeplans'] );
+    }
+
+    public function makeplans() {
         try {
             \Stripe\Product::create([
                 'id' => 'SAT',
