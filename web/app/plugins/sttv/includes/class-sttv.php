@@ -74,7 +74,7 @@ final class STTV {
         require_once 'classes/checkout/class-sttv-checkout-customer.php';
 
         // subscription classes
-        require_once 'classes/subscriptions/class-sttv-subscriptions-admin.php';
+        require_once 'classes/pricing/class-sttv-pricing-admin.php';
 
         // REST setup and init
         require_once 'classes/class-sttv-rest.php';
@@ -87,7 +87,7 @@ final class STTV {
         require_once 'classes/multiuser/class-sttv-multiuser-admin.php';
         require_once 'classes/multiuser/class-sttv-multiuser-keys.php';
 
-        new \STTV\Subscriptions\Admin();
+        new \STTV\Pricing\Admin();
         new \STTV\Courses\Admin();
         new \STTV\Multiuser\Admin();
         new \STTV\REST\API();

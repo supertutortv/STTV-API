@@ -16,7 +16,7 @@ class Post_Types {
 
         $supports = [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields', 'comments', 'author' ];
 
-        register_post_type(
+        /* register_post_type(
             'pricing',
             [
                 'labels'				=>	[
@@ -38,7 +38,7 @@ class Post_Types {
                 'can_export'			=>	true,
                 'supports'				=>	[ 'title', 'custom-fields' ]
             ]
-        );
+        ); */
 		
 		register_post_type(
             'courses',
