@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Admin {
     public function __construct() {
-        add_action( 'admin_init', [ $this, 'makeplans'] );
+        add_action( 'save_post_courses', [ $this, 'makeplans'] );
     }
 
     public function makeplans() {
