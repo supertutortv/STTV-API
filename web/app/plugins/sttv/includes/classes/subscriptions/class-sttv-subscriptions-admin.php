@@ -29,5 +29,16 @@ class Admin {
         ]);
         
         update_post_meta( $post_id, 'pricing_data', $data );
+
+        \Stripe\Product::create([
+            'id' => 'SAT',
+            "name" => 'The Best SAT Prep Course Ever',
+            "type" => "service",
+        ]);
+        \Stripe\Product::create([
+            'id' => 'ACT',
+            "name" => 'The Best ACT Prep Course Ever',
+            "type" => "service",
+        ]);
     }
 }
