@@ -11,7 +11,7 @@ class Admin {
 
     public function makeplans() {
         try {
-            \Stripe\Product::retreive([
+            \Stripe\Product::retrieve([
                 'id' => 'SAT',
             ]);
         } catch( \Exception $e ) {
@@ -24,7 +24,7 @@ class Admin {
         }
 
         try {
-            \Stripe\Product::retreive([
+            \Stripe\Product::retrieve([
                 'id' => 'ACT',
             ]);
         } catch( \Exception $e ) {
@@ -37,7 +37,7 @@ class Admin {
         }
 
         try {
-            \Stripe\Product::retreive([
+            \Stripe\Product::retrieve([
                 'id' => 'COMBO',
             ]);
         } catch( \Exception $e ) {
