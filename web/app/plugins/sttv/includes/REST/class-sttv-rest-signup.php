@@ -50,11 +50,6 @@ class Signup extends \WP_REST_Controller {
                             'required' => false,
                             'type' => 'string',
                             'description' => 'Coupon to check'
-                        ],
-                        'tax' => [
-                            'required' => false,
-                            'type' => 'string',
-                            'description' => 'Postal code to check for tax rate'
                         ]
                     ]
                 ]

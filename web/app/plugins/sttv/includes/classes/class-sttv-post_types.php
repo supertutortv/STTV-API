@@ -17,14 +17,14 @@ class Post_Types {
         $supports = [ 'title', 'editor', 'excerpt', 'thumbnail', 'custom-fields', 'comments', 'author' ];
 
         register_post_type(
-            'subscriptions',
+            'pricing',
             [
                 'labels'				=>	[
-                    'name'	=>	'Subscriptions'
+                    'name'	=>	'Pricing'
                 ],
-                'description'			=>	'SupertutorTV Course subscription plans',
+                'description'			=>	'SupertutorTV Course pricing plans',
                 'menu_position'			=>	55,
-                'menu_icon'				=>  'dashicons-clock',
+                'menu_icon'				=>  'dashicons-money',
                 'public'				=>	true,
                 'hierarchical'			=>	false,
                 'exclude_from_search'	=>	true,
@@ -36,7 +36,7 @@ class Post_Types {
                 ],
                 'delete_with_user'		=>	false,
                 'can_export'			=>	true,
-                'supports'				=>	$supports
+                'supports'				=>	[ 'title', 'custom-fields' ]
             ]
         );
 		
