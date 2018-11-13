@@ -199,52 +199,21 @@ class Signup extends \WP_REST_Controller {
             $customer->save();
             
             //Begin Order Processing
-            $this->set_tax( $cus['shipping']['address']['postal_code'] );
-
-            $plan = get_post_meta( sttv_id_decode($body['plan']['id']), 'pricing_data', true )[$body['plan']['id']];
- 
-            $items[] = [
-                'customer' => $customer->id,
-                'currency' => 'usd',
-                'amount' => $plan['price'],
-                'description' => $plan['name'],
-                'discountable' => true
-            ];
-
-            if ( $this->tax > 0 ) {
-                $items[99] = [
-                    'customer' => $customer->id,
-                    'amount' => round( (int)$plan['taxable'] * ( $this->tax / 100 ) ),
-                    'currency' => 'usd',
-                    'description' => 'Sales tax',
-                    'discountable' => false
-                ];
-            }
-
-            if ( $priship ) {
-                $items[100] = [
-                    'customer' => $customer->id,
-                    'amount' => 705,
-                    'currency' => 'usd',
-                    'description' => 'Priority Shipping',
-                    'discountable' => false
-                ];
-            }
-
             $order = new \STTV\Checkout\Order( 'create', [
                 'customer' => $customer->id,
-                'trial' => $skiptrial ? 0 : (int)$plan['trial'],
+                'trial' => $skiptrial ? 0 : 5,
                 'metadata' => [
                     'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user->ID,
-                    'plan' => json_encode($plan['courses']),
-                    'start' => time(),
-                    'end' => time() + (MONTH_IN_SECONDS * (int)$plan['length'])
+                    'wp_id' => $user->ID
                 ],
-                'items' => $items
+                'items' => [
+                    'plan' => $body['plan']['id'],
+                    'qty' => 1
+                ]
             ]);
             $response = $order->response();
-            if ($skiptrial) $order->pay();
+
+            if ( $priship ) {}
 
             $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);

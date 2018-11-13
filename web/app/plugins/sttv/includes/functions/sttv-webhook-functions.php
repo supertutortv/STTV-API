@@ -95,9 +95,6 @@ function customer_created( $data ) {
                 'dark_mode' => false
             ],
             'userdata' => [
-                'customer' => $customer['id'],
-                'uid' => $customer['invoice_prefix'],
-                'orders' => [],
                 'login_timestamps' => []
             ]
         ],
