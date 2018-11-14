@@ -11,42 +11,45 @@ class Admin {
 
     public function makeplans() {
         try {
-            \Stripe\Product::retrieve([
+            $sat = \Stripe\Product::retrieve([
                 'id' => 'SAT',
             ]);
         } catch( \Exception $e ) {
-            \Stripe\Product::create([
+            $sat = \Stripe\Product::create([
                 'id' => 'SAT',
                 "name" => 'The Best SAT Prep Course Ever',
                 "type" => "service",
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever]' ]
             ]);
         }
+        set_transient('pricingplan_sat', json_encode($sat), DAY_IN_SECONDS*10);
 
         try {
-            \Stripe\Product::retrieve([
+            $act = \Stripe\Product::retrieve([
                 'id' => 'ACT',
             ]);
         } catch( \Exception $e ) {
-            \Stripe\Product::create([
+            $act = \Stripe\Product::create([
                 'id' => 'ACT',
                 "name" => 'The Best ACT Prep Course Ever',
                 "type" => "service",
                 'metadata' => [ 'roles' => '[the_best_act_prep_course_ever]' ]
             ]);
         }
+        set_transient('pricingplan_act', json_encode($act), DAY_IN_SECONDS*10);
 
         try {
-            \Stripe\Product::retrieve([
+            $combo = \Stripe\Product::retrieve([
                 'id' => 'COMBO',
             ]);
         } catch( \Exception $e ) {
-            \Stripe\Product::create([
+            $combo = \Stripe\Product::create([
                 'id' => 'COMBO',
                 "name" => 'SAT and ACT Combo',
                 "type" => "service",
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever,the_best_act_prep_course_ever]' ]
             ]);
         }
+        set_transient('pricingplan_combo', json_encode($combo), DAY_IN_SECONDS*10);
     }
 }

@@ -26,7 +26,7 @@ class Order extends Stripe {
     }
 
     protected function retrieve( $id ) {
-        return \Stripe\Invoice::retrieve( $id );
+        return \Stripe\Subscription::retrieve( $id );
     }
 
     public function save() {
