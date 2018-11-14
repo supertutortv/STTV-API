@@ -22,7 +22,7 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever]' ]
             ]);
         }
-        set_transient('pricingplan_sat', json_encode($sat), DAY_IN_SECONDS*10);
+        update_option('pricingplan_sat', json_encode($sat) );
 
         try {
             $act = \Stripe\Product::retrieve([
@@ -36,7 +36,7 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_act_prep_course_ever]' ]
             ]);
         }
-        set_transient('pricingplan_act', json_encode($act), DAY_IN_SECONDS*10);
+        update_option('pricingplan_act', json_encode($act) );
 
         try {
             $combo = \Stripe\Product::retrieve([
@@ -50,6 +50,6 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever,the_best_act_prep_course_ever]' ]
             ]);
         }
-        set_transient('pricingplan_combo', json_encode($combo), DAY_IN_SECONDS*10);
+        update_option('pricingplan_combo', json_encode($combo) );
     }
 }
