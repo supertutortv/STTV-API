@@ -64,7 +64,7 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stSignupInit( WP_REST_Request $request ) {
-        $plan = get_option('pricingplan_'.$request['plan']);
+        $plan = json_decode(get_option('pricingplan_'.$request['plan']),true);
         return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'resp' => $plan ]);
     }
 
