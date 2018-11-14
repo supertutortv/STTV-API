@@ -11,9 +11,10 @@ class Admin {
 
     public function makeplans() {
         try {
-            $sat = \Stripe\Product::retrieve([
-                'id' => 'SAT',
-            ]);
+            if ( !get_option('pricingplan_sat') )
+                $sat = \Stripe\Product::retrieve([
+                    'id' => 'SAT',
+                ]);
         } catch( \Exception $e ) {
             $sat = \Stripe\Product::create([
                 'id' => 'SAT',
@@ -22,9 +23,11 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever]' ]
             ]);
         }
-        update_option('pricingplan_sat', json_encode($sat) );
+
+        update_option('pricingplan_sat', json_encode(\Stripe\Plan::all(['product'=>'SAT'])) );
 
         try {
+            if ( !get_option('pricingplan_act') )
             $act = \Stripe\Product::retrieve([
                 'id' => 'ACT',
             ]);
@@ -36,9 +39,10 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_act_prep_course_ever]' ]
             ]);
         }
-        update_option('pricingplan_act', json_encode($act) );
+        update_option('pricingplan_act', json_encode(\Stripe\Plan::all(['product'=>'ACT'])) );
 
         try {
+            if ( !get_option('pricingplan_combo') )
             $combo = \Stripe\Product::retrieve([
                 'id' => 'COMBO',
             ]);
@@ -50,6 +54,6 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever,the_best_act_prep_course_ever]' ]
             ]);
         }
-        update_option('pricingplan_combo', json_encode($combo) );
+        update_option('pricingplan_combo', json_encode(\Stripe\Plan::all(['product'=>'COMBO'])) );
     }
 }
