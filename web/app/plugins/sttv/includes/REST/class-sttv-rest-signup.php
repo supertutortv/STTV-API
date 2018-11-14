@@ -35,7 +35,7 @@ class Signup extends \WP_REST_Controller {
         ];
 
         $routes = [
-            '/init' => [
+            '/(?P<plan>act|sat|combo)' => [
                 [
                     'methods' => 'GET',
                     'callback' => [ $this, 'stSignupInit' ]
@@ -64,9 +64,7 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stSignupInit( WP_REST_Request $request ) {
-        ob_start();
-        require_once STTV_TEMPLATE_DIR.'signup/account.php';
-        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'html' => ob_get_clean() ]);
+        return sttv_rest_response( 'signup_success', 'ok' , 200, [ 'resp' => $request['plan'] ]);
     }
 
     public function stSignupPost( WP_REST_Request $request ) {
