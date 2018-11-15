@@ -31,6 +31,8 @@ class Admin {
 			"course_{$test}_feedback" => true,
 			"course_{$test}_reviews" => true
 		];
+
+		$intr_thumb = explode('|',$course['course_meta']['intro_vid']);
 		
 		$data = [
 			'id' => $post_id,
@@ -48,10 +50,10 @@ class Admin {
 			'playlist' => [
 				[
 					'id' => 0,
-					'vidid' => $course['course_meta']['intro_vid'],
+					'vidid' => $intr_thumb[0],
 					'timestamp' => time(),
 					'name' => strtoupper( $test ).' Intro',
-					'thumb' => '665232086'
+					'thumb' => $intr_thumb[1]
 				]
 			],
 			'collections' => []
