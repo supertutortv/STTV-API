@@ -89,7 +89,7 @@ function customer_created( $data ) {
             'history' => [],
             'downloads' => [],
             'type' => 'standard',
-            'trialing' => 0,
+            'trialing' => false,
             'settings' => [
                 'autoplay' => false,
                 'dark_mode' => false
