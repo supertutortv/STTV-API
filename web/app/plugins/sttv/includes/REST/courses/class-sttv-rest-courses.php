@@ -77,7 +77,9 @@ class Courses extends \WP_REST_Controller {
 		$userid = get_current_user_id();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		$access = current_user_can('manage_options') ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
+		$admin = current_user_can('manage_options');
+
+		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
 		if ( empty( $access ) ) return sttv_rest_response(
 			'dataInvalid',
@@ -102,9 +104,9 @@ class Courses extends \WP_REST_Controller {
 				);
 
 			$test_code = strtolower($meta['test']);
-			if ( !current_user_can( "course_{$test_code}_access" ) ) continue;
+			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
 
-			$trialing = current_user_can( "course_{$test_code}_trialing" );
+			$trialing = !$admin && current_user_can( "course_{$test_code}_trialing" );
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
