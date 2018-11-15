@@ -48,7 +48,7 @@ class Admin {
 			'playlist' => [
 				[
 					'id' => 0,
-					'vidid' => $course['intro_vid'],
+					'vidid' => $course['course_meta']['intro_vid'],
 					'timestamp' => time(),
 					'name' => strtoupper( $test ).' Intro',
 					'thumb' => '665232086'
