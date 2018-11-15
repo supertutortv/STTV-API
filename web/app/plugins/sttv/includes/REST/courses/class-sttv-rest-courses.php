@@ -226,7 +226,7 @@ class Courses extends \WP_REST_Controller {
 	public function update_user_course_data( WP_REST_Request $request ) {
 		$updated = $allowed = [];
 		$timestamp = time();
-		if ( current_user_can( 'course_platform_access' ) ) {
+		if ( current_user_can('manage_options') || current_user_can( 'course_platform_access' ) ) {
 			global $wpdb;
 
 			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
