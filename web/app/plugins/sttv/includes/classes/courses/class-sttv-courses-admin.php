@@ -7,26 +7,27 @@ defined( 'ABSPATH' ) || exit;
 class Admin {
     public function __construct() {
 		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
-		add_action( 'user_register', [ $this, 'add_user_course_meta' ] );
+		add_action( 'user_register', [ $this, 'admin_course_meta' ] );
 	}
 	
-	public function add_user_course_meta( $user_id ) {
-		return update_user_meta( $user_id, 'sttv_user_data', [
-			'user' => [
-				'history' => [],
-				'downloads' => [],
-				'type' => 'standard',
-				'trialing' => false,
-				'settings' => [
-					'autoplay' => false,
-					'dark_mode' => false
+	public function admin_course_meta( $user_id ) {
+		if ( !user_can($user_id,'manage_posts') ) return false;
+			return update_user_meta( $user_id, 'sttv_user_data', [
+				'user' => [
+					'history' => [],
+					'downloads' => [],
+					'type' => 'standard',
+					'trialing' => false,
+					'settings' => [
+						'autoplay' => false,
+						'dark_mode' => false
+					],
+					'userdata' => [
+						'login_timestamps' => []
+					]
 				],
-				'userdata' => [
-					'login_timestamps' => []
-				]
-			],
-			'courses' => []
-		]);
+				'courses' => []
+			]);
 	}
     
     public function sttv_build_course( $post_id, $post ) {
