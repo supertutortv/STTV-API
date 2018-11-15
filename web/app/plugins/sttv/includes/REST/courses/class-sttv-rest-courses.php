@@ -78,7 +78,7 @@ class Courses extends \WP_REST_Controller {
 		return wp_get_current_user();
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		$access = current_user_can('manage_options') ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
+		$access = current_user_can('administrator') ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
 		if ( empty( $umeta['courses'] ) ) return sttv_rest_response(
 			'dataInvalid',
