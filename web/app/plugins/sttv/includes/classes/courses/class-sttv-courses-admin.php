@@ -38,7 +38,6 @@ class Admin {
 			'slug' => $post->post_name,
 			'created' => strtotime( $post->post_date ),
 			'modified' => strtotime( $post->post_modified ),
-			'intro' => $intros['videos'][$test.'-course-intro']['id'],
 			'test' => strtoupper( $test ),
 			'type' => 'collection',
 			'thumbUrls' => [
@@ -49,9 +48,9 @@ class Admin {
 			'playlist' => [
 				[
 					'id' => 0,
-					'vidid' => $intros['videos'][$test.'-course-intro']['id'],
+					'vidid' => $course['intro_vid'],
 					'timestamp' => time(),
-					'name' => strtoupper( $test ).' Course Intro',
+					'name' => strtoupper( $test ).' Intro',
 					'thumb' => '665232086'
 				]
 			],
