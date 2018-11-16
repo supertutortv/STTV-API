@@ -127,7 +127,7 @@ class Admin {
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
 				'type' => 'playlist',
-				'description' => esc_html( $sec['section_info']['description'] ),
+				'description' => $sec['section_info']['description'],
 				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
 				'color' => '#'.$color,
 				'collection' => $subsec,
