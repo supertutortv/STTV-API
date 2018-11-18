@@ -23,8 +23,11 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever]' ]
             ]);
         }
+        $satplans = \Stripe\Plan::all(['product'=>'SAT']);
 
-        update_option('pricingplan_sat', json_encode(\Stripe\Plan::all(['product'=>'SAT'])) );
+        $sat->plans = $satplans->data;
+
+        update_option('pricingplan_sat', json_encode($sat) );
 
         try {
             if ( !get_option('pricingplan_act') )
@@ -39,7 +42,11 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_act_prep_course_ever]' ]
             ]);
         }
-        update_option('pricingplan_act', json_encode(\Stripe\Plan::all(['product'=>'ACT'])) );
+        $actplans = \Stripe\Plan::all(['product'=>'ACT']);
+
+        $act->plans = $actplans->data;
+
+        update_option('pricingplan_act', json_encode($act) );
 
         try {
             if ( !get_option('pricingplan_combo') )
@@ -54,6 +61,10 @@ class Admin {
                 'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever,the_best_act_prep_course_ever]' ]
             ]);
         }
-        update_option('pricingplan_combo', json_encode(\Stripe\Plan::all(['product'=>'COMBO'])) );
+        $comboplans = \Stripe\Plan::all(['product'=>'COMBO']);
+
+        $combo->plans = $comboplans->data;
+
+        update_option('pricingplan_combo', json_encode($combo) );
     }
 }
