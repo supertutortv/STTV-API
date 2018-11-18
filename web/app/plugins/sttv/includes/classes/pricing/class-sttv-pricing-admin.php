@@ -24,7 +24,9 @@ class Admin {
         } finally {
             $satplans = \Stripe\Plan::all(['product'=>'SAT']);
 
-            update_option('pricingplan_sat', json_encode(['product' => $sat, 'plans' => $satplans->data]) );
+            $sat->plans = $satplans->data;
+
+            update_option('pricingplan_sat', json_encode($sat) );
         }
 
         try {
@@ -41,7 +43,9 @@ class Admin {
         } finally {
             $actplans = \Stripe\Plan::all(['product'=>'ACT']);
 
-            update_option('pricingplan_act', json_encode(['product' => $act, 'plans' => $actplans->data]) );
+            $act->plans = $actplans->data;
+
+            update_option('pricingplan_act', json_encode($act) );
         }
 
         try {
@@ -58,7 +62,9 @@ class Admin {
         } finally {
             $comboplans = \Stripe\Plan::all(['product'=>'COMBO']);
 
-            update_option('pricingplan_combo', json_encode(['product' => $combo, 'plans' => $comboplans->data]) );
+            $combo->plans = $comboplans->data;
+
+            update_option('pricingplan_combo', json_encode($combo) );
         }
     }
 }
