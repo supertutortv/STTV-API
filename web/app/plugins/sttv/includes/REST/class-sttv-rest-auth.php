@@ -191,7 +191,8 @@ class Auth extends \WP_REST_Controller {
         return sttv_rest_response(
             (is_wp_error($check)) ? 'pwError' : 'pwSuccess',
             'Password check',
-            200
+            200,
+            $check
         );
     }
 
