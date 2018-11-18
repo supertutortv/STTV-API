@@ -11,10 +11,9 @@ class Admin {
 
     public function makeplans() {
         try {
-            if ( !get_option('pricingplan_sat') )
-                $sat = \Stripe\Product::retrieve([
-                    'id' => 'SAT',
-                ]);
+            $sat = \Stripe\Product::retrieve([
+                'id' => 'SAT',
+            ]);
         } catch( \Exception $e ) {
             $sat = \Stripe\Product::create([
                 'id' => 'SAT',
@@ -29,7 +28,6 @@ class Admin {
         }
 
         try {
-            if ( !get_option('pricingplan_act') )
             $act = \Stripe\Product::retrieve([
                 'id' => 'ACT',
             ]);
@@ -47,7 +45,6 @@ class Admin {
         }
 
         try {
-            if ( !get_option('pricingplan_combo') )
             $combo = \Stripe\Product::retrieve([
                 'id' => 'COMBO',
             ]);
