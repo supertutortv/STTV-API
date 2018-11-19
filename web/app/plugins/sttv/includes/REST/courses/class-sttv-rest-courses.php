@@ -229,7 +229,7 @@ class Courses extends \WP_REST_Controller {
 		if ( current_user_can('manage_options') || current_user_can( 'course_platform_access' ) ) {
 			global $wpdb;
 
-			return extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
+			extract(json_decode( $request->get_body(), true ), EXTR_PREFIX_ALL, 'udata');
 			$userid = get_current_user_id();
 			$patch = $request->get_param( 'patch' );
 			$umeta = get_user_meta( $userid, 'sttv_user_data', true );
@@ -252,7 +252,7 @@ class Courses extends \WP_REST_Controller {
 						'wp_id' => $userid,
 						'udata_type' => $patch,
 						'udata_timestamp' => $timestamp,
-						'udata_id' => $udata_id,
+						'udata_id' => $udata_id ?? $udata_hash,
 						'udata_name' => $udata_name,
 						'udata_thumb' => $udata_thumb,
 						'udata_path' => $udata_path,
