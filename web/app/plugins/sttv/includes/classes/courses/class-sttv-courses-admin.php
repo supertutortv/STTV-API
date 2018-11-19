@@ -26,7 +26,10 @@ class Admin {
 						'login_timestamps' => []
 					]
 				],
-				'courses' => []
+				'courses' => [
+					'the-best-act-prep-course-ever',
+					'the-best-sat-prep-course-ever'
+				]
 			]);
 	}
     
