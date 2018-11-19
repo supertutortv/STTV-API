@@ -255,7 +255,7 @@ class Courses extends \WP_REST_Controller {
 						'udata_id' => isset($udata_id) ? $udata_id : $udata_hash,
 						'udata_name' => $udata_name,
 						'udata_thumb' => $udata_thumb,
-						'udata_path' => isset($udata_path) ? $udata_path : '',
+						'udata_path' => isset($udata_path) ? $udata_path : $udata_file,
 						'udata_test' => isset($udata_test) ? $udata_test : ''
 					];
 					
@@ -263,7 +263,7 @@ class Courses extends \WP_REST_Controller {
 
 					$updated = [
 						'id' => (int) $wpdb->insert_id,
-						'vidid' => $udata_id,
+						'vidid' => isset($udata_id) ? $udata_id : $udata_file,
 						'timestamp' => $timestamp,
 						'name' => $udata_name,
 						'thumb' => $udata_thumb
