@@ -263,7 +263,7 @@ class Courses extends \WP_REST_Controller {
 
 					$updated = [
 						'id' => (int) $wpdb->insert_id,
-						'vidid' => isset($udata_id) ? $udata_id : $udata_file,
+						'vidid' => isset($udata_id) ? $udata_id : $udata_hash,
 						'timestamp' => $timestamp,
 						'name' => $udata_name,
 						'thumb' => $udata_thumb
