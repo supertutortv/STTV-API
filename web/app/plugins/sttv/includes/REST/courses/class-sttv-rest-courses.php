@@ -107,7 +107,7 @@ class Courses extends \WP_REST_Controller {
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
 
 			$trialing = !$admin && current_user_can( "course_{$test_code}_trialing" );
-			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
+			$access[$slug] = (function() use (&$meta,$trialing) {
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
 					foreach ( $val['collection'] as $k => &$subsec ) {
