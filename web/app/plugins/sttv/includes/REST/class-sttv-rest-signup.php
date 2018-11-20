@@ -97,10 +97,12 @@ class Signup extends \WP_REST_Controller {
             200,
             [
                 'update' => [
-                    'email' => $email,
-                    'firstname' => $firstname,
-                    'lastname' => $lastname,
-                    'password' => $password
+                    'account' => [
+                        'email' => $email,
+                        'firstname' => $firstname,
+                        'lastname' => $lastname,
+                        'password' => $password
+                    ]
                 ]
             ]
         );
