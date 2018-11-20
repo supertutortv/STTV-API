@@ -191,6 +191,8 @@ class Signup extends \WP_REST_Controller {
             $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
+
+            return $body['plan'];
             
             //Begin Order Processing
             $order = new \STTV\Checkout\Order( 'create', [
@@ -202,8 +204,7 @@ class Signup extends \WP_REST_Controller {
                 ],
                 'items' => [
                     [
-                        'plan' => $body['plan']['id'],
-                        'qty' => 1
+                        'plan' => $body['plan']['id']
                     ]
                 ]
             ]);
