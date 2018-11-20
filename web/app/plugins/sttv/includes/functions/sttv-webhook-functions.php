@@ -114,6 +114,22 @@ function customer_deleted( $data ) {
     return wp_delete_user( $id );
 }
 
+function customer_subscription_created( $data ) {
+    $obj = $data['data']['object'];
+    $meta = $obj['metadata'];
+    $user = get_userdata( $meta['wp_id'] );
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $courses = json_decode($obj['plan']['metadata']['courses'],true);
+
+    $umeta['courses'][] = $courses;
+    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+    return $umeta;
+}
+
+/* function customer_subscription_update( $data ) {
+
+} */
+
 // invoice.created
 function invoice_created( $data ) {
     $obj = $data['data']['object'];
