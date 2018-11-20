@@ -124,7 +124,7 @@ function customer_subscription_created( $data ) {
     $umeta['courses'] = $courses;
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
-    $roles = explode('|',$meta['roles']);
+    $roles = explode('|',$meta['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
 
     if ( $obj['status'] === 'trialing' ) $user->add_cap('course_trialing');
