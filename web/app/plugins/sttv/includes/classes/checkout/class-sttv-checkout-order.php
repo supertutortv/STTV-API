@@ -12,7 +12,6 @@ class Order extends Stripe {
     }
 
     protected function create( $obj ) {
-        return $obj;
         return \Stripe\Subscription::create([
             'customer' => $obj['customer'],
             'cancel_at_period_end' => true,

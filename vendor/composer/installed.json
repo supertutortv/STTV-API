@@ -1,56 +1,5 @@
 [
     {
-        "name": "johnpbloch/wordpress-core-installer",
-        "version": "1.0.0.2",
-        "version_normalized": "1.0.0.2",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/johnpbloch/wordpress-core-installer.git",
-            "reference": "7941acd71725710a789daabe0557429da63e7ac6"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/johnpbloch/wordpress-core-installer/zipball/7941acd71725710a789daabe0557429da63e7ac6",
-            "reference": "7941acd71725710a789daabe0557429da63e7ac6",
-            "shasum": ""
-        },
-        "require": {
-            "composer-plugin-api": "^1.0"
-        },
-        "conflict": {
-            "composer/installers": "<1.0.6"
-        },
-        "require-dev": {
-            "composer/composer": "^1.0",
-            "phpunit/phpunit": ">=4.8.35"
-        },
-        "time": "2018-01-29T14:49:29+00:00",
-        "type": "composer-plugin",
-        "extra": {
-            "class": "johnpbloch\\Composer\\WordPressCorePlugin"
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "johnpbloch\\Composer\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "John P. Bloch",
-                "email": "me@johnpbloch.com"
-            }
-        ],
-        "description": "A custom installer to handle deploying WordPress with composer",
-        "keywords": [
-            "wordpress"
-        ]
-    },
-    {
         "name": "oscarotero/env",
         "version": "v1.1.0",
         "version_normalized": "1.1.0.0",
@@ -508,18 +457,69 @@
         ]
     },
     {
-        "name": "stripe/stripe-php",
-        "version": "v6.20.0",
-        "version_normalized": "6.20.0.0",
+        "name": "johnpbloch/wordpress-core-installer",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "eef8383c1b54417c470f3f60f14ffdd6f04773d4"
+            "url": "https://github.com/johnpbloch/wordpress-core-installer.git",
+            "reference": "fd12f5cfe27223b92b0f4bbc097059eb23cc56c4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/eef8383c1b54417c470f3f60f14ffdd6f04773d4",
-            "reference": "eef8383c1b54417c470f3f60f14ffdd6f04773d4",
+            "url": "https://api.github.com/repos/johnpbloch/wordpress-core-installer/zipball/fd12f5cfe27223b92b0f4bbc097059eb23cc56c4",
+            "reference": "fd12f5cfe27223b92b0f4bbc097059eb23cc56c4",
+            "shasum": ""
+        },
+        "require": {
+            "composer-plugin-api": "^1.0"
+        },
+        "conflict": {
+            "composer/installers": "<1.0.6"
+        },
+        "require-dev": {
+            "composer/composer": "^1.0",
+            "phpunit/phpunit": ">=4.8.35"
+        },
+        "time": "2018-11-09T20:10:38+00:00",
+        "type": "composer-plugin",
+        "extra": {
+            "class": "johnpbloch\\Composer\\WordPressCorePlugin"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "johnpbloch\\Composer\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "John P. Bloch",
+                "email": "me@johnpbloch.com"
+            }
+        ],
+        "description": "A custom installer to handle deploying WordPress with composer",
+        "keywords": [
+            "wordpress"
+        ]
+    },
+    {
+        "name": "stripe/stripe-php",
+        "version": "v6.22.0",
+        "version_normalized": "6.22.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stripe/stripe-php.git",
+            "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/2a87430d6cefe71c6b618e163aa05e7de97d2619",
+            "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619",
             "shasum": ""
         },
         "require": {
@@ -533,7 +533,7 @@
             "phpunit/phpunit": "~4.0",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2018-10-30T17:02:13+00:00",
+        "time": "2018-11-15T22:35:15+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

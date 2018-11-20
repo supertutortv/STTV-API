@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.22.0 - 2018-11-15
+* [#549](https://github.com/stripe/stripe-php/pull/549) Add support for client telemetry
+
+## 6.21.1 - 2018-11-12
+* [#548](https://github.com/stripe/stripe-php/pull/548) Don't mutate `Exception` class properties from `OAuthBase` error
+
+## 6.21.0 - 2018-11-08
+* [#537](https://github.com/stripe/stripe-php/pull/537) Add new API endpoints for the `Invoice` resource.
+
+## 6.20.1 - 2018-11-07
+* [#546](https://github.com/stripe/stripe-php/pull/546) Drop files from the Composer package that aren't needed in the release
+
 ## 6.20.0 - 2018-10-30
 * [#536](https://github.com/stripe/stripe-php/pull/536) Add support for the `Person` resource
 * [#541](https://github.com/stripe/stripe-php/pull/541) Add support for the `WebhookEndpoint` resource
