@@ -193,9 +193,8 @@ class Signup extends \WP_REST_Controller {
             $customer->save();
 
             $plan = json_decode($body['plan'],true);
-            
-            //Begin Order Processing
-            $order = \Stripe\Subscription::create([
+
+            $thePars = [
                 'customer' => $customer->id,
                 "items" => [
                     [
@@ -208,7 +207,12 @@ class Signup extends \WP_REST_Controller {
                     'wp_id' => $user->ID
                 ],
                 'trial_period_days' => $skiptrial ? 0 : 5
-            ]);
+            ];
+
+            return $thePars;
+            
+            //Begin Order Processing
+            $order = \Stripe\Subscription::create($thePars);
 
             if ( $priship ) {}
 
