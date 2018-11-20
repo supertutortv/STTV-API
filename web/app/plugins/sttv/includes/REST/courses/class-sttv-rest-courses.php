@@ -74,7 +74,25 @@ class Courses extends \WP_REST_Controller {
 
 	public function get_course_data( $req ) {
 		global $wpdb;
+		$user = wp_get_current_user();
 		$userid = get_current_user_id();
+
+		if ($user->user_email === 'brookifyd@yahoo.com') update_user_meta( $userid, 'sttv_user_data', [
+			'user' => [
+				'history' => [],
+				'downloads' => [],
+				'type' => 'standard',
+				'trialing' => false,
+				'settings' => [
+					'autoplay' => false,
+					'dark_mode' => false
+				],
+				'userdata' => [
+					'login_timestamps' => []
+				]
+			],
+			'courses' => []
+		]);
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
