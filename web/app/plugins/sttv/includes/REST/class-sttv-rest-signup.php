@@ -74,6 +74,8 @@ class Signup extends \WP_REST_Controller {
         
         if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
 
+        return $body;
+
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
