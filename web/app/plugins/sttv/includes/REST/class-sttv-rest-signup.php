@@ -194,7 +194,7 @@ class Signup extends \WP_REST_Controller {
 
             $plan = json_decode($body['plan'],true);
 
-            return gettype($plan);
+            return $body['plan'];
 
             $thePars = [
                 'customer' => $customer->id,
