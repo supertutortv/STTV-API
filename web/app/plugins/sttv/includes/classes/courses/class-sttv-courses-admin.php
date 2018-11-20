@@ -15,7 +15,7 @@ class Admin {
 				'user' => [
 					'history' => [],
 					'downloads' => [],
-					'type' => 'admin',
+					'type' => 'standard',
 					'trialing' => false,
 					'settings' => [
 						'autoplay' => false,

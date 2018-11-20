@@ -81,7 +81,7 @@ class Courses extends \WP_REST_Controller {
 			'user' => [
 				'history' => [],
 				'downloads' => [],
-				'type' => 'standard',
+				'type' => 'admin',
 				'trialing' => false,
 				'settings' => [
 					'autoplay' => false,
@@ -126,6 +126,7 @@ class Courses extends \WP_REST_Controller {
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
 
 			$trialing = !$admin && current_user_can( "course_trialing" );
+			$umeta['user']['trialing'] = $trialing;
 
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				foreach ( $meta['collections'] as $sec => &$val ) {
