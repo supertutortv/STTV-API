@@ -77,6 +77,8 @@ class Signup extends \WP_REST_Controller {
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
+        return $body;
+
         return $this->$ep($body,$request);
     }
 
