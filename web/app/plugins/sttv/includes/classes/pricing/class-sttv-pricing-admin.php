@@ -19,7 +19,7 @@ class Admin {
                 'id' => 'SAT',
                 "name" => 'The Best SAT Prep Course Ever',
                 "type" => "service",
-                'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever]' ]
+                'metadata' => [ 'roles' => 'the_best_sat_prep_course_ever' ]
             ]);
         } finally {
             $satplans = \Stripe\Plan::all(['product'=>'SAT']);
@@ -39,7 +39,7 @@ class Admin {
                 'id' => 'ACT',
                 "name" => 'The Best ACT Prep Course Ever',
                 "type" => "service",
-                'metadata' => [ 'roles' => '[the_best_act_prep_course_ever]' ]
+                'metadata' => [ 'roles' => 'the_best_act_prep_course_ever' ]
             ]);
         } finally {
             $actplans = \Stripe\Plan::all(['product'=>'ACT']);
@@ -59,7 +59,7 @@ class Admin {
                 'id' => 'COMBO',
                 "name" => 'SAT and ACT Combo',
                 "type" => "service",
-                'metadata' => [ 'roles' => '[the_best_sat_prep_course_ever,the_best_act_prep_course_ever]' ]
+                'metadata' => [ 'roles' => 'the_best_sat_prep_course_ever|the_best_act_prep_course_ever' ]
             ]);
         } finally {
             $comboplans = \Stripe\Plan::all(['product'=>'COMBO']);
