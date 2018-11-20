@@ -118,6 +118,7 @@ function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
+    $cus = \Stripe\customer::retrieve("cus_".$user->user_login);
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
 
@@ -128,6 +129,22 @@ function customer_subscription_created( $data ) {
     foreach ( $roles as $role ) $user->add_role($role);
 
     if ( $obj['status'] === 'trialing' ) $user->add_cap('course_trialing');
+
+    $message = 'Welcome';
+
+    /* $welcome = new \STTV\Email([
+        'to' => $user->user_email,
+        'subject' => 'Welcome!',
+        'message' => $message
+    ]);
+    $welcome->send(); */
+
+    $newuser = new \STTV\Email([
+        'to' => 'info@supertutortv.com',
+        'subject' => 'New Customer!',
+        'message' => '<pre>'.json_encode($data,JSON_PRETTY_PRINT).'</pre><pre>'.json_encode($cus,JSON_PRETTY_PRINT).'</pre>'
+    ]);
+    $newuser->send();
 
     return $umeta;
 }
