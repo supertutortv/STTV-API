@@ -176,6 +176,8 @@ class Signup extends \WP_REST_Controller {
             wp_set_current_user($body['customer']['id']);
         }
 
+        return $body['plan'];
+
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
             $cus = $body['customer'];
@@ -193,8 +195,6 @@ class Signup extends \WP_REST_Controller {
             $customer->save();
 
             $plan = json_decode($body['plan'],true);
-
-            return $body;
 
             $thePars = [
                 'customer' => $customer->id,
