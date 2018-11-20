@@ -196,7 +196,7 @@ class Signup extends \WP_REST_Controller {
                 'customer' => $customer->id,
                 "items" => [
                     [
-                        'plan' => $body['plan']['id']
+                        'plan' => $body['plan']->id
                     ]
                 ],
                 'cancel_at_period_end' => true,
