@@ -123,7 +123,7 @@ function customer_subscription_created( $data ) {
 
     $umeta['courses'][] = $courses;
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-    return $umeta;
+    return gettype($obj['plan']['metadata']['courses']);
 }
 
 /* function customer_subscription_update( $data ) {
