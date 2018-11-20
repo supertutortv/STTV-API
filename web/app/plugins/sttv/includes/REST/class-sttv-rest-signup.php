@@ -192,7 +192,7 @@ class Signup extends \WP_REST_Controller {
             $customer->shipping = $cus['shipping'];
             $customer->save();
 
-            return gettype($body['plan']);
+            $plan = json_decode($body['plan'],true);
             
             //Begin Order Processing
             $order = new \STTV\Checkout\Order( 'create', [
@@ -204,7 +204,7 @@ class Signup extends \WP_REST_Controller {
                 ],
                 'items' => [
                     [
-                        'plan' => $plan
+                        'plan' => $plan['id']
                     ]
                 ]
             ]);
