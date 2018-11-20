@@ -197,7 +197,7 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
-                'items' => [
+                "items" => [
                     [
                         'plan' => $plan['id']
                     ]
