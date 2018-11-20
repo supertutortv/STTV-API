@@ -126,8 +126,6 @@ class Signup extends \WP_REST_Controller {
             $email = strtolower($email);
             $fullname = $firstname.' '.$lastname;
 
-            return [$firstname,$lastname,$email,$password];
-
             if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
             if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
@@ -138,22 +136,11 @@ class Signup extends \WP_REST_Controller {
                 'first_name' => $firstname,
                 'last_name' => $lastname,
                 'display_name' => $fullname,
+                'user_login' => 'st',
+                'role' => 'student',
                 'show_admin_bar_front' => 'false'
             ];
-
-            $login = wp_get_current_user();
-            if ($login->ID === 0) {
-                $creds = $creds + [
-                    'user_login' => 'st',
-                    'role' => 'student'
-                ];
-                $user_id = wp_insert_user($creds);
-            } else {
-                $creds = $creds + [
-                    'ID' => $login->ID
-                ];
-                // $user_id = wp_update_user($creds);
-            }
+            $user_id = wp_insert_user($creds);
 
             if ( is_wp_error( $user_id ) ) {
                 return sttv_rest_response(
@@ -166,17 +153,14 @@ class Signup extends \WP_REST_Controller {
 
             $login = wp_set_current_user($user_id);
 
-            $customer = (new \STTV\Checkout\Customer( 'create', [
+            $customer = \Stripe\Customer::create([
                 'description' => $fullname,
                 'email' => $email,
+                'source' => $cus['token'] ?: null,
+                'coupon' => $body['pricing']['coupon']['id'] ?: null,
+                'shipping' => $cus['shipping'],
                 'metadata' => [ 'wp_id' => $user_id ]
-            ]))->response();
-            
-            $customer = \Stripe\Customer::retrieve($cid);
-            $customer->source = $cus['token'] ?: null;
-            $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
-            $customer->shipping = $cus['shipping'];
-            $customer->save();
+            ]);
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
