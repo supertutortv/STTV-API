@@ -192,7 +192,7 @@ class Signup extends \WP_REST_Controller {
             $customer->shipping = $cus['shipping'];
             $customer->save();
 
-            return $body['plan'];
+            return $body['plan']['id'];
             
             //Begin Order Processing
             $order = new \STTV\Checkout\Order( 'create', [
