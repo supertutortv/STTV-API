@@ -206,8 +206,6 @@ class Signup extends \WP_REST_Controller {
                 ],
                 'trial_period_days' => $skiptrial ? 0 : 5
             ];
-
-            return $thePars;
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create($thePars);
