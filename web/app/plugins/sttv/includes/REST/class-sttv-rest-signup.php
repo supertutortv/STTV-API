@@ -210,7 +210,14 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $order = \Stripe\Subscription::create($thePars);
 
-            if ( $priship ) {}
+            if ( $priship ) {
+                \Stripe\Charge::create([
+                    "amount" => 795,
+                    "currency" => "usd",
+                    "source" => $cus['token'], // obtained with Stripe.js
+                    "description" => "Priority shipping for ".$cus['shipping']['name']
+                ]);
+            }
 
             $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);
