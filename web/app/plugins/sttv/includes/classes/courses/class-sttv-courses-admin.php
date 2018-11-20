@@ -11,7 +11,6 @@ class Admin {
 	}
 	
 	public function admin_course_meta( $user_id ) {
-		if ( !user_can($user_id,'manage_posts') ) return false;
 			return update_user_meta( $user_id, 'sttv_user_data', [
 				'user' => [
 					'history' => [],
