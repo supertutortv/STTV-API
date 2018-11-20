@@ -75,13 +75,14 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		global $wpdb;
 		$userid = get_current_user_id();
-		return $userid;
+		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
 		$admin = current_user_can('manage_options');
 
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
+		return $access;
 		if ( empty( $access ) ) return sttv_rest_response(
 			'dataInvalid',
 			'We\'re building the course data for you. Please wait...',
