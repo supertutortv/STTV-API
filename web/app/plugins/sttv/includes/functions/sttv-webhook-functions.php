@@ -121,7 +121,7 @@ function customer_subscription_created( $data ) {
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
 
-    $umeta['courses'][] = $courses;
+    $umeta['courses'] = $courses;
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
     return $umeta;
 }
