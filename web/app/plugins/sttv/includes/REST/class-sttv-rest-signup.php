@@ -192,11 +192,15 @@ class Signup extends \WP_REST_Controller {
             $customer->shipping = $cus['shipping'];
             $customer->save();
 
+            $plan = json_decode($body['plan'],true);
+
+            return gettype($plan);
+
             $thePars = [
                 'customer' => $customer->id,
                 "items" => [
                     [
-                        'plan' => $body['plan']->id
+                        'plan' => ''
                     ]
                 ],
                 'cancel_at_period_end' => true,
