@@ -75,6 +75,7 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		global $wpdb;
 		$userid = get_current_user_id();
+		return wp_get_current_user();
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
