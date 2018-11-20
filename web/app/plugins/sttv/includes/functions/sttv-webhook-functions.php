@@ -123,6 +123,10 @@ function customer_subscription_created( $data ) {
 
     $umeta['courses'] = $courses;
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+
+    $roles = explode('|',$meta['roles']);
+    foreach ( $roles as $role ) $user->add_role($role);
+
     return $umeta;
 }
 
@@ -132,56 +136,12 @@ function customer_subscription_created( $data ) {
 
 // invoice.created
 function invoice_created( $data ) {
-    $obj = $data['data']['object'];
-    $meta = $obj['metadata'];
-    $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $courses = json_decode($meta['plan'],true);
-
-    foreach ( $courses as $course ) {
-        $cmeta = get_post_meta( $course, 'sttv_course_data', true );
-        $umeta['courses'][$cmeta['slug']] = [];
-        foreach($cmeta['capabilities'] as $cap) $user->add_cap( $cap );
-    }
-    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-
-    global $wpdb;
-    return $wpdb->insert( $wpdb->prefix.'trial_reference',
-        [
-            'invoice_id' => $obj['id'],
-            'wp_id' => $obj['metadata']['wp_id'] ?? 0,
-            'exp_date' => $obj['due_date']
-        ],
-        [
-            '%s',
-            '%d',
-            '%d'
-        ]
-    );
+    
 }
 
 // invoice.updated
 function invoice_updated( $data ) {
-    global $wpdb;
-    $obj = $data['data']['object'];
-    $umeta = get_user_meta( $obj['metadata']['wp_id'], 'sttv_user_data', true );
 
-    if ( isset($data['data']['previous_attributes']['hosted_invoice_url']) )
-        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_url'] = $obj['hosted_invoice_url'] ?? '';
-    if ( isset($data['data']['previous_attributes']['invoice_pdf']) )
-        $umeta['user']['userdata']['orders'][$obj['id']]['invoice_pdf'] = $obj['invoice_pdf'] ?? '';
-
-    if ( $obj['closed'] === true && $obj['amount_remaining'] > 0 )
-        return $wpdb->update( $wpdb->prefix.'trial_reference',
-            [
-                'exp_date' => time(),
-                'is_trash' => 1
-            ],
-            [
-                'invoice_id' => $obj['id']
-            ]
-        );
-    return false;
 }
 
 // invoice.payment_succeeded
