@@ -136,6 +136,8 @@ function customer_subscription_created( $data ) {
         case 'COMBO':
             $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER</b> and <b>THE BEST SAT PREP COURSE EVER!</b>
             <br/><br/>
+            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
+            <br/><br/>
             If you’re in the US, and not on the free limited access trial, we’ll be shipping out your books soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day for the ACT series only.
             <br/><br/>
             We recommend you start by taking a full practice test and then logging in to the course to review your answers for each test. For the ACT, you can find link to the first free test, so you can get started right away, here:
@@ -161,6 +163,8 @@ function customer_subscription_created( $data ) {
         case 'SAT':
             $message = 'Welcome to the <b>BEST SAT PREP COURSE EVER!</b>
             <br/><br/>
+            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
+            <br/><br/>
             If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
             <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>
             <br/><br/>
@@ -176,6 +180,8 @@ function customer_subscription_created( $data ) {
             break;
         case 'ACT':
             $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER!</b>
+            <br/><br/>
+            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
             <br/><br/>
             If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day.
             <br/><br/>
