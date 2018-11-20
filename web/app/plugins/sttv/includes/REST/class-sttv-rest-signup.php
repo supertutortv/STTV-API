@@ -54,6 +54,13 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
+            '/trial' => [
+				[
+                    'methods' => 'DELETE',
+                    'callback' => [ $this, 'stCancelTrial' ],
+                    'permission_callback' => 'sttv_verify_web_token'
+                ]
+            ],
             '/account' => $steps,
             '/pay' => $steps
 		];
@@ -187,6 +194,8 @@ class Signup extends \WP_REST_Controller {
                 ]);
             }
 
+            update_user_meta( $user_id, 'subscriptions', json_encode($order) );
+
             $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);
 
@@ -211,6 +220,10 @@ class Signup extends \WP_REST_Controller {
         } else {
             return sttv_rest_response( 'bad_request', 'Valid parameters are required to use this method/endpoint combination. Only one parameter is allowed per request, and parameters must have value.', 400 );
         }
+    }
+
+    public function stCancelTrial( WP_REST_Request $request ) {
+        return wp_get_current_user();
     }
 
     private function check_coupon( $coupon, $sig ) {
