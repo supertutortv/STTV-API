@@ -22,7 +22,7 @@ class Admin {
                 'metadata' => [ 'roles' => 'the_best_sat_prep_course_ever' ]
             ]);
         } finally {
-            $satplans = \Stripe\Plan::all(['product'=>'SAT']);
+            $satplans = \Stripe\Plan::all(['product'=>'SAT','active'=>true]);
 
             $sat->plans = $satplans->data;
             $sat->price = 0;
@@ -42,7 +42,7 @@ class Admin {
                 'metadata' => [ 'roles' => 'the_best_act_prep_course_ever' ]
             ]);
         } finally {
-            $actplans = \Stripe\Plan::all(['product'=>'ACT']);
+            $actplans = \Stripe\Plan::all(['product'=>'ACT','active'=>true]);
 
             $act->plans = $actplans->data;
             $act->price = 0;
@@ -62,7 +62,7 @@ class Admin {
                 'metadata' => [ 'roles' => 'the_best_sat_prep_course_ever|the_best_act_prep_course_ever' ]
             ]);
         } finally {
-            $comboplans = \Stripe\Plan::all(['product'=>'COMBO']);
+            $comboplans = \Stripe\Plan::all(['product'=>'COMBO','active'=>true]);
 
             $combo->plans = $comboplans->data;
             $combo->price = 0;
