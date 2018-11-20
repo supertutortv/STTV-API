@@ -127,6 +127,8 @@ function customer_subscription_created( $data ) {
     $roles = explode('|',$meta['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
 
+    if ( $obj['status'] === 'trialing' ) $user->add_cap('course_trialing');
+
     return $umeta;
 }
 
