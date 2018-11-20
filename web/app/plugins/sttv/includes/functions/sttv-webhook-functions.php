@@ -132,12 +132,76 @@ function customer_subscription_created( $data ) {
 
     $message = 'Welcome';
 
-    /* $welcome = new \STTV\Email([
+    switch ($obj['plan']['product']) {
+        case 'COMBO':
+            $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER</b> and <b>THE BEST SAT PREP COURSE EVER!</b>
+            <br/><br/>
+            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your books soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day for the ACT series only.
+            <br/><br/>
+            We recommend you start by taking a full practice test and then logging in to the course to review your answers for each test. For the ACT, you can find link to the first free test, so you can get started right away, here:
+            <a href="https://supertutortv.com/actcourseresources">https://supertutortv.com/actcourseresources</a>
+            <br/>
+            While you’re on that page, you can also access our pacing guides (i.e. to do lists) and ACT spreadsheet so you can start making a study game plan to get the most out of this course.
+            <br/><br/>
+            For the SAT, We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
+            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>.
+            <br/>
+            You can also check out our SAT spreadsheet for a list of what’s on the course to help customize your own study schedule!
+            <br/><br/>
+            We just launched a new platform, so thanks for your patience as we optimize the course. 
+            <br/><br/>
+            We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
+            <br/><br/>
+            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
+            <br/><br/>
+            Thanks and now it’s time to CRUSH THESE TESTS!
+            <br/><br/>
+            Brooke';
+            break;
+        case 'SAT':
+            $message = 'Welcome to the <b>BEST SAT PREP COURSE EVER!</b>
+            <br/><br/>
+            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
+            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>
+            <br/><br/>
+            Get organized! <a href="https://docs.google.com/spreadsheets/d/1t8uNSWfbUQPQhD569OGlM6Poo0B03P3jA0vYu8JFoH8/edit?usp=sharing">Check out our spreadsheet</a> for a list of what’s on the course to help customize your own study schedule!
+            <br/><br/>
+            We just launched, so thanks for your patience as we optimize the course.  We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
+            <br/><br/>
+            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
+            <br/><br/>
+            Thanks and now it’s time to CRUSH THE SAT!
+            <br/><br/>
+            Brooke';
+            break;
+        case 'ACT':
+            $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER!</b>
+            <br/><br/>
+            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day.
+            <br/><br/>
+            We recommend you start by taking a full practice test and then logging in to the course to review your answers. You can find link to the first free test, so you can get started right away, here:
+            <a href="https://supertutortv.com/actcourseresources">https://supertutortv.com/actcourseresources</a>
+            <br/><br/>
+            While you’re on that page, you can also access our pacing guides (i.e. to do lists) so you can start making a study game plan to get the most out of this course.
+            <br/><br/>
+            We just launched a new platform, so thanks for your patience as we optimize the course. 
+            <br/><br/>
+            We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
+            <br/><br/>
+            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
+            <br/><br/>
+            Thanks and now it’s time to CRUSH THE ACT!
+            <br/><br/>
+            Brooke';
+            break;
+    }
+
+    $welcome = new \STTV\Email([
         'to' => $user->user_email,
         'subject' => 'Welcome!',
         'message' => $message
     ]);
-    $welcome->send(); */
+    $welcome->send();
 
     $newuser = new \STTV\Email([
         'to' => 'info@supertutortv.com',
