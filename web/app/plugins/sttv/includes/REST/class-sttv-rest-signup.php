@@ -195,16 +195,20 @@ class Signup extends \WP_REST_Controller {
             $plan = json_decode($body['plan'],true);
             
             //Begin Order Processing
-            $order = new \STTV\Checkout\Order( 'create', [
+            $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
-                'trial' => $skiptrial ? 0 : 5,
+                'items' => [
+                    [
+                        'plan' => $plan['id']
+                    ]
+                ],
+                'cancel_at_period_end' => true,
                 'metadata' => [
                     'checkout_id' => $body['session']['id'],
                     'wp_id' => $user->ID
                 ],
-                'plan' => $plan['id']
+                'trial_period_days' => $skiptrial ? 0 : 5
             ]);
-            $response = $order->response();
 
             if ( $priship ) {}
 
@@ -212,11 +216,11 @@ class Signup extends \WP_REST_Controller {
             sttv_set_auth_cookie($token->token);
 
             return sttv_rest_response(
-                'checkout_success',
+                'checkoutSuccess',
                 'Thank you for signing up! You will be redirected shortly.',
                 200,
                 [
-                    'response' => $response
+                    'response' => $order
                 ]
             );
         });
