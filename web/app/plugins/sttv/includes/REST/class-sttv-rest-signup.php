@@ -192,8 +192,6 @@ class Signup extends \WP_REST_Controller {
             $customer->shipping = $cus['shipping'];
             $customer->save();
 
-            $plan = json_decode($body['plan'],true);
-
             $thePars = [
                 'customer' => $customer->id,
                 "items" => [
