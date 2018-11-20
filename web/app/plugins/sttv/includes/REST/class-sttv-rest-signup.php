@@ -201,8 +201,10 @@ class Signup extends \WP_REST_Controller {
                     'wp_id' => $user->ID
                 ],
                 'items' => [
-                    'plan' => $body['plan']['id'],
-                    'qty' => 1
+                    [
+                        'plan' => $body['plan']['id'],
+                        'qty' => 1
+                    ]
                 ]
             ]);
             $response = $order->response();
