@@ -173,7 +173,7 @@ class Signup extends \WP_REST_Controller {
                 'cancel_at_period_end' => true,
                 'metadata' => [
                     'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user->ID
+                    'wp_id' => $user_id
                 ],
                 'trial_period_days' => $skiptrial ? 0 : 5
             ]);
