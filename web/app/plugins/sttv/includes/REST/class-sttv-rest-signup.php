@@ -177,7 +177,6 @@ class Signup extends \WP_REST_Controller {
         }
 
         return sttv_stripe_errors(function() use ($body) {
-            return $body;
             $customer = $create_invoice = $cid = $login = $items = $user = false;
             $cus = $body['customer'];
             $user = wp_get_current_user();
@@ -192,8 +191,6 @@ class Signup extends \WP_REST_Controller {
             $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
-
-            return $body;
             
             //Begin Order Processing
             $order = new \STTV\Checkout\Order( 'create', [
