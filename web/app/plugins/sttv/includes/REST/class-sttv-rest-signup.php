@@ -77,8 +77,6 @@ class Signup extends \WP_REST_Controller {
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
-        return $body;
-
         return $this->$ep($body,$request);
     }
 
@@ -179,6 +177,7 @@ class Signup extends \WP_REST_Controller {
         }
 
         return sttv_stripe_errors(function() use ($body) {
+            return $body;
             $customer = $create_invoice = $cid = $login = $items = $user = false;
             $cus = $body['customer'];
             $user = wp_get_current_user();
