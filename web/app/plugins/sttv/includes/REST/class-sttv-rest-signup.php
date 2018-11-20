@@ -74,8 +74,6 @@ class Signup extends \WP_REST_Controller {
         
         if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
 
-        return $body;
-
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
 
@@ -178,8 +176,6 @@ class Signup extends \WP_REST_Controller {
             wp_set_current_user($body['customer']['id']);
         }
 
-        return $body['plan'];
-
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
             $cus = $body['customer'];
@@ -202,7 +198,7 @@ class Signup extends \WP_REST_Controller {
                 'customer' => $customer->id,
                 "items" => [
                     [
-                        'plan' => ''
+                        'plan' => $body['plan']['id']
                     ]
                 ],
                 'cancel_at_period_end' => true,
