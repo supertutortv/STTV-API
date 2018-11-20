@@ -80,8 +80,6 @@ class Courses extends \WP_REST_Controller {
 
 		$admin = current_user_can('manage_options');
 
-		return $umeta;
-
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
 		if ( empty( $access ) ) return sttv_rest_response(
@@ -217,6 +215,8 @@ class Courses extends \WP_REST_Controller {
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
+
+		return $umeta;
 		
 		return sttv_rest_response(
 			'user_course_data_success',
