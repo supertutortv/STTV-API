@@ -81,20 +81,54 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _account( $body, $request ) {
-        $verify = sttv_verify_web_token($request);
-        $loggedin = !is_wp_error($verify);
+        extract($body);
+        $firstname = ucfirst(strtolower($firstname));
+        $lastname = ucfirst(strtolower($lastname));
+        $email = strtolower($email);
+        $fullname = $firstname.' '.$lastname;
 
-        return sttv_stripe_errors(function() use ($body,$loggedin) {
+        if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
 
-            extract($body);
+        if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. If this is you, please login and make your purchase through the dashboard. ', 200 );
+
+        return sttv_rest_response(
+            'signupSuccess',
+            'Account created',
+            200,
+            [
+                'update' => [
+                    'email' => $email,
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'password' => $password
+                ]
+            ]
+        );
+    }
+
+    private function _pay( $body, $request ) {
+        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
+
+        return sttv_stripe_errors(function() use ($body) {
+            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
+            $items = $courseids = [];
+
+            $cus = $body['customer'];
+            $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
+            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
+            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
+            
+            extract($cus['account']);
             $firstname = ucfirst(strtolower($firstname));
             $lastname = ucfirst(strtolower($lastname));
             $email = strtolower($email);
             $fullname = $firstname.' '.$lastname;
 
+            return [$firstname,$lastname,$email,$password];
+
             if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
     
-            if ( email_exists( $email ) && $loggedin ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
+            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
 
             $creds = [
                 'user_pass' => $password,
@@ -116,7 +150,7 @@ class Signup extends \WP_REST_Controller {
                 $creds = $creds + [
                     'ID' => $login->ID
                 ];
-                $user_id = wp_update_user($creds);
+                // $user_id = wp_update_user($creds);
             }
 
             if ( is_wp_error( $user_id ) ) {
@@ -135,64 +169,15 @@ class Signup extends \WP_REST_Controller {
                 'email' => $email,
                 'metadata' => [ 'wp_id' => $user_id ]
             ]))->response();
-
-            return sttv_rest_response(
-                'signupSuccess',
-                'Account created',
-                200,
-                [
-                    'update' => [
-                        'id' => $user_id
-                    ]
-                ]
-            );
-        });
-    }
-
-    private function _plan( $body ) {
-        extract($body);
-        $meta = get_post_meta(sttv_id_decode($id),'pricing_data',true)[$id];
-
-        ob_start();
-        include_once STTV_TEMPLATE_DIR.'signup/billing.php';
-        $html = ob_get_clean();
-
-        return sttv_rest_response( 'signup_success', 'Pricing retrieved', 200, [
-            'html' => $html,
-            'update' => [
-                'name' => $meta['name'],
-                'price' => $meta['price'],
-                'taxable' => $meta['taxable']
-            ]
-        ]);
-    }
-
-    private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
-
-        $verify = sttv_verify_web_token($request);
-
-        if (is_wp_error($verify) || !$verify->ID) {
-            wp_set_current_user($body['customer']['id']);
-        }
-
-        return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
-            $cus = $body['customer'];
-            $user = wp_get_current_user();
-            $cid = 'cus_'.$user->user_login;
-            $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
-            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-            $items = $courseids = [];
             
             $customer = \Stripe\Customer::retrieve($cid);
             $customer->source = $cus['token'] ?: null;
             $customer->coupon = $body['pricing']['coupon']['id'] ?: null;
             $customer->shipping = $cus['shipping'];
             $customer->save();
-
-            $thePars = [
+            
+            //Begin Order Processing
+            $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 "items" => [
                     [
@@ -205,16 +190,13 @@ class Signup extends \WP_REST_Controller {
                     'wp_id' => $user->ID
                 ],
                 'trial_period_days' => $skiptrial ? 0 : 5
-            ];
-            
-            //Begin Order Processing
-            $order = \Stripe\Subscription::create($thePars);
+            ]);
 
             if ( $priship ) {
                 \Stripe\Charge::create([
                     "amount" => 795,
                     "currency" => "usd",
-                    "source" => $cus['token'], // obtained with Stripe.js
+                    "source" => $cus['token'],
                     "description" => "Priority shipping for ".$cus['shipping']['name']
                 ]);
             }
