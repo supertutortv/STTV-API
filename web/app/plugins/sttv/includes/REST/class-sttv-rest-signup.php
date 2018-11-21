@@ -61,9 +61,6 @@ class Signup extends \WP_REST_Controller {
                     'permission_callback' => 'sttv_verify_web_token'
                 ]
             ],
-            '/cancel' => [
-
-            ],
             '/account' => $steps,
             '/pay' => $steps
 		];
