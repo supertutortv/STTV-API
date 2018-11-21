@@ -61,6 +61,9 @@ class Signup extends \WP_REST_Controller {
                     'permission_callback' => 'sttv_verify_web_token'
                 ]
             ],
+            '/cancel' => [
+
+            ],
             '/account' => $steps,
             '/pay' => $steps
 		];
@@ -223,7 +226,18 @@ class Signup extends \WP_REST_Controller {
     }
 
     public function stCancelTrial( WP_REST_Request $request ) {
-        return wp_get_current_user();
+        $user = wp_get_current_user();
+        $umeta = get_user_meta( $user->ID, 'sttv_user_data', true );
+        $subs = $umeta['subscriptions'];
+
+        if ( empty($subs) ) {
+            $cus = \Stripe\Customer::retrieve('cus_'.$user->user_login);
+            foreach ( $cus['subscriptions']['data'] as $sub ) $subs[] = $sub['id'];
+        }
+
+        foreach ( $subs as $sub ) {
+
+        }
     }
 
     private function check_coupon( $coupon, $sig ) {

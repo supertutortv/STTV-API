@@ -7,60 +7,7 @@ defined( 'ABSPATH' ) || exit;
 ##############################
 
 // trial.expiration.checker
-function trial_expiration_checker() {
-    global $wpdb;
-    $time = time();
-    $ref_table = "{$wpdb->prefix}trial_reference";
-    $returned = [];
-
-    // Garbage Collection
-    $garbage = $wpdb->get_results(
-        $wpdb->prepare( "SELECT * FROM $ref_table WHERE exp_date < %d AND is_trash = %d", [ $time, 1 ] )
-    , ARRAY_A );
-
-    if ( !empty( $garbage ) ) {
-        foreach ( $garbage as $g ) {
-            $umeta = get_user_meta( $g['wp_id'], 'sttv_user_data', true );
-            if ( ( $g['exp_date'] > 0 ) && $umeta ) {
-                try {
-                    $customer = \Stripe\Customer::retrieve( $umeta['customer'] );
-                    $customer->delete();
-                } catch ( Exception $e ) {
-                    $returned[] = $e->getJsonBody();
-                    continue;
-                }
-            }
-            
-            $wpdb->delete( $ref_table,
-                [
-                    'invoice_id' => $g['invoice_id']
-                ]
-            );
-        }
-        $returned[] = $garbage;
-    }
-
-    //Invoices
-    $invs = $wpdb->get_results( 
-        $wpdb->prepare( "SELECT invoice_id,exp_date FROM $ref_table WHERE exp_date < %d", [ $time ] )
-    , ARRAY_A );
-
-    if ( !empty( $invs ) ) {
-        foreach ( $invs as $inv ) {
-            if ( $inv['exp_date'] !== 0 ) {
-                try {
-                    $pay = \Stripe\Invoice::retrieve( $inv['invoice_id'] );
-                    $pay->pay();
-                } catch ( Exception $e ) {
-                    continue;
-                }
-            }
-        }
-        $returned[] = $invs;
-    }
-
-    return $returned ?: false ;
-}
+function trial_expiration_checker() {}
 
 //api.duplicate.user
 function api_duplicate_user($data) {
@@ -86,6 +33,7 @@ function customer_created( $data ) {
 
     return update_user_meta( $user_id, 'sttv_user_data', [
         'user' => [
+            'subscription' => '',
             'history' => [],
             'downloads' => [],
             'type' => 'standard',
@@ -123,11 +71,13 @@ function customer_subscription_created( $data ) {
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
 
     $umeta['courses'] = $courses;
+    $umeta['user']['trialing'] = ( $obj['status'] === 'trialing' );
+    $umeta['subscriptions'][] = $obj['id'];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+    update_user_meta( $meta['wp_id'], 'subscriptions', $subs );
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
-
     if ( $obj['status'] === 'trialing' ) $user->add_cap('course_trialing');
 
     $message = 'Welcome';
@@ -219,19 +169,42 @@ function customer_subscription_created( $data ) {
     return $umeta;
 }
 
-/* function customer_subscription_update( $data ) {
+function customer_subscription_updated( $data ) {
+    $obj = $data['data']['object'];
+    $meta = $obj['metadata'];
+    $prev = $data['data']['previous_attributes'];
+    $user = get_userdata( $meta['wp_id'] );
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
 
-} */
+    if (!$user) return $user;
+
+    foreach ($prev as $attr => $val) {
+        switch($attr) {
+            case 'status':
+                if ($val === 'trialing' && $obj['status'] === 'active') {
+                    $user->remove_cap('course_trialing');
+                    $umeta['user']['trialing'] = false;
+                    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+                }
+            break;
+        }
+    }
+}
+
+// customer.subscription.deleted
+function customer_subscription_deleted( $data ) {}
+
+// charge.succeeded
+function charge_succeeded( $data ) {}
 
 // invoice.created
-function invoice_created( $data ) {
-    
-}
+function invoice_created( $data ) {}
 
 // invoice.updated
-function invoice_updated( $data ) {
+function invoice_updated( $data ) {}
 
-}
+// invoice.finalized
+function invoice_finalized( $data ) {}
 
 // invoice.payment_succeeded
 function invoice_payment_succeeded( $data ) {
