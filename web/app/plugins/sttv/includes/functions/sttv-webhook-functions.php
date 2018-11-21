@@ -72,9 +72,8 @@ function customer_subscription_created( $data ) {
 
     $umeta['courses'] = $courses;
     $umeta['user']['trialing'] = ( $obj['status'] === 'trialing' );
-    $umeta['subscriptions'][] = $obj['id'];
+    $umeta['user']['subscription'] = $obj['id'];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-    update_user_meta( $meta['wp_id'], 'subscriptions', $subs );
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);

@@ -54,10 +54,10 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
-            '/trial' => [
+            '/cancel' => [
 				[
-                    'methods' => 'DELETE',
-                    'callback' => [ $this, 'stCancelTrial' ],
+                    'methods' => 'POST',
+                    'callback' => [ $this, 'stCancellations' ],
                     'permission_callback' => 'sttv_verify_web_token'
                 ]
             ],
@@ -224,19 +224,37 @@ class Signup extends \WP_REST_Controller {
         }
     }
 
-    public function stCancelTrial( WP_REST_Request $request ) {
+    public function stCancellations( WP_REST_Request $request ) {
+        $body = json_decode($request->get_body(),true);
         $user = wp_get_current_user();
         $umeta = get_user_meta( $user->ID, 'sttv_user_data', true );
-        $subs = $umeta['subscriptions'];
 
-        if ( empty($subs) ) {
-            $cus = \Stripe\Customer::retrieve('cus_'.$user->user_login);
-            foreach ( $cus['subscriptions']['data'] as $sub ) $subs[] = $sub['id'];
+        if ( !isset($body['subscription']) ) return sttv_rest_response( 'signupError', 'A valid subscription id must be provided to cancel a subscription or trial.', 200 );
+
+        if ( $umeta['user']['subscription'] !== $body['subscription'] ) return sttv_rest_response( 'signupError', 'Something went wrong on our end. No action has been taken.', 200, [ 'additional' => 'Subscription ID provided did not match the user subscription on file.' ] );
+
+        $sub = \Stripe\Subscription::retrieve($body['subscription']);
+
+        switch($body['action']) {
+            case 'trial':
+                $sub->trial_end = 'now';
+                $sub->save();
+            break;
+            case 'subscription':
+                $sub->cancel();
+            break;
+            default:
+                return sttv_rest_response( 'signupError', 'A valid cancellation action must be passed with this request.', 200 );
         }
 
-        foreach ( $subs as $sub ) {
-
-        }
+        return sttv_rest_response(
+            'cancellationSuccess',
+            'Your request has been processed.',
+            200,
+            [
+                'response' => $sub
+            ]
+        );
     }
 
     private function check_coupon( $coupon, $sig ) {
