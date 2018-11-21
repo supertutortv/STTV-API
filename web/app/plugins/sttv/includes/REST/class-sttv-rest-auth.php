@@ -100,8 +100,6 @@ class Auth extends \WP_REST_Controller {
         // attempt login
         $login = wp_authenticate( $body['username'], $body['password'] );
 
-        return $login;
-
         // checks if WP_Error is thrown after login attempt
         if ( is_wp_error( $login ) )
             return sttv_rest_response(
