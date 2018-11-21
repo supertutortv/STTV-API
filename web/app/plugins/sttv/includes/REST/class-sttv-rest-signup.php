@@ -237,7 +237,8 @@ class Signup extends \WP_REST_Controller {
                 return sttv_rest_response(
                     'signupSuccess',
                     'Trial cancelled',
-                    200
+                    200,
+                    ['extra'=>$body['subscription']]
                 );
                 /* $sub->trial_end = 'now';
                 $sub->save(); */
