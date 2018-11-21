@@ -143,7 +143,7 @@ class Signup extends \WP_REST_Controller {
                 'first_name' => $firstname,
                 'last_name' => $lastname,
                 'display_name' => $fullname,
-                'user_login' => 'st',
+                'user_login' => $email,
                 'role' => 'student',
                 'show_admin_bar_front' => 'false'
             ];
