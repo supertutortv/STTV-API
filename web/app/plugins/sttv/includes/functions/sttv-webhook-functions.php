@@ -191,7 +191,18 @@ function customer_subscription_updated( $data ) {
 }
 
 // customer.subscription.deleted
-function customer_subscription_deleted( $data ) {}
+function customer_subscription_deleted( $data ) {
+    $obj = $data['data']['object'];
+    $roles = explode('|',$obj['plan']['metadata']['roles']);
+    $meta = $obj['metadata'];
+    $user = get_userdata( $meta['wp_id'] );
+
+    foreach ($roles as $role) {
+        $user->remove_role( $role );
+    }
+
+    return $roles;
+}
 
 // charge.succeeded
 function charge_succeeded( $data ) {}
