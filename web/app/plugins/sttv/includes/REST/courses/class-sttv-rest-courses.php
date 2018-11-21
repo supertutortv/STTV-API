@@ -77,7 +77,7 @@ class Courses extends \WP_REST_Controller {
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
 
-		if ($user->user_email === 'brookifyd@yahoo.com') update_user_meta( $userid, 'sttv_user_data', [
+		if ($user->user_email === 'angelrawencraw@gmail.com') update_user_meta( $userid, 'sttv_user_data', [
 			'user' => [
 				'history' => [],
 				'downloads' => [],
@@ -91,7 +91,9 @@ class Courses extends \WP_REST_Controller {
 					'login_timestamps' => []
 				]
 			],
-			'courses' => []
+			'courses' => [
+				'the-best-sat-prep-course-ever'=>[]
+			]
 		]);
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
