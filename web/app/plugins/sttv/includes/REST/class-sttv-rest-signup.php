@@ -237,18 +237,28 @@ class Signup extends \WP_REST_Controller {
 
         switch($body['action']) {
             case 'trial':
-                $sub->trial_end = 'now';
-                $sub->save();
+                return sttv_rest_response(
+                    'signupSuccess',
+                    'Trial cancelled',
+                    200
+                );
+                /* $sub->trial_end = 'now';
+                $sub->save(); */
             break;
             case 'subscription':
-                $sub->cancel();
+                return sttv_rest_response(
+                    'signupSuccess',
+                    'Trial cancelled',
+                    200
+                );
+                /* $sub->cancel(); */
             break;
             default:
                 return sttv_rest_response( 'signupError', 'A valid cancellation action must be passed with this request.', 200 );
         }
 
         return sttv_rest_response(
-            'cancellationSuccess',
+            'signupSuccess',
             'Your request has been processed.',
             200,
             [
