@@ -144,7 +144,6 @@ class Signup extends \WP_REST_Controller {
                 'last_name' => $lastname,
                 'display_name' => $fullname,
                 'user_login' => $email,
-                'role' => 'student',
                 'show_admin_bar_front' => 'false'
             ];
             $user_id = wp_insert_user($creds);
