@@ -97,6 +97,7 @@ class Auth extends \WP_REST_Controller {
         // get username and password from request
         $body = json_decode($request->get_body(),true);
 
+        return [$body['username'], $body['password']];
         // attempt login
         $login = wp_authenticate( $body['username'], $body['password'] );
 
