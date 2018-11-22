@@ -188,7 +188,7 @@ class Signup extends \WP_REST_Controller {
                 \Stripe\Charge::create([
                     "amount" => 795,
                     "currency" => "usd",
-                    "source" => $cus['token'],
+                    "customer" => $customer->id,
                     "description" => "Priority shipping for ".$cus['shipping']['name']
                 ]);
             }
