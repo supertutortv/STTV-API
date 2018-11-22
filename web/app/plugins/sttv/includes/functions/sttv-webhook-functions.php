@@ -176,7 +176,7 @@ function customer_subscription_created( $data ) {
     ]);
     $newuser->send();
 
-    return $umeta;
+    return $meta;
 }
 
 function customer_subscription_updated( $data ) {
