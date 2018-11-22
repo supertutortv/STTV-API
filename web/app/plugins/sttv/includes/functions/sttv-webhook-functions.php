@@ -77,7 +77,18 @@ function customer_subscription_created( $data ) {
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
-    if ( $obj['status'] === 'trialing' ) $user->add_cap('course_trialing');
+    if ( $obj['status'] === 'trialing' )
+        $user->add_cap('course_trialing');
+    elseif ($obj['status'] === 'active') {
+        if ( $meta['priship'] == 'true' ) {
+            \Stripe\Charge::create([
+                "amount" => 795,
+                "currency" => "usd",
+                "customer" => $obj['customer'],
+                "description" => "Priority shipping for ".$cus['shipping']['name']
+            ]);
+        }
+    }
 
     $message = 'Welcome';
 

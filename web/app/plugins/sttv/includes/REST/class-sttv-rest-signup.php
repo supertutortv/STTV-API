@@ -179,21 +179,11 @@ class Signup extends \WP_REST_Controller {
                 'cancel_at_period_end' => true,
                 'metadata' => [
                     'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user_id
+                    'wp_id' => $user_id,
+                    'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
-
-            if ( $priship ) {
-                \Stripe\Charge::create([
-                    "amount" => 795,
-                    "currency" => "usd",
-                    "customer" => $customer->id,
-                    "description" => "Priority shipping for ".$cus['shipping']['name']
-                ]);
-            }
-
-            update_user_meta( $user_id, 'subscriptions', json_encode($order) );
 
             $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);
