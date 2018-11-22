@@ -123,7 +123,7 @@ class Signup extends \WP_REST_Controller {
             $items = $courseids = [];
 
             $cus = $body['customer'];
-            $skiptrial = isset($cus['options']['skipTrial']) && $cus['options']['skipTrial'];
+            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
             $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
             $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
             
@@ -181,7 +181,7 @@ class Signup extends \WP_REST_Controller {
                     'checkout_id' => $body['session']['id'],
                     'wp_id' => $user_id
                 ],
-                'trial_period_days' => $skiptrial ? 0 : 5
+                'trial_period_days' => $dotrial ? 5 : 0
             ]);
 
             if ( $priship ) {
