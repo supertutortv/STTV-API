@@ -100,7 +100,7 @@ class Courses extends \WP_REST_Controller {
 				],
 				'courses' => $crss
 			];
-			update_user_meta( $userid, 'sttv_user_data', $meta );
+			update_user_meta( $userid, 'sttv_user_data', $user );
 		}
 
 		$admin = current_user_can('manage_options');
