@@ -563,27 +563,5 @@
             "payment processing",
             "stripe"
         ]
-    },
-    {
-        "name": "wpackagist-plugin/regenerate-thumbnails",
-        "version": "3.0.2",
-        "version_normalized": "3.0.2.0",
-        "source": {
-            "type": "svn",
-            "url": "https://plugins.svn.wordpress.org/regenerate-thumbnails/",
-            "reference": "tags/3.0.2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.3.0.2.zip",
-            "reference": null,
-            "shasum": null
-        },
-        "require": {
-            "composer/installers": "~1.0"
-        },
-        "type": "wordpress-plugin",
-        "installation-source": "dist",
-        "homepage": "https://wordpress.org/plugins/regenerate-thumbnails/"
     }
 ]
