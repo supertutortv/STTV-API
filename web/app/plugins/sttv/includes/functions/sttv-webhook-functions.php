@@ -214,9 +214,14 @@ function customer_subscription_updated( $data ) {
 // customer.subscription.deleted
 function customer_subscription_deleted( $data ) {
     $obj = $data['data']['object'];
-    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
     $meta = $obj['metadata'];
+
+    if ( !isset( $meta['wp_id'] ) ) return false;
+    
     $user = get_userdata( $meta['wp_id'] );
+    if ( is_wp_error($user) ) return $user;
+
+    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
 
     foreach ($roles as $role) {
         $user->remove_role( $role );
