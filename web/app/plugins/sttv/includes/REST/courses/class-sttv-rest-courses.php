@@ -77,7 +77,7 @@ class Courses extends \WP_REST_Controller {
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
 		
-		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+		$umeta = false; //get_user_meta( $userid, 'sttv_user_data', true );
 
 		if ( !$umeta ) {
 			$crss = [];
@@ -100,7 +100,7 @@ class Courses extends \WP_REST_Controller {
 				],
 				'courses' => $crss
 			];
-			update_user_meta( $userid, 'sttv_user_data', $meta );
+			update_user_meta( $userid, 'sttv_user_data', $umeta );
 		}
 
 		$admin = current_user_can('manage_options');
@@ -111,7 +111,7 @@ class Courses extends \WP_REST_Controller {
 			'dataInvalid',
 			'We\'re building the course data for you. Please wait...',
 			200,
-			[ 'retry' => 5, 'meta' => $user ]
+			[ 'retry' => 5, 'meta' => $ume ]
 		);
 
 		foreach( $access as $slug => $data ) {
