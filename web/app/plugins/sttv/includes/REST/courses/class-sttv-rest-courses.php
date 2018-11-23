@@ -112,7 +112,7 @@ class Courses extends \WP_REST_Controller {
 			'dataInvalid',
 			'We\'re building the course data for you. Please wait...',
 			200,
-			[ 'retry' => 5 ]
+			[ 'retry' => 5, 'meta' => $umeta ]
 		);
 
 		foreach( $access as $slug => $data ) {
