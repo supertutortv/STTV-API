@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "691e0b2bc5786ba22b0b1471a1bc497a",
+    "content-hash": "e57c43c7c77dbe41a05fc11d4f558bc1",
     "packages": [
         {
             "name": "composer/installers",
@@ -355,16 +355,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v6.22.0",
+            "version": "v6.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619"
+                "reference": "ea40f3aded584285b273c3f74b3883088dbdf336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/2a87430d6cefe71c6b618e163aa05e7de97d2619",
-                "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/ea40f3aded584285b273c3f74b3883088dbdf336",
+                "reference": "ea40f3aded584285b273c3f74b3883088dbdf336",
                 "shasum": ""
             },
             "require": {
@@ -406,7 +406,7 @@
                 "payment processing",
                 "stripe"
             ],
-            "time": "2018-11-15T22:35:15+00:00"
+            "time": "2018-11-20T19:29:47+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -497,6 +497,26 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/members/"
+        },
+        {
+            "name": "wpackagist-plugin/regenerate-thumbnails",
+            "version": "3.0.2",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/regenerate-thumbnails/",
+                "reference": "tags/3.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.3.0.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/regenerate-thumbnails/"
         }
     ],
     "packages-dev": [

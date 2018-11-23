@@ -509,17 +509,17 @@
     },
     {
         "name": "stripe/stripe-php",
-        "version": "v6.22.0",
-        "version_normalized": "6.22.0.0",
+        "version": "v6.22.1",
+        "version_normalized": "6.22.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619"
+            "reference": "ea40f3aded584285b273c3f74b3883088dbdf336"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/2a87430d6cefe71c6b618e163aa05e7de97d2619",
-            "reference": "2a87430d6cefe71c6b618e163aa05e7de97d2619",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/ea40f3aded584285b273c3f74b3883088dbdf336",
+            "reference": "ea40f3aded584285b273c3f74b3883088dbdf336",
             "shasum": ""
         },
         "require": {
@@ -533,7 +533,7 @@
             "phpunit/phpunit": "~4.0",
             "squizlabs/php_codesniffer": "~2.0"
         },
-        "time": "2018-11-15T22:35:15+00:00",
+        "time": "2018-11-20T19:29:47+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -563,5 +563,27 @@
             "payment processing",
             "stripe"
         ]
+    },
+    {
+        "name": "wpackagist-plugin/regenerate-thumbnails",
+        "version": "3.0.2",
+        "version_normalized": "3.0.2.0",
+        "source": {
+            "type": "svn",
+            "url": "https://plugins.svn.wordpress.org/regenerate-thumbnails/",
+            "reference": "tags/3.0.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.3.0.2.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "type": "wordpress-plugin",
+        "installation-source": "dist",
+        "homepage": "https://wordpress.org/plugins/regenerate-thumbnails/"
     }
 ]
