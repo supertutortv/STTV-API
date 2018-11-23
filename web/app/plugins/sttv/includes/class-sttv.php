@@ -138,7 +138,9 @@ final class STTV {
         add_filter( 'ls_meta_generator', '__return_false' );
         add_filter( 'show_admin_bar', '__return_false' );
         add_filter( 'emoji_svg_url', '__return_false' );
-        add_filter( 'pre_option_default_role', '__return_false' );
+        add_filter( 'pre_option_default_role', function($dr) {
+            return '';
+        } );
 		remove_action( 'wp_head', '_admin_bar_bump_cb' );
         remove_action( 'wp_head', 'wp_generator' );
         remove_action( 'rest_api_init', 'create_initial_rest_routes', 99 );
