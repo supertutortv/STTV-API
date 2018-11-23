@@ -196,9 +196,19 @@ function customer_subscription_updated( $data ) {
                     $umeta['user']['trialing'] = false;
                     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
                 }
+
+                if ( $meta['priship'] == 'true' ) {
+                    \Stripe\Charge::create([
+                        "amount" => 795,
+                        "currency" => "usd",
+                        "customer" => $obj['customer'],
+                        "description" => "Priority shipping for ".$cus['shipping']['name']
+                    ]);
+                }
             break;
         }
     }
+    return $prev;
 }
 
 // customer.subscription.deleted
