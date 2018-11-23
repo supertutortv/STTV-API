@@ -82,7 +82,7 @@ function customer_subscription_created( $data ) {
     elseif ($obj['status'] === 'active') {
         if ( $meta['priship'] == 'true' ) {
             \Stripe\Charge::create([
-                "amount" => 795,
+                "amount" => $obj['plan']['metadata']['priship'] ?? 795,
                 "currency" => "usd",
                 "customer" => $obj['customer'],
                 "description" => "Priority shipping for ".$cus['shipping']['name']
@@ -199,7 +199,7 @@ function customer_subscription_updated( $data ) {
 
                 if ( $meta['priship'] == 'true' ) {
                     \Stripe\Charge::create([
-                        "amount" => 795,
+                        "amount" => $obj['plan']['metadata']['priship'] ?? 795,
                         "currency" => "usd",
                         "customer" => $obj['customer'],
                         "description" => "Priority shipping for ".$cus['shipping']['name']
@@ -214,7 +214,7 @@ function customer_subscription_updated( $data ) {
 // customer.subscription.deleted
 function customer_subscription_deleted( $data ) {
     $obj = $data['data']['object'];
-    $roles = explode('|',$obj['plan']['metadata']['roles']);
+    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
 
