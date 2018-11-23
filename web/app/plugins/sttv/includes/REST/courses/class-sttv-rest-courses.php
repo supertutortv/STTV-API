@@ -79,7 +79,7 @@ class Courses extends \WP_REST_Controller {
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		if ( !$umeta['courses'] ) {
+		if ( !$umeta || empty($umeta['courses']) ) {
 			$crss = [];
 
 			if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
