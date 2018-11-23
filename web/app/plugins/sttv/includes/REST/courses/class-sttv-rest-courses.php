@@ -77,7 +77,7 @@ class Courses extends \WP_REST_Controller {
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
 		
-		$umeta = false; //get_user_meta( $userid, 'sttv_user_data', true );
+		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
 		if ( !$umeta ) {
 			$crss = [];
