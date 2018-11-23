@@ -76,15 +76,14 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
-
-		$crss = [];
-
-		if ( current_user_can('the_best_sat_prep_course_ever') ) $crss['the-best-sat-prep-course-ever'] = [];
-		if ( current_user_can('the_best_act_prep_course_ever') ) $crss['the-best-act-prep-course-ever'] = [];
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
 		if ( !$umeta ) {
+			$crss = [];
+
+			if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
+			if ( current_user_can("course_act_access") ) $crss['the-best-act-prep-course-ever'] = [];
 			$umeta = [
 				'user' => [
 					'history' => [],
