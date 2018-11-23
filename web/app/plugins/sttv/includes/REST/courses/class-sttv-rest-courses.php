@@ -77,26 +77,32 @@ class Courses extends \WP_REST_Controller {
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
 
-		if ($user->user_email === 'angelrawencraw@gmail.com') update_user_meta( $userid, 'sttv_user_data', [
-			'user' => [
-				'history' => [],
-				'downloads' => [],
-				'type' => 'admin',
-				'trialing' => false,
-				'settings' => [
-					'autoplay' => false,
-					'dark_mode' => false
-				],
-				'userdata' => [
-					'login_timestamps' => []
-				]
-			],
-			'courses' => [
-				'the-best-sat-prep-course-ever'=>[]
-			]
-		]);
+		$crss = [];
+
+		if ( current_user_can('the_best_sat_prep_course_ever') ) $crss['the-best-sat-prep-course-ever'] = [];
+		if ( current_user_can('the_best_act_prep_course_ever') ) $crss['the-best-act-prep-course-ever'] = [];
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
+
+		if ( !$umeta ) {
+			$umeta = [
+				'user' => [
+					'history' => [],
+					'downloads' => [],
+					'type' => 'admin',
+					'trialing' => false,
+					'settings' => [
+						'autoplay' => false,
+						'dark_mode' => false
+					],
+					'userdata' => [
+						'login_timestamps' => []
+					]
+				],
+				'courses' => $crss
+			];
+			update_user_meta( $userid, 'sttv_user_data', $meta );
+		}
 
 		$admin = current_user_can('manage_options');
 
