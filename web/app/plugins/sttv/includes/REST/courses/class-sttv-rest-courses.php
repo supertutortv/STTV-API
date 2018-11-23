@@ -100,7 +100,7 @@ class Courses extends \WP_REST_Controller {
 				],
 				'courses' => $crss
 			];
-			update_user_meta( $userid, 'sttv_user_data', $user );
+			update_user_meta( $userid, 'sttv_user_data', $meta );
 		}
 
 		$admin = current_user_can('manage_options');
@@ -111,7 +111,7 @@ class Courses extends \WP_REST_Controller {
 			'dataInvalid',
 			'We\'re building the course data for you. Please wait...',
 			200,
-			[ 'retry' => 5, 'meta' => $umeta ]
+			[ 'retry' => 5, 'meta' => $user ]
 		);
 
 		foreach( $access as $slug => $data ) {
