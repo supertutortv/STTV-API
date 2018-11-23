@@ -179,6 +179,7 @@ function customer_subscription_created( $data ) {
     return $meta;
 }
 
+// customer.subscription.updated
 function customer_subscription_updated( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
@@ -209,6 +210,27 @@ function customer_subscription_updated( $data ) {
         }
     }
     return $prev;
+}
+
+// customer.subscription.trial_will_end
+function customer_subscription_trial_will_end( $data ) {
+    $obj = $data['data']['object'];
+    $meta = $obj['metadata'];
+    $user = get_userdata( $meta['wp_id'] );
+    $amt = number_format((float)$obj['plan']['amount']/100, 2);
+
+    $thedate = date('F d Y \at h:i:s a', $obj['trial_end']);
+
+    if ( time()+(5*MINUTE_IN_SECONDS) > $obj['trial_end'] )
+        return false;
+    else
+        $email = new \STTV\Email([
+            'to' => $user->user_email,
+            'subject' => 'Your free trial is expiring soon!',
+            'message' => "<pre>On {$thedate}, your free trial will expire. This is just a reminder that the card on file with your account will be charged ${$amt}. If you elected to get priority shipping for your books, that will show up as a separate charge. Thank you for being a SupertutorTV student!</pre>"
+        ]);
+        return $email->send();
+
 }
 
 // customer.subscription.deleted
