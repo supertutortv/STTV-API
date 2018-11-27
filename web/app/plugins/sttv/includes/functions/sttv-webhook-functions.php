@@ -223,6 +223,8 @@ function customer_subscription_updated( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
 
+    update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
+
     if (!$user) return $user;
 
     foreach ($prev as $attr => $val) {
