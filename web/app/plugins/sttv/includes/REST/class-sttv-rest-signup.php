@@ -218,7 +218,16 @@ class Signup extends \WP_REST_Controller {
 
         if ( !isset($body['subscription']) ) return sttv_rest_response( 'signupError', 'A valid subscription id must be provided to cancel a subscription or trial.', 200 );
 
-        if ( $umeta['user']['subscription'] !== $body['subscription'] ) return sttv_rest_response( 'signupError', 'Something went wrong on our end. No action has been taken.', 200, [ 'additional' => 'Subscription ID provided did not match the user subscription on file.' ] );
+        if ( $umeta['user']['subscription'] !== $body['subscription'] ) return sttv_rest_response(
+            'signupError',
+            'Something went wrong on our end. No action has been taken.',
+            200,
+            [
+                'additional' => 'Subscription ID provided did not match the user subscription on file.',
+                'meta_sub_id' => $umeta['user']['subscription'],
+                'provided_id' => $body['subscription']
+            ] 
+        );
 
         try {
             $sub = \Stripe\Subscription::retrieve($body['subscription']);
