@@ -76,8 +76,7 @@ function customer_subscription_created( $data ) {
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
-    $fullname = $user->display_name;
-    $firstlast = explode(' ', $fullname);
+    $fullname = $user->first_name.' '.$user->last_name;
 
     $umeta['courses'] = $courses;
     $umeta['user']['trialing'] = ( $obj['status'] === 'trialing' );
@@ -107,6 +106,7 @@ function customer_subscription_created( $data ) {
 
     $testname = $matches[1];
     $coursename = $prod->name;
+    $bookname = $getstarted = '';
 
     switch ($obj['plan']['product']) {
         case 'COMBO':
@@ -192,7 +192,7 @@ function customer_subscription_created( $data ) {
         'content' => [
             [
                 'name' => 'fname',
-                'content' => $firstlast[0]
+                'content' => $user->first_name
             ],
             [
                 'name' => 'coursename',
