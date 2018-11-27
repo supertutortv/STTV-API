@@ -220,39 +220,52 @@ class Signup extends \WP_REST_Controller {
 
         if ( $umeta['user']['subscription'] !== $body['subscription'] ) return sttv_rest_response( 'signupError', 'Something went wrong on our end. No action has been taken.', 200, [ 'additional' => 'Subscription ID provided did not match the user subscription on file.' ] );
 
-        $sub = \Stripe\Subscription::retrieve($body['subscription']);
+        try {
+            $sub = \Stripe\Subscription::retrieve($body['subscription']);
 
-        switch($body['action']) {
-            case 'trial':
-                /* return sttv_rest_response(
-                    'signupSuccess',
-                    'Trial cancelled',
-                    200,
-                    ['extra'=>$body['subscription']]
-                ); */
-                $sub->trial_end = 'now';
-                $sub->save();
-            break;
-            case 'subscription':
-                /* return sttv_rest_response(
-                    'signupSuccess',
-                    'Subscription cancelled',
-                    200
-                ); */
-                $sub->cancel();
-            break;
-            default:
-                return sttv_rest_response( 'signupError', 'A valid cancellation action must be passed with this request.', 200 );
+            switch($body['action']) {
+                case 'trial':
+                    /* return sttv_rest_response(
+                        'signupSuccess',
+                        'Trial cancelled',
+                        200,
+                        ['extra'=>$body['subscription']]
+                    ); */
+                    $sub->trial_end = 'now';
+                    $sub->save();
+                break;
+                case 'subscription':
+                    /* return sttv_rest_response(
+                        'signupSuccess',
+                        'Subscription cancelled',
+                        200
+                    ); */
+                    $sub->metadata->cancelled = 'manual';
+                    $sub->save();
+                    $sub->cancel();
+                break;
+                default:
+                    return sttv_rest_response( 'signupError', 'A valid cancellation action must be passed with this request.', 200 );
+            }
+
+            return sttv_rest_response(
+                'signupSuccess',
+                'Your request has been processed.',
+                200,
+                [
+                    'response' => $sub
+                ]
+            );
+        } catch (\Exception $e) {
+            return sttv_rest_response(
+                'signupError',
+                'There was an error with Stripe.',
+                200,
+                [
+                    'error' => $e
+                ]
+            );
         }
-
-        return sttv_rest_response(
-            'signupSuccess',
-            'Your request has been processed.',
-            200,
-            [
-                'response' => $sub
-            ]
-        );
     }
 
     private function check_coupon( $coupon, $sig ) {

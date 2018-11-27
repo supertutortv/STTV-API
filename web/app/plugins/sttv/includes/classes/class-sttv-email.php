@@ -1,10 +1,10 @@
 <?php
 
-namespace STTV;
+namespace STTV\Email;
 
 defined( 'ABSPATH' ) || exit;
 
-class Email {
+class Standard {
 
     private static $error = false;
 
@@ -60,5 +60,58 @@ class Email {
             $this->headers,
             $this->attachments
         );
+    }
+}
+
+class Template {
+
+    private $mandrill;
+
+    public $response = null;
+
+    public $error = null;
+
+    public function __construct($args=[]) {
+        if ( empty($args) || !isset($args['email'], $args['name'], $args['subject'], $args['template'], $args['content']) ) {
+            $this->error = 'The required parameters were not set.';
+            return $this;
+        }
+
+        $this->mandrill = new \Mandrill(MANDRILL_API_KEY);
+
+        $from = get_option('admin_email');
+        
+        $message = [
+            'from_email' => $from,
+            'from_name' => 'SupertutorTV',
+            'subject' => $args['subject'],
+            'to'=> [
+                [
+                    'type' => 'to',
+                    'email' => $args['email'],
+                    'name' => $args['name']
+                ]
+            ],
+            'headers' => [
+                'Reply-To' => $from,
+            ],
+            'metadata' => [
+                'website' => 'https://supertutortv.com'
+            ],
+            'inline_css' => true,
+            'track_opens' => true,
+            'track_clicks' => true,
+            'bcc_address' => 'dave@supertutortv.com'
+        ];
+        
+        try {
+            $this->response = $this->mandrill->messages->sendTemplate(
+                $args['template'],
+                $args['content'],
+                $message
+            );
+        } catch ( \Mandrill_Error $e ) {
+            $this->error = $e;
+        }
     }
 }

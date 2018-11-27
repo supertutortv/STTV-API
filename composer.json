@@ -41,7 +41,8 @@
     "roots/wp-password-bcrypt": "1.0.0",
     "stripe/stripe-php": "^6.6",
     "wpackagist-plugin/members": "^2.1",
-    "wpackagist-plugin/advanced-custom-fields": "^5.6"
+    "wpackagist-plugin/advanced-custom-fields": "^5.6",
+    "mandrill/mandrill": "1.0.*"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.0.2"

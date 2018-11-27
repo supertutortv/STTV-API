@@ -79,40 +79,24 @@ class Courses extends \WP_REST_Controller {
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
-		if ( !$umeta || empty($umeta['courses']) ) {
+		if ( empty( $umeta ) ) return sttv_rest_response(
+			'dataInvalid',
+			'We\'re building the course data for you. Please wait...',
+			200,
+			[ 'retry' => 5 ]
+		);
+
+		if ( empty($umeta['courses']) ) {
 			$crss = [];
 
 			if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
 			if ( current_user_can("course_act_access") ) $crss['the-best-act-prep-course-ever'] = [];
-			$umeta = [
-				'user' => [
-					'history' => [],
-					'downloads' => [],
-					'type' => 'standard',
-					'trialing' => false,
-					'settings' => [
-						'autoplay' => false,
-						'dark_mode' => false
-					],
-					'userdata' => [
-						'login_timestamps' => []
-					]
-				],
-				'courses' => $crss
-			];
-			update_user_meta( $userid, 'sttv_user_data', $umeta );
+			$umeta['courses'] = $crss;
 		}
 
 		$admin = current_user_can('manage_options');
 
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
-
-		if ( empty( $access ) ) return sttv_rest_response(
-			'dataInvalid',
-			'We\'re building the course data for you. Please wait...',
-			200,
-			[ 'retry' => 5, 'meta' => $umeta ]
-		);
 
 		foreach( $access as $slug => $data ) {
 			$course = get_posts([

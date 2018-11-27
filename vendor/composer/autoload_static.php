@@ -48,6 +48,13 @@ class ComposerStaticInitd6fcf41209a7385f4e84612821c2d263
                 0 => __DIR__ . '/..' . '/johnpbloch/wordpress-core-installer/src',
             ),
         ),
+        'M' => 
+        array (
+            'Mandrill' => 
+            array (
+                0 => __DIR__ . '/..' . '/mandrill/mandrill/src',
+            ),
+        ),
         'E' => 
         array (
             'Env' => 

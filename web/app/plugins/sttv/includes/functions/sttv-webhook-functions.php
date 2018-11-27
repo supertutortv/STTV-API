@@ -7,7 +7,9 @@ defined( 'ABSPATH' ) || exit;
 ##############################
 
 // trial.expiration.checker
-function trial_expiration_checker() {}
+function trial_expiration_checker() {
+    
+}
 
 //api.duplicate.user
 function api_duplicate_user($data) {
@@ -31,7 +33,7 @@ function customer_created( $data ) {
         'ID' => $customer['metadata']['wp_id']
     ]);
 
-    return update_user_meta( $user_id, 'sttv_user_data', [
+    $umeta = [
         'user' => [
             'subscription' => '',
             'history' => [],
@@ -47,7 +49,10 @@ function customer_created( $data ) {
             ]
         ],
         'courses' => []
-    ]);
+    ];
+    update_user_meta( $user_id, 'sttv_user_data', $umeta );
+
+    return $umeta;
 }
 
 // customer.updated
@@ -66,9 +71,13 @@ function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
-    $cus = \Stripe\customer::retrieve($obj['customer']);
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
+    $cus = \Stripe\Customer::retrieve($obj['customer']);
+    $plan = $obj['plan'];
+    $prod = \Stripe\Product::retrieve($plan['product']);
+    $fullname = $user->display_name;
+    $firstlast = explode(' ', $fullname);
 
     $umeta['courses'] = $courses;
     $umeta['user']['trialing'] = ( $obj['status'] === 'trialing' );
@@ -77,106 +86,132 @@ function customer_subscription_created( $data ) {
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
-    if ( $obj['status'] === 'trialing' )
-        $user->add_cap('course_trialing');
+
+    if ( $obj['status'] === 'trialing' ) {
+
+    }
     elseif ($obj['status'] === 'active') {
+
         if ( $meta['priship'] == 'true' ) {
             \Stripe\Charge::create([
                 "amount" => $obj['plan']['metadata']['priship'] ?? 795,
                 "currency" => "usd",
                 "customer" => $obj['customer'],
-                "description" => "Priority shipping for ".$cus['shipping']['name']
+                "description" => "Priority shipping for ".$fullname,
+                "shipping" => $cus->shipping
             ]);
         }
     }
 
-    $message = 'Welcome';
+    preg_match('/The Best (\w+) Prep Course Ever/gm',$prod->name,$matches);
+
+    $testname = $matches[1];
+    $coursename = $prod->name;
 
     switch ($obj['plan']['product']) {
         case 'COMBO':
-            $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER</b> and <b>THE BEST SAT PREP COURSE EVER!</b>
-            <br/><br/>
-            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
-            <br/><br/>
-            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your books soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day for the ACT series only.
-            <br/><br/>
-            We recommend you start by taking a full practice test and then logging in to the course to review your answers for each test. For the ACT, you can find link to the first free test, so you can get started right away, here:
+            $testname = 'SAT and ACT';
+            $coursename = 'The Best SAT and The Best ACT Prep Courses';
+            $bookname = 'The Official SAT Study Guide and The Official ACT Prep Guide';
+            $getstarted = 'We recommend you start by taking a full practice test and then logging in to the course to review your answers for each test. For the ACT, you can find link to the first free test, so you can get started right away, here:
             <a href="https://supertutortv.com/actcourseresources">https://supertutortv.com/actcourseresources</a>
             <br/>
             While you’re on that page, you can also access our pacing guides (i.e. to do lists) and ACT spreadsheet so you can start making a study game plan to get the most out of this course.
             <br/><br/>
             For the SAT, We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
-            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>.
-            <br/>
-            You can also check out our SAT spreadsheet for a list of what’s on the course to help customize your own study schedule!
-            <br/><br/>
-            We just launched a new platform, so thanks for your patience as we optimize the course. 
-            <br/><br/>
-            We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
-            <br/><br/>
-            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
-            <br/><br/>
-            Thanks and now it’s time to CRUSH THESE TESTS!
-            <br/><br/>
-            Brooke';
+            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>.';
             break;
         case 'SAT':
-            $message = 'Welcome to the <b>BEST SAT PREP COURSE EVER!</b>
-            <br/><br/>
-            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
-            <br/><br/>
-            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
-            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>
-            <br/><br/>
-            Get organized! <a href="https://docs.google.com/spreadsheets/d/1t8uNSWfbUQPQhD569OGlM6Poo0B03P3jA0vYu8JFoH8/edit?usp=sharing">Check out our spreadsheet</a> for a list of what’s on the course to help customize your own study schedule!
-            <br/><br/>
-            We just launched, so thanks for your patience as we optimize the course.  We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
-            <br/><br/>
-            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
-            <br/><br/>
-            Thanks and now it’s time to CRUSH THE SAT!
-            <br/><br/>
-            Brooke';
+            $bookname = 'The Official SAT Study Guide';
+            $getstarted = 'We recommend you start by taking a full practice test from the official tests #1-8 and reviewing your answers. You can also find links to all 8 practice tests we offer video explanations for on our website (see SAT tests labelled #1-8):
+            <a href="http://supertutortv.com/resources">http://supertutortv.com/resources</a>.';
             break;
         case 'ACT':
-            $message = 'Welcome to the <b>BEST ACT PREP COURSE EVER!</b>
-            <br/><br/>
-            Keep this email for your records. To login to the course platform, go to <a href="https://courses.supertutortv.com/login">courses.supertutortv.com/login</a> and enter your email address and password.
-            <br/><br/>
-            If you’re in the US, and not on the free limited access trial, we’ll be shipping out your book soon. If you’re international, and not on the free limited access trial, we’ll send you a code for a digital book by the next business day.
-            <br/><br/>
-            We recommend you start by taking a full practice test and then logging in to the course to review your answers. You can find link to the first free test, so you can get started right away, here:
+            $bookname = 'The Official ACT Prep Guide';
+            $getstarted = 'We recommend you start by taking a full practice test and then logging in to the course to review your answers for each test. For the ACT, you can find link to the first free test, so you can get started right away, here:
             <a href="https://supertutortv.com/actcourseresources">https://supertutortv.com/actcourseresources</a>
-            <br/><br/>
-            While you’re on that page, you can also access our pacing guides (i.e. to do lists) so you can start making a study game plan to get the most out of this course.
-            <br/><br/>
-            We just launched a new platform, so thanks for your patience as we optimize the course. 
-            <br/><br/>
-            We love feedback. Should you have any questions or comments always feel free to reach out to us here or at info@supertutortv.com!
-            <br/><br/>
-            Remember, if you’re on the free limited trial, you’ll only have access to a few videos until you elect to unlock the full course or your five day trial is up and your card is charged.
-            <br/><br/>
-            Thanks and now it’s time to CRUSH THE ACT!
-            <br/><br/>
-            Brooke';
+            <br/>
+            While you’re on that page, you can also access our pacing guides (i.e. to do lists) and ACT spreadsheet so you can start making a study game plan to get the most out of this course.';
             break;
     }
 
-    $welcome = new \STTV\Email([
-        'to' => $user->user_email,
-        'subject' => 'Welcome!',
-        'message' => $message
+    $order = new \STTV\Email\Template([
+        'template' => 'new-order',
+        'email' => 'supertutortv@gmail.com',
+        'name' => 'SupertutorTV Course Orders',
+        'subject' => 'New Order ('.$obj['status'] === 'trialing' ? 'TRIAL' : 'PAID'.') | '.$fullname.' - '.$user->user_email,
+        'content' => [
+            [
+                'name' => 'sub',
+                'content' => $obj['id']
+            ],
+            [
+                'name' => 'name',
+                'content' => $fullname
+            ],
+            [
+                'name' => 'email',
+                'content' => $user->user_email
+            ],
+            [
+                'name' => 'cusid',
+                'content' => $obj['customer']
+            ],
+            [
+                'name' => 'wpid',
+                'content' => $meta['wp_id']
+            ],
+            [
+                'name' => 'plan',
+                'content' => $plan['nickname'].' | '.$plan['product']
+            ],
+            [
+                'name' => 'status',
+                'content' => $obj['status']
+            ],
+            [
+                'name' => 'priship',
+                'content' => $meta['priship'] == 'true' ? 'yes' : 'no'
+            ],
+            [
+                'name' => 'address',
+                'content' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
+            ],
+            [
+                'name' => 'datetime',
+                'content' => date('l, F jS, Y \at h:ia')
+            ]
+        ]
     ]);
-    $welcome->send();
 
-    $newuser = new \STTV\Email([
-        'to' => 'info@supertutortv.com',
-        'subject' => 'New Customer!',
-        'message' => '<pre>'.json_encode($data,JSON_PRETTY_PRINT).'</pre><pre>'.json_encode($cus,JSON_PRETTY_PRINT).'</pre>'
+    return new \STTV\Email\Template([
+        'template' => 'course-welcome',
+        'email' => $user->user_email,
+        'name' => $fullname,
+        'subject' => 'Welcome to SupertutorTV! (Read this)',
+        'content' => [
+            [
+                'name' => 'fname',
+                'content' => $firstlast[0]
+            ],
+            [
+                'name' => 'coursename',
+                'content' => $coursename
+            ],
+            [
+                'name' => 'testname',
+                'content' => $testname
+            ],
+            [
+                'name' => 'getstarted',
+                'content' => $getstarted
+            ],
+            [
+                'name' => 'bookname',
+                'content' => $bookname
+            ]
+        ]
     ]);
-    $newuser->send();
-
-    return $meta;
 }
 
 // customer.subscription.updated
@@ -184,6 +219,7 @@ function customer_subscription_updated( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $prev = $data['data']['previous_attributes'];
+    $cus = \Stripe\Customer::retrieve($obj['customer']);
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
 
@@ -196,15 +232,17 @@ function customer_subscription_updated( $data ) {
                     $user->remove_cap('course_trialing');
                     $umeta['user']['trialing'] = false;
                     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-                }
 
-                if ( $meta['priship'] == 'true' ) {
-                    \Stripe\Charge::create([
-                        "amount" => $obj['plan']['metadata']['priship'] ?? 795,
-                        "currency" => "usd",
-                        "customer" => $obj['customer'],
-                        "description" => "Priority shipping for ".$cus['shipping']['name']
-                    ]);
+                    $priship = null;
+                    if ( $meta['priship'] == 'true' ) {
+                        $priship = \Stripe\Charge::create([
+                            "amount" => $obj['plan']['metadata']['priship'] ?? 795,
+                            "currency" => "usd",
+                            "customer" => $obj['customer'],
+                            "description" => "Priority shipping for ".$user->display_name,
+                            "shipping" => $cus->shipping
+                        ]);
+                    }
                 }
             break;
         }
@@ -224,10 +262,10 @@ function customer_subscription_trial_will_end( $data ) {
     if ( time()+(5*MINUTE_IN_SECONDS) > $obj['trial_end'] )
         return false;
     else
-        $email = new \STTV\Email([
+        $email = new \STTV\Email\Standard([
             'to' => $user->user_email,
             'subject' => 'Your free trial is expiring soon!',
-            'message' => "<pre>On {$thedate}, your free trial will expire. This is just a reminder that the card on file with your account will be charged ${$amt}. If you elected to get priority shipping for your books, that will show up as a separate charge. Thank you for being a SupertutorTV student!</pre>"
+            'message' => "<pre>On {$thedate}, your free trial will expire. This is just a reminder that the card on file with your account will be charged ${$amt}. If you elected to get priority shipping for your books, that will show up as a separate charge. Thank you for being a SupertutorTV customer and student!</pre>"
         ]);
         return $email->send();
 
@@ -265,71 +303,7 @@ function invoice_updated( $data ) {}
 function invoice_finalized( $data ) {}
 
 // invoice.payment_succeeded
-function invoice_payment_succeeded( $data ) {
-    global $wpdb;
-
-    $meta = $data['data']['object']['metadata'];
-    $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $courses = json_decode($meta['plan '],true);
-
-    foreach ( $courses as $course ) {
-        $cmeta = get_post_meta( sttv_id_decode($course), 'sttv_course_data', true );
-        $test = strtolower( $course['test'] );
-        $user->remove_cap( "course_{$test}_trial" );
-    }
-    $umeta['user']['data']['orders'][$data['data']['object']['id']] = [];
-    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-
-    return $wpdb->update( $wpdb->prefix.'trial_reference',
-        [
-            'exp_date' => 0,
-            'is_trash' => 1
-        ],
-        [
-            'invoice_id' => $data['data']['object']['id']
-        ]
-    );
-}
+function invoice_payment_succeeded( $data ) {}
 
 // invoice.payment_failed
-function invoice_payment_failed( $data ) {
-    global $wpdb;
-    $id = $data['data']['object']['id'];
-    $record = $wpdb->get_results( "SELECT * FROM sttvapp_trial_reference WHERE invoice_id = '$id'", ARRAY_A );
-
-    $user = get_userdata( $record[0]['wp_id'] );
-    foreach(['course_act_access','course_sat_access'] as $thecap)
-        $user->remove_cap( $thecap );
-
-    if ( $record[0]['retries'] < 2 ) {
-        return $wpdb->update( $wpdb->prefix.'trial_reference',
-            [
-                'retries' => ++$record[0]['retries'],
-                'exp_date' => time() + 300
-            ],
-            [
-                'invoice_id' => $data['data']['object']['id']
-            ],
-            [
-                '%d',
-                '%d'
-            ]
-        );
-    } else {
-        $delete = time() + (HOUR_IN_SECONDS * 48);
-        return $wpdb->update( $wpdb->prefix.'trial_reference',
-            [
-                'is_trash' => 1,
-                'exp_date' => $delete
-            ],
-            [
-                'invoice_id' => $data['data']['object']['id']
-            ],
-            [
-                '%d'
-            ]
-        );
-    }
-    return $user;
-}
+function invoice_payment_failed( $data ) {}
