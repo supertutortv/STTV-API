@@ -213,7 +213,8 @@ function customer_subscription_created( $data ) {
                 ]
             ]
         ]),
-        'meta' => $umeta
+        'meta' => $umeta,
+        'status' => $obj['status']
     ];
 }
 

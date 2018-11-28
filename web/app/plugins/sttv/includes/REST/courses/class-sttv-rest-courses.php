@@ -95,10 +95,7 @@ class Courses extends \WP_REST_Controller {
 			$umeta['courses'] = $crss;
 		}
 
-		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) {
-			$umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
-			update_user_meta( $userid, 'sttv_user_data', $umeta );
-		}
+		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
 
 		$admin = current_user_can('manage_options');
 
