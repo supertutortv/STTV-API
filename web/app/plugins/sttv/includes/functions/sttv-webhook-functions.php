@@ -39,7 +39,7 @@ function customer_created( $data ) {
             'history' => [],
             'downloads' => [],
             'type' => 'standard',
-            'trialing' => false,
+            'trialing' => true,
             'settings' => [
                 'autoplay' => false,
                 'dark_mode' => false
@@ -79,7 +79,7 @@ function customer_subscription_created( $data ) {
     $fullname = $user->first_name.' '.$user->last_name;
 
     $umeta['courses'] = $courses;
-    $umeta['user']['trialing'] = ( $obj['status'] === 'trialing' );
+    $umeta['user']['trialing'] = $obj['status'] == 'trialing';
     $umeta['user']['subscription'] = $obj['id'];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
@@ -135,11 +135,13 @@ function customer_subscription_created( $data ) {
             break;
     }
 
+    $paid = $obj['status'] == 'trialing' ? 'TRIAL' : 'PAID';
+
     $order = new \STTV\Email\Template([
         'template' => 'new-order',
         'email' => 'supertutortv@gmail.com',
         'name' => 'SupertutorTV Course Orders',
-        'subject' => 'New Order ('.$obj['status'] === 'trialing' ? 'TRIAL' : 'PAID'.') | '.$fullname.' - '.$user->user_email,
+        'subject' => "New Order ($paid) | $fullname - $user->user_email",
         'content' => [
             [
                 'name' => 'sub',
