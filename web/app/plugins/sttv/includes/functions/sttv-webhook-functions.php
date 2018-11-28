@@ -25,33 +25,13 @@ function customer_created( $data ) {
     global $wpdb;
     $customer = $data['data']['object'];
     $user_id = $customer['metadata']['wp_id'];
-    $wpdb->update($wpdb->users, [
+    return $wpdb->update($wpdb->users, [
         'user_login' => str_replace('cus_','',$customer['id']),
         'user_nicename' => str_replace(' ','-',strtolower($customer['description'])).'-'.str_replace('cus_','',$customer['id'])
     ],
     [
         'ID' => $customer['metadata']['wp_id']
     ]);
-
-    $umeta = [
-        'user' => [
-            'subscription' => '',
-            'history' => [],
-            'downloads' => [],
-            'type' => 'standard',
-            'trialing' => null,
-            'settings' => [
-                'autoplay' => false,
-                'dark_mode' => false
-            ],
-            'userdata' => [
-                'login_timestamps' => []
-            ]
-        ],
-        'courses' => []
-    ];
-
-    return [$umeta, update_user_meta( $user_id, 'sttv_user_data', $umeta )];
 }
 
 // customer.updated
@@ -70,7 +50,6 @@ function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $plan = $obj['plan'];
@@ -79,10 +58,25 @@ function customer_subscription_created( $data ) {
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
-    $umeta['courses'] = $courses;
-    $umeta['user']['trialing'] = $obj['status'] == 'trialing' ? true : false;
-    $umeta['user']['subscription'] = $obj['id'];
-    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+    $umeta = [
+        'user' => [
+            'subscription' => $obj['id'],
+            'history' => [],
+            'downloads' => [],
+            'type' => 'standard',
+            'trialing' => ($obj['status'] == 'trialing'),
+            'settings' => [
+                'autoplay' => false,
+                'dark_mode' => false
+            ],
+            'userdata' => [
+                'login_timestamps' => []
+            ]
+        ],
+        'courses' => $courses
+    ];
+
+    update_user_meta( $user->ID, 'sttv_user_data', $umeta );
 
     if ( $obj['status'] === 'trialing' ) {
         $user->add_cap('course_trialing');
