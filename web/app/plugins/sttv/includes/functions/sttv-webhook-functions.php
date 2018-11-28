@@ -247,6 +247,13 @@ function customer_subscription_updated( $data ) {
                     $umeta['user']['trialing'] = false;
                     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
+                    $email = new \STTV\Email\Standard([
+                        'to' => 'info@supertutortv.com',
+                        'subject' => $fullname.'\'s trial has ended - PAID',
+                        'message' => 'Please wait 24 hrs before shipping their book(s).'
+                    ]);
+                    $email->send();
+
                     $priship = null;
                     if ( $meta['priship'] == 'true' ) {
                         $priship = \Stripe\Charge::create([
