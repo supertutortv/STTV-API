@@ -158,7 +158,6 @@ class Auth extends \WP_REST_Controller {
         /* $response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=".RECAPTCHA_SECRET."&response=".$token."&remoteip=".$_SERVER['REMOTE_ADDR']),true); */
 
         $id = email_exists($email);
-        return $id;
 
         if (!$id) return sttv_rest_response(
             'resetError',
@@ -169,7 +168,7 @@ class Auth extends \WP_REST_Controller {
         $user = wp_set_current_user($id);
         $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'.'.$user->user_login;
 
-        $message = new \STTV\Email([
+        $message = new \STTV\Email\Standard([
             'to' => $email,
             'subject' => 'SupertutorTV account password reset',
             'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/>"
