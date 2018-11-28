@@ -70,7 +70,7 @@ function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
-    $umeta = (array) get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $plan = $obj['plan'];
