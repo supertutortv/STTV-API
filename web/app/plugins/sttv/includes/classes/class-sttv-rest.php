@@ -11,9 +11,7 @@ class API {
     private $allowed_origins = [
         'https://supertutortv.com',
         'https://courses.supertutortv.com',
-        'https://api.supertutortv.com',
-        'http://localhost:8080', //remove in production
-        'http://localhost:8888' //remove in production
+        'https://api.supertutortv.com'
     ];
 
     private $origin;
