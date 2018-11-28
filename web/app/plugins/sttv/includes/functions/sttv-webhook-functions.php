@@ -186,34 +186,37 @@ function customer_subscription_created( $data ) {
         ]
     ]);
 
-    return new \STTV\Email\Template([
-        'template' => 'course-welcome',
-        'email' => $user->user_email,
-        'name' => $fullname,
-        'subject' => 'Welcome to SupertutorTV! (Read this)',
-        'content' => [
-            [
-                'name' => 'fname',
-                'content' => $user->first_name
-            ],
-            [
-                'name' => 'coursename',
-                'content' => $coursename
-            ],
-            [
-                'name' => 'testname',
-                'content' => $testname
-            ],
-            [
-                'name' => 'getstarted',
-                'content' => $getstarted
-            ],
-            [
-                'name' => 'bookname',
-                'content' => $bookname
+    return [
+        'email' => new \STTV\Email\Template([
+            'template' => 'course-welcome',
+            'email' => $user->user_email,
+            'name' => $fullname,
+            'subject' => 'Welcome to SupertutorTV! (Read this)',
+            'content' => [
+                [
+                    'name' => 'fname',
+                    'content' => $user->first_name
+                ],
+                [
+                    'name' => 'coursename',
+                    'content' => $coursename
+                ],
+                [
+                    'name' => 'testname',
+                    'content' => $testname
+                ],
+                [
+                    'name' => 'getstarted',
+                    'content' => $getstarted
+                ],
+                [
+                    'name' => 'bookname',
+                    'content' => $bookname
+                ]
             ]
-        ]
-    ]);
+        ]),
+        'meta' => $umeta
+    ];
 }
 
 // customer.subscription.updated
