@@ -86,7 +86,7 @@ class Courses extends \WP_REST_Controller {
 			[ 'retry' => 5 ]
 		);
 
-		if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
+		//if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
 
 		if ( empty($umeta['courses']) ) {
 			$crss = [];
