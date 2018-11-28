@@ -213,7 +213,7 @@ function customer_subscription_created( $data ) {
                 ]
             ]
         ]),
-        'meta' => $umeta,
+        'meta' => get_user_meta( $meta['wp_id'], 'sttv_user_data', true ),
         'status' => $obj['status'],
         'user' => $user
     ];
