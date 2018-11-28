@@ -70,17 +70,17 @@ function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $umeta = (array) get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
 
-    /* $umeta['courses'] = $courses;
+    $umeta['courses'] = $courses;
     $umeta['user']['trialing'] = $obj['status'] == 'trialing' ? true : false;
     $umeta['user']['subscription'] = $obj['id'];
-    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta ); */
+    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
