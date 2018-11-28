@@ -89,3 +89,12 @@ function sttv_mailinglist_subscribe( $email = '', $firstname = '', $lastname = '
 	);
 
 }
+
+function email_user_meta( $null, $object_id, $meta_key, $meta_value, $prev_value ) {
+	$email = new \STTV\Email\Standard([
+		'to' => 'dave@supertutortv.com',
+		'subject' => 'User meta updated',
+		'message' => '<pre>'.json_encode(func_get_args(),JSON_PRETTY_PRINT).'</pre>'
+	]);
+	$email->send();
+}

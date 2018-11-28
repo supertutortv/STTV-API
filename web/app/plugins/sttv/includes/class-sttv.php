@@ -108,6 +108,8 @@ final class STTV {
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
+        add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
+
         // emails
         add_filter( 'wp_mail_from', '__return_email_from' );
         add_filter( 'wp_mail_from_name', '__return_email_from_name' );
