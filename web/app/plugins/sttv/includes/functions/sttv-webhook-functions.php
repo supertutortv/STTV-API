@@ -50,9 +50,8 @@ function customer_created( $data ) {
         ],
         'courses' => []
     ];
-    update_user_meta( $user_id, 'sttv_user_data', $umeta );
 
-    return $umeta;
+    return [$umeta, update_user_meta( $user_id, 'sttv_user_data', $umeta )];
 }
 
 // customer.updated
@@ -78,10 +77,10 @@ function customer_subscription_created( $data ) {
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
 
-    $umeta['courses'] = $courses;
+    /* $umeta['courses'] = $courses;
     $umeta['user']['trialing'] = $obj['status'] == 'trialing' ? true : false;
     $umeta['user']['subscription'] = $obj['id'];
-    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta ); */
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
@@ -102,7 +101,7 @@ function customer_subscription_created( $data ) {
         }
     }
 
-    preg_match('/The Best (\w+) Prep Course Ever/gm',$prod->name,$matches);
+    preg_match('/The Best (\w+) Prep Course Ever/m',$prod->name,$matches);
 
     $testname = $matches[1];
     $coursename = $prod->name;
@@ -299,6 +298,9 @@ function customer_subscription_deleted( $data ) {
 
 // charge.succeeded
 function charge_succeeded( $data ) {}
+
+// charge.refunded
+function charge_refunded( $data ) {}
 
 // invoice.created
 function invoice_created( $data ) {}
