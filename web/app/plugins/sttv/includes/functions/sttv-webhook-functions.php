@@ -6,10 +6,6 @@ defined( 'ABSPATH' ) || exit;
 ##### HELPERS #####
 ###################
 
-function create_ship_charge() {
-
-}
-
 ##############################
 ##### STTV CUSTOM EVENTS #####
 ##############################
