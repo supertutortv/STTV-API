@@ -11,11 +11,12 @@ class Admin {
 	}
 	
 	public function admin_course_meta( $user_id ) {
+		if ( current_user_can('manage_options') ) 
 			return update_user_meta( $user_id, 'sttv_user_data', [
 				'user' => [
 					'history' => [],
 					'downloads' => [],
-					'type' => 'standard',
+					'type' => 'admin',
 					'trialing' => false,
 					'settings' => [
 						'autoplay' => false,
