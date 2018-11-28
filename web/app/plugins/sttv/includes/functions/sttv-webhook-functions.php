@@ -39,7 +39,7 @@ function customer_created( $data ) {
             'history' => [],
             'downloads' => [],
             'type' => 'standard',
-            'trialing' => true,
+            'trialing' => null,
             'settings' => [
                 'autoplay' => false,
                 'dark_mode' => false
@@ -79,7 +79,7 @@ function customer_subscription_created( $data ) {
     $fullname = $user->first_name.' '.$user->last_name;
 
     $umeta['courses'] = $courses;
-    $umeta['user']['trialing'] = $obj['status'] == 'trialing';
+    $umeta['user']['trialing'] = $obj['status'] == 'trialing' ? true : false;
     $umeta['user']['subscription'] = $obj['id'];
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
