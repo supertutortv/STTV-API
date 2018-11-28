@@ -99,6 +99,8 @@ class Courses extends \WP_REST_Controller {
 
 		$admin = current_user_can('manage_options');
 
+		$trialing = !$admin && ($umeta['user']['trialing'] ?? current_user_can( 'course_trialing' ));
+
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
 		foreach( $access as $slug => $data ) {
@@ -118,9 +120,6 @@ class Courses extends \WP_REST_Controller {
 
 			$test_code = strtolower($meta['test']);
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
-
-			$trialing = !$admin && current_user_can( "course_trialing" );
-			$umeta['user']['trialing'] = $trialing;
 
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				foreach ( $meta['collections'] as $sec => &$val ) {

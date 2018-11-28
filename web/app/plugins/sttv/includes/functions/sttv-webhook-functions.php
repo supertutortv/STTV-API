@@ -85,7 +85,7 @@ function customer_subscription_created( $data ) {
     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
 
     if ( $obj['status'] === 'trialing' ) {
-
+        $user->add_cap('course_trialing');
     }
     elseif ($obj['status'] === 'active') {
 
