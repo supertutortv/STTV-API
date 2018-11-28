@@ -2,6 +2,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
+###################
+##### HELPERS #####
+###################
+
+function create_ship_charge() {
+
+}
+
 ##############################
 ##### STTV CUSTOM EVENTS #####
 ##############################
@@ -82,15 +90,21 @@ function customer_subscription_created( $data ) {
         $user->add_cap('course_trialing');
     }
     elseif ($obj['status'] === 'active') {
-
+        $priship = null;
         if ( $meta['priship'] == 'true' ) {
-            \Stripe\Charge::create([
+            $shipchg = \Stripe\Charge::create([
                 "amount" => $obj['plan']['metadata']['priship'] ?? 795,
                 "currency" => "usd",
                 "customer" => $obj['customer'],
                 "description" => "Priority shipping for ".$fullname,
                 "shipping" => $cus->shipping
             ]);
+            $email = new \STTV\Email\Standard([
+                'to' => 'info@supertutortv.com',
+                'subject' => $fullname.' paid for priority shipping',
+                'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
+            ]);
+            $email->send();
         }
     }
 
@@ -207,9 +221,7 @@ function customer_subscription_created( $data ) {
                 ]
             ]
         ]),
-        'meta' => get_user_meta( $meta['wp_id'], 'sttv_user_data', true ),
-        'status' => $obj['status'],
-        'user' => $user
+        'meta' => get_user_meta( $meta['wp_id'], 'sttv_user_data', true )
     ];
 }
 
@@ -221,6 +233,7 @@ function customer_subscription_updated( $data ) {
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+    $fullname = $user->first_name.' '.$user->last_name;
 
     update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
 
@@ -240,9 +253,15 @@ function customer_subscription_updated( $data ) {
                             "amount" => $obj['plan']['metadata']['priship'] ?? 795,
                             "currency" => "usd",
                             "customer" => $obj['customer'],
-                            "description" => "Priority shipping for ".$user->display_name,
+                            "description" => "Priority shipping for ".$fullname,
                             "shipping" => $cus->shipping
                         ]);
+                        $email = new \STTV\Email\Standard([
+                            'to' => 'info@supertutortv.com',
+                            'subject' => $fullname.' paid for priority shipping',
+                            'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
+                        ]);
+                        $email->send();
                     }
                 }
             break;
