@@ -57,10 +57,22 @@ function customer_deleted( $data ) {
 function customer_subscription_created( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
-    $user = get_userdata( $meta['wp_id'] );
-    $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
-    //$sub = \Stripe\Subscription::retrieve($obj['id']);
+    $sub = \Stripe\Subscription::retrieve($obj['id']);
+
+    if ( isset( $meta['wp_id'] ) ) {
+        $uid = $meta['wp_id'];
+    } else {
+        $uid = $cus->metadata->wp_id;
+        $sub->metadata = [
+            'priship' => "false",
+            'wp_id' => $uid
+        ];
+        $sub->save();
+    }
+
+    $user = get_userdata( $uid );
+    $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
