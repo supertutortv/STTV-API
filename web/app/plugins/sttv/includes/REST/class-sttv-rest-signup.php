@@ -176,7 +176,7 @@ class Signup extends \WP_REST_Controller {
                         'plan' => $body['plan']['id']
                     ]
                 ],
-                'cancel_at_period_end' => true,
+                'cancel_at_period_end' => !$dotrial,
                 'metadata' => [
                     'checkout_id' => $body['session']['id'],
                     'wp_id' => $user_id,

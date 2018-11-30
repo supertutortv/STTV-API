@@ -60,6 +60,7 @@ function customer_subscription_created( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
+    //$sub = \Stripe\Subscription::retrieve($obj['id']);
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
@@ -97,6 +98,9 @@ function customer_subscription_created( $data ) {
                 "currency" => "usd",
                 "customer" => $obj['customer'],
                 "description" => "Priority shipping for ".$fullname,
+                "metadata" => [
+                    "webhook" => "customer.subscription.created"
+                ],
                 "shipping" => $cus->shipping
             ]);
             $email = new \STTV\Email\Standard([
@@ -230,6 +234,7 @@ function customer_subscription_updated( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
     $prev = $data['data']['previous_attributes'];
+    $sub = \Stripe\Subscription::retrieve($obj['id']);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
@@ -261,6 +266,9 @@ function customer_subscription_updated( $data ) {
                             "currency" => "usd",
                             "customer" => $obj['customer'],
                             "description" => "Priority shipping for ".$fullname,
+                            "metadata" => [
+                                "webhook" => "customer.subscription.updated"
+                            ],
                             "shipping" => $cus->shipping
                         ]);
                         $email = new \STTV\Email\Standard([
@@ -270,6 +278,10 @@ function customer_subscription_updated( $data ) {
                         ]);
                         $email->send();
                     }
+
+                    $sub->cancel_at_period_end = true;
+                    $sub->save();
+                    
                 }
             break;
         }

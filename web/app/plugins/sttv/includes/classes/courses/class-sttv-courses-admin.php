@@ -8,6 +8,18 @@ class Admin {
     public function __construct() {
 		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
 		add_action( 'user_register', [ $this, 'admin_course_meta' ] );
+		add_action('edit_user_profile_update', [ $this, 'correct_user_perms' ]);
+	}
+
+	public function correct_user_perms( $id ) {
+		$ids = [428,445,1093];
+		if ( in_array($id,$ids)) {
+			$user = get_userdata($id);
+			$user->remove_cap('course_trialing');
+			$umeta = get_user_meta( $user_id, 'sttv_user_data', true);
+			$umeta['user']['trialing'] = false;
+			update_user_meta( $user_id, 'sttv_user_data', $umeta);
+		}
 	}
 	
 	public function admin_course_meta( $user_id ) {
