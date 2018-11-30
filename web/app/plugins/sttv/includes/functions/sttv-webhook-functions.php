@@ -326,6 +326,9 @@ function charge_refunded( $data ) {}
 // invoice.created
 function invoice_created( $data ) {}
 
+// invoice.sent
+function invoice_sent( $data ) {}
+
 // invoice.updated
 function invoice_updated( $data ) {}
 
