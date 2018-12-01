@@ -12,7 +12,7 @@ class Admin {
 	}
 
 	public function correct_user_perms( $id ) {
-		$ids = [428,445,1093];
+		$ids = [428,445,1093,1121,1147,1166];
 		if ( in_array($id,$ids)) {
 			$user = get_userdata($id);
 			$user->remove_cap('course_trialing');
