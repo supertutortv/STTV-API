@@ -18,6 +18,7 @@ class Admin {
 			$user->remove_cap('course_trialing');
 			$umeta = get_user_meta( $user_id, 'sttv_user_data', true);
 			$umeta['user']['trialing'] = false;
+			if ( $id == 1147 ) $umeta['courses']['the-best-sat-prep-course-ever'] = [];
 			update_user_meta( $user_id, 'sttv_user_data', $umeta);
 		}
 	}
