@@ -44,7 +44,16 @@ function customer_created( $data ) {
 
 // customer.updated
 function customer_updated( $data ) {
-    return false;
+    global $wpdb;
+    $customer = $data['data']['object'];
+    $user_id = $customer['metadata']['wp_id'];
+    return $wpdb->update($wpdb->users, [
+        'user_login' => str_replace('cus_','',$customer['id']),
+        'user_nicename' => str_replace(' ','-',strtolower($customer['description'])).'-'.str_replace('cus_','',$customer['id'])
+    ],
+    [
+        'ID' => $customer['metadata']['wp_id']
+    ]);
 }
 
 // customer.deleted
