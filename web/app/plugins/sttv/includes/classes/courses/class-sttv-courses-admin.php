@@ -8,7 +8,7 @@ class Admin {
     public function __construct() {
 		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
 		add_action( 'user_register', [ $this, 'admin_course_meta' ] );
-		add_action('edit_user_profile_update', [ $this, 'correct_user_perms' ]);
+		add_action( 'edit_user_profile_update', [ $this, 'correct_user_perms' ]);
 	}
 
 	public function correct_user_perms( $id ) {
