@@ -88,12 +88,11 @@ class Courses extends \WP_REST_Controller {
 
 		//if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
 
-		if ( empty($umeta['courses']) ) {
-			$crss = [];
-			if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
-			if ( current_user_can("course_act_access") ) $crss['the-best-act-prep-course-ever'] = [];
-			$umeta['courses'] = $crss;
-		}
+		
+		$crss = [];
+		if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
+		if ( current_user_can("course_act_access") ) $crss['the-best-act-prep-course-ever'] = [];
+		$umeta['courses'] = $crss;
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
 
