@@ -106,6 +106,11 @@ final class STTV {
 			
         });
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
+        add_action( 'edit_user_profile', function( $user ) {
+            echo '<pre>';
+            echo json_encode(get_user_meta( $user->ID, 'sttv_user_data', true), JSON_PRETTY_PRINT);
+            echo '</pre>';
+        }, 999 );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
         add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
