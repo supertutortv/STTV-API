@@ -254,9 +254,11 @@ function customer_subscription_created( $data ) {
 function customer_subscription_updated( $data ) {
     $obj = $data['data']['object'];
     $meta = $obj['metadata'];
+    $plan = $obj['plan'];
     $prev = $data['data']['previous_attributes'];
     $sub = \Stripe\Subscription::retrieve($obj['id']);
     $cus = \Stripe\Customer::retrieve($obj['customer']);
+    $prod = \Stripe\Product::retrieve($plan['product']);
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $fullname = $user->first_name.' '.$user->last_name;
@@ -279,6 +281,23 @@ function customer_subscription_updated( $data ) {
                         'message' => 'Please wait 24 hrs before shipping their book(s).'
                     ]);
                     $email->send();
+
+                    return new \STTV\Email\Template([
+                        'template' => 'trial-ended',
+                        'email' => $user->user_email,
+                        'name' => $fullname,
+                        'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
+                        'content' => [
+                            [
+                                'name' => 'fname',
+                                'content' => $user->first_name
+                            ],
+                            [
+                                'name' => 'coursename',
+                                'content' => $prod->name
+                            ]
+                        ]
+                    ]);
 
                     $priship = null;
                     if ( $meta['priship'] == 'true' ) {
