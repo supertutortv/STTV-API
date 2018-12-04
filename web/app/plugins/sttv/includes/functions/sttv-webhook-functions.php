@@ -373,3 +373,6 @@ function invoice_payment_succeeded( $data ) {}
 
 // invoice.payment_failed
 function invoice_payment_failed( $data ) {}
+
+// coupon.created
+function courpon_created( $data ) {}
