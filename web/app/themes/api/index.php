@@ -8,5 +8,6 @@
 	<?php wp_head(); ?>
 </head>
 <body>
+<?php do_action('print_test'); ?>
 </body>
 </html>
