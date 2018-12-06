@@ -96,7 +96,7 @@ class Courses extends \WP_REST_Controller {
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
 
-		$admin = current_user_can('manage_options');
+		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
 		$trialing = !$admin && ($umeta['user']['trialing'] ?? current_user_can( 'course_trialing' ));
 
