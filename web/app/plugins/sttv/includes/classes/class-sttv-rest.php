@@ -68,6 +68,7 @@ class API {
             header( 'Access-Control-Allow-Headers: Accept, Referrer, Origin, Credentials, Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC, X-RateLimit-Buster' );
             header( 'Content-Type: '.STTV_REST_CONTENT_TYPE );
             header( 'Host: ' . rest_url() );
+            header( 'X-Origin-Verify: ' . $this->origin );
     
             return $value;
             
