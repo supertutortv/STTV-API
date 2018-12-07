@@ -59,9 +59,9 @@ class API {
             header_remove( 'X-Robots-Tag' );
 
             if ( in_array( $this->origin, $this->allowed_origins ) ) {
-                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $this->origin ) );
+                header( 'Access-Control-Allow-Origin: ' . $this->origin );
             } else {
-                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( home_url() ) );
+                header( 'Access-Control-Allow-Origin: ' . home_url() );
             }
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
