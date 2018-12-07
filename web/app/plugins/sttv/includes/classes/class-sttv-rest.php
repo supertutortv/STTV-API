@@ -59,7 +59,7 @@ class API {
             header_remove( 'X-Robots-Tag' );
 
             if ( in_array( $this->origin, $this->allowed_origins ) ) {
-                header( 'Access-Control-Allow-Origin: ' . $this->origin );
+                header( 'Access-Control-Allow-Origin: poop.edu' );
             } else {
                 header( 'Access-Control-Allow-Origin: ' . home_url() );
             }
