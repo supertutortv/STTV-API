@@ -247,89 +247,6 @@
         ]
     },
     {
-        "name": "johnpbloch/wordpress-core",
-        "version": "4.9.8",
-        "version_normalized": "4.9.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/johnpbloch/wordpress-core.git",
-            "reference": "50323f9b91d7689d615b4af02caf9d80584b1cfc"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/50323f9b91d7689d615b4af02caf9d80584b1cfc",
-            "reference": "50323f9b91d7689d615b4af02caf9d80584b1cfc",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2"
-        },
-        "provide": {
-            "wordpress/core-implementation": "4.9.8"
-        },
-        "time": "2018-08-02T21:48:32+00:00",
-        "type": "wordpress-core",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "WordPress Community",
-                "homepage": "http://wordpress.org/about/"
-            }
-        ],
-        "description": "WordPress is web software you can use to create a beautiful website or blog.",
-        "homepage": "http://wordpress.org/",
-        "keywords": [
-            "blog",
-            "cms",
-            "wordpress"
-        ]
-    },
-    {
-        "name": "johnpbloch/wordpress",
-        "version": "4.9.8",
-        "version_normalized": "4.9.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/johnpbloch/wordpress.git",
-            "reference": "de02cd79a41e06f36558040724414197cb7f6246"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/de02cd79a41e06f36558040724414197cb7f6246",
-            "reference": "de02cd79a41e06f36558040724414197cb7f6246",
-            "shasum": ""
-        },
-        "require": {
-            "johnpbloch/wordpress-core": "4.9.8",
-            "johnpbloch/wordpress-core-installer": "^1.0",
-            "php": ">=5.3.2"
-        },
-        "time": "2018-08-02T21:48:39+00:00",
-        "type": "package",
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0+"
-        ],
-        "authors": [
-            {
-                "name": "WordPress Community",
-                "homepage": "http://wordpress.org/about/"
-            }
-        ],
-        "description": "WordPress is web software you can use to create a beautiful website or blog.",
-        "homepage": "http://wordpress.org/",
-        "keywords": [
-            "blog",
-            "cms",
-            "wordpress"
-        ]
-    },
-    {
         "name": "vlucas/phpdotenv",
         "version": "v2.5.1",
         "version_normalized": "2.5.1.0",
@@ -380,28 +297,6 @@
             "env",
             "environment"
         ]
-    },
-    {
-        "name": "wpackagist-plugin/advanced-custom-fields",
-        "version": "5.7.7",
-        "version_normalized": "5.7.7.0",
-        "source": {
-            "type": "svn",
-            "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
-            "reference": "tags/5.7.7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.5.7.7.zip",
-            "reference": null,
-            "shasum": null
-        },
-        "require": {
-            "composer/installers": "~1.0"
-        },
-        "type": "wordpress-plugin",
-        "installation-source": "dist",
-        "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
     },
     {
         "name": "squizlabs/php_codesniffer",
@@ -508,63 +403,6 @@
         ]
     },
     {
-        "name": "stripe/stripe-php",
-        "version": "v6.22.1",
-        "version_normalized": "6.22.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/stripe/stripe-php.git",
-            "reference": "ea40f3aded584285b273c3f74b3883088dbdf336"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/ea40f3aded584285b273c3f74b3883088dbdf336",
-            "reference": "ea40f3aded584285b273c3f74b3883088dbdf336",
-            "shasum": ""
-        },
-        "require": {
-            "ext-curl": "*",
-            "ext-json": "*",
-            "ext-mbstring": "*",
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "php-coveralls/php-coveralls": "1.*",
-            "phpunit/phpunit": "~4.0",
-            "squizlabs/php_codesniffer": "~2.0"
-        },
-        "time": "2018-11-20T19:29:47+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Stripe\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Stripe and contributors",
-                "homepage": "https://github.com/stripe/stripe-php/contributors"
-            }
-        ],
-        "description": "Stripe PHP Library",
-        "homepage": "https://stripe.com/",
-        "keywords": [
-            "api",
-            "payment processing",
-            "stripe"
-        ]
-    },
-    {
         "name": "mandrill/mandrill",
         "version": "1.0.55",
         "version_normalized": "1.0.55.0",
@@ -608,5 +446,167 @@
             "api",
             "email"
         ]
+    },
+    {
+        "name": "johnpbloch/wordpress-core",
+        "version": "5.0.0",
+        "version_normalized": "5.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/johnpbloch/wordpress-core.git",
+            "reference": "a11a6399a3681ffbbf7e27ac4e372d836529fdb7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/johnpbloch/wordpress-core/zipball/a11a6399a3681ffbbf7e27ac4e372d836529fdb7",
+            "reference": "a11a6399a3681ffbbf7e27ac4e372d836529fdb7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "provide": {
+            "wordpress/core-implementation": "5.0.0"
+        },
+        "time": "2018-12-09T20:55:56+00:00",
+        "type": "wordpress-core",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "WordPress Community",
+                "homepage": "http://wordpress.org/about/"
+            }
+        ],
+        "description": "WordPress is web software you can use to create a beautiful website or blog.",
+        "homepage": "http://wordpress.org/",
+        "keywords": [
+            "blog",
+            "cms",
+            "wordpress"
+        ]
+    },
+    {
+        "name": "johnpbloch/wordpress",
+        "version": "5.0.0",
+        "version_normalized": "5.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/johnpbloch/wordpress.git",
+            "reference": "391c36c97f55384bbb3e38146752dc9ac6235d4c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/johnpbloch/wordpress/zipball/391c36c97f55384bbb3e38146752dc9ac6235d4c",
+            "reference": "391c36c97f55384bbb3e38146752dc9ac6235d4c",
+            "shasum": ""
+        },
+        "require": {
+            "johnpbloch/wordpress-core": "5.0.0",
+            "johnpbloch/wordpress-core-installer": "^1.0",
+            "php": ">=5.3.2"
+        },
+        "time": "2018-12-09T20:56:03+00:00",
+        "type": "package",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+"
+        ],
+        "authors": [
+            {
+                "name": "WordPress Community",
+                "homepage": "http://wordpress.org/about/"
+            }
+        ],
+        "description": "WordPress is web software you can use to create a beautiful website or blog.",
+        "homepage": "http://wordpress.org/",
+        "keywords": [
+            "blog",
+            "cms",
+            "wordpress"
+        ]
+    },
+    {
+        "name": "stripe/stripe-php",
+        "version": "v6.24.0",
+        "version_normalized": "6.24.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stripe/stripe-php.git",
+            "reference": "e608b6538b45d233db66838c389c6548c1152a27"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stripe/stripe-php/zipball/e608b6538b45d233db66838c389c6548c1152a27",
+            "reference": "e608b6538b45d233db66838c389c6548c1152a27",
+            "shasum": ""
+        },
+        "require": {
+            "ext-curl": "*",
+            "ext-json": "*",
+            "ext-mbstring": "*",
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "php-coveralls/php-coveralls": "1.*",
+            "phpunit/phpunit": "~4.0",
+            "squizlabs/php_codesniffer": "~2.0"
+        },
+        "time": "2018-11-28T16:32:29+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Stripe\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Stripe and contributors",
+                "homepage": "https://github.com/stripe/stripe-php/contributors"
+            }
+        ],
+        "description": "Stripe PHP Library",
+        "homepage": "https://stripe.com/",
+        "keywords": [
+            "api",
+            "payment processing",
+            "stripe"
+        ]
+    },
+    {
+        "name": "wpackagist-plugin/advanced-custom-fields",
+        "version": "5.7.8",
+        "version_normalized": "5.7.8.0",
+        "source": {
+            "type": "svn",
+            "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
+            "reference": "tags/5.7.8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.5.7.8.zip",
+            "reference": null,
+            "shasum": null
+        },
+        "require": {
+            "composer/installers": "~1.0"
+        },
+        "type": "wordpress-plugin",
+        "installation-source": "dist",
+        "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
     }
 ]
