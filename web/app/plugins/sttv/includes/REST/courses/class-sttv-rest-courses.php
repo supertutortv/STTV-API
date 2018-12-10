@@ -264,11 +264,11 @@ class Courses extends \WP_REST_Controller {
 						'wp_id' => $userid,
 						'udata_type' => $patch,
 						'udata_timestamp' => $timestamp,
-						'udata_id' => isset($udata_id) ? $udata_id : $udata_hash,
+						'udata_id' => $udata_id ?? $udata_hash,
 						'udata_name' => $udata_name,
 						'udata_thumb' => $udata_thumb,
-						'udata_path' => isset($udata_path) ? $udata_path : $udata_file,
-						'udata_test' => isset($udata_test) ? $udata_test : ''
+						'udata_path' => $udata_path ?? $udata_file,
+						'udata_test' => $udata_test ?? ''
 					];
 					
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
@@ -302,6 +302,7 @@ class Courses extends \WP_REST_Controller {
 							];
 
 						$umeta['user']['settings']['autoplay'] = $updated['settings']['autoplay'] = array_merge($umeta['user']['settings']['autoplay'],$udata_autoplay);
+						$updated['settings']['autoplay'] = $umeta['user']['settings']['autoplay'];
 					}
 
 					update_user_meta( $userid, 'sttv_user_data', $umeta );
