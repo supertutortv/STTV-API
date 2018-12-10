@@ -84,7 +84,7 @@ class Auth extends \WP_REST_Controller {
     public function verify( WP_REST_Request $request ) {
         $verify = sttv_verify_web_token($request);
 
-        if ($verify->ID > 0) \STTV\Log::access([
+        if (@$verify->ID > 0) \STTV\Log::access([
             'id' => $verify->ID,
             'email' => $verify->user_email,
             'type' => 'pageload'
