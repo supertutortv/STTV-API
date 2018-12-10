@@ -291,15 +291,19 @@ class Courses extends \WP_REST_Controller {
 					];
 				case 'settings':
 					$allowed['settings'] = [
-						'autoplay',
-						'dark_mode',
-						'default_course'
+						'autoplay'
 					];
-					foreach( $body as $key => $val ) {
-						if ( in_array($key,$allowed[$patch]) ) {
-							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;
-						}
+
+					if ( $udata_autoplay ) {
+						if ( !is_array( $umeta['user']['settings']['autoplay']) )
+							$umeta['user']['settings']['autoplay'] = [
+								'msl' => false,
+								'playlist' => false
+							];
+
+						$umeta['user']['settings']['autoplay'] = $updated['settings']['autoplay'] = array_merge($umeta['user']['settings']['autoplay'],$udata_autoplay);
 					}
+
 					update_user_meta( $userid, 'sttv_user_data', $umeta );
 					break;
 				default:

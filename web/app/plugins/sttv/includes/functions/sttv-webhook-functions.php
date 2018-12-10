@@ -92,7 +92,10 @@ function customer_subscription_created( $data ) {
             'type' => 'standard',
             'trialing' => ($obj['status'] == 'trialing'),
             'settings' => [
-                'autoplay' => false,
+                'autoplay' => [
+                    'msl' => false,
+                    'playlist' => false
+                ],
                 'dark_mode' => false
             ],
             'userdata' => [
