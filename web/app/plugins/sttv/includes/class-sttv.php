@@ -103,7 +103,7 @@ final class STTV {
         add_action( 'wp_enqueue_scripts', [ __NAMESPACE__ . '\\Scripts', 'init' ] );
         add_action( 'admin_init', function() {
 			if( defined('DOING_AJAX') && DOING_AJAX ) return;
-			
+			echo get_current_user();
         });
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_action( 'edit_user_profile', function( $user ) {
