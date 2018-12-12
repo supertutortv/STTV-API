@@ -118,7 +118,7 @@ final class STTV {
         }, 999 );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
-        add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
+        //add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
 
         // emails
         add_filter( 'wp_mail_from', '__return_email_from' );
