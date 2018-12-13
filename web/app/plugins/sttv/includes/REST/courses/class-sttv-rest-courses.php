@@ -96,6 +96,12 @@ class Courses extends \WP_REST_Controller {
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
 
+		if ( !is_array( $umeta['user']['settings']['autoplay']) )
+			$umeta['user']['settings']['autoplay'] = [
+				'msl' => false,
+				'playlist' => false
+			];
+		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
 		$trialing = !$admin && ($umeta['user']['trialing'] ?? current_user_can( 'course_trialing' ));
@@ -289,6 +295,7 @@ class Courses extends \WP_REST_Controller {
 						'orders',
 						'tests'
 					];
+					break;
 				case 'settings':
 					$allowed['settings'] = [
 						'autoplay'
