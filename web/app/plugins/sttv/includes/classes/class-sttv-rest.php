@@ -94,6 +94,7 @@ class API {
             'STTV\REST\Auth',
             'STTV\REST\Signup',
             'STTV\REST\Forms',
+            'STTV\REST\Migrate',
             'STTV\REST\Courses',
             'STTV\REST\Courses\Feedback',
             'STTV\REST\Courses\Reviews',
