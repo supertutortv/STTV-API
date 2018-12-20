@@ -48,7 +48,11 @@ class Migrate extends \WP_REST_Controller {
         foreach ($body as $user) {
             if ($user instanceof WP_User) {
                 unset($user->data->ID);
-                $returned[] = wp_insert_user($user);
+                $uid = wp_insert_user($user);
+                $returned[] = is_wp_error($uid) ? $uid : [
+                    'user_can_act' => user_can($uid,'the_best_act_prep_course_ever'),
+                    'id' => $uid
+                ];
             }
         }
         return sttv_rest_response(
