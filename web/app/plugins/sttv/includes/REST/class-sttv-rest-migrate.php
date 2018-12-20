@@ -43,7 +43,7 @@ class Migrate extends \WP_REST_Controller {
 
     public function users( WP_REST_Request $request ) {
         $body = unserialize($request->get_body());
-        unset($body->ID);
+        unset($body->data->ID);
         return sttv_rest_response(
             'migration',
             'Migration successful',
