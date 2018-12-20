@@ -30,7 +30,7 @@ class Migrate extends \WP_REST_Controller {
             '/users' => [
                 [
                     'methods' => 'POST',
-                    'callback' => [ $this, 'token' ],
+                    'callback' => [ $this, 'users' ],
                     'permission_callback' => [ $this, 'verifyMigrate' ]
                 ]
             ]
