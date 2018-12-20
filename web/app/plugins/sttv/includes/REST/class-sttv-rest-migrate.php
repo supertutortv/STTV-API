@@ -52,6 +52,6 @@ class Migrate extends \WP_REST_Controller {
     }
 
     public function verifyMigrate( WP_REST_Request $request ) {
-        return $request->get_header('STTVWHSEC') === 'xxxxxx';
+        return $request->get_header('STTVWHSEC') === hash_hmac( 'sha256', $request->get_body(), STTV_WHSEC );
     }
 }
