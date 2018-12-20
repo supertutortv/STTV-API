@@ -43,12 +43,19 @@ class Migrate extends \WP_REST_Controller {
 
     public function users( WP_REST_Request $request ) {
         $body = unserialize($request->get_body());
-        unset($body->data->ID);
+        $returned = [];
+        
+        foreach ($body as $user) {
+            if ($user instanceof WP_User) {
+                unset($user->data->ID);
+                $returned[] = wp_insert_user($user);
+            }
+        }
         return sttv_rest_response(
             'migration',
             'Migration successful',
             200,
-            $body
+            $returned
         );
     }
 
