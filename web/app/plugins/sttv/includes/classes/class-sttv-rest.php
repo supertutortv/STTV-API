@@ -81,6 +81,7 @@ class API {
         require_once $path . 'class-sttv-rest-auth.php';
         require_once $path . 'class-sttv-rest-signup.php';
         require_once $path . 'class-sttv-rest-forms.php';
+        require_once $path . 'class-sttv-rest-migrate.php';
         
         //courses
         require_once $path . 'courses/class-sttv-rest-courses.php';
