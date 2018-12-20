@@ -46,7 +46,7 @@ class Migrate extends \WP_REST_Controller {
             'migration',
             'Migration successful',
             200,
-            $request->get_header("STTV_WHSEC")
+            $request->get_body()
         );
     }
 
