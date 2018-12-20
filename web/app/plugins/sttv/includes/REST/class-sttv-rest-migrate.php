@@ -49,7 +49,12 @@ class Migrate extends \WP_REST_Controller {
             if ($user instanceof WP_User) {
                 unset($user->data->ID);
                 $uid = wp_insert_user($user);
-                $returned[] = is_wp_error($uid) ? $uid : [
+                if (is_wp_error($uid)) continue;
+
+                $uu = new WP_User($uid);
+                $uu->add_role('the_best_act_prep_course_ever');
+
+                $returned[$uid] = [
                     'user_can_act' => user_can($uid,'the_best_act_prep_course_ever'),
                     'id' => $uid
                 ];
