@@ -51,8 +51,6 @@ class Migrate extends \WP_REST_Controller {
                 $uid = wp_insert_user($user);
                 if (is_wp_error($uid)) continue;
 
-                $uu = new WP_User($uid);
-                $uu->add_role('the_best_act_prep_course_ever');
                 $umeta = [
                     'user' => [
                         'subscription' => '',
