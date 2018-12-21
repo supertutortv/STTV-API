@@ -165,16 +165,18 @@ class Auth extends \WP_REST_Controller {
             200
         );
 
-        $user = wp_set_current_user($id);
-        $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'|'.$user->user_login;
+        add_action('rest_post_echo_response', function() use ($id){
+            $user = wp_set_current_user($id);
+            $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'|'.$user->user_login;
 
-        $message = new \STTV\Email\Standard([
-            'to' => $email,
-            'subject' => 'SupertutorTV account password reset',
-            'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/>"
-        ]);
+            $message = new \STTV\Email\Standard([
+                'to' => $email,
+                'subject' => 'SupertutorTV account password reset',
+                'message' => "Click the link below to reset your password.<br/><a href='$link'>$link</a><br/><br/><br/>If you didn't request a password reset, you can ignore this email or forward it on to us so we can document unauthorized requests. Thanks!<br/><br/>"
+            ]);
 
-        $message->send();
+            $message->send();
+        });
 
         return sttv_rest_response(
             'resetSuccess',
