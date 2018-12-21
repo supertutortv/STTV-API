@@ -399,5 +399,5 @@ function coupon_created( $data ) {}
 // coupon.updated
 function coupon_updated( $data ) {
     $cus = \Stripe\Customer::retrieve('cus_ECF9lu9kqySlFU');
-    return get_object_vars($cus->shipping);
+    return $cus->shipping;
 }
