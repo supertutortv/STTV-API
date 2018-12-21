@@ -81,6 +81,7 @@ function customer_subscription_created( $data ) {
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
+    $shipping = json_decode(json_encode($cus->shipping),true);
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
@@ -122,7 +123,7 @@ function customer_subscription_created( $data ) {
                 "metadata" => [
                     "webhook" => "customer.subscription.created"
                 ],
-                "shipping" => json_encode($cus->shipping)
+                "shipping" => $shipping
             ]);
             $email = new \STTV\Email\Standard([
                 'to' => 'info@supertutortv.com',
@@ -262,6 +263,7 @@ function customer_subscription_updated( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $fullname = $user->first_name.' '.$user->last_name;
+    $shipping = json_decode(json_encode($cus->shipping),true);
 
     update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
 
@@ -309,7 +311,7 @@ function customer_subscription_updated( $data ) {
                             "metadata" => [
                                 "webhook" => "customer.subscription.updated"
                             ],
-                            "shipping" => json_decode($cus->shipping,true)
+                            "shipping" => $shipping
                         ]);
                         $email = new \STTV\Email\Standard([
                             'to' => 'info@supertutortv.com',
@@ -399,5 +401,5 @@ function coupon_created( $data ) {}
 // coupon.updated
 function coupon_updated( $data ) {
     $cus = \Stripe\Customer::retrieve('cus_ECF9lu9kqySlFU');
-    print_r(json_encode($cus->shipping));
+    print_r(json_decode(json_encode($cus->shipping),true));
 }
