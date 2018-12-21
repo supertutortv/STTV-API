@@ -59,15 +59,16 @@ class API {
             header_remove( 'X-Robots-Tag' );
 
             if ( in_array( $this->origin, $this->allowed_origins ) ) {
-                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $this->origin ) );
+                header( 'Access-Control-Allow-Origin: ' . $this->origin );
             } else {
-                header( 'Access-Control-Allow-Origin: ' . esc_url_raw( home_url() ) );
+                header( 'Access-Control-Allow-Origin: ' . home_url() );
             }
             header( 'Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD' );
             header( 'Access-Control-Allow-Credentials: true' );
             header( 'Access-Control-Allow-Headers: Accept, Referrer, Origin, Credentials, Content-Type, User-Agent, Access-Control-Allow-Headers, Authorization, X-WP-Nonce, X-STTV-Auth, X-STTV-WHSEC, X-RateLimit-Buster' );
             header( 'Content-Type: '.STTV_REST_CONTENT_TYPE );
             header( 'Host: ' . rest_url() );
+            header( 'X-Origin-Verify: ' . $this->origin );
     
             return $value;
             
@@ -80,6 +81,7 @@ class API {
         require_once $path . 'class-sttv-rest-auth.php';
         require_once $path . 'class-sttv-rest-signup.php';
         require_once $path . 'class-sttv-rest-forms.php';
+        require_once $path . 'class-sttv-rest-migrate.php';
         
         //courses
         require_once $path . 'courses/class-sttv-rest-courses.php';
@@ -93,6 +95,7 @@ class API {
             'STTV\REST\Auth',
             'STTV\REST\Signup',
             'STTV\REST\Forms',
+            'STTV\REST\Migrate',
             'STTV\REST\Courses',
             'STTV\REST\Courses\Feedback',
             'STTV\REST\Courses\Reviews',

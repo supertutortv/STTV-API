@@ -102,8 +102,8 @@ final class STTV {
         add_action( 'init', [ $this, 'emergency_access' ] );
         add_action( 'wp_enqueue_scripts', [ __NAMESPACE__ . '\\Scripts', 'init' ] );
         add_action( 'admin_init', function() {
-			if( defined('DOING_AJAX') && DOING_AJAX ) return;
-			
+            if( defined('DOING_AJAX') && DOING_AJAX ) return;
+            print_r(wp_upload_dir());
         });
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_action( 'edit_user_profile', function( $user ) {
@@ -118,7 +118,7 @@ final class STTV {
         }, 999 );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
 
-        add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
+        //add_filter( 'update_user_metadata', 'email_user_meta', 10, 5 );
 
         // emails
         add_filter( 'wp_mail_from', '__return_email_from' );

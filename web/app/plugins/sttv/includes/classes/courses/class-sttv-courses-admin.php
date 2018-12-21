@@ -156,21 +156,21 @@ class Admin {
 		$presc = $psubsec = [];
 
 		if ( $course['practice']['uploads'] ) {
-			$root_path = STTV_RESOURCE_DIR . $test .'/practice/';
-			if ( ! is_dir( $root_path ) ) {
-				mkdir( $root_path, 0755, true );
+			$proot_path = STTV_RESOURCE_DIR . $test .'/practice/';
+			if ( ! is_dir( $proot_path ) ) {
+				mkdir( $proot_path, 0755, true );
 			}
 
 			foreach ( $course['practice']['uploads'] as $file ) {
-				$chunk = stristr( $file['file']['url'], '/uploads');
-				$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+				$pchunk = stristr( $file['file']['url'], '/uploads');
+				$fcopy = copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
 						'file' => $test . '/practice/' . $file['file']['filename'],
 						'size' => round($file['file']['filesize'] / 1024) . ' KB',
 						'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
-						'hash' => md5_file( $root_path . $file['file']['filename'] ),
+						'hash' => md5_file( $proot_path . $file['file']['filename'] ),
 						'updated' => strtotime( $file['file']['modified'] ),
 						'in_trial' => (bool) $file['in_trial']
 					];

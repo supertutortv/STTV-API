@@ -96,6 +96,12 @@ class Courses extends \WP_REST_Controller {
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
 
+		if ( !is_array( $umeta['user']['settings']['autoplay']) )
+			$umeta['user']['settings']['autoplay'] = [
+				'msl' => false,
+				'playlist' => false
+			];
+		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
 		$trialing = !$admin && ($umeta['user']['trialing'] ?? current_user_can( 'course_trialing' ));
@@ -264,11 +270,11 @@ class Courses extends \WP_REST_Controller {
 						'wp_id' => $userid,
 						'udata_type' => $patch,
 						'udata_timestamp' => $timestamp,
-						'udata_id' => isset($udata_id) ? $udata_id : $udata_hash,
+						'udata_id' => $udata_id ?? $udata_hash,
 						'udata_name' => $udata_name,
 						'udata_thumb' => $udata_thumb,
-						'udata_path' => isset($udata_path) ? $udata_path : $udata_file,
-						'udata_test' => isset($udata_test) ? $udata_test : ''
+						'udata_path' => $udata_path ?? $udata_file,
+						'udata_test' => $udata_test ?? ''
 					];
 					
 					$wpdb->insert( $table, $allowed, ['%d','%s','%d','%s','%s','%s','%s','%s'] );
@@ -289,17 +295,23 @@ class Courses extends \WP_REST_Controller {
 						'orders',
 						'tests'
 					];
+					break;
 				case 'settings':
 					$allowed['settings'] = [
-						'autoplay',
-						'dark_mode',
-						'default_course'
+						'autoplay'
 					];
-					foreach( $body as $key => $val ) {
-						if ( in_array($key,$allowed[$patch]) ) {
-							$umeta['user'][$patch][$key] = $updated[$patch][$key] = $val;
-						}
+
+					if ( $udata_autoplay ) {
+						if ( !is_array( $umeta['user']['settings']['autoplay']) )
+							$umeta['user']['settings']['autoplay'] = [
+								'msl' => false,
+								'playlist' => false
+							];
+
+						$umeta['user']['settings']['autoplay'] = $updated['settings']['autoplay'] = array_merge($umeta['user']['settings']['autoplay'],$udata_autoplay);
+						$updated['settings']['autoplay'] = $umeta['user']['settings']['autoplay'];
 					}
+
 					update_user_meta( $userid, 'sttv_user_data', $umeta );
 					break;
 				default:

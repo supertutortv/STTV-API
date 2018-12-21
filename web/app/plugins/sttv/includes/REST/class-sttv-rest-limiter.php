@@ -131,7 +131,7 @@ class Limiter {
 		$this->start = $limiter['start'];
 
 		// Don't throttle HEAD or OPTIONS requests so folks can still get header info.
-		if ( 'HEAD' !== $request->get_method() || 'OPTIONS' !== $request->get_method() ) {
+		if ( 'HEAD' !== $request->get_method() ) {
 			$this->counter();
 		}
 
