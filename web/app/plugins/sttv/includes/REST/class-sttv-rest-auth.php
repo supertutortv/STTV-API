@@ -166,7 +166,7 @@ class Auth extends \WP_REST_Controller {
         );
 
         $user = wp_set_current_user($id);
-        $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'.'.$user->user_login;
+        $link = wp_lostpassword_url().'/'.get_password_reset_key($user).'|'.$user->user_login;
 
         $message = new \STTV\Email\Standard([
             'to' => $email,
@@ -184,7 +184,7 @@ class Auth extends \WP_REST_Controller {
     }
 
     public function verifyPwChange( WP_REST_Request $request ) {
-        list($key,$login) = explode('.',$request->get_param('key'),2);
+        list($key,$login) = explode('|',$request->get_param('key'),2);
 
         $check = check_password_reset_key($key,$login);
         return sttv_rest_response(
