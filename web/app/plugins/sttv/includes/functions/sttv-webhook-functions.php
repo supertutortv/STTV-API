@@ -121,7 +121,7 @@ function customer_subscription_created( $data ) {
                 "metadata" => [
                     "webhook" => "customer.subscription.created"
                 ],
-                "shipping" => $cus->shipping
+                "shipping" => json_decode($cus->shipping,true)
             ]);
             $email = new \STTV\Email\Standard([
                 'to' => 'info@supertutortv.com',
