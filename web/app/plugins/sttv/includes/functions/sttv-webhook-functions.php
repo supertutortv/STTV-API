@@ -106,6 +106,7 @@ function customer_subscription_created( $data ) {
     ];
 
     update_user_meta( $user->ID, 'sttv_user_data', $umeta );
+    trigger_error($cus->shipping);
 
     if ( $obj['status'] === 'trialing' ) {
         $user->add_cap('course_trialing');
@@ -121,7 +122,7 @@ function customer_subscription_created( $data ) {
                 "metadata" => [
                     "webhook" => "customer.subscription.created"
                 ],
-                "shipping" => json_decode($cus->shipping,true)
+                "shipping" => get_object_vars($cus->shipping)
             ]);
             $email = new \STTV\Email\Standard([
                 'to' => 'info@supertutortv.com',
@@ -396,4 +397,7 @@ function invoice_payment_failed( $data ) {}
 function coupon_created( $data ) {}
 
 // coupon.updated
-function coupon_updated( $data ) {}
+function coupon_updated( $data ) {
+    $cus = \Stripe\Customer::retrieve('cus_ECF9lu9kqySlFU');
+    return get_object_vars($cus->shipping);
+}
