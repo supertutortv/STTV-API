@@ -74,7 +74,7 @@ class Migrate extends \WP_REST_Controller {
                     'courses' => ['the-best-act-prep-course-ever'=>[]]
                 ];
             
-                update_user_meta( $user->ID, 'sttv_user_data', $umeta );
+                update_user_meta( $uid, 'sttv_user_data', $umeta );
 
                 $returned[$uid] = [
                     'user_can_act' => user_can($uid,'the_best_act_prep_course_ever'),
