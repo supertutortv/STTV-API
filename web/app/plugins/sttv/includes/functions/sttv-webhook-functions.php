@@ -122,7 +122,7 @@ function customer_subscription_created( $data ) {
                 "metadata" => [
                     "webhook" => "customer.subscription.created"
                 ],
-                "shipping" => get_object_vars($cus->shipping)
+                "shipping" => json_encode($cus->shipping)
             ]);
             $email = new \STTV\Email\Standard([
                 'to' => 'info@supertutortv.com',
@@ -309,7 +309,7 @@ function customer_subscription_updated( $data ) {
                             "metadata" => [
                                 "webhook" => "customer.subscription.updated"
                             ],
-                            "shipping" => $cus->shipping
+                            "shipping" => json_decode($cus->shipping,true)
                         ]);
                         $email = new \STTV\Email\Standard([
                             'to' => 'info@supertutortv.com',
@@ -399,5 +399,5 @@ function coupon_created( $data ) {}
 // coupon.updated
 function coupon_updated( $data ) {
     $cus = \Stripe\Customer::retrieve('cus_ECF9lu9kqySlFU');
-    print_r($cus->shipping);
+    print_r(json_decode($cus->shipping,true));
 }
