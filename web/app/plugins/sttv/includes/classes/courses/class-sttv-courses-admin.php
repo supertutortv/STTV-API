@@ -6,7 +6,7 @@ defined( 'ABSPATH' ) || exit;
 
 class Admin {
     public function __construct() {
-		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 10, 2 );
+		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 999, 2 );
 		add_action( 'user_register', [ $this, 'admin_course_meta' ] );
 		add_action( 'edit_user_profile_update', [ $this, 'correct_user_perms' ]);
 	}
@@ -167,7 +167,7 @@ class Admin {
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
-						'file' => $test .'/practice/' . $file['file']['filename'],
+						'file' => $test . '/practice/' . $file['file']['filename'],
 						'size' => round($file['file']['filesize'] / 1024) . ' KB',
 						'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 						'hash' => md5_file( $proot_path . $file['file']['filename'] ),
