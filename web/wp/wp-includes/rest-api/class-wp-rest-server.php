@@ -408,6 +408,7 @@ class WP_REST_Server {
 				echo '/**/' . $jsonp_callback . '(' . $result . ')';
 			} else {
 				echo $result;
+				do_action('rest_post_echo_response');
 			}
 		}
 		return null;
