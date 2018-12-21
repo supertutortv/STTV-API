@@ -6,6 +6,10 @@ defined( 'ABSPATH' ) || exit;
 ##### HELPERS #####
 ###################
 
+function __stJ2A($object) {
+    return json_decode(json_encode($object),true);
+}
+
 ##############################
 ##### STTV CUSTOM EVENTS #####
 ##############################
@@ -81,7 +85,7 @@ function customer_subscription_created( $data ) {
     $plan = $obj['plan'];
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
-    $shipping = json_decode(json_encode($cus->shipping),true);
+    $shipping = __stJ2A($cus->shipping);
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
@@ -107,7 +111,6 @@ function customer_subscription_created( $data ) {
     ];
 
     update_user_meta( $user->ID, 'sttv_user_data', $umeta );
-    trigger_error($cus->shipping);
 
     if ( $obj['status'] === 'trialing' ) {
         $user->add_cap('course_trialing');
@@ -263,7 +266,7 @@ function customer_subscription_updated( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
     $fullname = $user->first_name.' '.$user->last_name;
-    $shipping = json_decode(json_encode($cus->shipping),true);
+    $shipping = __stJ2A($cus->shipping);
 
     update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
 
@@ -399,7 +402,4 @@ function invoice_payment_failed( $data ) {}
 function coupon_created( $data ) {}
 
 // coupon.updated
-function coupon_updated( $data ) {
-    $cus = \Stripe\Customer::retrieve('cus_ECF9lu9kqySlFU');
-    print_r(json_decode(json_encode($cus->shipping),true));
-}
+function coupon_updated( $data ) {}
