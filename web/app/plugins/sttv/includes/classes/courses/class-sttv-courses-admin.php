@@ -56,7 +56,6 @@ class Admin {
 
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
 		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
-		$intros = json_decode( file_get_contents( $cache_dir . 'Intro-Videos.cache' ), true );
 
 		$caps = [
 			'course_platform_access' => true,
@@ -143,7 +142,6 @@ class Admin {
 				'abbrev' => $sec['section_info']['section_code'],
 				'type' => 'playlist',
 				'description' => $sec['section_info']['description'],
-				'intro' => $intros['videos'][$test.'-'.strtolower($sec['section_info']['section_code'])]['id'],
 				'color' => '#'.$color,
 				'collection' => $subsec,
 				'downloads' => $resources
