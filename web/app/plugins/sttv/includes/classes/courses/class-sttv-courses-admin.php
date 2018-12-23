@@ -108,10 +108,11 @@ class Admin {
 					if ( ! is_dir( $root_path ) ) {
 						mkdir( $root_path, 2775, true );
 					}
-					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
 					if ( $fcopy ){
 						$resources[] = [
+							'chunk' => $chunk,
 							'name' => $file['file']['title'],
 							'file' => $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
@@ -162,7 +163,7 @@ class Admin {
 
 			foreach ( $course['practice']['uploads'] as $file ) {
 				$pchunk = stristr( $file['file']['url'], '/uploads');
-				$fcopy = copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
+				$fcopy = @copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
