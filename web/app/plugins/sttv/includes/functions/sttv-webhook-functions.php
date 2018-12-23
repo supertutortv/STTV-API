@@ -287,7 +287,7 @@ function customer_subscription_updated( $data ) {
                     ]);
                     $email->send();
 
-                    return new \STTV\Email\Template([
+                    new \STTV\Email\Template([
                         'template' => 'trial-ended',
                         'email' => $user->user_email,
                         'name' => $fullname,
