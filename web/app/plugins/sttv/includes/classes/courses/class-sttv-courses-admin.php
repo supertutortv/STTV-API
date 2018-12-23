@@ -108,7 +108,7 @@ class Admin {
 					if ( ! is_dir( $root_path ) ) {
 						mkdir( $root_path, 2775, true );
 					}
-					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
 					if ( $fcopy ){
 						$resources[] = [
