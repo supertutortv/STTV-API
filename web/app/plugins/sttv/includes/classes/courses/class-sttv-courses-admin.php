@@ -112,7 +112,6 @@ class Admin {
 
 					if ( $fcopy ){
 						$resources[] = [
-							'chunk' => $root_path . $file['file']['filename'],
 							'name' => $file['file']['title'],
 							'file' => $test .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
