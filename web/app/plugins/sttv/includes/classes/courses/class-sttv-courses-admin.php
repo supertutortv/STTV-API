@@ -97,7 +97,7 @@ class Admin {
 		// SECTIONS
 		foreach( $course['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
-			$resources = $videos = $subsec = [];
+			$resources = $videos = $subsec = $test = [];
 			$color = '';
 
 			if ( $sec['uploads'] ) {
@@ -108,7 +108,8 @@ class Admin {
 					if ( ! is_dir( $root_path ) ) {
 						mkdir( $root_path, 0755, true );
 					}
-					$fcopy = copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
+					
 					if ( $fcopy ){
 						$resources[] = [
 							'name' => $file['file']['title'],
