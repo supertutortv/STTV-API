@@ -97,7 +97,7 @@ class Admin {
 		// SECTIONS
 		foreach( $course['sections'] as $ind => $sec) {
 			$aslug = sanitize_title_with_dashes( $sec['section_info']['section_name'] );
-			$resources = $videos = $subsec = $test = [];
+			$resources = $videos = $subsec = [];
 			$color = '';
 
 			if ( $sec['uploads'] ) {
