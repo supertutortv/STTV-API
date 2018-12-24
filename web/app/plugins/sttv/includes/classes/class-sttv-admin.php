@@ -23,6 +23,6 @@ class Admin {
     }
 
     public static function vimeo_cache_refresh() {
-        echo STTV_CRON_DIR;
+        echo exec('php -f '.STTV_CRON_DIR.'sttv-cron.php vcache');
     }
 }
