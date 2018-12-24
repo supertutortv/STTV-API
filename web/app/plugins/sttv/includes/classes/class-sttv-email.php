@@ -100,8 +100,7 @@ class Template {
             ],
             'inline_css' => true,
             'track_opens' => true,
-            'track_clicks' => true,
-            'bcc_address' => 'dave@supertutortv.com'
+            'track_clicks' => true
         ];
         
         try {

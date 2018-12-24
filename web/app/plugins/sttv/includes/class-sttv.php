@@ -67,6 +67,7 @@ final class STTV {
         require_once 'classes/class-sttv-logger.php';
         require_once 'classes/class-sttv-email.php';
         require_once 'classes/class-sttv-jwt.php';
+        require_once 'classes/class-sttv-admin.php';
 
         // checkout classes
         require_once 'classes/checkout/class-sttv-checkout-stripe.php';
@@ -87,6 +88,7 @@ final class STTV {
         require_once 'classes/multiuser/class-sttv-multiuser-admin.php';
         require_once 'classes/multiuser/class-sttv-multiuser-keys.php';
 
+        \STTV\Admin::init();
         new \STTV\Pricing\Admin();
         new \STTV\Courses\Admin();
         new \STTV\Multiuser\Admin();
