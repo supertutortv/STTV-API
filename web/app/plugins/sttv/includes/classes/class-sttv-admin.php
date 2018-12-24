@@ -23,6 +23,6 @@ class Admin {
     }
 
     public static function vimeo_cache_refresh() {
-        echo exec('whoami');
+        echo STTV_CRON_DIR;
     }
 }
