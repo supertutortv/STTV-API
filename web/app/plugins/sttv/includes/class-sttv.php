@@ -88,6 +88,7 @@ final class STTV {
         require_once 'classes/multiuser/class-sttv-multiuser-admin.php';
         require_once 'classes/multiuser/class-sttv-multiuser-keys.php';
 
+        \STTV\Admin::init();
         new \STTV\Pricing\Admin();
         new \STTV\Courses\Admin();
         new \STTV\Multiuser\Admin();
