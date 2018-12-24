@@ -23,6 +23,6 @@ class Admin {
     }
 
     public static function vimeo_cache_refresh() {
-        echo 'Hallo wurrrld!';
+        echo exec('whoami');
     }
 }
