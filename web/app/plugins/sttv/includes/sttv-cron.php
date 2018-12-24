@@ -140,9 +140,9 @@ class Cron {
                     fwrite( $filew, $contents );
                     fclose( $filew );
 
-                print_r( "Album ".$alb['name']." has been updated \r\n" );
+                echo "Album ".$alb['name']." has been updated \r\n";
             }
-            print_r( "The Vimeo JSON cache has been updated \r\n" );
+            echo "The Vimeo JSON cache has been updated \r\n";
         } catch ( Exception $e ) {
 
             print_r( $e );

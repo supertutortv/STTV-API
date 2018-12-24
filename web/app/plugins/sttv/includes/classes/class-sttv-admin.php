@@ -27,6 +27,8 @@ class Admin {
             __FILE__,
             'vcache'
         ];
+        echo '<div>';
         require_once STTV_CRON_DIR.'sttv-cron.php';
+        echo '</div>';
     }
 }
