@@ -23,7 +23,10 @@ class Admin {
     }
 
     public static function vimeo_cache_refresh() {
-        $pth = STTV_CRON_DIR.'sttv-cron.php';
-        echo passthru("php -f $pth vcache 2>&1");
+        $argv = [
+            __FILE__,
+            'vcache'
+        ];
+        require_once STTV_CRON_DIR.'sttv-cron.php';
     }
 }
