@@ -28,6 +28,13 @@ class Notifications extends \WP_REST_Controller {
 					'callback' => [ $this, 'reset' ],
 					'permission_callback' => 'sttv_verify_web_token'
 				]
+			],
+			'/notification' => [
+				[
+					'methods' => 'POST',
+					'callback' => [ $this, 'single' ],
+					'permission_callback' => 'sttv_verify_web_token'
+				]
 			]
 		];
 
@@ -38,7 +45,18 @@ class Notifications extends \WP_REST_Controller {
 
 	public function retrieve(WP_REST_Request $req) {
 		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
-		return get_posts(['post_type'=>'notifications','post__not_in'=>$notin]);
+		$posts = get_posts([
+			'post_type' => 'notifications',
+			'post__not_in' => $notin,
+			'fields' => ['ID','post_date','post_title']
+		]);
+		return array_map(function($post) {
+			return [
+				'id' => $post->ID,
+				'date' => $post->post_date,
+				'title' => $post->post_title
+			];
+		},$posts);
 	}
 
 	public function update(WP_REST_Request $req) {
