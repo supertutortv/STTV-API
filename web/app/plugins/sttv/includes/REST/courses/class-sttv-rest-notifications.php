@@ -40,7 +40,6 @@ class Notifications extends \WP_REST_Controller {
 	public function add(WP_REST_Request $req) {
 		$u = wp_get_current_user();
 		$notin = get_user_meta( $u->ID, 'cn_dismissed', true ) ?: [];
-		list($id) = json_decode($req->get_body(),true);
-		return $notin[$id];
+		return json_decode($req->get_body(),true);
 	}
 }
