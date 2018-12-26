@@ -68,7 +68,12 @@ class Notifications extends \WP_REST_Controller {
 		extract(json_decode($req->get_body(),true));
 		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		$notin[] = $id;
-		return update_user_meta( get_current_user_id(), 'cn_dismissed', $notin );
+		return sttv_rest_response(
+			'notification',
+			'Notification dismissed',
+			200,
+			[ 'updated' => update_user_meta( get_current_user_id(), 'cn_dismissed', $notin ) ]
+		);
 	}
 
 	public function single(WP_REST_Request $req) {
