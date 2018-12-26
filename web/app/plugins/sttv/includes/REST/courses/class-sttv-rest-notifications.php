@@ -20,7 +20,7 @@ class Notifications extends \WP_REST_Controller {
 				],
 				[
 					'methods' => 'PUT',
-					'callback' => [ $this, 'add' ],
+					'callback' => [ $this, 'update' ],
 					'permission_callback' => 'sttv_verify_web_token'
 				]
 			]
@@ -37,10 +37,12 @@ class Notifications extends \WP_REST_Controller {
 		return get_posts(['post_type'=>'notifications','post__not_in'=>$notin]);
 	}
 
-	public function add(WP_REST_Request $req) {
+	public function update(WP_REST_Request $req) {
+		extract(json_decode($req->get_body(),true));
 		$u = wp_get_current_user();
 		$notin = get_user_meta( $u->ID, 'cn_dismissed', true ) ?: [];
-		extract(json_decode($req->get_body(),true));
-		return $notin[] = $id;
+		$notin[] = $id;
+		
+		return $notin;
 	}
 }
