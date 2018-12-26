@@ -47,10 +47,8 @@ class Notifications extends \WP_REST_Controller {
 		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		$posts = get_posts([
 			'post_type' => 'notifications',
-			'post__not_in' => $notin,
-			'fields' => ['ID','post_date','post_title']
+			'post__not_in' => $notin
 		]);
-		return $posts;
 		return array_map(function($post) {
 			return [
 				'id' => $post->ID,
