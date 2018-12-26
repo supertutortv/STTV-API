@@ -50,6 +50,7 @@ class Notifications extends \WP_REST_Controller {
 			'post__not_in' => $notin,
 			'fields' => ['ID','post_date','post_title']
 		]);
+		return $posts;
 		return array_map(function($post) {
 			return [
 				'id' => $post->ID,
