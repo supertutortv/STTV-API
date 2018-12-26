@@ -4,6 +4,8 @@ namespace STTV\REST\Courses;
 
 defined( 'ABSPATH' ) || exit;
 
+use \WP_REST_Request;
+
 class Notifications extends \WP_REST_Controller {
 	
 	public function __construct() {}
