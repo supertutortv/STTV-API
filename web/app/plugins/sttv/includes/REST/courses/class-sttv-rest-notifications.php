@@ -32,17 +32,14 @@ class Notifications extends \WP_REST_Controller {
 	}
 
 	public function retrieve(WP_REST_Request $req) {
-		$u = wp_get_current_user();
-		$notin = get_user_meta( $u->ID, 'cn_dismissed', true ) ?: [];
+		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		return get_posts(['post_type'=>'notifications','post__not_in'=>$notin]);
 	}
 
 	public function update(WP_REST_Request $req) {
 		extract(json_decode($req->get_body(),true));
-		$u = wp_get_current_user();
-		$notin = get_user_meta( $u->ID, 'cn_dismissed', true ) ?: [];
+		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		$notin[] = $id;
-		
-		return $notin;
+		return update_user_meta( get_current_user_id(), 'cn_dismissed', $notin );
 	}
 }
