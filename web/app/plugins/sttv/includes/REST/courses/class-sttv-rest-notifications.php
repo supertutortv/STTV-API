@@ -49,13 +49,19 @@ class Notifications extends \WP_REST_Controller {
 			'post_type' => 'notifications',
 			'post__not_in' => $notin
 		]);
-		return array_map(function($post) {
-			return [
-				'id' => $post->ID,
-				'date' => $post->post_date,
-				'title' => $post->post_title
-			];
-		},$posts);
+
+		return sttv_rest_response(
+			'notification',
+			'All valid notifications for this user',
+			200,
+			[ 'data' => array_map(function($post) {
+				return [
+					'id' => $post->ID,
+					'date' => $post->post_date,
+					'title' => $post->post_title
+				];
+			},$posts) ]
+		);
 	}
 
 	public function update(WP_REST_Request $req) {
@@ -63,6 +69,17 @@ class Notifications extends \WP_REST_Controller {
 		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		$notin[] = $id;
 		return update_user_meta( get_current_user_id(), 'cn_dismissed', $notin );
+	}
+
+	public function single(WP_REST_Request $req) {
+		extract(json_decode($req->get_body(),true));
+		$post = get_post($id);
+		return sttv_rest_response(
+			'notification',
+			"Single notification $post->ID",
+			200,
+			[ 'data' => $post ]
+		);
 	}
 
 	public function reset() {
