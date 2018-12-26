@@ -55,9 +55,10 @@ class Notifications extends \WP_REST_Controller {
 			'All valid notifications for this user',
 			200,
 			[ 'data' => array_map(function($post) {
+				$d = new DateTime($post->post_date);
 				return [
 					'id' => $post->ID,
-					'date' => $post->post_date,
+					'date' => $d->format('m/d/Y'),
 					'title' => $post->post_title
 				];
 			},$posts) ]
