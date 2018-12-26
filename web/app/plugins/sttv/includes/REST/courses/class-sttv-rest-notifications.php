@@ -22,6 +22,11 @@ class Notifications extends \WP_REST_Controller {
 					'methods' => 'PUT',
 					'callback' => [ $this, 'update' ],
 					'permission_callback' => 'sttv_verify_web_token'
+				],
+				[
+					'methods' => 'DELETE',
+					'callback' => [ $this, 'reset' ],
+					'permission_callback' => 'sttv_verify_web_token'
 				]
 			]
 		];
@@ -41,5 +46,9 @@ class Notifications extends \WP_REST_Controller {
 		$notin = get_user_meta( get_current_user_id(), 'cn_dismissed', true ) ?: [];
 		$notin[] = $id;
 		return update_user_meta( get_current_user_id(), 'cn_dismissed', $notin );
+	}
+
+	public function reset() {
+		return update_user_meta( get_current_user_id(), 'cn_dismissed', [] );
 	}
 }
