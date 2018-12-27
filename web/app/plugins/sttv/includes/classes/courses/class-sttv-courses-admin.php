@@ -16,7 +16,7 @@ class Admin {
 
 		try {
 			$cus = \Stripe\Customer::all(['email'=>$email]);
-			print_r($cus);
+			print_r($cus->data);
 
 		} catch (\Exception $e) {
 			print_r($e);
