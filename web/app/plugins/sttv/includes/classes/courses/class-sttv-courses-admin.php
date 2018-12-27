@@ -17,7 +17,7 @@ class Admin {
 		try {
 			$cus = \Stripe\Customer::all(['email'=>'dave@supertutortv.com']);
 			$obj = $cus->data[0];
-			if (!empty($obj)) print_r($obj->metadata);
+			if (!empty($obj)) print_r($obj->metadata->wp_id);
 
 		} catch (\Exception $e) {
 			print_r($e);
