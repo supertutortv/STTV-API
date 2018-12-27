@@ -12,12 +12,12 @@ class Admin {
 	}
 
 	public function correct_user_perms( $id ) {
-		$user = get_userdata($id);
-		$email = $user->user_email;
+		//$user = get_userdata($id);
+		//$email = $user->user_email;
 
 		try {
 			//$cus = \Stripe\Customer::all(['email'=>$email]);
-			print_r($user);
+			print_r($id);
 
 		} catch (\Exception $e) {
 			print_r($e);
