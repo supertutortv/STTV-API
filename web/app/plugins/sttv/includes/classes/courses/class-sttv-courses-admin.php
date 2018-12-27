@@ -11,13 +11,12 @@ class Admin {
 		add_action( 'edit_user_profile', [ $this, 'correct_user_perms' ]);
 	}
 
-	public function correct_user_perms( $id ) {
-		//$user = get_userdata($id);
-		//$email = $user->user_email;
+	public function correct_user_perms( $user ) {
+		$email = $user->user_email;
 
 		try {
-			//$cus = \Stripe\Customer::all(['email'=>$email]);
-			print_r($id);
+			$cus = \Stripe\Customer::all(['email'=>$email]);
+			print_r($cus);
 
 		} catch (\Exception $e) {
 			print_r($e);
