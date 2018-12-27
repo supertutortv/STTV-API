@@ -26,17 +26,6 @@ class Admin {
 		} catch (\Exception $e) {
 			print_r($e);
 		}
-		
-		/* $ids = [428,445,1093,1108,1121,1127,1147,1166];
-		if ( in_array($id,$ids)) {
-			$user = get_userdata($id);
-			$umeta = get_user_meta( $id, 'sttv_user_data', true);
-			$user->remove_cap('course_trialing');
-			$umeta = get_user_meta( $user_id, 'sttv_user_data', true);
-			$umeta['user']['trialing'] = false;
-			if ( $id == 1147 ) $umeta['courses']['the-best-sat-prep-course-ever'] = [];
-			update_user_meta( $user_id, 'sttv_user_data', $umeta);
-		} */
 	}
 	
 	public function admin_course_meta( $user_id ) {
