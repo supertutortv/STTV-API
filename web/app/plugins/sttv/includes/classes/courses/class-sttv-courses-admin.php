@@ -8,19 +8,19 @@ class Admin {
     public function __construct() {
 		add_action( 'save_post_courses', [ $this, 'sttv_build_course' ], 999, 2 );
 		add_action( 'user_register', [ $this, 'admin_course_meta' ] );
-		add_action( 'edit_user_profile', [ $this, 'correct_user_perms' ]);
+		add_action( 'edit_user_profile_update', [ $this, 'correct_user_perms' ]);
 	}
 
 	public function correct_user_perms( $user ) {
 		$email = $user->user_email;
 
 		try {
-			$cus = \Stripe\Customer::all(['email'=>'dave@supertutortv.com']);
-			$obj = $cus->data[0];
+			$cus = \Stripe\Customer::all(['email'=>$email]);
+			$obj = $cus->data;
 			if (!empty($obj)) {
+				$obj = $obj[0];
 				$obj->metadata = ['wp_id'=>$user->ID];
 				$obj->save();
-				print_r($obj->metadata->wp_id);
 			}
 
 		} catch (\Exception $e) {
