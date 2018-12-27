@@ -85,6 +85,7 @@ class API {
         
         //courses
         require_once $path . 'courses/class-sttv-rest-courses.php';
+        require_once $path . 'courses/class-sttv-rest-notifications.php';
         require_once $path . 'courses/class-sttv-rest-feedback.php';
         require_once $path . 'courses/class-sttv-rest-reviews.php';
         require_once $path . 'courses/class-sttv-rest-multiuser.php';
@@ -97,6 +98,7 @@ class API {
             'STTV\REST\Forms',
             'STTV\REST\Migrate',
             'STTV\REST\Courses',
+            'STTV\REST\Courses\Notifications',
             'STTV\REST\Courses\Feedback',
             'STTV\REST\Courses\Reviews',
             'STTV\REST\Courses\MultiUser'

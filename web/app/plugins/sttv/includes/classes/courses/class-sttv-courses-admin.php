@@ -11,15 +11,20 @@ class Admin {
 		add_action( 'edit_user_profile_update', [ $this, 'correct_user_perms' ]);
 	}
 
-	public function correct_user_perms( $id ) {
-		$ids = [428,445,1093,1108,1121,1127,1147,1166];
-		if ( in_array($id,$ids)) {
-			$user = get_userdata($id);
-			$user->remove_cap('course_trialing');
-			$umeta = get_user_meta( $user_id, 'sttv_user_data', true);
-			$umeta['user']['trialing'] = false;
-			if ( $id == 1147 ) $umeta['courses']['the-best-sat-prep-course-ever'] = [];
-			update_user_meta( $user_id, 'sttv_user_data', $umeta);
+	public function correct_user_perms( $user ) {
+		$email = $user->user_email;
+
+		try {
+			$cus = \Stripe\Customer::all(['email'=>$email]);
+			$obj = $cus->data;
+			if (!empty($obj)) {
+				$obj = $obj[0];
+				$obj->metadata = ['wp_id'=>$user->ID];
+				$obj->save();
+			}
+
+		} catch (\Exception $e) {
+			print_r($e);
 		}
 	}
 	
