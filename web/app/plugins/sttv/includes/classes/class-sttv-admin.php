@@ -28,6 +28,7 @@ class Admin {
     }
 
     public static function vimeo_cache_refresh() {
+        echo '<div>Updating cache</div>';
         /* $argv = [
             __FILE__,
             'vcache'
@@ -111,9 +112,9 @@ class Admin {
                     fwrite( $filew, $contents );
                     fclose( $filew );
 
-                echo "Album ".$alb['name']." has been updated <br/>";
+                echo '<div>Album '.$alb['name'].' has been updated <br/></div>';
             }
-            echo "The Vimeo JSON cache has been updated <br/>";
+            echo '<div>The Vimeo JSON cache has been updated <br/></div>';
         } catch ( Exception $e ) {
 
             print_r( $e );
