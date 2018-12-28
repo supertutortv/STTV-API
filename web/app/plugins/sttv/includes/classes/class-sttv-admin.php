@@ -43,7 +43,7 @@ class Admin {
             $albs = (array) $alb_data['body']['data'];
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                $path = STTV_CACHE_DIR . '/cache/';
+                $path = STTV_CACHE_DIR . '/';
                 $pieces = explode(':',$alb['name']);
                 if (!in_array($pieces[0], self::$tests)) continue;
 
