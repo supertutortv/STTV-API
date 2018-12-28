@@ -37,7 +37,7 @@ class Admin {
         echo '</div>'; */
         try {
             
-            $vimeo = new \Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
+            $vimeo = new \Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
             
