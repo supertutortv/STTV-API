@@ -35,10 +35,10 @@ class Admin {
         echo '<div>';
         require_once STTV_CRON_DIR.'sttv-cron.php';
         echo '</div>'; */
-        print_r(get_declared_classes());
+
         try {
             
-            $vimeo = new Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
+            $vimeo = new \Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
             
