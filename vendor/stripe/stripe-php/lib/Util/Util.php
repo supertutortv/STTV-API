@@ -71,6 +71,7 @@ abstract class Util
 
             // business objects
             \Stripe\Account::OBJECT_NAME => 'Stripe\\Account',
+            \Stripe\AccountLink::OBJECT_NAME => 'Stripe\\AccountLink',
             \Stripe\AlipayAccount::OBJECT_NAME => 'Stripe\\AlipayAccount',
             \Stripe\ApplePayDomain::OBJECT_NAME => 'Stripe\\ApplePayDomain',
             \Stripe\ApplicationFee::OBJECT_NAME => 'Stripe\\ApplicationFee',
@@ -81,6 +82,7 @@ abstract class Util
             \Stripe\BitcoinTransaction::OBJECT_NAME => 'Stripe\\BitcoinTransaction',
             \Stripe\Card::OBJECT_NAME => 'Stripe\\Card',
             \Stripe\Charge::OBJECT_NAME => 'Stripe\\Charge',
+            \Stripe\CheckoutSession::OBJECT_NAME => 'Stripe\\CheckoutSession',
             \Stripe\CountrySpec::OBJECT_NAME => 'Stripe\\CountrySpec',
             \Stripe\Coupon::OBJECT_NAME => 'Stripe\\Coupon',
             \Stripe\Customer::OBJECT_NAME => 'Stripe\\Customer',

@@ -82,6 +82,9 @@ define('RECAPTCHA_SITEKEY', env('RECAPTCHA_SITEKEY'));
 define('RECAPTCHA_SECRET', env('RECAPTCHA_SECRET'));
 define('STTV_WHSEC', env('STTV_WHSEC'));
 define('STTV_BACKDOOR', env('STTV_BACKDOOR'));
+define('VIMEO_CLIENT', env('VIMEO_CLIENT'));
+define('VIMEO_TOKEN', env('VIMEO_TOKEN'));
+define('VIMEO_SECRET', env('VIMEO_SECRET'));
 
 /**
  * Bootstrap WordPress
