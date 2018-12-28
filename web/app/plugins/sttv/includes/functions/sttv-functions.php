@@ -100,3 +100,19 @@ function email_user_meta( $null, $object_id, $meta_key, $meta_value, $prev_value
 		$email->send();
 	}
 }
+
+function st_sanitize_title( $title='' ) {
+	$title = strip_tags( $title );
+	$title = preg_replace('|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $title);
+	$title = str_replace('%', '', $title);
+	$title = preg_replace('|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $title);
+	$title = strtolower($title);
+	$title = preg_replace('/&.+?;/', '', $title);
+	$title = str_replace('.', '-', $title);
+	$title = preg_replace('/[^%a-z0-9 _-]/', '', $title);
+	$title = preg_replace('/\s+/', '-', $title);
+	$title = preg_replace('|-+|', '-', $title);
+	$title = trim($title, '-');
+ 
+	return $title;
+}
