@@ -361,15 +361,26 @@ function customer_subscription_deleted( $data ) {
     $meta = $obj['metadata'];
 
     if ( !isset( $meta['wp_id'] ) ) return false;
-    
     $user = get_userdata( $meta['wp_id'] );
     if ( is_wp_error($user) ) return $user;
 
-    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
+    $fullname = $user->first_name.' '.$user->last_name;
+    $manual_cancelled = $meta['cancelled'] ?? false;
+    if ($manual_cancelled) return new \STTV\Email\Template([
+        'template' => 'course-cancelled',
+        'email' => $user->user_email,
+        'name' => $fullname,
+        'subject' => 'Cancellation Confirmation',
+        'content' => [
+            [
+                'name' => 'fname',
+                'content' => $user->first_name
+            ]
+        ]
+    ]);
 
-    foreach ($roles as $role) {
-        $user->remove_role( $role );
-    }
+    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
+    foreach ($roles as $role) $user->remove_role( $role );
 
     return $roles;
 }
@@ -379,6 +390,9 @@ function charge_succeeded( $data ) {}
 
 // charge.refunded
 function charge_refunded( $data ) {}
+
+// charge.failed
+function charge_failed( $data ) {}
 
 // invoice.created
 function invoice_created( $data ) {}

@@ -104,7 +104,6 @@ class Webhook {
                 'message' => '<pre>'.json_encode($data,JSON_PRETTY_PRINT).'</pre>'
             ]);
             $email->send();
-            $this->http = 418;
             $this->message = 'invalid_webhook';
             $this->response = [
                 [
