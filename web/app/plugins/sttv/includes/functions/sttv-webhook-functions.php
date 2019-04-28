@@ -340,15 +340,17 @@ function customer_subscription_deleted( $data ) {
 // invoice.payment_succeeded
 function invoice_payment_succeeded( $data ) {
     $obj = $data['data']['object'];
-    $cus = \Stripe\Customer::retrieve($obj['customer']);
-    $sub = \Stripe\Subscription::retrieve($obj['subscription']);
-    $meta = __stJ2A($cus->metadata);
-    $submeta = __stJ2A($sub->metadata);
-    $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $fullname = $user->first_name.' '.$user->last_name;
+    $priship = null;
 
-    if ($obj['paid'] == true) {
+    if ($obj['paid'] == true && $obj['amount_paid'] > 0) {
+        $cus = \Stripe\Customer::retrieve($obj['customer']);
+        $sub = \Stripe\Subscription::retrieve($obj['subscription']);
+        $meta = __stJ2A($cus->metadata);
+        $submeta = __stJ2A($sub->metadata);
+        $user = get_userdata( $meta['wp_id'] );
+        $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+        $fullname = $user->first_name.' '.$user->last_name;
+
         $email = new \STTV\Email\Standard([
             'to' => 'info@supertutortv.com',
             'subject' => $fullname.'\'s trial has ended - PAID',
@@ -365,7 +367,7 @@ function invoice_payment_succeeded( $data ) {
                 "metadata" => [
                     "webhook" => "invoice.payment_succeeded"
                 ],
-                "shipping" => __stJ2A($cus->shipping)
+                "shipping" => $obj['customer_shipping']
             ]);
         }
     }
@@ -389,25 +391,27 @@ function invoice_payment_failed( $data ) {}
 // charge.succeeded
 function charge_succeeded( $data ) {
     $obj = $data['data']['object'];
-    $cus = \Stripe\Customer::retrieve($obj['customer']);
-    $meta = __stJ2A($cus->metadata);
-    $user = get_userdata( $meta['wp_id'] );
-    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
-    $fullname = $user->first_name.' '.$user->last_name;
+    if ($obj['paid'] == true) {
+        $cus = \Stripe\Customer::retrieve($obj['customer']);
+        $meta = __stJ2A($cus->metadata);
+        $user = get_userdata( $meta['wp_id'] );
+        $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+        $fullname = $user->first_name.' '.$user->last_name;
 
-    if ($obj['paid'] == true && strpos($obj['description'],'Payment for invoice') > -1) {
-        $user->remove_cap('course_trialing');
-        $umeta['user']['trialing'] = false;
-        update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-    }
+        if (strpos($obj['description'],'Payment for invoice') > -1) {
+            $user->remove_cap('course_trialing');
+            $umeta['user']['trialing'] = false;
+            update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+        }
 
-    if ($obj['paid'] == true && strpos($obj['description'],'Priority shipping') > -1) {
-        $email = new \STTV\Email\Standard([
-            'to' => 'info@supertutortv.com',
-            'subject' => $fullname.' paid for priority shipping',
-            'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
-        ]);
-        $email->send();
+        if (strpos($obj['description'],'Priority shipping') > -1) {
+            $email = new \STTV\Email\Standard([
+                'to' => 'info@supertutortv.com',
+                'subject' => $fullname.' paid for priority shipping',
+                'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
+            ]);
+            $email->send();
+        }
     }
 }
 
