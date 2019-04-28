@@ -1,9 +1,12 @@
 <?php
+
+$version = file_get_contents('./VERSION');
+
 /*
 Plugin Name:  STTV API
 Plugin URI:   https://app.supertutortv.com
 Description:  Separate standalone API for Supertutor Media web resources
-Version:      2.0.0
+Version:      {$version}
 Author:       David Paul
 License:      MIT License
 */
@@ -18,6 +21,6 @@ if ( ! defined( 'STTV_PLUGIN_FILE' ) ) {
 
 require_once __DIR__ . '/includes/class-sttv.php';
 
-$sttv = \STTV\STTV::instance();
+$sttv = \STTV\STTV::instance($version);
 
 //end of line, man.

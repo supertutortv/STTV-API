@@ -12,15 +12,15 @@ final class STTV {
 
     protected static $_instance = null;
 
-    public static function instance() {
+    public static function instance($ver = '2.0.0') {
 		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+			self::$_instance = new self($ver);
 		}
 		return self::$_instance;
     }
 
-    public function __construct() {
-        $this->define_constants();
+    public function __construct( $ver = '2.0.0') {
+        $this->define_constants($ver);
         $this->includes();
         $this->init_hooks();
         $this->files();
@@ -28,10 +28,10 @@ final class STTV {
         do_action( 'sttv_loaded' );
     }
 
-    private function define_constants() {
+    private function define_constants($ver) {
         // MAIN CONSTANTS
         $this->define( 'STTV_BRANDNAME', 'SupertutorTV' );
-        $this->define( 'STTV_VERSION', '2.0.0' );
+        $this->define( 'STTV_VERSION', $ver );
         $this->define( 'STTV_PREFIX', 'sttv' );
         $this->define( 'STTV_API_DIR', dirname( dirname( dirname( ABSPATH ) ) ) );
         $this->define( 'STTV_CACHE_DIR', STTV_API_DIR . '/cache/' );
