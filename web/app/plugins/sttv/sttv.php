@@ -1,6 +1,6 @@
 <?php
 
-$version = file_get_contents('./VERSION');
+$version = file_get_contents(__DIR__.'/VERSION');
 
 /*
 Plugin Name:  STTV API
