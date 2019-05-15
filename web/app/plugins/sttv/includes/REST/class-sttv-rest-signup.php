@@ -88,38 +88,72 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _account( $body, $request ) {
-        extract($body);
-        $firstname = ucfirst(strtolower($firstname));
-        $lastname = ucfirst(strtolower($lastname));
-        $email = strtolower($email);
-        $fullname = $firstname.' '.$lastname;
 
-        if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
+        return sttv_stripe_errors(function() use ($body) {
+            extract($body);
+            $firstname = ucfirst(strtolower($firstname));
+            $lastname = ucfirst(strtolower($lastname));
+            $email = strtolower($email);
+            $fullname = $firstname.' '.$lastname;
 
-        if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. If this is you, please login and make your purchase through the dashboard. ', 200 );
+            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
 
-        return sttv_rest_response(
-            'signupSuccess',
-            'Account created',
-            200,
-            [
-                'update' => [
+            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. If this is you, please login and make your purchase through the dashboard. ', 200 );
+
+            $user_id = wp_insert_user([
+                'user_pass' => $password,
+                'user_email' => $email,
+                'first_name' => $firstname,
+                'last_name' => $lastname,
+                'display_name' => $fullname,
+                'user_login' => $email,
+                'show_admin_bar_front' => 'false'
+            ]);
+
+            if ( is_wp_error( $user_id ) ) {
+                return sttv_rest_response(
+                    'signupError',
+                    'There was an error creating your account. Please check back again later.',
+                    200,
+                    [ 'data' => $user_id ]
+                );
+            }
+
+            $login = wp_set_current_user($user_id);
+
+            $customer = \Stripe\Customer::create([
+                'description' => $fullname,
+                'name' => $fullname,
+                'email' => $email,
+                'metadata' => [ 'wp_id' => $user_id ]
+            ]);
+
+            $token = new \STTV\JWT( $login, DAY_IN_SECONDS*5 );
+            sttv_set_auth_cookie($token->token);
+
+            return sttv_rest_response(
+                'signupSuccess',
+                'Account created',
+                200,
+                [
                     'account' => [
                         'email' => $email,
                         'firstname' => $firstname,
                         'lastname' => $lastname,
-                        'password' => $password
+                        'id' => $user_id,
+                        'customer' => $customer
                     ]
                 ]
-            ]
-        );
+            );
+
+        });
     }
 
     private function _pay( $body, $request ) {
         if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
         return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
+            /* $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
             $items = $courseids = [];
 
             $cus = $body['customer'];
@@ -134,39 +168,6 @@ class Signup extends \WP_REST_Controller {
             $fullname = $firstname.' '.$lastname;
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
-    
-            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
-
-            $creds = [
-                'user_pass' => $password,
-                'user_email' => $email,
-                'first_name' => $firstname,
-                'last_name' => $lastname,
-                'display_name' => $fullname,
-                'user_login' => $email,
-                'show_admin_bar_front' => 'false'
-            ];
-            $user_id = wp_insert_user($creds);
-
-            if ( is_wp_error( $user_id ) ) {
-                return sttv_rest_response(
-                    'signupError',
-                    'Cannot update your account. Please check back again later.',
-                    200,
-                    [ 'data' => $user_id ]
-                );
-            }
-
-            $login = wp_set_current_user($user_id);
-
-            $customer = \Stripe\Customer::create([
-                'description' => $fullname,
-                'email' => $email,
-                'source' => $cus['token'] ?: null,
-                'coupon' => $body['pricing']['coupon']['id'] ?: null,
-                'shipping' => $cus['shipping'],
-                'metadata' => [ 'wp_id' => $user_id ]
-            ]);
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
@@ -183,10 +184,7 @@ class Signup extends \WP_REST_Controller {
                     'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
-            ]);
-
-            $token = new \STTV\JWT( $user, $skiptrial ? DAY_IN_SECONDS*30 : DAY_IN_SECONDS*5 );
-            sttv_set_auth_cookie($token->token);
+            ]); */
 
             return sttv_rest_response(
                 'checkoutSuccess',
