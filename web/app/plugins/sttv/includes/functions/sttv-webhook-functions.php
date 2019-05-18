@@ -51,7 +51,7 @@ function customer_created( $data ) {
                 'login_timestamps' => []
             ]
         ],
-        'courses' => []
+        'courses' => json_decode('{}',true)
     ]);
 
     return $wpdb->update($wpdb->users, [
