@@ -33,6 +33,27 @@ function customer_created( $data ) {
     global $wpdb;
     $customer = $data['data']['object'];
     $user_id = $customer['metadata']['wp_id'];
+    update_user_meta( $user_id, 'sttv_user_data', [
+        'user' => [
+            'subscription' => '',
+            'history' => [],
+            'downloads' => [],
+            'type' => 'standard',
+            'trialing' => null,
+            'settings' => [
+                'autoplay' => [
+                    'msl' => false,
+                    'playlist' => false
+                ],
+                'dark_mode' => false
+            ],
+            'userdata' => [
+                'login_timestamps' => []
+            ]
+        ],
+        'courses' => []
+    ]);
+
     return $wpdb->update($wpdb->users, [
         'user_login' => str_replace('cus_','',$customer['id']),
         'user_nicename' => str_replace(' ','-',strtolower($customer['description'])).'-'.str_replace('cus_','',$customer['id'])
@@ -89,28 +110,6 @@ function customer_subscription_created( $data ) {
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
     foreach ( $roles as $role ) $user->add_role($role);
-    $umeta = [
-        'user' => [
-            'subscription' => $obj['id'],
-            'history' => [],
-            'downloads' => [],
-            'type' => 'standard',
-            'trialing' => ($obj['status'] == 'trialing'),
-            'settings' => [
-                'autoplay' => [
-                    'msl' => false,
-                    'playlist' => false
-                ],
-                'dark_mode' => false
-            ],
-            'userdata' => [
-                'login_timestamps' => []
-            ]
-        ],
-        'courses' => $courses
-    ];
-
-    update_user_meta( $user->ID, 'sttv_user_data', $umeta );
 
     if ( $obj['status'] === 'trialing' ) {
         $user->add_cap('course_trialing');

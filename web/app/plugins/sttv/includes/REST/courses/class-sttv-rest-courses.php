@@ -83,7 +83,7 @@ class Courses extends \WP_REST_Controller {
 			'dataInvalid',
 			'We\'re still building your account for you. Please wait...',
 			200,
-			[ 'retry' => 500 ]
+			[ 'retry' => 3000 ]
 		);
 
 		//if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
