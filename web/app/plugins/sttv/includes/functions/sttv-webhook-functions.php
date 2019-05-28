@@ -109,32 +109,11 @@ function customer_subscription_created( $data ) {
     $shipping = __stJ2A($cus->shipping);
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
-    foreach ( $roles as $role ) $user->add_role($role);
 
-    if ( $obj['status'] === 'trialing' ) {
-        $user->add_cap('course_trialing');
-    }
-    elseif ($obj['status'] === 'active') {
-        $priship = null;
-        if ( $meta['priship'] == 'true' ) {
-            $shipchg = \Stripe\Charge::create([
-                "amount" => $obj['plan']['metadata']['priship'] ?? 795,
-                "currency" => "usd",
-                "customer" => $obj['customer'],
-                "description" => "Priority shipping for ".$fullname,
-                "metadata" => [
-                    "webhook" => "customer.subscription.created"
-                ],
-                "shipping" => $shipping
-            ]);
-            $email = new \STTV\Email\Standard([
-                'to' => 'info@supertutortv.com',
-                'subject' => $fullname.' paid for priority shipping',
-                'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
-            ]);
-            $email->send();
-        }
-    }
+    if ( $obj['status'] === 'trialing' )
+        foreach ( $roles as $role ) $user->add_role($role.'_trial');
+    else
+        foreach ( $roles as $role ) $user->add_role($role);
 
     preg_match('/The Best (\w+) Prep Course Ever/m',$prod->name,$matches);
 
@@ -275,9 +254,15 @@ function customer_subscription_updated( $data ) {
         switch($attr) {
             case 'status':
                 if ($val === 'trialing' && $obj['status'] === 'active') {
-                    $user->remove_cap('course_trialing');
                     $umeta['user']['trialing'] = false;
                     update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+
+                    $roles = explode('|',$plan['metadata']['roles']);
+
+                    foreach ( $roles as $role ) {
+                        $user->remove_role($role.'_trial');
+                        $user->add_role($role);
+                    }
 
                     $email = new \STTV\Email\Standard([
                         'to' => 'info@supertutortv.com',

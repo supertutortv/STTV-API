@@ -87,11 +87,10 @@ class Courses extends \WP_REST_Controller {
 		);
 
 		//if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
-
 		
 		$crss = [];
-		if ( current_user_can("course_sat_access") ) $crss['the-best-sat-prep-course-ever'] = [];
-		if ( current_user_can("course_act_access") ) $crss['the-best-act-prep-course-ever'] = [];
+		if ( current_user_can( "course_sat_access" ) ) $crss['the-best-sat-prep-course-ever'] = [];
+		if ( current_user_can( "course_act_access" ) ) $crss['the-best-act-prep-course-ever'] = [];
 		$umeta['courses'] = $crss;
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
@@ -104,8 +103,6 @@ class Courses extends \WP_REST_Controller {
 		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
-		$trialing = !$admin && ($umeta['user']['trialing'] ?? current_user_can( 'course_trialing' ));
-
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
 		foreach( $access as $slug => $data ) {
@@ -116,15 +113,17 @@ class Courses extends \WP_REST_Controller {
 				'post_type' => 'courses'
 			]);
 			$meta = get_post_meta( $course[0]->ID, 'sttv_course_data', true );
-			if ( !$meta )
-				return sttv_rest_response(
-					'course_not_found',
-					'The course requested was not found or does not exist. Please try again.',
-					404
-				);
+			if ( !$meta ) return sttv_rest_response(
+				'course_not_found',
+				'The course requested was not found or does not exist. Please try again.',
+				404
+			);
 
 			$test_code = strtolower($meta['test']);
+
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
+
+			$trialing = !$admin && current_user_can( "course_{$test_code}_trial_access" );
 
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				foreach ( $meta['collections'] as $sec => &$val ) {
@@ -181,54 +180,6 @@ class Courses extends \WP_REST_Controller {
 				];
 				$umeta['courses'][$slug][$rec['udata_type']][] = $darray;
 			}
-			/* $umeta['courses'][$slug] = [
-				'id' => $meta['id'],
-				'name' => $meta['name'],
-				'slug' => $meta['slug'],
-				'test' => $meta['test'],
-				'intro' => $meta['intro'],
-				'type' => 'collection',
-				'collections' => (function() use (&$meta,$trialing) {
-					$sections = [];
-					foreach ( $meta['sections'] as $sec => $val ) {
-						foreach ( $val['files'] as &$file ) {
-							if ( $file['in_trial'] === false && $trialing ) {
-								$file['file'] = 0;
-							}
-							unset( $file['in_trial'] );
-						}
-						foreach ( $val['collection'] as $k => &$subsec ) {
-							if ( $subsec['data']['in_trial'] === false && $trialing ) {
-								foreach ( $subsec['collection'] as &$vid ) {
-									$vid['ID'] = 0;
-								}
-							}
-							unset( $subsec['data']['in_trial'] );
-						}
-						$sections[$sec] = $val;
-					}
-					foreach ( $meta['practice']['files'] as &$file ) {
-						if ( ! $file['in_trial'] && $trialing ) {
-							$file['file'] = 0;
-							unset( $file['in_trial'] );
-						}
-					}
-					foreach ( $meta['practice']['collection'] as $k => &$book ) {
-						if ( ! $book['data']['in_trial'] && $trialing ) {
-							foreach ( $book['collection'] as $b => &$test ) {
-								foreach ( $test['collection'] as $t => &$sec ) {
-									foreach ( $sec['collection'] as $s => &$vid ) {
-										$vid['ID'] = 0;
-									}
-								}
-							}
-						}
-						unset( $book['data']['in_trial'] );
-					}
-					$sections['practice'] = $meta['practice'];
-					return $sections;
-				})()
-			]; */
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
