@@ -98,7 +98,48 @@ class Signup extends \WP_REST_Controller {
 
             if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
 
-            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. If this is you, please login and make your purchase through the dashboard. ', 200 );
+            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
+
+            return sttv_rest_response(
+                'signupSuccess',
+                'Account created',
+                200,
+                [
+                    'update' => [
+                        'account' => [
+                            'email' => $email,
+                            'firstname' => $firstname,
+                            'lastname' => $lastname,
+                            'id' => $user_id
+                        ]
+                    ]
+                ]
+            );
+
+        });
+    }
+
+    private function _pay( $body, $request ) {
+        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
+
+        return sttv_stripe_errors(function() use ($body) {
+            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
+            $items = $courseids = [];
+
+            $cus = $body['customer'];
+            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
+            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
+            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
+            
+            extract($cus['account']);
+            $firstname = ucfirst(strtolower($firstname));
+            $lastname = ucfirst(strtolower($lastname));
+            $email = strtolower($email);
+            $fullname = $firstname.' '.$lastname;
+
+            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
+
+            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
 
             $user_id = wp_insert_user([
                 'user_pass' => $password,
@@ -125,49 +166,11 @@ class Signup extends \WP_REST_Controller {
                 'description' => $fullname,
                 'name' => $fullname,
                 'email' => $email,
+                'source' => $cus['token'] ?: null,
+                'coupon' => $body['pricing']['coupon']['id'] ?: null,
+                'shipping' => $cus['shipping'],
                 'metadata' => [ 'wp_id' => $user_id ]
             ]);
-
-            $token = new \STTV\JWT( $login, DAY_IN_SECONDS*5 );
-            sttv_set_auth_cookie($token->token);
-
-            return sttv_rest_response(
-                'signupSuccess',
-                'Account created',
-                200,
-                [
-                    'account' => [
-                        'email' => $email,
-                        'firstname' => $firstname,
-                        'lastname' => $lastname,
-                        'id' => $user_id,
-                        'customer' => $customer
-                    ]
-                ]
-            );
-
-        });
-    }
-
-    private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
-
-        return sttv_stripe_errors(function() use ($body) {
-            /* $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
-            $items = $courseids = [];
-
-            $cus = $body['customer'];
-            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
-            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-            
-            extract($cus['account']);
-            $firstname = ucfirst(strtolower($firstname));
-            $lastname = ucfirst(strtolower($lastname));
-            $email = strtolower($email);
-            $fullname = $firstname.' '.$lastname;
-
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
@@ -184,7 +187,10 @@ class Signup extends \WP_REST_Controller {
                     'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
-            ]); */
+            ]);
+
+            $token = new \STTV\JWT( $login, DAY_IN_SECONDS*5 );
+            sttv_set_auth_cookie($token->token);
 
             return sttv_rest_response(
                 'checkoutSuccess',
