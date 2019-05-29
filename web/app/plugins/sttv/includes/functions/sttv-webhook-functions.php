@@ -253,23 +253,13 @@ function customer_subscription_updated( $data ) {
         switch($attr) {
             case 'status':
                 if ($val === 'trialing' && $obj['status'] === 'active') {
-                    $umeta['user']['trialing'] = false;
-                    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
-
                     $roles = explode('|',$plan['metadata']['roles']);
 
                     foreach ( $roles as $role ) {
                         $user->remove_role($role.'_trial');
                         $user->add_role($role);
                     }
-
-                    $email = new \STTV\Email\Standard([
-                        'to' => 'info@supertutortv.com',
-                        'subject' => $fullname.'\'s trial has ended - PAID',
-                        'message' => 'Please wait 24 hrs before shipping their book(s).'
-                    ]);
-                    $email->send();
-
+                    
                     new \STTV\Email\Template([
                         'template' => 'trial-ended',
                         'email' => $user->user_email,
@@ -286,26 +276,6 @@ function customer_subscription_updated( $data ) {
                             ]
                         ]
                     ]);
-
-                    $priship = null;
-                    if ( $meta['priship'] == 'true' ) {
-                        $priship = \Stripe\Charge::create([
-                            "amount" => $obj['plan']['metadata']['priship'] ?? 795,
-                            "currency" => "usd",
-                            "customer" => $obj['customer'],
-                            "description" => "Priority shipping for ".$fullname,
-                            "metadata" => [
-                                "webhook" => "customer.subscription.updated"
-                            ],
-                            "shipping" => $shipping
-                        ]);
-                        $email = new \STTV\Email\Standard([
-                            'to' => 'info@supertutortv.com',
-                            'subject' => $fullname.' paid for priority shipping',
-                            'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
-                        ]);
-                        $email->send();
-                    }
 
                     $sub->cancel_at_period_end = true;
                     $sub->save();
@@ -430,7 +400,6 @@ function charge_succeeded( $data ) {
         $fullname = $user->first_name.' '.$user->last_name;
 
         if (strpos($obj['description'],'Payment for invoice') > -1) {
-            $user->remove_cap('course_trialing');
             $umeta['user']['trialing'] = false;
             update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
         }
