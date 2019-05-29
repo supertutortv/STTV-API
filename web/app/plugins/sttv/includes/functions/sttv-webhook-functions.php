@@ -33,6 +33,27 @@ function customer_created( $data ) {
     global $wpdb;
     $customer = $data['data']['object'];
     $user_id = $customer['metadata']['wp_id'];
+    update_user_meta( $user_id, 'sttv_user_data', [
+        'user' => [
+            'subscription' => '',
+            'history' => [],
+            'downloads' => [],
+            'type' => 'standard',
+            'trialing' => null,
+            'settings' => [
+                'autoplay' => [
+                    'msl' => false,
+                    'playlist' => false
+                ],
+                'dark_mode' => false
+            ],
+            'userdata' => [
+                'login_timestamps' => []
+            ]
+        ],
+        'courses' => json_decode('{}',true)
+    ]);
+
     return $wpdb->update($wpdb->users, [
         'user_login' => str_replace('cus_','',$customer['id']),
         'user_nicename' => str_replace(' ','-',strtolower($customer['description'])).'-'.str_replace('cus_','',$customer['id'])
@@ -89,54 +110,11 @@ function customer_subscription_created( $data ) {
     $shipping = __stJ2A($cus->shipping);
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
-    foreach ( $roles as $role ) $user->add_role($role);
-    $umeta = [
-        'user' => [
-            'subscription' => $obj['id'],
-            'history' => [],
-            'downloads' => [],
-            'type' => 'standard',
-            'trialing' => ($obj['status'] == 'trialing'),
-            'settings' => [
-                'autoplay' => [
-                    'msl' => false,
-                    'playlist' => false
-                ],
-                'dark_mode' => false
-            ],
-            'userdata' => [
-                'login_timestamps' => []
-            ]
-        ],
-        'courses' => $courses
-    ];
 
-    update_user_meta( $user->ID, 'sttv_user_data', $umeta );
-
-    if ( $obj['status'] === 'trialing' ) {
-        $user->add_cap('course_trialing');
-    }
-    elseif ($obj['status'] === 'active') {
-        $priship = null;
-        if ( $meta['priship'] == 'true' ) {
-            $shipchg = \Stripe\Charge::create([
-                "amount" => $obj['plan']['metadata']['priship'] ?? 795,
-                "currency" => "usd",
-                "customer" => $obj['customer'],
-                "description" => "Priority shipping for ".$fullname,
-                "metadata" => [
-                    "webhook" => "customer.subscription.created"
-                ],
-                "shipping" => $shipping
-            ]);
-            $email = new \STTV\Email\Standard([
-                'to' => 'info@supertutortv.com',
-                'subject' => $fullname.' paid for priority shipping',
-                'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
-            ]);
-            $email->send();
-        }
-    }
+    if ( $obj['status'] === 'trialing' )
+        foreach ( $roles as $role ) $user->add_role($role.'_trial');
+    else
+        foreach ( $roles as $role ) $user->add_role($role);
 
     preg_match('/The Best (\w+) Prep Course Ever/m',$prod->name,$matches);
 
@@ -275,6 +253,59 @@ function customer_subscription_updated( $data ) {
         switch($attr) {
             case 'status':
                 if ($val === 'trialing' && $obj['status'] === 'active') {
+                    $umeta['user']['trialing'] = false;
+                    update_user_meta( $meta['wp_id'], 'sttv_user_data', $umeta );
+
+                    $roles = explode('|',$plan['metadata']['roles']);
+
+                    foreach ( $roles as $role ) {
+                        $user->remove_role($role.'_trial');
+                        $user->add_role($role);
+                    }
+
+                    $email = new \STTV\Email\Standard([
+                        'to' => 'info@supertutortv.com',
+                        'subject' => $fullname.'\'s trial has ended - PAID',
+                        'message' => 'Please wait 24 hrs before shipping their book(s).'
+                    ]);
+                    $email->send();
+
+                    new \STTV\Email\Template([
+                        'template' => 'trial-ended',
+                        'email' => $user->user_email,
+                        'name' => $fullname,
+                        'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
+                        'content' => [
+                            [
+                                'name' => 'fname',
+                                'content' => $user->first_name
+                            ],
+                            [
+                                'name' => 'coursename',
+                                'content' => $prod->name
+                            ]
+                        ]
+                    ]);
+
+                    $priship = null;
+                    if ( $meta['priship'] == 'true' ) {
+                        $priship = \Stripe\Charge::create([
+                            "amount" => $obj['plan']['metadata']['priship'] ?? 795,
+                            "currency" => "usd",
+                            "customer" => $obj['customer'],
+                            "description" => "Priority shipping for ".$fullname,
+                            "metadata" => [
+                                "webhook" => "customer.subscription.updated"
+                            ],
+                            "shipping" => $shipping
+                        ]);
+                        $email = new \STTV\Email\Standard([
+                            'to' => 'info@supertutortv.com',
+                            'subject' => $fullname.' paid for priority shipping',
+                            'message' => '<pre>'.json_encode($cus->shipping,JSON_PRETTY_PRINT).'</pre>'
+                        ]);
+                        $email->send();
+                    }
 
                     $sub->cancel_at_period_end = true;
                     $sub->save();

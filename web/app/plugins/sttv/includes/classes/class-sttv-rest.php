@@ -79,6 +79,7 @@ class API {
         $path = dirname( __DIR__ ) . '/REST/';
         require_once $path . 'class-sttv-rest-limiter.php';
         require_once $path . 'class-sttv-rest-auth.php';
+        require_once $path . 'class-sttv-rest-checkout.php';
         require_once $path . 'class-sttv-rest-signup.php';
         require_once $path . 'class-sttv-rest-forms.php';
         require_once $path . 'class-sttv-rest-migrate.php';
@@ -94,6 +95,7 @@ class API {
     public function register_rest_routes() {
         $controllers = [
             'STTV\REST\Auth',
+            'STTV\REST\Checkout',
             'STTV\REST\Signup',
             'STTV\REST\Forms',
             'STTV\REST\Migrate',

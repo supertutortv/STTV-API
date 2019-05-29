@@ -32,12 +32,16 @@ class Admin {
 		if ( current_user_can('manage_options') ) 
 			return update_user_meta( $user_id, 'sttv_user_data', [
 				'user' => [
+					'subscription' => '',
 					'history' => [],
 					'downloads' => [],
 					'type' => 'admin',
 					'trialing' => false,
 					'settings' => [
-						'autoplay' => false,
+						'autoplay' => [
+							'msl' => false,
+							'playlist' => false
+					],
 						'dark_mode' => false
 					],
 					'userdata' => [
@@ -65,7 +69,6 @@ class Admin {
 		$caps = [
 			'course_platform_access' => true,
 			"course_{$test}_access" => true,
-			"course_{$test}_trialing" => true,
 			"course_{$test}_feedback" => true,
 			"course_{$test}_reviews" => true
 		];
@@ -240,8 +243,15 @@ class Admin {
 
 		$role = add_role(str_replace(' ','_',strtolower($post->post_title)),$post->post_title) ?? get_role(str_replace(' ','_',strtolower($post->post_title)));
 
+		$role_trial = add_role(str_replace(' ','_',strtolower($post->post_title.' Trial')),$post->post_title.' Trial') ?? get_role(str_replace(' ','_',strtolower($post->post_title.' Trial')));
+
+		$role->add_cap("course_{$test}_full_access",true);
+		$role_trial->add_cap("course_{$test}_trial_access",true);
+
 		foreach( $caps as $cap => $grant ) {
 			$role->add_cap($cap,$grant);
+			$role_trial->add_cap($cap,$grant);
 		}
+
 	}
 }

@@ -1,28 +1,19 @@
 {
-  "name": "roots/bedrock",
+  "name": "supertutortv/api",
   "type": "project",
   "license": "MIT",
-  "description": "WordPress boilerplate with modern development tools, easier configuration, and an improved folder structure",
-  "homepage": "https://roots.io/bedrock/",
+  "description": "Supertutortv courses API",
+  "homepage": "https://api.supertutortv.com/",
   "authors": [
     {
-      "name": "Scott Walkinshaw",
-      "email": "scott.walkinshaw@gmail.com",
-      "homepage": "https://github.com/swalkinshaw"
-    },
-    {
-      "name": "Ben Word",
-      "email": "ben@benword.com",
-      "homepage": "https://github.com/retlehs"
+      "name": "David Paul",
+      "email": "dave@supertutortv.com",
+      "homepage": "https://github.com/enlightenedpie"
     }
   ],
   "keywords": [
     "bedrock", "roots", "wordpress", "stack", "composer", "vagrant", "wp"
   ],
-  "support": {
-    "issues": "https://github.com/roots/bedrock/issues",
-    "forum": "https://discourse.roots.io/category/bedrock"
-  },
   "config": {
     "preferred-install": "dist"
   },
