@@ -245,10 +245,9 @@ function customer_subscription_updated( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
 
-    update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
-
     if (!$user) return $user;
 
+    // update any previous attributes
     foreach ($prev as $attr => $val) {
         switch($attr) {
             case 'status':
@@ -284,6 +283,10 @@ function customer_subscription_updated( $data ) {
             break;
         }
     }
+
+    $umeta['user']['trialing'] = ($obj['status'] === 'active');
+    update_user_meta($meta['wp_id'],'sttv_user_data',$umeta);
+    update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
     return $prev;
 }
 
