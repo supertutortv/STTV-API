@@ -284,7 +284,7 @@ function customer_subscription_updated( $data ) {
         }
     }
 
-    $umeta['user']['trialing'] = ($obj['status'] === 'active');
+    $umeta['user']['trialing'] = ($obj['status'] === 'trialing');
     update_user_meta($meta['wp_id'],'sttv_user_data',$umeta);
     update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
     return $prev;
