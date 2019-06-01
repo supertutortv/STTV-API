@@ -91,6 +91,10 @@ function customer_subscription_created( $data ) {
     $cus = \Stripe\Customer::retrieve($obj['customer']);
     $sub = \Stripe\Subscription::retrieve($obj['id']);
 
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+
+    $umeta['user']['subscription'] = $obj['id'];
+
     if ( isset( $meta['wp_id'] ) ) {
         $uid = $meta['wp_id'];
     } else {
@@ -108,6 +112,9 @@ function customer_subscription_created( $data ) {
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
     $shipping = __stJ2A($cus->shipping);
+    $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
+
+    $umeta['user']['subscription'] = $obj['id'];
 
     $roles = explode('|',$obj['plan']['metadata']['roles']);
 
@@ -285,6 +292,7 @@ function customer_subscription_updated( $data ) {
     }
 
     $umeta['user']['trialing'] = ($obj['status'] === 'trialing');
+    $umeta['user']['subscription'] = $obj['id'];
     update_user_meta($meta['wp_id'],'sttv_user_data',$umeta);
     update_user_meta($meta['wp_id'],'subscription_id',$obj['id']);
     return $prev;
