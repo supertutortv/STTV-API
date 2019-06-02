@@ -4,4 +4,4 @@
 web/.htaccess
 mode_modules
 *.code-workspace
-web/app/uploads/
+web/app/uploads
