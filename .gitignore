@@ -1,7 +1,8 @@
 .DS_Store
 .env
 .env.example
-web/.htaccess
-mode_modules
+.htaccess
+node_modules
 *.code-workspace
-web/app/uploads/
+web/app/uploads
+.vscode
