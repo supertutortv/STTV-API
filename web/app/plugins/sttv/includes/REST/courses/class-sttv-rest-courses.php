@@ -75,7 +75,7 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		global $wpdb;
 		$user = wp_get_current_user();
-		$userid = get_current_user_id();
+		$userid = $user->ID;
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -100,6 +100,10 @@ class Courses extends \WP_REST_Controller {
 				'msl' => false,
 				'playlist' => false
 			];
+		
+		$umeta = array_merge($umeta['user']['userdata'],[
+			'data' => $user
+		]);
 		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
