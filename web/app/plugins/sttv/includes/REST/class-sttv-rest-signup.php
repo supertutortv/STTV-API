@@ -191,9 +191,9 @@ class Signup extends \WP_REST_Controller {
 
             for ($i = 0, $size = count($thePlan['plans']); $i < $size; $i++) {
                 $refarr = ['month'=>6,'year'=>12];
-                $temp = json_decode($thePlan['plans'][$i],true);
+                $temp = $thePlan['plans'][$i];
                 if ($refarr[$temp['interval']] === $plan['length']) {
-                    $thePlan = $emp;
+                    $thePlan = $temp;
                     break;
                 }
             }
