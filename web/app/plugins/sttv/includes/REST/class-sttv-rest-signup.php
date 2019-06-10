@@ -187,27 +187,13 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
-            return $cus;
+            return $doTrial;
 
-            /*$cus = $body['customer'];
-            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
-            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-            
-            extract($cus['account']);
-            $firstname = ucfirst(strtolower($firstname));
-            $lastname = ucfirst(strtolower($lastname));
-            $email = strtolower($email);
-            $fullname = $firstname.' '.$lastname;
-
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
-            
-            //Begin Order Processing
-            $order = \Stripe\Subscription::create([
-                'customer' => $customer->id,
-                "items" => [
+            /* $order = \Stripe\Subscription::create([
+                'customer' => $cus->id,
+                'items' => [
                     [
-                        'plan' => $body['plan']['id']
+                        'plan' => $plan['id']
                     ]
                 ],
                 'cancel_at_period_end' => !$dotrial,
@@ -217,7 +203,15 @@ class Signup extends \WP_REST_Controller {
                     'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
-            ]);
+            ]); */
+
+            /*
+            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
+
+            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
+            
+            //Begin Order Processing
+            
 
             return sttv_rest_response(
                 'checkoutSuccess',
