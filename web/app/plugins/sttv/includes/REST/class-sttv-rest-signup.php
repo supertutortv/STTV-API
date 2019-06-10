@@ -191,7 +191,7 @@ class Signup extends \WP_REST_Controller {
 
             for ($i = 0, $size = count($thePlan['plans']); $i < $size; $i++) {
                 $refarr = ['month'=>6,'year'=>12];
-                if ($refarr[$thePlan['plans'][$i]['interval']] === $plan['length']) $thePlan['plans'][$i];
+                if ($refarr[$thePlan['plans'][$i]['interval']] === $plan['length']) return $thePlan['plans'][$i];
             }
 
             /* $order = \Stripe\Subscription::create([
