@@ -172,10 +172,49 @@ class Signup extends \WP_REST_Controller {
                 'metadata' => [ 'wp_id' => $user_id ]
             ]);
             
+<<<<<<< HEAD
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
                 "items" => [
+=======
+            if ($shipping) unset($shipping['priShip']);
+
+            $edits = [
+                'address' => [
+                    'line1' => '.',
+                    'country' => $shipping ? $shipping['country'] : $loc
+                ],
+                'source' => $token,
+                'phone' => $phone,
+                'coupon' => $coupon ?? null
+            ];
+
+            if ($shipping) $edits['shipping'] = [
+                'name' => $user->display_name,
+                'phone' => $phone,
+                'address' => $shipping
+            ];
+
+            $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
+
+            $thePlan = json_decode(get_option('pricingplan_'.$plan['id']),true);
+
+            for ($i = 0, $size = count($thePlan['plans']); $i < $size; $i++) {
+                $refarr = ['month'=>6,'year'=>12];
+                $temp = json_decode($thePlan['plans'][$i],true);
+                if ($refarr[$temp['interval']] === $plan['length']) {
+                    $thePlan = $emp;
+                    break;
+                }
+            }
+
+            return $thePlan;
+
+            /* $order = \Stripe\Subscription::create([
+                'customer' => $cus->id,
+                'items' => [
+>>>>>>> check check
                     [
                         'plan' => $body['plan']['id']
                     ]
