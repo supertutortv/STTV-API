@@ -169,18 +169,23 @@ class Signup extends \WP_REST_Controller {
             
             if ($shipping) unset($shipping['priShip']);
 
-            $cus = \Stripe\Customer::update(
-                'cus_'.$user->user_login,
-                [
-                    'source' => $token,
-                    'phone' => $phone,
-                    'shipping' => [
-                        'address' => $shipping ?? null,
-                        'name' => $user->display_name,
-                        'phone' => $phone
-                    ]
-                ]
-            );
+            $edits = [
+                'address' => [
+                    'line1' => '.',
+                    'country' => $shipping ? $shipping['country'] : $loc
+                ],
+                'source' => $token,
+                'phone' => $phone,
+                'coupon' => $coupon ?? null
+            ];
+
+            if ($shipping) $edits['shipping'] = [
+                'name' => $user->display_name,
+                'phone' => $phone,
+                'address' => $shipping
+            ];
+
+            $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
             return $cus;
 
