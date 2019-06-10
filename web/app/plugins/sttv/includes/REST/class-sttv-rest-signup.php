@@ -201,13 +201,11 @@ class Signup extends \WP_REST_Controller {
                 }
             }
 
-            return $planID;
-
-            /* $order = \Stripe\Subscription::create([
+            $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
                 'items' => [
                     [
-                        'plan' => $plan['id']
+                        'plan' => $planID
                     ]
                 ],
                 'cancel_at_period_end' => !$plan['doTrial'],
@@ -227,7 +225,7 @@ class Signup extends \WP_REST_Controller {
                 [
                     'response' => $order
                 ]
-            ); */
+            );
         });
     }
 
