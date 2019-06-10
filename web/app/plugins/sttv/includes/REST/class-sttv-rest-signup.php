@@ -161,7 +161,26 @@ class Signup extends \WP_REST_Controller {
 
             $user = wp_get_current_user();
 
-            $cus = \Stripe\Customer::retrieve('cus_'.$user->user_login);
+            $phone = $shipping ? $shipping['phone'] : null;
+
+            unset($shipping['phone']);
+
+            $priShip = $shipping ? $shipping['priShip'] : false;
+            
+            unset($shipping['priShip']);
+
+            $cus = \Stripe\Customer::update(
+                'cus_'.$user->user_login,
+                [
+                    'source' => $token,
+                    'phone' => $phone,
+                    'shipping' => [
+                        'address' => $shipping ?? null,
+                        'name' => $user->display_name,
+                        'phone' => $phone
+                    ]
+                ]
+            );
 
             return $cus;
 
