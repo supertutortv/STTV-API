@@ -163,11 +163,11 @@ class Signup extends \WP_REST_Controller {
 
             $phone = $shipping ? $shipping['phone'] : null;
 
-            unset($shipping['phone']);
+            if ($shipping) unset($shipping['phone']);
 
             $priShip = $shipping ? $shipping['priShip'] : false;
             
-            unset($shipping['priShip']);
+            if ($shipping) unset($shipping['priShip']);
 
             $cus = \Stripe\Customer::update(
                 'cus_'.$user->user_login,
