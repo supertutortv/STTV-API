@@ -209,7 +209,7 @@ class Signup extends \WP_REST_Controller {
                 }
             }
 
-            return $thePlan;
+            return $thePlan['plans'][0];
 
             /* $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
