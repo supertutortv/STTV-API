@@ -161,7 +161,9 @@ class Signup extends \WP_REST_Controller {
 
             $user = wp_get_current_user();
 
-            return $user;
+            $cus = \Stripe\Customer::retrieve('cus_'.$user->user_login);
+
+            return $cus;
 
             /*$cus = $body['customer'];
             $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
