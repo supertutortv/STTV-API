@@ -187,31 +187,22 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
-            return $plan['doTrial'];
-
-            /* $order = \Stripe\Subscription::create([
+            $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
                 'items' => [
                     [
                         'plan' => $plan['id']
                     ]
                 ],
-                'cancel_at_period_end' => !$dotrial,
+                'cancel_at_period_end' => !$plan['doTrial'],
                 'metadata' => [
-                    'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user_id,
-                    'priship' => $priship
+                    'checkout_id' => $session['id'],
+                    'checkout_sig' => $session['signature'],
+                    'wp_id' => $user->ID,
+                    'priship' => $priShip
                 ],
-                'trial_period_days' => $dotrial ? 5 : 0
-            ]); */
-
-            /*
-            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
-
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
-            
-            //Begin Order Processing
-            
+                'trial_period_days' => $plan['doTrial'] ? 5 : 0
+            ]);
 
             return sttv_rest_response(
                 'checkoutSuccess',
@@ -220,7 +211,7 @@ class Signup extends \WP_REST_Controller {
                 [
                     'response' => $order
                 ]
-            );*/
+            );
         });
     }
 
