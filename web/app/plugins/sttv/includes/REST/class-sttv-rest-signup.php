@@ -189,19 +189,19 @@ class Signup extends \WP_REST_Controller {
 
             $thePlan = json_decode(get_option('pricingplan_'.$plan['id']),true);
             $refarr = [6=>'month',12=>'year'];
-
-            return $refarr[$plan['length']];
+            $planID = '';
 
             for ($i = 0, $size = count($thePlan['plans']); $i < $size; $i++) {
                 
                 $temp = $thePlan['plans'][$i];
-                if ($refarr[$temp['interval']] === $plan['length']) {
-                    $thePlan = $temp;
+
+                if ($temp['interval'] === $refarr[$plan['length']]) {
+                    $planID = $temp;
                     break;
                 }
             }
 
-            return $thePlan['plans'][0];
+            return $planID;
 
             /* $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
