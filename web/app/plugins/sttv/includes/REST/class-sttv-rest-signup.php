@@ -153,16 +153,20 @@ class Signup extends \WP_REST_Controller {
         if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
         sttv_verify_web_token($request);
-        return [
-            'body' => $body,
-            'user' => wp_get_current_user()
-        ];
 
-        /* return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
-            $items = $courseids = [];
+        return sttv_stripe_errors(function() use ($body) {
+            $vars = get_defined_vars();
 
-            $cus = $body['customer'];
+            extract($body);
+
+            $vars = array_diff(get_defined_vars(),$vars);
+
+            return [
+                'body' => $vars,
+                'user' => wp_get_current_user()
+            ];
+
+            /*$cus = $body['customer'];
             $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
             $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
             $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
@@ -199,8 +203,8 @@ class Signup extends \WP_REST_Controller {
                 [
                     'response' => $order
                 ]
-            );
-        }); */
+            );*/
+        });
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
