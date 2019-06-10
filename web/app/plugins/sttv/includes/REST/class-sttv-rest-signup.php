@@ -196,7 +196,7 @@ class Signup extends \WP_REST_Controller {
                 $temp = $thePlan['plans'][$i];
 
                 if ($temp['interval'] === $refarr[$plan['length']]) {
-                    $planID = $temp;
+                    $planID = $temp['id'];
                     break;
                 }
             }
