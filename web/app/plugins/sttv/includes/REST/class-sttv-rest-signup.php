@@ -187,7 +187,7 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
-            $thePlan = json_decode(get_option('pricingplan_'.$plan['id']));
+            $thePlan = json_decode(get_option('pricingplan_'.$plan['id']),true);
 
             for ($i = 0, $size = count($thePlan['plans']); $i < $size; $i++) {
                 $refarr = ['month'=>6,'year'=>12];
