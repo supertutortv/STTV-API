@@ -159,12 +159,9 @@ class Signup extends \WP_REST_Controller {
 
             extract($body);
 
-            $vars = array_diff(get_defined_vars(),$vars);
+            $user = wp_get_current_user();
 
-            return [
-                'body' => $vars,
-                'user' => wp_get_current_user()
-            ];
+            return $user;
 
             /*$cus = $body['customer'];
             $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
