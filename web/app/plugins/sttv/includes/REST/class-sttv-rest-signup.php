@@ -187,7 +187,7 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
-            return get_option('pricingplan_combo');
+            return json_decode(get_option('pricingplan_combo'));
 
             /* $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
