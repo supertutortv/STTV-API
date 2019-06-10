@@ -187,7 +187,9 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
-            $order = \Stripe\Subscription::create([
+            return get_option('pricingplan_combo');
+
+            /* $order = \Stripe\Subscription::create([
                 'customer' => $cus->id,
                 'items' => [
                     [
@@ -211,7 +213,7 @@ class Signup extends \WP_REST_Controller {
                 [
                     'response' => $order
                 ]
-            );
+            ); */
         });
     }
 
