@@ -101,9 +101,7 @@ class Courses extends \WP_REST_Controller {
 				'playlist' => false
 			];
 		
-		$umeta = array_merge($umeta['user']['userdata'],[
-			'data' => $user
-		]);
+		$umeta['user']['userdata']['data'] = $user;
 		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
