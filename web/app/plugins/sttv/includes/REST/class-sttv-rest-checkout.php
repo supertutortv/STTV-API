@@ -120,7 +120,7 @@ class Checkout extends \WP_REST_Controller {
 
         return wp_get_current_user();
 
-        return sttv_stripe_errors(function() use ($body) {
+        /* return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
             $items = $courseids = [];
 
@@ -198,7 +198,7 @@ class Checkout extends \WP_REST_Controller {
                     'response' => $order
                 ]
             );
-        });
+        }); */
     }
 
     public function sttv_parameter_checker( WP_REST_Request $request ) {
