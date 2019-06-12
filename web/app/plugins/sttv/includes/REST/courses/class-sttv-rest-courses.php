@@ -128,6 +128,8 @@ class Courses extends \WP_REST_Controller {
 				404
 			);
 
+			return $meta;
+
 			$test_code = strtolower($meta['test']);
 
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
