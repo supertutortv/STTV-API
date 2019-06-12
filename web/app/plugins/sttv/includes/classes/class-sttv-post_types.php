@@ -111,7 +111,7 @@ class Post_Types {
         global $post, $wp_rewrite;
         $fields = get_fields( $post->ID ); 
         $meta = json_encode( get_post_meta( $post->ID, 'sttv_course_data', true ), JSON_PRETTY_PRINT ); ?>
-        <pre><?php print_r( $meta ); ?></pre>
+        <pre><?php print_r( $fields ); ?></pre>
     <?php }
 
     public static function sttv_sub_data() {
