@@ -160,6 +160,7 @@ class Signup extends \WP_REST_Controller {
             $user = wp_get_current_user();
 
             $phone = $shipping ? $shipping['phone'] : null;
+            $doTrial = !!$plan['doTrial'];
             $priShip = false;
 
             if ($shipping) {
@@ -186,7 +187,7 @@ class Signup extends \WP_REST_Controller {
 
             return sttv_rest_response( 'checkoutError', 'Testing', 200, [ 'data' => [
                 'message' => 'Testing',
-                'body' => !!$plan['doTrial']
+                'body' => $priShip
             ]]);
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
