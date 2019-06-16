@@ -154,6 +154,8 @@ class Signup extends \WP_REST_Controller {
 
         sttv_verify_web_token($request);
 
+        return sttv_rest_response( 'signupError', 'Testing', 200, $body );
+
         return sttv_stripe_errors(function() use ($body) {
             $vars = get_defined_vars();
 
