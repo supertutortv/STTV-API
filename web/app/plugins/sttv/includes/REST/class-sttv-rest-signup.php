@@ -185,11 +185,6 @@ class Signup extends \WP_REST_Controller {
                 'address' => $shipping
             ];
 
-            return sttv_rest_response( 'checkoutError', 'Testing', 200, [ 'data' => [
-                'message' => 'Testing',
-                'body' => $priShip
-            ]]);
-
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
 
             $thePlan = json_decode(get_option('pricingplan_'.$plan['id']),true);
