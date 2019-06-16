@@ -154,8 +154,6 @@ class Signup extends \WP_REST_Controller {
 
         sttv_verify_web_token($request);
 
-        return sttv_rest_response( 'checkoutError', 'Testing', 200, $body);
-
         return sttv_stripe_errors(function() use ($body) {
             $vars = get_defined_vars();
 
@@ -164,12 +162,13 @@ class Signup extends \WP_REST_Controller {
             $user = wp_get_current_user();
 
             $phone = $shipping ? $shipping['phone'] : null;
+            $priShip = false;
 
-            if ($shipping) unset($shipping['phone']);
-
-            $priShip = $shipping ? $shipping['priShip'] : false;
-            
-            if ($shipping) unset($shipping['priShip']);
+            if ($shipping) {
+                $priShip = filter_var($shipping['priShip'], FILTER_VALIDATE_BOOLEAN);
+                unset($shipping['phone']);
+                unset($shipping['priShip']);
+            }
 
             $edits = [
                 'address' => [
