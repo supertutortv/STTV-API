@@ -150,11 +150,11 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
+        if ( empty($body) ) return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200 );
 
         sttv_verify_web_token($request);
 
-        return sttv_rest_response( 'signupError', 'Testing', 200, $body );
+        return sttv_rest_response( 'checkoutError', 'Testing', 200, $body );
 
         return sttv_stripe_errors(function() use ($body) {
             $vars = get_defined_vars();
