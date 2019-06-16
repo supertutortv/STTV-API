@@ -155,8 +155,6 @@ class Signup extends \WP_REST_Controller {
         sttv_verify_web_token($request);
 
         return sttv_stripe_errors(function() use ($body) {
-            $vars = get_defined_vars();
-
             extract($body);
 
             $user = wp_get_current_user();
@@ -188,7 +186,7 @@ class Signup extends \WP_REST_Controller {
 
             return sttv_rest_response( 'checkoutError', 'Testing', 200, [ 'data' => [
                 'message' => 'Testing',
-                'body' => $vars
+                'body' => get_defined_vars()
             ]]);
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
