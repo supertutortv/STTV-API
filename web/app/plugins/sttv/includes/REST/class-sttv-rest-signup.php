@@ -186,7 +186,7 @@ class Signup extends \WP_REST_Controller {
 
             return sttv_rest_response( 'checkoutError', 'Testing', 200, [ 'data' => [
                 'message' => 'Testing',
-                'body' => get_defined_vars()
+                'body' => !!$plan['doTrial']
             ]]);
 
             $cus = \Stripe\Customer::update('cus_'.$user->user_login,$edits);
