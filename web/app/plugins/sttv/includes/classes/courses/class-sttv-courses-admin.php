@@ -203,9 +203,9 @@ class Admin {
 					$tests = glob( $cache_dir . 'Practice:' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 					foreach ( $tests as $test ) {
-						$els = explode( ':', $test );
-						if ( strpos( $els[3], '.cache' ) ) {	
-							array_splice( $els, 3, 0, 'Test 1' );	
+						$els = strpos( $test, ':' ) ? explode( ':', $test ) : explode( '~', $test );
+						if ( strpos( $els[3], '.cache' ) ) {
+							array_splice( $els, 3, 0, 'Test 1' );
 						}
 
 						$aTitle = str_replace( '.cache', '', $els[4] );
