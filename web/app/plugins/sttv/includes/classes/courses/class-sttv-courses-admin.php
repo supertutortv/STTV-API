@@ -64,7 +64,7 @@ class Admin {
 		if (!$course['course_meta']['course_abbrev']) return false;
 
 		$test = strtolower( $course['course_meta']['course_abbrev'] );
-		$cache_dir = STTV_CACHE_DIR . $test .'/'. $course['course_meta']['course_abbrev'].':';
+		$cache_dir = STTV_CACHE_DIR . $test .'/';
 
 		$caps = [
 			'course_platform_access' => true,
@@ -114,7 +114,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					if ( ! is_dir( $root_path ) ) {
-						mkdir( $root_path, 2775, true );
+						mkdir( $root_path, 0775, true );
 					}
 					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
@@ -134,7 +134,7 @@ class Admin {
 
 			foreach ( $sec['subsections'] as $sub ) {
 				$newtitle = str_replace(' ','-',$sec['section_info']['section_name']);
-				$calb = json_decode( file_get_contents( $cache_dir.$newtitle.':'.$sub['subsection_name'].'.cache' ), true );
+				$calb = json_decode( file_get_contents( glob($cache_dir.'*'.$newtitle.'*'.$sub['subsection_name'].'*.cache')[0]), true );
 
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
@@ -170,7 +170,7 @@ class Admin {
 
 			foreach ( $course['practice']['uploads'] as $file ) {
 				$pchunk = stristr( $file['file']['url'], '/uploads');
-				$fcopy = @copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
+				$fcopy = copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
@@ -200,10 +200,10 @@ class Admin {
 				'in_trial' => (bool) $book['in_trial'],
 				'type' => 'collection',
 				'tests' => (function() use ( $cache_dir, $book ){
-					$tests = glob( $cache_dir . 'Practice:' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
+					$tests = glob( $cache_dir . '*Practice*' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 					foreach ( $tests as $test ) {
-						$els = strpos( $test, ':' ) ? explode( ':', $test ) : explode( '~', $test );
+						$els = preg_split("/:|~/",$test);
 						if ( strpos( $els[3], '.cache' ) ) {
 							array_splice( $els, 3, 0, 'Test 1' );
 						}
