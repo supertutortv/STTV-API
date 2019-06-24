@@ -217,14 +217,16 @@ class Admin {
 							'videos' => $pvideos['videos']
 						];
 
-						$cache[sanitize_title_with_dashes( $els[3] )] = [
+						$els3 = sanitize_title_with_dashes( $els[3] );
+
+						$cache[ $els3 ] = [
 							'name' => str_replace('-',' ',$els[3]),
 							'type' => 'playlist',
 							'color' => '#0aa',//#2d9e6b
 							'collection' => $tsections
 						];
 
-						$caps["course_{$exam}_{$title}_{sanitize_title_with_dashes($els[3])}"] = true;
+						$caps["course_{$exam}_{$title}_{$els3}"] = true;
 					}
 					return $cache;
 				})()
