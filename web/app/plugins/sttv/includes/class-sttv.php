@@ -115,9 +115,7 @@ final class STTV {
             ,ARRAY_A); */
             
             echo '<pre>';
-            echo json_encode($user, JSON_PRETTY_PRINT);
-            echo '<br><br>';
-            print_r('User can access test 5: '.user_can($user->ID,'course_act_test-5'));
+            echo json_encode($user->allcaps, JSON_PRETTY_PRINT);
             echo '</pre>';
         }, 999 );
         add_filter( 'lostpassword_url', 'sttv_lostpw_url' );
