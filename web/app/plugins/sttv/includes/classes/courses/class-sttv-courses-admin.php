@@ -226,7 +226,7 @@ class Admin {
 							'collection' => $tsections
 						];
 
-						$caps["course_{$exam}_{$title}_{$els3}"] = true;
+						$caps["course_{$exam}_{$title}_{$els3}"] = !($title === 'the-official-act-prep-guide' && $els3 === 'test-5');
 					}
 					return $cache;
 				})()
