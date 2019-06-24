@@ -46,8 +46,7 @@ class Install {
 
     private static $roles = [
         'teacher' => [ 'multi-user_teacher' => true, 'multi-user' => true ],
-        'student' => [],
-        'ACT_test_5_patch' => [ 'course_act_the-official-act-prep-guide_test-5'=> true]
+        'student' => []
     ];
 
     private static $dirs = [
