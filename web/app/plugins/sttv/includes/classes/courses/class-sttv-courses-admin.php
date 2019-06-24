@@ -224,7 +224,7 @@ class Admin {
 							'collection' => $tsections
 						];
 
-						$caps["course_{$exam}_{$title}_{$els[3]}"] = true;
+						$caps["course_{$exam}_{$title}_{sanitize_title_with_dashes($els[3])}"] = true;
 					}
 					return $cache;
 				})()
