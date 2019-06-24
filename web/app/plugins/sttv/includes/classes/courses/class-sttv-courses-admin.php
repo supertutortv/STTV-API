@@ -203,6 +203,7 @@ class Admin {
 					foreach ( $tests as $test ) {
 
 						$els = preg_split("/:|~/",$test);
+
 						if ( strpos( $els[3], '.cache' ) ) {
 							array_splice( $els, 3, 0, 'Test 1' );
 						}
@@ -223,7 +224,7 @@ class Admin {
 							'collection' => $tsections
 						];
 
-						$caps["course_{$exam}_{$title}_{$test}"] = true;
+						$caps["course_{$exam}_{$title}_{$els[3]}"] = true;
 					}
 					return $cache;
 				})()
