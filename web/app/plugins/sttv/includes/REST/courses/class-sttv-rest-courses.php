@@ -76,6 +76,8 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
+
+		return $user;
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -127,7 +129,7 @@ class Courses extends \WP_REST_Controller {
 
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				$meta['trialing'] = $trialing;
-				
+
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' || !current_user_can($val['permissions']) ) continue;
 
