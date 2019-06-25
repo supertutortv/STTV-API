@@ -129,10 +129,10 @@ class Courses extends \WP_REST_Controller {
 				$meta['trialing'] = $trialing;
 
 				foreach ( $meta['collections'] as $sec => &$val ) {
-					if ( $sec === 'practice' || !$user->has_cap($val['permissions']) ) continue;
+					if ( $sec === 'practice' || !in_array($val['permissions'],$user->allcaps) ) continue;
 
 					foreach ( $val['collection'] as $k => &$subsec ) {
-						if ( !$user->has_cap($subsec['permissions']) ) continue;
+						if ( !in_array($subsec['permissions'],$user->allcaps) ) continue;
 
 						if ( $subsec['in_trial'] === false && $trialing ) {
 							foreach ( $subsec['videos'] as &$vid ) {
@@ -154,10 +154,9 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( $user->has_cap($book['permissions']) ){
+					if ( in_array($book['permissions'],$user->allcaps) ){
 						foreach ( $book['tests'] as $b => &$test ) {
-							return gettype($user->allcaps);
-							if ( $user->has_cap( $test['permissions'] ) ){
+							if ( in_array($test['permissions'],$user->allcaps) ){
 								foreach ( $test['collection'] as $t => &$sec ) {
 									foreach ( $sec['videos'] as $s => &$vid ) {
 										if ( $book['in_trial'] === false && $trialing ) {
