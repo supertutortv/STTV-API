@@ -76,8 +76,6 @@ class Courses extends \WP_REST_Controller {
 		global $wpdb;
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
-
-		return ['has_test_5_cap' => $user->has_cap("course_act_the-official-act-prep-guide_test-4")];
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -91,8 +89,8 @@ class Courses extends \WP_REST_Controller {
 		//if (is_null($umeta['user']['trialing'])) $umeta['user']['trialing'] = current_user_can( "course_trialing" );
 		
 		$crss = [];
-		if ( current_user_can( "course_sat_access" ) ) $crss['the-best-sat-prep-course-ever'] = [];
-		if ( current_user_can( "course_act_access" ) ) $crss['the-best-act-prep-course-ever'] = [];
+		if ( $user->has_cap( "course_sat_access" ) ) $crss['the-best-sat-prep-course-ever'] = [];
+		if ( $user->has_cap( "course_act_access" ) ) $crss['the-best-act-prep-course-ever'] = [];
 		$umeta['courses'] = $crss;
 
 		if ( !isset($umeta['user']['subscription']) || empty(isset($umeta['user']['subscription'])) ) $umeta['user']['subscription'] = get_user_meta( $userid, 'subscription_id', true );
@@ -103,7 +101,7 @@ class Courses extends \WP_REST_Controller {
 				'playlist' => false
 			];
 		
-		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
+		$admin = ($user->has_cap('manage_options') || $user->has_cap('course_editor'));
 
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
 
@@ -123,20 +121,20 @@ class Courses extends \WP_REST_Controller {
 
 			$test_code = strtolower($meta['test']);
 
-			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
+			if ( !$admin && !$user->has_cap( "course_{$test_code}_access" ) ) continue;
 
-			$trialing = !$admin && current_user_can( "course_{$test_code}_trial_access" );
+			$trialing = !$admin && $user->has_cap( "course_{$test_code}_trial_access" );
 
-			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
+			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user) {
 				$meta['trialing'] = $trialing;
 
 				foreach ( $meta['collections'] as $sec => &$val ) {
-					if ( $sec === 'practice' || !current_user_can($val['permissions']) ) continue;
+					if ( $sec === 'practice' || !$user->has_cap($val['permissions']) ) continue;
 
 					unset( $val['permissions'] );
 
 					foreach ( $val['collection'] as $k => &$subsec ) {
-						if ( !current_user_can($subsec['permissions']) ) continue;
+						if ( !$user->has_cap($subsec['permissions']) ) continue;
 
 						unset( $subsec['permissions'] );
 
@@ -156,11 +154,11 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( current_user_can($book['permissions']) ){
+					if ( $user->has_cap($book['permissions']) ){
 
 						foreach ( $book['tests'] as $b => &$test ) {
 
-							if ( current_user_can($test['permissions']) ){
+							if ( $user->has_cap($test['permissions'] ) ){
 								foreach ( $test['collection'] as $t => &$sec ) {
 									foreach ( $sec['videos'] as $s => &$vid ) {
 										if ( $book['in_trial'] === false && $trialing ) {
