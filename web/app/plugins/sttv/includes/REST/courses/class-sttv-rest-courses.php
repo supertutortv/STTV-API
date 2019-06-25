@@ -131,8 +131,6 @@ class Courses extends \WP_REST_Controller {
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' || !$user->has_cap($val['permissions']) ) continue;
 
-					unset( $val['permissions'] );
-
 					foreach ( $val['collection'] as $k => &$subsec ) {
 						if ( !$user->has_cap($subsec['permissions']) ) continue;
 
@@ -150,6 +148,8 @@ class Courses extends \WP_REST_Controller {
 						if ( $dl['in_trial'] === false && $trialing ) $dl['file'] = 0;
 						unset( $dl['in_trial'] );
 					}
+
+					unset( $val['permissions'] );
 
 				}
 
