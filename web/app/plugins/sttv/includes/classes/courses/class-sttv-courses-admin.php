@@ -73,6 +73,8 @@ class Admin {
 			"course_{$exam}_reviews" => true
 		];
 
+		$test5Patch = false;
+
 		$intr_thumb = explode('|',$course['course_meta']['intro_vid']);
 		
 		$data = [
@@ -135,21 +137,26 @@ class Admin {
 			foreach ( $sec['subsections'] as $sub ) {
 				$newtitle = str_replace(' ','-',$sec['section_info']['section_name']);
 				$calb = json_decode( file_get_contents( glob($cache_dir.'*'.$newtitle.'*'.$sub['subsection_name'].'*.cache')[0]), true );
+				$subsecname = sanitize_title_with_dashes( $sub['subsection_name'] );
 
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
-				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
+				$subsec[$subsecname] = [
 					'name' => $sub['subsection_name'],
 					'type' => 'videos',
+					'permissions' => "course_{$exam}_{$aslug}_{$subsecname}",
 					'in_trial' => (bool) $sub['in_trial'],
 					'videos' => $calb['videos']
 				];
+
+				$caps["course_{$exam}_{$aslug}_{$subsecname}"] = true;
 			}
 
 			$data['collections'][$aslug] = [
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
 				'type' => 'playlist',
+				'permissions' => "course_{$exam}_{$aslug}",
 				'description' => $sec['section_info']['description'],
 				'color' => '#'.$color,
 				'collection' => $subsec,
@@ -194,9 +201,10 @@ class Admin {
 			// Main Practice Object
 			$psubsec[$title] = [
 				'name' => $book['book_name'],
+				'permissions' => "course_{$exam}_{$title}",
 				'in_trial' => (bool) $book['in_trial'],
 				'type' => 'collection',
-				'tests' => (function() use ( &$caps, $exam, $title, $cache_dir, $book ){
+				'tests' => (function() use ( &$caps, &$test5Patch, $exam, $title, $cache_dir, $book ){
 					$tests = glob( $cache_dir . '*Practice*' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 
@@ -221,6 +229,7 @@ class Admin {
 
 						$cache[ $els3 ] = [
 							'name' => str_replace('-',' ',$els[3]),
+							'permissions' => "course_{$exam}_{$title}_{$els3}",
 							'type' => 'playlist',
 							'color' => '#0aa',//#2d9e6b
 							'collection' => $tsections
@@ -228,6 +237,8 @@ class Admin {
 
 						if (!($title === 'the-official-act-prep-guide' && $els3 === 'test-5')) {
 							$caps["course_{$exam}_{$title}_{$els3}"] = true;
+						} else {
+							$test5Patch = true;
 						}
 					}
 					return $cache;
@@ -257,6 +268,10 @@ class Admin {
 		foreach( $caps as $cap => $grant ) {
 			$role->add_cap($cap,$grant);
 			$role_trial->add_cap($cap,$grant);
+		}
+
+		if ($test5Patch) {
+			$test5role = add_role('act_test_5_patch', 'ACT Test 5 Patch', ['course_act_the-official-act-prep-guide_test-5' => true]);
 		}
 
 	}
