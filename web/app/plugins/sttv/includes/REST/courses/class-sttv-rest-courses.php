@@ -128,8 +128,15 @@ class Courses extends \WP_REST_Controller {
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
 				$meta['trialing'] = $trialing;
 				foreach ( $meta['collections'] as $sec => &$val ) {
-					if ( $sec === 'practice' ) continue;
+					if ( $sec === 'practice' || !current_user_can($val['permissions']) ) continue;
+
+					unset( $val['permissions'] );
+
 					foreach ( $val['collection'] as $k => &$subsec ) {
+						if ( !current_user_can($subsec['permissions']) ) continue;
+
+						unset( $subsec['permissions'] );
+
 						if ( $subsec['in_trial'] === false && $trialing ) {
 							foreach ( $subsec['videos'] as &$vid ) {
 								$vid['id'] = 0;
@@ -146,15 +153,22 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( $book['in_trial'] === false && $trialing ) {
-						foreach ( $book['tests'] as $b => &$test ) {
-							foreach ( $test['collection'] as $t => &$sec ) {
-								foreach ( $sec['videos'] as $s => &$vid ) {
+					if ( !current_user_can($book['permissions']) ) continue;
+					
+					foreach ( $book['tests'] as $b => &$test ) {
+						if ( !current_user_can($test['permissions']) ) continue;
+						unset( $test['permissions'] );
+
+						foreach ( $test['collection'] as $t => &$sec ) {
+							foreach ( $sec['videos'] as $s => &$vid ) {
+								if ( $book['in_trial'] === false && $trialing ) {
 									$vid['id'] = 0;
 								}
 							}
 						}
 					}
+
+					unset( $book['permissions'] );
 					unset( $book['in_trial'] );
 				}
 
