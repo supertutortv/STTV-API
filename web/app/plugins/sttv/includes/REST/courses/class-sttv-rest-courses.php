@@ -156,7 +156,7 @@ class Courses extends \WP_REST_Controller {
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
 					if ( $user->has_cap($book['permissions']) ){
 						foreach ( $book['tests'] as $b => &$test ) {
-							return $user->allcaps;
+							return gettype($user->allcaps);
 							if ( $user->has_cap( $test['permissions'] ) ){
 								foreach ( $test['collection'] as $t => &$sec ) {
 									foreach ( $sec['videos'] as $s => &$vid ) {
