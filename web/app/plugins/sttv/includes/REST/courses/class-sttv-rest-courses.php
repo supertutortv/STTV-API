@@ -77,7 +77,7 @@ class Courses extends \WP_REST_Controller {
 		$user = wp_get_current_user();
 		$userid = get_current_user_id();
 
-		//return $user->allcaps;
+		return ['has_test_5_cap' => $user->has_cap("course_act_the-official-act-prep-guide_test-4")];
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
