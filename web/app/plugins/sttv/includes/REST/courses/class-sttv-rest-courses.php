@@ -157,8 +157,8 @@ class Courses extends \WP_REST_Controller {
 					if ( $user->has_cap($book['permissions']) ){
 
 						foreach ( $book['tests'] as $b => &$test ) {
-
-							if ( $user->has_cap($test['permissions'] ) ){
+							return $test['permissions'];
+							if ( $user->has_cap( $test['permissions'] ) ){
 								foreach ( $test['collection'] as $t => &$sec ) {
 									foreach ( $sec['videos'] as $s => &$vid ) {
 										if ( $book['in_trial'] === false && $trialing ) {
