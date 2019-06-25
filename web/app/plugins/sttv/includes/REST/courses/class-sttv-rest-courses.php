@@ -134,13 +134,13 @@ class Courses extends \WP_REST_Controller {
 					foreach ( $val['collection'] as $k => &$subsec ) {
 						if ( !$user->has_cap($subsec['permissions']) ) continue;
 
-						unset( $subsec['permissions'] );
-
 						if ( $subsec['in_trial'] === false && $trialing ) {
 							foreach ( $subsec['videos'] as &$vid ) {
 								$vid['id'] = 0;
 							}
 						}
+
+						//unset( $subsec['permissions'] );
 						unset( $subsec['in_trial'] );
 					}
 
@@ -149,7 +149,7 @@ class Courses extends \WP_REST_Controller {
 						unset( $dl['in_trial'] );
 					}
 
-					unset( $val['permissions'] );
+					//unset( $val['permissions'] );
 
 				}
 
@@ -168,10 +168,10 @@ class Courses extends \WP_REST_Controller {
 								}
 							}
 
-							unset( $test['permissions'] );
+							//unset( $test['permissions'] );
 						}
 	
-						unset( $book['permissions'] );
+						//unset( $book['permissions'] );
 						unset( $book['in_trial'] );
 					}
 				}
