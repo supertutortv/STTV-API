@@ -116,7 +116,9 @@ class Cron {
                         'thumb' => $out,
                         'index' => $i
                     ];
-                    if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
+                    if ($i == 0) $embcolor = $vid['embed']['color'];
+                    
+                    $i++;
                     
                 } // END VIDEO LOOP
                 $albobj = [
