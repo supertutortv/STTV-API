@@ -120,7 +120,9 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
+        if ( empty($body) ) return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200 );
+
+        sttv_verify_web_token($request);
 
         return sttv_stripe_errors(function() use ($body) {
             $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
@@ -174,17 +176,18 @@ class Signup extends \WP_REST_Controller {
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
-                'customer' => $customer->id,
-                "items" => [
+                'customer' => $cus->id,
+                'items' => [
                     [
-                        'plan' => $body['plan']['id']
+                        'plan' => $planID
                     ]
                 ],
-                'cancel_at_period_end' => !$dotrial,
+                'cancel_at_period_end' => !$plan['doTrial'],
                 'metadata' => [
-                    'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user_id,
-                    'priship' => $priship
+                    'checkout_id' => $session['id'],
+                    'checkout_sig' => $session['signature'],
+                    'wp_id' => $user->ID,
+                    'priship' => $priShip
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
