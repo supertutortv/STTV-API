@@ -73,7 +73,6 @@ class Cron {
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
                 $pieces = preg_split('/:|~/',$alb['name']);
-                echo $alb['name'];
                 if (!in_array($pieces[0], $this->tests)) continue;
 
                 $test_abbrev = strtolower( $pieces[0] );
