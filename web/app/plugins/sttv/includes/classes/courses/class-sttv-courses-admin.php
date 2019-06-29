@@ -271,7 +271,10 @@ class Admin {
 		}
 
 		if ($test5Patch) {
-			$test5role = add_role('act_test_5_patch', 'ACT Test 5 Patch', ['course_act_the-official-act-prep-guide_test-5' => true]);
+			$test5role = add_role('act_test_5_patch', 'ACT Test 5 Patch');
+			if ( $test5role !== NULL ) {
+				$test5role->add_cap( 'course_act_the-official-act-prep-guide_test-5' );
+			}
 		}
 
 	}
