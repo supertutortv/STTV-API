@@ -204,7 +204,7 @@ class Admin {
 				'permissions' => "course_{$exam}_{$title}",
 				'in_trial' => (bool) $book['in_trial'],
 				'type' => 'collection',
-				'tests' => (function() use ( &$caps, &$test5Patch, $exam, $title, $cache_dir, $book ){
+				'tests' => (function() use ( &$caps, $test5Patch, $exam, $title, $cache_dir, $book ){
 					$tests = glob( $cache_dir . '*Practice*' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
 
