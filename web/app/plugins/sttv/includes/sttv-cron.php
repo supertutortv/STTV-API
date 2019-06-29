@@ -72,12 +72,11 @@ class Cron {
             $albs = (array) $alb_data['body']['data'];
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                $path = dirname( __DIR__ ) . '/cache/';
                 $pieces = preg_split('/:|~/',$alb['name']);
                 if (!in_array($pieces[0], $this->tests)) continue;
 
                 $test_abbrev = strtolower( $pieces[0] );
-                $path .= $test_abbrev . '/';
+                $path = dirname( __DIR__ ) . '/cache/' . $test_abbrev . '/';
                 $name = implode(' ', $pieces );
                 $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=manual';
                 $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
