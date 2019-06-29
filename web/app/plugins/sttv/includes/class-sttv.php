@@ -112,7 +112,8 @@ final class STTV {
             $dbtable = $wpdb->prefix.'course_udata';
 			$cu_data = $wpdb->get_results(
 				$wpdb->prepare("SELECT * FROM $dbtable WHERE wp_id = %d;",$user->ID)
-			,ARRAY_A);
+            ,ARRAY_A);
+            
             echo '<pre>';
             echo json_encode($cu_data, JSON_PRETTY_PRINT);
             echo '</pre>';

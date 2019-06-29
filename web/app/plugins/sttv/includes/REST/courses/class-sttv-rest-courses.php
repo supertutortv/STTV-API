@@ -125,16 +125,30 @@ class Courses extends \WP_REST_Controller {
 
 			$trialing = !$admin && current_user_can( "course_{$test_code}_trial_access" );
 
-			$umeta['courses'][$slug] = (function() use (&$meta,$trialing) {
+			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user) {
 				$meta['trialing'] = $trialing;
+
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
+
+					if ( !current_user_can($val['permissions']) ) {
+						unset( $meta['collections'][$sec] );
+						continue;
+					}
+
 					foreach ( $val['collection'] as $k => &$subsec ) {
+						if ( !current_user_can($subsec['permissions']) ) {
+							unset($val['collection'][$k]);
+							continue;
+						}
+
 						if ( $subsec['in_trial'] === false && $trialing ) {
 							foreach ( $subsec['videos'] as &$vid ) {
 								$vid['id'] = 0;
 							}
 						}
+
+						unset( $subsec['permissions'] );
 						unset( $subsec['in_trial'] );
 					}
 
@@ -143,18 +157,34 @@ class Courses extends \WP_REST_Controller {
 						unset( $dl['in_trial'] );
 					}
 
+					unset( $val['permissions'] );
+
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( $book['in_trial'] === false && $trialing ) {
-						foreach ( $book['tests'] as $b => &$test ) {
-							foreach ( $test['collection'] as $t => &$sec ) {
-								foreach ( $sec['videos'] as $s => &$vid ) {
+					if ( !current_user_can($book['permissions']) ) {
+						unset($meta['collections']['practice']['collection'][$k]);
+						continue;
+					}
+
+					foreach ( $book['tests'] as $b => &$test ) {
+						if ( !current_user_can($test['permissions']) ) {
+							unset($book['tests'][$b]);
+							continue;
+						}
+
+						foreach ( $test['collection'] as $t => &$sec ) {
+							foreach ( $sec['videos'] as $s => &$vid ) {
+								if ( $book['in_trial'] === false && $trialing ) {
 									$vid['id'] = 0;
 								}
 							}
 						}
+
+						unset( $test['permissions'] );
 					}
+
+					unset( $book['permissions'] );
 					unset( $book['in_trial'] );
 				}
 

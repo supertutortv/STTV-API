@@ -114,7 +114,6 @@ class Cron {
                         'tags' => $tags,
                         'text' => $vid['description'] ?? '',
                         'thumb' => $out,
-                        'views' => $vid['stats']['plays'],
                         'index' => $i
                     ];
                     if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}

@@ -63,15 +63,17 @@ class Admin {
 		$course = get_fields( $post_id );
 		if (!$course['course_meta']['course_abbrev']) return false;
 
-		$test = strtolower( $course['course_meta']['course_abbrev'] );
-		$cache_dir = STTV_CACHE_DIR . $test .'/';
+		$exam = strtolower( $course['course_meta']['course_abbrev'] );
+		$cache_dir = STTV_CACHE_DIR . $exam .'/';
 
 		$caps = [
 			'course_platform_access' => true,
-			"course_{$test}_access" => true,
-			"course_{$test}_feedback" => true,
-			"course_{$test}_reviews" => true
+			"course_{$exam}_access" => true,
+			"course_{$exam}_feedback" => true,
+			"course_{$exam}_reviews" => true
 		];
+
+		$test5Patch = false;
 
 		$intr_thumb = explode('|',$course['course_meta']['intro_vid']);
 		
@@ -81,7 +83,7 @@ class Admin {
 			'slug' => $post->post_name,
 			'created' => strtotime( $post->post_date ),
 			'modified' => strtotime( $post->post_modified ),
-			'test' => strtoupper( $test ),
+			'test' => strtoupper( $exam ),
 			'type' => 'collection',
 			'thumb' => $course['course_meta']['cover_image'] ?? '',
 			'thumbUrls' => [
@@ -109,7 +111,7 @@ class Admin {
 			$color = '';
 
 			if ( $sec['uploads'] ) {
-				$root_path = STTV_RESOURCE_DIR . $test .'/'. $aslug .'/';
+				$root_path = STTV_RESOURCE_DIR . $exam .'/'. $aslug .'/';
 
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
@@ -121,7 +123,7 @@ class Admin {
 					if ( $fcopy ){
 						$resources[] = [
 							'name' => $file['file']['title'],
-							'file' => $test .'/'. $aslug .'/' . $file['file']['filename'],
+							'file' => $exam .'/'. $aslug .'/' . $file['file']['filename'],
 							'size' => round($file['file']['filesize'] / 1024) . ' KB',
 							'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 							'hash' => md5_file( $root_path . $file['file']['filename'] ),
@@ -135,35 +137,40 @@ class Admin {
 			foreach ( $sec['subsections'] as $sub ) {
 				$newtitle = str_replace(' ','-',$sec['section_info']['section_name']);
 				$calb = json_decode( file_get_contents( glob($cache_dir.'*'.$newtitle.'*'.$sub['subsection_name'].'*.cache')[0]), true );
+				$subsecname = sanitize_title_with_dashes( $sub['subsection_name'] );
 
 				if ( empty( $color ) ) $color = $calb['embedColor'];
 
-				$subsec[sanitize_title_with_dashes( $sub['subsection_name'] )] = [
+				$subsec[$subsecname] = [
 					'name' => $sub['subsection_name'],
 					'type' => 'videos',
+					'permissions' => "course_{$exam}_{$aslug}_{$subsecname}",
 					'in_trial' => (bool) $sub['in_trial'],
 					'videos' => $calb['videos']
 				];
+
+				$caps["course_{$exam}_{$aslug}_{$subsecname}"] = true;
 			}
 
 			$data['collections'][$aslug] = [
 				'name' => $sec['section_info']['section_name'],
 				'abbrev' => $sec['section_info']['section_code'],
 				'type' => 'playlist',
+				'permissions' => "course_{$exam}_{$aslug}",
 				'description' => $sec['section_info']['description'],
 				'color' => '#'.$color,
 				'collection' => $subsec,
 				'downloads' => $resources
 			];
 
-			$caps["course_{$test}_{$aslug}"] = true;
+			$caps["course_{$exam}_{$aslug}"] = true;
 		}
 			
 		// PRACTICE
 		$presc = $psubsec = [];
 
 		if ( $course['practice']['uploads'] ) {
-			$proot_path = STTV_RESOURCE_DIR . $test .'/practice/';
+			$proot_path = STTV_RESOURCE_DIR . $exam .'/practice/';
 			if ( ! is_dir( $proot_path ) ) {
 				mkdir( $proot_path, 0755, true );
 			}
@@ -174,7 +181,7 @@ class Admin {
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
-						'file' => $test . '/practice/' . $file['file']['filename'],
+						'file' => $exam . '/practice/' . $file['file']['filename'],
 						'size' => round($file['file']['filesize'] / 1024) . ' KB',
 						'thumb' => str_replace( '.pdf', '-pdf', $file['file']['url'] ) . '.jpg',
 						'hash' => md5_file( $proot_path . $file['file']['filename'] ),
@@ -189,21 +196,22 @@ class Admin {
 	
 			$title = sanitize_title_with_dashes( $book['book_name'] );
 
-			if ( strpos( $book['book_name'], 'Free' ) !== false ) {
-				$data['capabilities'][] = "course_{$test}_{$title}";
-			}
-			$caps["course_{$test}_{$title}"] = true;
+			$caps["course_{$exam}_{$title}"] = true;
 	
 			// Main Practice Object
 			$psubsec[$title] = [
 				'name' => $book['book_name'],
+				'permissions' => "course_{$exam}_{$title}",
 				'in_trial' => (bool) $book['in_trial'],
 				'type' => 'collection',
-				'tests' => (function() use ( $cache_dir, $book ){
+				'tests' => (function() use ( &$caps, &$test5Patch, $exam, $title, $cache_dir, $book ){
 					$tests = glob( $cache_dir . '*Practice*' . str_replace( ' ', '-', $book['book_name'] ) . "*.cache" );
 					$cache = [];
+
 					foreach ( $tests as $test ) {
+
 						$els = preg_split("/:|~/",$test);
+
 						if ( strpos( $els[3], '.cache' ) ) {
 							array_splice( $els, 3, 0, 'Test 1' );
 						}
@@ -217,12 +225,21 @@ class Admin {
 							'videos' => $pvideos['videos']
 						];
 
-						$cache[sanitize_title_with_dashes( $els[3] )] = [
+						$els3 = sanitize_title_with_dashes( $els[3] );
+
+						$cache[ $els3 ] = [
 							'name' => str_replace('-',' ',$els[3]),
+							'permissions' => "course_{$exam}_{$title}_{$els3}",
 							'type' => 'playlist',
 							'color' => '#0aa',//#2d9e6b
 							'collection' => $tsections
 						];
+
+						if (!($title === 'the-official-act-prep-guide' && $els3 === 'test-5')) {
+							$caps["course_{$exam}_{$title}_{$els3}"] = true;
+						} else {
+							$test5Patch = true;
+						}
 					}
 					return $cache;
 				})()
@@ -245,12 +262,16 @@ class Admin {
 
 		$role_trial = add_role(str_replace(' ','_',strtolower($post->post_title.' Trial')),$post->post_title.' Trial') ?? get_role(str_replace(' ','_',strtolower($post->post_title.' Trial')));
 
-		$role->add_cap("course_{$test}_full_access",true);
-		$role_trial->add_cap("course_{$test}_trial_access",true);
+		$role->add_cap("course_{$exam}_full_access",true);
+		$role_trial->add_cap("course_{$exam}_trial_access",true);
 
 		foreach( $caps as $cap => $grant ) {
 			$role->add_cap($cap,$grant);
 			$role_trial->add_cap($cap,$grant);
+		}
+
+		if ($test5Patch) {
+			$test5role = add_role('act_test_5_patch', 'ACT Test 5 Patch', ['course_act_the-official-act-prep-guide_test-5' => true]);
 		}
 
 	}
