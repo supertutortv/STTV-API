@@ -108,11 +108,13 @@ final class STTV {
         });
         add_action( 'stripepress_events_invalid', 'sttv_404_redirect' );
         add_action( 'edit_user_profile', function( $user ) {
-            global $wpdb;
+            /* global $wpdb;
             $dbtable = $wpdb->prefix.'course_udata';
 			$cu_data = $wpdb->get_results(
 				$wpdb->prepare("SELECT * FROM $dbtable WHERE wp_id = %d;",$user->ID)
-            ,ARRAY_A);
+            ,ARRAY_A); */
+
+            $cu_data = $user->allcaps;
             
             echo '<pre>';
             echo json_encode($cu_data, JSON_PRETTY_PRINT);
