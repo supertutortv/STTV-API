@@ -125,9 +125,6 @@ class Signup extends \WP_REST_Controller {
                 'description' => $fullname,
                 'name' => $fullname,
                 'email' => $email,
-                'source' => $cus['token'] ?: null,
-                'coupon' => $body['pricing']['coupon']['id'] ?: null,
-                'shipping' => $cus['shipping'],
                 'metadata' => [ 'wp_id' => $user_id ]
             ]);
 
@@ -163,16 +160,21 @@ class Signup extends \WP_REST_Controller {
             $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
             $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
             $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-            
-            extract($cus['account']);
-            $firstname = ucfirst(strtolower($firstname));
-            $lastname = ucfirst(strtolower($lastname));
-            $email = strtolower($email);
-            $fullname = $firstname.' '.$lastname;
+
+            $user = wp_get_current_user();
+
+            $customer = \Stripe\Customer::update(
+                "cus_$user->user_login",
+                [
+                    'source' => $cus['token'] ?: null,
+                    'coupon' => $body['pricing']['coupon']['id'] ?: null,
+                    'shipping' => $cus['shipping']
+                ]
+            );
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
-                'customer' => $cus->id,
+                'customer' => $customer->id,
                 'items' => [
                     [
                         'plan' => $planID
