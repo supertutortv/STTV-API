@@ -100,6 +100,37 @@ class Signup extends \WP_REST_Controller {
 
             if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
 
+            $user_id = wp_insert_user([
+                'user_pass' => $password,
+                'user_email' => $email,
+                'first_name' => $firstname,
+                'last_name' => $lastname,
+                'display_name' => $fullname,
+                'user_login' => $email,
+                'show_admin_bar_front' => 'false'
+            ]);
+
+            if ( is_wp_error( $user_id ) ) {
+                return sttv_rest_response(
+                    'signupError',
+                    'There was an error creating your account. Please check back again later.',
+                    200,
+                    [ 'data' => $user_id ]
+                );
+            }
+
+            $login = wp_set_current_user($user_id);
+
+            $customer = \Stripe\Customer::create([
+                'description' => $fullname,
+                'name' => $fullname,
+                'email' => $email,
+                'source' => $cus['token'] ?: null,
+                'coupon' => $body['pricing']['coupon']['id'] ?: null,
+                'shipping' => $cus['shipping'],
+                'metadata' => [ 'wp_id' => $user_id ]
+            ]);
+
             return sttv_rest_response(
                 'signupSuccess',
                 'Account created',
@@ -138,41 +169,6 @@ class Signup extends \WP_REST_Controller {
             $lastname = ucfirst(strtolower($lastname));
             $email = strtolower($email);
             $fullname = $firstname.' '.$lastname;
-
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
-
-            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
-
-            $user_id = wp_insert_user([
-                'user_pass' => $password,
-                'user_email' => $email,
-                'first_name' => $firstname,
-                'last_name' => $lastname,
-                'display_name' => $fullname,
-                'user_login' => $email,
-                'show_admin_bar_front' => 'false'
-            ]);
-
-            if ( is_wp_error( $user_id ) ) {
-                return sttv_rest_response(
-                    'signupError',
-                    'There was an error creating your account. Please check back again later.',
-                    200,
-                    [ 'data' => $user_id ]
-                );
-            }
-
-            $login = wp_set_current_user($user_id);
-
-            $customer = \Stripe\Customer::create([
-                'description' => $fullname,
-                'name' => $fullname,
-                'email' => $email,
-                'source' => $cus['token'] ?: null,
-                'coupon' => $body['pricing']['coupon']['id'] ?: null,
-                'shipping' => $cus['shipping'],
-                'metadata' => [ 'wp_id' => $user_id ]
-            ]);
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
