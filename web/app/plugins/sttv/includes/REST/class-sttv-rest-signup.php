@@ -295,7 +295,7 @@ class Signup extends \WP_REST_Controller {
                 'Valid coupon',
                 200,
                 [
-                    'update' => $coupon
+                    'update' => is_array($coupon)
                 ]
             );
         } catch ( \Exception $e ) {
