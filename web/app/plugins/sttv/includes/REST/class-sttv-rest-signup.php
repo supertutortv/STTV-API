@@ -288,7 +288,7 @@ class Signup extends \WP_REST_Controller {
             $coupon = \Stripe\Coupon::retrieve( $coupon );
             if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
-            $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
+            $coupon = (array) $coupon;
 
             return sttv_rest_response(
                 'coupon_valid',
