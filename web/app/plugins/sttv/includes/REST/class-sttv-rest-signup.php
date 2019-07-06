@@ -289,7 +289,15 @@ class Signup extends \WP_REST_Controller {
             if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
             $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
-            return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'update' => ['id' => $coupon->id, 'value' => $amt ]] );
+
+            return sttv_rest_response(
+                'coupon_valid',
+                'Valid coupon',
+                200,
+                [
+                    'update' => $coupon
+                ]
+            );
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
             list($UA,$platform,$product) = explode('|',$sig);
