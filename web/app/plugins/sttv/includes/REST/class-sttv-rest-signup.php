@@ -288,7 +288,7 @@ class Signup extends \WP_REST_Controller {
             $coupon = json_decode(json_encode(\Stripe\Coupon::retrieve( $coupon )),true);
             if ( !$coupon['valid'] ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
-            $passthru = ['amount_off','id','name','percent_off','valid'];
+            $passthru = ['amount_off','id','percent_off'];
 
             $coupon = array_filter($coupon, function($val) use ($passthru) {
                 return in_array($val,$passthru);
