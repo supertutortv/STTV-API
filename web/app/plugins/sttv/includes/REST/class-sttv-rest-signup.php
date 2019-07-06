@@ -286,7 +286,13 @@ class Signup extends \WP_REST_Controller {
         if ( empty( $coupon ) ) return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         try {
             $coupon = json_decode(json_encode(\Stripe\Coupon::retrieve( $coupon )),true);
-            //if ( !$coupon['valid'] ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
+            if ( !$coupon['valid'] ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
+
+            $passthru = ['amount_off','id','name','percent_off','valid'];
+
+            array_filter($coupon, function($val) use ($passthru) {
+                return in_array($val,$passthru);
+            }, ARRAY_FILTER_USE_KEY);
 
             return sttv_rest_response(
                 'coupon_valid',
