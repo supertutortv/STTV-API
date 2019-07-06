@@ -285,10 +285,8 @@ class Signup extends \WP_REST_Controller {
     private function check_coupon( $coupon, $sig ) {
         if ( empty( $coupon ) ) return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         try {
-            $coupon = \Stripe\Coupon::retrieve( $coupon );
-            if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
-
-            $coupon = (array) $coupon;
+            $coupon = (array) \Stripe\Coupon::retrieve( $coupon );
+            //if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
             return sttv_rest_response(
                 'coupon_valid',
