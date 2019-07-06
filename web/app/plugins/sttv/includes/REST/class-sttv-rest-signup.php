@@ -290,7 +290,7 @@ class Signup extends \WP_REST_Controller {
 
             $passthru = ['amount_off','id','name','percent_off','valid'];
 
-            array_filter($coupon, function($val) use ($passthru) {
+            $coupon = array_filter($coupon, function($val) use ($passthru) {
                 return in_array($val,$passthru);
             }, ARRAY_FILTER_USE_KEY);
 
