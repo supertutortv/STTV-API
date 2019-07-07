@@ -154,20 +154,32 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_stripe_errors(function() use ($body) {
             extract($body);
-            $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
-            $priship = isset($shipping['priShip']) && $shipping['priShip'];
+
+            $atts = [];
+
+            $atts['source'] = $token ?: null;
+
+            $atts['coupon'] = $coupon ?: null;
 
             $user = wp_get_current_user();
 
+            $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
+            $priship = isset($shipping['priShip']) && $shipping['priShip'];
+            $phone = isset($shipping['phone']) ? $shipping['phone'] : null;
+
+            if ($shipping) {
+                unset($shipping['priShip']);
+                unset($shipping['phone']);
+                $atts['shipping'] = [
+                    'name' => $fullname,
+                    'phone' => $phone,
+                    'address' => $shipping
+                ];
+            }
+
             $customer = \Stripe\Customer::update(
                 "cus_$user->user_login",
-                [
-                    'source' => $token ?: null,
-                    'coupon' => $coupon ?: null,
-                    'shipping' => [
-                        'name' => $fullname
-                    ]
-                ]
+                $atts
             );
             
             //Begin Order Processing
@@ -175,15 +187,15 @@ class Signup extends \WP_REST_Controller {
                 'customer' => $customer->id,
                 'items' => [
                     [
-                        'plan' => $planID
+                        'plan' => $plan['id']
                     ]
                 ],
-                'cancel_at_period_end' => !$plan['doTrial'],
+                'cancel_at_period_end' => !$dotrial,
                 'metadata' => [
                     'checkout_id' => $session['id'],
                     'checkout_sig' => $session['signature'],
                     'wp_id' => $user->ID,
-                    'priship' => $priShip
+                    'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
