@@ -152,23 +152,23 @@ class Signup extends \WP_REST_Controller {
 
         sttv_verify_web_token($request);
 
-        return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
-            $items = $courseids = [];
+        return wp_get_current_user();
 
-            $cus = $body['customer'];
-            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
-            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
+        return sttv_stripe_errors(function() use ($body) {
+            extract($body);
+            $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
+            $priship = isset($shipping['priShip']) && $shipping['priShip'];
 
             $user = wp_get_current_user();
 
             $customer = \Stripe\Customer::update(
                 "cus_$user->user_login",
                 [
-                    'source' => $cus['token'] ?: null,
-                    'coupon' => $body['pricing']['coupon']['id'] ?: null,
-                    'shipping' => $cus['shipping']
+                    'source' => $token ?: null,
+                    'coupon' => $coupon ?: null,
+                    'shipping' => [
+                        'name'
+                    ]
                 ]
             );
             
