@@ -152,8 +152,6 @@ class Signup extends \WP_REST_Controller {
 
         sttv_verify_web_token($request);
 
-        return wp_get_current_user();
-
         return sttv_stripe_errors(function() use ($body) {
             extract($body);
             $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
@@ -167,7 +165,7 @@ class Signup extends \WP_REST_Controller {
                     'source' => $token ?: null,
                     'coupon' => $coupon ?: null,
                     'shipping' => [
-                        'name'
+                        'name' => $fullname
                     ]
                 ]
             );
