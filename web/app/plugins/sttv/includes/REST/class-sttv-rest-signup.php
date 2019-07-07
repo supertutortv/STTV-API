@@ -167,9 +167,16 @@ class Signup extends \WP_REST_Controller {
             $priship = isset($shipping['priShip']) && $shipping['priShip'];
             $phone = isset($shipping['phone']) ? $shipping['phone'] : null;
 
-            $plan = json_decode(get_option('pricingplan_'.$plan['id']),true);
+            $plans = json_decode(get_option('pricingplan_'.$plan['id']),true);
 
-            return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200, ['plans' => $plan] );
+            foreach ($plans['plans'] as $pln) {
+                if ($pln['interval_count'] == $plan['length'] || $pln['interval_count']*12 == $plan['length']) {
+                    $plan = $pln;
+                    break;
+                }
+            }
+
+            return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200, ['plan' => $plan] );
 
             if ($shipping) {
                 unset($shipping['priShip']);
@@ -191,7 +198,7 @@ class Signup extends \WP_REST_Controller {
                 'customer' => $customer->id,
                 'items' => [
                     [
-                        'plan' => strtoupper($plan['id'])
+                        'plan' => $plan['id']
                     ]
                 ],
                 'cancel_at_period_end' => !$dotrial,
