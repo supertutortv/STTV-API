@@ -171,7 +171,7 @@ class Signup extends \WP_REST_Controller {
                 unset($shipping['priShip']);
                 unset($shipping['phone']);
                 $atts['shipping'] = [
-                    'name' => $fullname,
+                    'name' => $name,
                     'phone' => $phone,
                     'address' => $shipping
                 ];
