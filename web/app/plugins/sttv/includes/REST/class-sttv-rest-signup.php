@@ -176,8 +176,6 @@ class Signup extends \WP_REST_Controller {
                 }
             }
 
-            return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200, ['plan' => $plan] );
-
             if ($shipping) {
                 unset($shipping['priShip']);
                 unset($shipping['phone']);
