@@ -128,6 +128,9 @@ class Signup extends \WP_REST_Controller {
                 'metadata' => [ 'wp_id' => $user_id ]
             ]);
 
+            $token = new \STTV\JWT( $login, DAY_IN_SECONDS*5 );
+            sttv_set_auth_cookie($token->token);
+
             return sttv_rest_response(
                 'signupSuccess',
                 'Account created',
@@ -208,9 +211,6 @@ class Signup extends \WP_REST_Controller {
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
-
-            $token = new \STTV\JWT( $user, DAY_IN_SECONDS*5 );
-            sttv_set_auth_cookie($token->token);
 
             return sttv_rest_response(
                 'checkoutSuccess',
