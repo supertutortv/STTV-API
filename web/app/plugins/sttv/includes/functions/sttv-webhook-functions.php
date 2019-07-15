@@ -119,7 +119,7 @@ function customer_subscription_created( $data ) {
     $roles = explode('|',$obj['plan']['metadata']['roles']);
 
     if ( $obj['status'] === 'trialing' )
-        foreach ( $roles as $role ) $user->add_role($role.'_trial');
+        foreach ( $roles as $role ) if ($role !== 'act_test_5_patch') $user->add_role($role.'_trial');
     else
         foreach ( $roles as $role ) $user->add_role($role);
 
@@ -262,7 +262,7 @@ function customer_subscription_updated( $data ) {
                     $roles = explode('|',$plan['metadata']['roles']);
 
                     foreach ( $roles as $role ) {
-                        $user->remove_role($role.'_trial');
+                        if ($role !== 'act_test_5_patch') $user->remove_role($role.'_trial');
                         $user->add_role($role);
                     }
                     
