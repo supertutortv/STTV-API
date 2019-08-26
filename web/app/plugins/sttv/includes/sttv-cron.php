@@ -68,16 +68,22 @@ class Cron {
         try {
             
             $vimeo = new Vimeo( $this->seckeys['vclient'], $this->seckeys['vsec'], $this->seckeys['vtok'] );
-            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
-            $albs = (array) $alb_data['body']['data'];
+            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=75" );
+            $alb_data_2 = $albs = [];
+
+            if ( intval( $alb_data['body']['total'] ) > 75 ) {
+                $alb_data_2 = $vimeo->request( $alb_data['body']['paging']['next'].'&fields=uri,name&per_page=75' );
+                $albs = array_merge( $alb_data['body']['data'], $alb_data_2['body']['data'] );
+            } else {
+                $albs = (array) $alb_data['body']['data'];
+            }
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                $path = dirname( __DIR__ ) . '/cache/';
                 $pieces = preg_split('/:|~/',$alb['name']);
                 if (!in_array($pieces[0], $this->tests)) continue;
 
                 $test_abbrev = strtolower( $pieces[0] );
-                $path .= $test_abbrev . '/';
+                $path = dirname( __DIR__ ) . '/cache/' . $test_abbrev . '/';
                 $name = implode(' ', $pieces );
                 $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=manual';
                 $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
