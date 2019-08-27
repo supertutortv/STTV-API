@@ -159,9 +159,22 @@ class Signup extends \WP_REST_Controller {
         return sttv_stripe_errors(function() use ($body) {
             extract($body);
 
+            $data = [];
+
             $user = wp_get_current_user();
 
-            return \Stripe\Customer::retrieve("cus_$user->user_login");
+            $cus = \Stripe\Customer::retrieve("cus_$user->user_login");
+
+            foreach ($cus['sources']['data'] as $card) {
+                if ($card['id'] !== $cus['default_source']) continue;
+                $data['card'] = [
+                    'name' => $card['name'],
+                    'brand' => $card['brand'],
+                    'last4' => $card['last4']
+                ];
+            }
+
+            return $data;
         });
     }
 
