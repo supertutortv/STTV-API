@@ -62,6 +62,7 @@ class Signup extends \WP_REST_Controller {
                 ]
             ],
             '/account' => $steps,
+            '/activate' => $steps,
             '/pay' => $steps
 		];
 
@@ -147,6 +148,20 @@ class Signup extends \WP_REST_Controller {
                 ]
             );
 
+        });
+    }
+
+    private function _activate( $body, $request ) {
+        if ( empty($body) ) return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200 );
+
+        sttv_verify_web_token($request);
+
+        return sttv_stripe_errors(function() use ($body) {
+            extract($body);
+
+            $user = wp_get_current_user();
+
+            return \Stripe\Customer::retrieve("cus_$user->user_login");
         });
     }
 
