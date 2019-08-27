@@ -85,6 +85,7 @@ class Admin {
 			'modified' => strtotime( $post->post_modified ),
 			'test' => strtoupper( $exam ),
 			'type' => 'collection',
+			'resourceLink' => $course['course_meta']['course_resource_link'] ?? '#',
 			'thumb' => $course['course_meta']['cover_image'] ?? '',
 			'thumbUrls' => [
 				'plain' => 'https://i.vimeocdn.com/video/||ID||_295x166.jpg?r=pad',
