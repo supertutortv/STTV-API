@@ -111,7 +111,7 @@ class Auth extends \WP_REST_Controller {
 
         $umeta = get_user_meta($login->ID, 'sttv_user_data', true);
 
-        $exp = (isset($umeta['user']['trialing']) && (time() < $umeta['user']['trialing']) && ($umeta['user']['trialing'] > 0)) ? $umeta['user']['trialing']-time() : DAY_IN_SECONDS*30 ;
+        $exp = DAY_IN_SECONDS*5 ;
 
         $token = new \STTV\JWT( $login, $exp );
 
