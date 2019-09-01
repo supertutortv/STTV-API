@@ -205,6 +205,8 @@ class Courses extends \WP_REST_Controller {
 				return $meta;
 			})();
 
+			$umeta['courses'][$slug]['subId'] = get_user_meta( $userid, "sub_id-$test_code", true);
+
 			$dbtable = $wpdb->prefix.'course_udata';
 			$cu_data = $wpdb->get_results(
 				$wpdb->prepare("SELECT * FROM $dbtable WHERE wp_id = %d AND udata_test = %s;",$userid,$meta['test'])

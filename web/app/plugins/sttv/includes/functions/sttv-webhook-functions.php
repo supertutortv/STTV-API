@@ -109,6 +109,15 @@ function customer_subscription_created( $data ) {
     $user = get_userdata( $uid );
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $plan = $obj['plan'];
+
+    if ($plan['product'] === 'COMBO') {
+        update_user_meta( $uid, 'sub_id-sat', $obj['id']);
+        update_user_meta( $uid, 'sub_id-act', $obj['id']);
+    } else {
+        $crslc = strtolower($plan['product']);
+        update_user_meta( $uid, "sub_id-$crslc", $obj['id']);
+    }
+
     $prod = \Stripe\Product::retrieve($plan['product']);
     $fullname = $user->first_name.' '.$user->last_name;
     $shipping = __stJ2A($cus->shipping);
