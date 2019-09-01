@@ -176,7 +176,10 @@ class Signup extends \WP_REST_Controller {
                 ];
             }
 
-            $data['stuff'] = $sub;
+            $data['sub'] = [
+                'customer' => $sub['customer'],
+                'id' => $sub['id']
+            ];
 
             return $data;
         });
