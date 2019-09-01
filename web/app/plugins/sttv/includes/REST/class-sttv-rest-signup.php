@@ -165,6 +165,8 @@ class Signup extends \WP_REST_Controller {
 
             $cus = \Stripe\Customer::retrieve("cus_$user->user_login");
 
+            $sub = \Stripe\Subscription::retrieve($subId);
+
             foreach ($cus['sources']['data'] as $card) {
                 if ($card['id'] !== $cus['default_source']) continue;
                 $data['card'] = [
