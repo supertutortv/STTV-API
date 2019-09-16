@@ -354,7 +354,7 @@ function customer_subscription_deleted( $data ) {
     ]);
 
     $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
-    foreach ($roles as $role) $user->remove_role( $role );
+    //foreach ($roles as $role) $user->remove_role( $role );
 
     return $roles;
 }
