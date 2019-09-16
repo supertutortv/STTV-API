@@ -137,22 +137,18 @@ class Courses extends \WP_REST_Controller {
 			$failFlag = get_user_meta($userid, "invoiceFailFlag-$test_code", true);
 
 			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user,$failFlag) {
-				if ($failFlag) return [
-					'failFlag' => $failFlag
-				];
-
 				$meta['trialing'] = $trialing;
-
+				
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
 
-					if ( !current_user_can($val['permissions']) ) {
+					if ( $failFlag || !current_user_can($val['permissions']) ) {
 						unset( $meta['collections'][$sec] );
 						continue;
 					}
 
 					foreach ( $val['collection'] as $k => &$subsec ) {
-						if ( !current_user_can($subsec['permissions']) ) {
+						if ( $failFlag || !current_user_can($subsec['permissions']) ) {
 							unset($val['collection'][$k]);
 							continue;
 						}
@@ -177,13 +173,13 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( !current_user_can($book['permissions']) ) {
+					if ( $failFlag || !current_user_can($book['permissions']) ) {
 						unset($meta['collections']['practice']['collection'][$k]);
 						continue;
 					}
 
 					foreach ( $book['tests'] as $b => &$test ) {
-						if ( !current_user_can($test['permissions']) ) {
+						if ( $failFlag || !current_user_can($test['permissions']) ) {
 							unset($book['tests'][$b]);
 							continue;
 						}
@@ -212,6 +208,7 @@ class Courses extends \WP_REST_Controller {
 			})();
 
 			$umeta['courses'][$slug]['subId'] = get_user_meta( $userid, "sub_id-$test_code", true);
+			$umeta['courses'][$slug]['failFlag'] = $failFlag;
 
 			$dbtable = $wpdb->prefix.'course_udata';
 			$cu_data = $wpdb->get_results(
