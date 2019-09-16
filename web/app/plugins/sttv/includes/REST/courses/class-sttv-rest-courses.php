@@ -136,7 +136,7 @@ class Courses extends \WP_REST_Controller {
 
 			$failFlag = get_user_meta($userid, "invoiceFailFlag-$test_code", true);
 
-			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user) {
+			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user,$failFlag) {
 				if ($failFlag) return [
 					'failFlag' => $failFlag
 				];
