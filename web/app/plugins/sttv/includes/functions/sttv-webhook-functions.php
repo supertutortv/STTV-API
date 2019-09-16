@@ -263,6 +263,8 @@ function customer_subscription_updated( $data ) {
 
     if (!$user) return $user;
 
+    $fullname = $user->first_name.' '.$user->last_name;
+
     // update any previous attributes
     foreach ($prev as $attr => $val) {
         switch($attr) {
@@ -325,7 +327,6 @@ function customer_subscription_trial_will_end( $data ) {
             'message' => "<pre>On {$thedate}, your free trial will expire. This is just a reminder that the card on file with your account will be charged ${$amt}. If you elected to get priority shipping for your books, that will show up as a separate charge. Thank you for being a SupertutorTV customer and student!</pre>"
         ]);
         return $email->send();
-
 }
 
 // customer.subscription.deleted
@@ -337,7 +338,7 @@ function customer_subscription_deleted( $data ) {
     $user = get_userdata( $meta['wp_id'] );
     if ( is_wp_error($user) ) return $user;
 
-    $fullname = $user->first_name.' '.$user->last_name;
+    $fullname = ''.$user->first_name.' '.$user->last_name;
     $manual_cancelled = $meta['cancelled'] ?? false;
     if ($manual_cancelled) return new \STTV\Email\Template([
         'template' => 'course-cancelled',
@@ -407,7 +408,15 @@ function invoice_updated( $data ) {}
 function invoice_finalized( $data ) {}
 
 // invoice.payment_failed
-function invoice_payment_failed( $data ) {}
+function invoice_payment_failed( $data ) {
+    $obj = $data['data']['object'];
+    $user = get_user_by('login', str_replace('cus_','',$obj['customer']));
+
+    foreach ($obj['lines']['data'] as $line) {
+        $course = strtolower($line['plan']['product']);
+        update_user_meta($user->ID,"invoiceFailFlag-$course",$obj['hosted_invoice_url']);
+    }
+}
 
 // charge.succeeded
 function charge_succeeded( $data ) {
