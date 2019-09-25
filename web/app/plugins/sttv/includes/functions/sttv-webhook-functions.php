@@ -80,8 +80,11 @@ function customer_updated( $data ) {
 // customer.deleted
 function customer_deleted( $data ) {
     require_once( ABSPATH.'wp-admin/includes/user.php' );
-    $id = ($data['data']['object']['metadata']['wp_id'] == 1) ? 0 : $data['data']['object']['metadata']['wp_id'];
-    return wp_delete_user( $id );
+    
+    $obj = $data['data']['object'];
+    $user = get_user_by('login', str_replace('cus_','',$obj['id']));
+
+    return wp_delete_user( $user->ID == 1 ? 0 : $user->ID );
 }
 
 //customer.subscription.created
