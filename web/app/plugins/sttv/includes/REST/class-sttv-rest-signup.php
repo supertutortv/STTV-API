@@ -54,6 +54,13 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
+            '/getcard' => [
+				[
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'stGetCard' ],
+                    'permission_callback' => 'sttv_verify_web_token'
+                ]
+            ],
             '/cancel' => [
 				[
                     'methods' => 'POST',
@@ -63,6 +70,7 @@ class Signup extends \WP_REST_Controller {
             ],
             '/account' => $steps,
             '/activate' => $steps,
+            '/getcard' => $steps,
             '/pay' => $steps
 		];
 
@@ -74,6 +82,28 @@ class Signup extends \WP_REST_Controller {
     public function stSignupInit( WP_REST_Request $request ) {
         $plan = json_decode(get_option('pricingplan_'.$request['plan']),true);
         return sttv_rest_response( 'pricingData', 'ok' , 200, [ 'data' => $plan ]);
+    }
+
+    public function stGetCard( WP_REST_Request $request ) {
+
+        return sttv_stripe_errors(function() {
+            $data = [];
+
+            $user = wp_get_current_user();
+
+            $cus = \Stripe\Customer::retrieve("cus_$user->user_login");
+
+            foreach ($cus['sources']['data'] as $card) {
+                if ($card['id'] !== $cus['default_source']) continue;
+                $data['card'] = [
+                    'name' => $card['name'],
+                    'brand' => $card['brand'],
+                    'last4' => $card['last4']
+                ];
+            }
+
+            return $data;
+        });
     }
 
     public function stSignupPost( WP_REST_Request $request ) {
