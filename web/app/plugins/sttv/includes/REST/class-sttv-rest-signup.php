@@ -109,7 +109,7 @@ class Signup extends \WP_REST_Controller {
         $body = json_decode($request->get_body(),true);
         $ep = str_replace('/signup/','_',$request->get_route());
         
-        if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
+        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
@@ -181,8 +181,6 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _activate( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200 );
-
         sttv_verify_web_token($request);
 
         return sttv_stripe_errors(function() use ($body) {
@@ -195,8 +193,6 @@ class Signup extends \WP_REST_Controller {
     }
 
     private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'checkoutError', 'Request body cannot be empty', 200 );
-
         sttv_verify_web_token($request);
 
         return sttv_stripe_errors(function() use ($body) {
