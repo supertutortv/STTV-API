@@ -70,7 +70,6 @@ class Signup extends \WP_REST_Controller {
             ],
             '/account' => $steps,
             '/activate' => $steps,
-            '/getcard' => $steps,
             '/pay' => $steps
 		];
 
