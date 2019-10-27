@@ -414,11 +414,14 @@ function invoice_finalized( $data ) {}
 function invoice_payment_failed( $data ) {
     $obj = $data['data']['object'];
     $user = get_user_by('login', str_replace('cus_','',$obj['customer']));
+    $ret = [];
 
     foreach ($obj['lines']['data'] as $line) {
         $course = strtolower($line['plan']['product']);
-        update_user_meta($user->ID,"invoiceFailFlag-$course",$obj['hosted_invoice_url']);
+        $ret[] = update_user_meta($user->ID,"invoiceFailFlag-$course",$obj['hosted_invoice_url']);
     }
+
+    return $ret;
 }
 
 // charge.succeeded
