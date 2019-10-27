@@ -113,6 +113,8 @@ function customer_subscription_created( $data ) {
     $courses = json_decode($obj['plan']['metadata']['courses'],true);
     $plan = $obj['plan'];
 
+    delete_user_meta($user->ID, "invoiceFailFlag-all");
+
     if ($plan['product'] === 'COMBO') {
         update_user_meta( $uid, 'sub_id-sat', $obj['id']);
         update_user_meta( $uid, 'sub_id-act', $obj['id']);
@@ -330,10 +332,7 @@ function customer_subscription_deleted( $data ) {
         ]
     ]);
 
-    $roles = explode('|',$obj['plan']['metadata']['roles'] ?? $obj['plan']['metadata']['role']);
-    //foreach ($roles as $role) $user->remove_role( $role );
-
-    return $roles;
+    return update_user_meta($user->ID,"invoiceFailFlag-all",true);
 }
 
 // invoice.payment_succeeded
