@@ -273,32 +273,6 @@ function customer_subscription_updated( $data ) {
         switch($attr) {
             case 'status':
                 if ($val === 'trialing' && $obj['status'] === 'active') {
-                    $roles = explode('|',$plan['metadata']['roles']);
-
-                    foreach ( $roles as $role ) {
-                        $user->remove_role($role.'_trial');
-                        $user->add_role($role);
-                    }
-                    
-                    new \STTV\Email\Template([
-                        'template' => 'trial-ended',
-                        'email' => $user->user_email,
-                        'name' => $fullname,
-                        'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
-                        'content' => [
-                            [
-                                'name' => 'fname',
-                                'content' => $user->first_name
-                            ],
-                            [
-                                'name' => 'coursename',
-                                'content' => $prod->name
-                            ]
-                        ]
-                    ]);
-
-                    $sub->cancel_at_period_end = true;
-                    $sub->save();
                     
                 }
             break;
@@ -376,12 +350,39 @@ function invoice_payment_succeeded( $data ) {
         $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
         $fullname = $user->first_name.' '.$user->last_name;
 
+        $roles = explode('|',$submeta['roles']);
+
+        foreach ( $roles as $role ) {
+            $user->remove_role($role.'_trial');
+            $user->add_role($role);
+        }
+
+        $sub->cancel_at_period_end = true;
+        $sub->save();
+
         $email = new \STTV\Email\Standard([
             'to' => 'info@supertutortv.com',
             'subject' => $fullname.'\'s trial has ended - PAID',
             'message' => 'Please wait 24 hrs before shipping their book(s).'
         ]);
         $email->send();
+        
+        new \STTV\Email\Template([
+            'template' => 'trial-ended',
+            'email' => $user->user_email,
+            'name' => $fullname,
+            'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
+            'content' => [
+                [
+                    'name' => 'fname',
+                    'content' => $user->first_name
+                ],
+                [
+                    'name' => 'coursename',
+                    'content' => $prod->name
+                ]
+            ]
+        ]);
 
         if ( $submeta['priship'] == 'true' ) {
             $priship = \Stripe\Charge::create([
@@ -418,7 +419,7 @@ function invoice_payment_failed( $data ) {
 
     foreach ($obj['lines']['data'] as $line) {
         $course = strtolower($line['plan']['product']);
-        $ret[] = update_user_meta($user->ID,"invoiceFailFlag-$course",$obj['hosted_invoice_url']);
+        $ret[$course] = update_user_meta($user->ID,"invoiceFailFlag-$course",true);
     }
 
     return $ret;
