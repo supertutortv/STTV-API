@@ -134,7 +134,7 @@ class Courses extends \WP_REST_Controller {
 
 			$trialing = !$admin && current_user_can( "course_{$test_code}_trial_access" );
 
-			$failFlag = get_user_meta($userid, "invoiceFailFlag-$test_code", true);
+			$failFlag = !!get_user_meta($userid, "invoiceFailFlag-$test_code", true);
 
 			return $failFlag;
 
