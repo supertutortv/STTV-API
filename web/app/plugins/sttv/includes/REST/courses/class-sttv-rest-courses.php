@@ -228,6 +228,7 @@ class Courses extends \WP_REST_Controller {
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
+		$umeta['refresh'] = time() + 18 * HOUR_IN_SECONDS;
 		
 		return sttv_rest_response(
 			'user_course_data_success',
