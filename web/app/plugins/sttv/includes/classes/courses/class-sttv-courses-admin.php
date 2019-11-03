@@ -99,7 +99,7 @@ class Admin {
 					'id' => 0,
 					'vidid' => $intr_thumb[0],
 					'timestamp' => time(),
-					'name' => strtoupper( $test ).' Intro',
+					'name' => strtoupper( $exam ).' Intro',
 					'thumb' => $intr_thumb[1]
 				]
 			],
@@ -118,7 +118,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 
-					$data['resDirs'][$root_path] = mkdir( $root_path, 0775, true );
+					if ( ! is_dir( $root_path ) ) $data['resDirs'][$root_path] = mkdir( $root_path, 0775, true );
 
 					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
@@ -174,11 +174,11 @@ class Admin {
 		if ( $course['practice']['uploads'] ) {
 			$proot_path = STTV_RESOURCE_DIR . $exam .'/practice/';
 
-			$data['resDirs'][$proot_path] = mkdir( $proot_path, 0775, true );
+			if ( ! is_dir( $proot_path ) ) $data['resDirs'][$proot_path] = mkdir( $proot_path, 0775, true );
 
 			foreach ( $course['practice']['uploads'] as $file ) {
 				$pchunk = stristr( $file['file']['url'], '/uploads');
-				$fcopy = copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
+				$fcopy = @copy( WP_CONTENT_DIR . $pchunk, $proot_path . $file['file']['filename'] );
 				if ( $fcopy ){
 					$presc[] = [
 						'name' => $file['file']['title'],
