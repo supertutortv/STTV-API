@@ -73,6 +73,7 @@ class Courses extends \WP_REST_Controller {
 	##########################
 
 	public function get_course_data( $req ) {
+		return STTV_RESOURCE_DIR;
 		global $wpdb;
 		$user = wp_get_current_user();
 		$userid = $user->ID;
