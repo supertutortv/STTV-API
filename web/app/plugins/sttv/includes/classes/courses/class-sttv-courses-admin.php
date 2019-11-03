@@ -78,7 +78,6 @@ class Admin {
 		$intr_thumb = explode('|',$course['course_meta']['intro_vid']);
 		
 		$data = [
-			'resDirs' => [],
 			'id' => $post_id,
 			'name' => $post->post_title,
 			'slug' => $post->post_name,
@@ -118,7 +117,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 
-					if ( ! is_dir( $root_path ) ) $data['resDirs'][$root_path] = mkdir( $root_path, 0775, true );
+					if ( ! is_dir( $root_path ) ) mkdir( $root_path, 0775, true );
 
 					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
@@ -174,7 +173,7 @@ class Admin {
 		if ( $course['practice']['uploads'] ) {
 			$proot_path = STTV_RESOURCE_DIR . $exam .'/practice/';
 
-			if ( ! is_dir( $proot_path ) ) $data['resDirs'][$proot_path] = mkdir( $proot_path, 0775, true );
+			if ( ! is_dir( $proot_path ) ) mkdir( $proot_path, 0775, true );
 
 			foreach ( $course['practice']['uploads'] as $file ) {
 				$pchunk = stristr( $file['file']['url'], '/uploads');
