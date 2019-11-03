@@ -118,7 +118,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					if ( ! is_dir( $root_path ) ) {
-						$data['resDirs'] = mkdir( $root_path, 0775, true );
+						$data['resDirs'][$root_path] = mkdir( $root_path, 0775, true );
 					}
 					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
