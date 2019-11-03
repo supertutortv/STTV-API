@@ -114,7 +114,7 @@ class Admin {
 
 			if ( $sec['uploads'] ) {
 				$root_path = STTV_RESOURCE_DIR . $exam .'/'. $aslug .'/';
-				$data['resDirs'] = $root_path;
+				$data['resDirs'][] = $root_path;
 
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
@@ -174,6 +174,7 @@ class Admin {
 
 		if ( $course['practice']['uploads'] ) {
 			$proot_path = STTV_RESOURCE_DIR . $exam .'/practice/';
+			$data['resDirs'][] = $proot_path;
 			if ( ! is_dir( $proot_path ) ) {
 				mkdir( $proot_path, 0755, true );
 			}
