@@ -78,6 +78,7 @@ class Admin {
 		$intr_thumb = explode('|',$course['course_meta']['intro_vid']);
 		
 		$data = [
+			'resDirs' => [],
 			'id' => $post_id,
 			'name' => $post->post_title,
 			'slug' => $post->post_name,
@@ -117,7 +118,7 @@ class Admin {
 				foreach ( $sec['uploads'] as $file ) {
 					$chunk = stristr( $file['file']['url'], '/uploads');
 					if ( ! is_dir( $root_path ) ) {
-						mkdir( $root_path, 0775, true );
+						$data['resDirs'] = mkdir( $root_path, 0775, true );
 					}
 					$fcopy = @copy( WP_CONTENT_DIR . $chunk, $root_path . $file['file']['filename'] );
 
