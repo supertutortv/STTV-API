@@ -52,7 +52,7 @@ class Admin {
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
                 $pieces = preg_split('/:|~/',$alb['name']);
-                if (!in_array($pieces[0], $this->tests)) continue;
+                if (!in_array($pieces[0], self::$tests)) continue;
 
                 $test_abbrev = strtolower( $pieces[0] );
                 $path = dirname( __DIR__ ) . '/cache/' . $test_abbrev . '/';
@@ -77,7 +77,7 @@ class Admin {
                 foreach ($vids as $vid) { // LOOP THROUGH VIDEOS PER ALBUM
                     $vidid = str_replace('https://vimeo.com/','',$vid['link']);
                     $vidname = $vid['name'];
-                    $slug = $this->sanitize_this_title($vidname);
+                    $slug = sanitize_title_with_dashes($vidname);
                     $tags = [];
                     $stags = $vid['tags'];
                     foreach ($stags as $tag) {
