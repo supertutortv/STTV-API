@@ -38,6 +38,7 @@ class Admin {
         echo '</div>';
 
         /* try {
+            // adding this comment for diff (remove later)
             
             $vimeo = new \Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
