@@ -119,9 +119,9 @@ class Admin {
                     fwrite( $filew, $contents );
                     fclose( $filew );
 
-                echo "Album ".$alb['name']." has been updated \r\n";
+                echo "Album ".$alb['name']." has been updated \r\n\n";
             }
-            echo "The Vimeo JSON cache has been updated \r\n";
+            echo "The Vimeo JSON cache has been updated \r\n\n";
         } catch ( Exception $e ) {
 
             print_r( $e );
