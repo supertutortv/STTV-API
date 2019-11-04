@@ -43,7 +43,7 @@ class Admin {
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
 
-            print_r($albs);
+            print_r($alb_data);
 
             return;
             
