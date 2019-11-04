@@ -54,6 +54,13 @@ class Signup extends \WP_REST_Controller {
                     ]
                 ]
             ],
+            '/getcard' => [
+				[
+                    'methods' => 'GET',
+                    'callback' => [ $this, 'stGetCard' ],
+                    'permission_callback' => 'sttv_verify_web_token'
+                ]
+            ],
             '/cancel' => [
 				[
                     'methods' => 'POST',
@@ -62,6 +69,7 @@ class Signup extends \WP_REST_Controller {
                 ]
             ],
             '/account' => $steps,
+            '/activate' => $steps,
             '/pay' => $steps
 		];
 
@@ -75,11 +83,33 @@ class Signup extends \WP_REST_Controller {
         return sttv_rest_response( 'pricingData', 'ok' , 200, [ 'data' => $plan ]);
     }
 
+    public function stGetCard( WP_REST_Request $request ) {
+
+        return sttv_stripe_errors(function() {
+            $data = [];
+
+            $user = wp_get_current_user();
+
+            $cus = \Stripe\Customer::retrieve("cus_$user->user_login");
+
+            foreach ($cus['sources']['data'] as $card) {
+                if ($card['id'] !== $cus['default_source']) continue;
+                $data['card'] = [
+                    'name' => $card['name'],
+                    'brand' => $card['brand'],
+                    'last4' => $card['last4']
+                ];
+            }
+
+            return $data;
+        });
+    }
+
     public function stSignupPost( WP_REST_Request $request ) {
         $body = json_decode($request->get_body(),true);
         $ep = str_replace('/signup/','_',$request->get_route());
         
-        if ( empty($body) ) return sttv_rest_response( 'checkout_null_body', 'Request body cannot be empty', 400 );
+        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
 
         $body = sttv_array_map_recursive( 'rawurldecode', $body );
         $body = sttv_array_map_recursive( 'sanitize_text_field', $body );
@@ -91,47 +121,6 @@ class Signup extends \WP_REST_Controller {
 
         return sttv_stripe_errors(function() use ($body) {
             extract($body);
-            $firstname = ucfirst(strtolower($firstname));
-            $lastname = ucfirst(strtolower($lastname));
-            $email = strtolower($email);
-            $fullname = $firstname.' '.$lastname;
-
-            if ( !is_email( $email ) ) return sttv_rest_response( 'signupError', 'Email cannot be empty or blank, and must be a valid email address.', 200 );
-
-            if ( email_exists( $email ) ) return sttv_rest_response( 'signupError', 'Email address is already in use. Is this you? ', 200 );
-
-            return sttv_rest_response(
-                'signupSuccess',
-                'Account created',
-                200,
-                [
-                    'update' => [
-                        'account' => [
-                            'email' => $email,
-                            'firstname' => $firstname,
-                            'lastname' => $lastname,
-                            'id' => $user_id
-                        ]
-                    ]
-                ]
-            );
-
-        });
-    }
-
-    private function _pay( $body, $request ) {
-        if ( empty($body) ) return sttv_rest_response( 'signupError', 'Request body cannot be empty', 200 );
-
-        return sttv_stripe_errors(function() use ($body) {
-            $customer = $create_invoice = $cid = $login = $items = $user = $plan = false;
-            $items = $courseids = [];
-
-            $cus = $body['customer'];
-            $dotrial = isset($cus['options']['doTrial']) && $cus['options']['doTrial'];
-            $priship = isset($cus['options']['priorityShip']) && $cus['options']['priorityShip'];
-            $mailinglist = isset($cus['options']['mailinglist']) && $cus['options']['mailinglist'];
-            
-            extract($cus['account']);
             $firstname = ucfirst(strtolower($firstname));
             $lastname = ucfirst(strtolower($lastname));
             $email = strtolower($email);
@@ -166,31 +155,102 @@ class Signup extends \WP_REST_Controller {
                 'description' => $fullname,
                 'name' => $fullname,
                 'email' => $email,
-                'source' => $cus['token'] ?: null,
-                'coupon' => $body['pricing']['coupon']['id'] ?: null,
-                'shipping' => $cus['shipping'],
                 'metadata' => [ 'wp_id' => $user_id ]
-            ]);
-            
-            //Begin Order Processing
-            $order = \Stripe\Subscription::create([
-                'customer' => $customer->id,
-                "items" => [
-                    [
-                        'plan' => $body['plan']['id']
-                    ]
-                ],
-                'cancel_at_period_end' => !$dotrial,
-                'metadata' => [
-                    'checkout_id' => $body['session']['id'],
-                    'wp_id' => $user_id,
-                    'priship' => $priship
-                ],
-                'trial_period_days' => $dotrial ? 5 : 0
             ]);
 
             $token = new \STTV\JWT( $login, DAY_IN_SECONDS*5 );
             sttv_set_auth_cookie($token->token);
+
+            return sttv_rest_response(
+                'signupSuccess',
+                'Account created',
+                200,
+                [
+                    'update' => [
+                        'account' => [
+                            'email' => $email,
+                            'firstname' => $firstname,
+                            'lastname' => $lastname,
+                            'id' => $user_id
+                        ]
+                    ]
+                ]
+            );
+
+        });
+    }
+
+    private function _activate( $body, $request ) {
+        sttv_verify_web_token($request);
+
+        return sttv_stripe_errors(function() use ($body) {
+            extract($body);
+
+            $sub = \Stripe\Subscription::retrieve($subId);
+            $sub->trial_end = 'now';
+            $sub->save();
+        });
+    }
+
+    private function _pay( $body, $request ) {
+        sttv_verify_web_token($request);
+
+        return sttv_stripe_errors(function() use ($body) {
+            extract($body);
+
+            $atts = [];
+
+            $atts['source'] = $token ?: null;
+
+            $atts['coupon'] = $coupon ?: null;
+
+            $user = wp_get_current_user();
+
+            $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
+            $priship = isset($shipping['priShip']) && $shipping['priShip'];
+            $phone = isset($shipping['phone']) ? $shipping['phone'] : null;
+
+            $plans = json_decode(get_option('pricingplan_'.$plan['id']),true);
+
+            foreach ($plans['plans'] as $pln) {
+                if ($pln['interval_count'] == $plan['length'] || $pln['interval_count']*12 == $plan['length']) {
+                    $plan = $pln;
+                    break;
+                }
+            }
+
+            if ($shipping) {
+                unset($shipping['priShip']);
+                unset($shipping['phone']);
+                $atts['shipping'] = [
+                    'name' => $name,
+                    'phone' => $phone,
+                    'address' => $shipping
+                ];
+            }
+
+            $customer = \Stripe\Customer::update(
+                "cus_$user->user_login",
+                $atts
+            );
+            
+            //Begin Order Processing
+            $order = \Stripe\Subscription::create([
+                'customer' => $customer->id,
+                'items' => [
+                    [
+                        'plan' => $plan['id']
+                    ]
+                ],
+                'cancel_at_period_end' => !$dotrial,
+                'metadata' => [
+                    'checkout_id' => $session['id'],
+                    'checkout_sig' => $session['signature'],
+                    'wp_id' => $user->ID,
+                    'priship' => $priship
+                ],
+                'trial_period_days' => $dotrial ? 5 : 0
+            ]);
 
             return sttv_rest_response(
                 'checkoutSuccess',
@@ -284,11 +344,23 @@ class Signup extends \WP_REST_Controller {
     private function check_coupon( $coupon, $sig ) {
         if ( empty( $coupon ) ) return sttv_rest_response( 'bad_request', 'Coupon cannot be empty or blank.', 400 );
         try {
-            $coupon = \Stripe\Coupon::retrieve( $coupon );
-            if ( !$coupon->valid ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
+            $coupon = json_decode(json_encode(\Stripe\Coupon::retrieve( $coupon )),true);
+            if ( !$coupon['valid'] ) return sttv_rest_response( 'signupError', 'Expired coupon', 200 );
 
-            $amt = ($coupon->amount_off > -1) ? '$'.$coupon->amount_off : $coupon->percent_off.'%';
-            return sttv_rest_response( 'coupon_valid', 'Valid coupon', 200, [ 'update' => ['id' => $coupon->id, 'value' => $amt ]] );
+            $passthru = ['amount_off','id','percent_off'];
+
+            $coupon = array_filter($coupon, function($val) use ($passthru) {
+                return in_array($val,$passthru);
+            }, ARRAY_FILTER_USE_KEY);
+
+            return sttv_rest_response(
+                'coupon_valid',
+                'Valid coupon',
+                200,
+                [
+                    'update' => $coupon
+                ]
+            );
         } catch ( \Exception $e ) {
             $sig = base64_decode($sig);
             list($UA,$platform,$product) = explode('|',$sig);

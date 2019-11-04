@@ -40,16 +40,22 @@ class Admin {
         try {
             
             $vimeo = new \Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
-            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
-            $albs = (array) $alb_data['body']['data'];
+            $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=75" );
+            $alb_data_2 = $albs = [];
+
+            if ( intval( $alb_data['body']['total'] ) > 75 ) {
+                $alb_data_2 = $vimeo->request( $alb_data['body']['paging']['next'].'&fields=uri,name&per_page=75' );
+                $albs = array_merge( $alb_data['body']['data'], $alb_data_2['body']['data'] );
+            } else {
+                $albs = (array) $alb_data['body']['data'];
+            }
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
-                $path = STTV_CACHE_DIR . '/';
-                $pieces = explode(':',$alb['name']);
+                $pieces = preg_split('/:|~/',$alb['name']);
                 if (!in_array($pieces[0], self::$tests)) continue;
 
                 $test_abbrev = strtolower( $pieces[0] );
-                $path .= $test_abbrev . '/';
+                $path = dirname( __DIR__ ) . '/cache/' . $test_abbrev . '/';
                 $name = implode(' ', $pieces );
                 $qstring = 'fields=name,description,duration,link,embed.color,tags.tag,pictures.sizes.link,stats.plays&per_page=75&sort=manual';
                 $albid = str_replace( '/albums/', '', stristr($alb['uri'], '/albums/') );
@@ -71,7 +77,7 @@ class Admin {
                 foreach ($vids as $vid) { // LOOP THROUGH VIDEOS PER ALBUM
                     $vidid = str_replace('https://vimeo.com/','',$vid['link']);
                     $vidname = $vid['name'];
-                    $slug = st_sanitize_title($vidname);
+                    $slug = sanitize_title_with_dashes($vidname);
                     $tags = [];
                     $stags = $vid['tags'];
                     foreach ($stags as $tag) {
@@ -86,10 +92,11 @@ class Admin {
                         'tags' => $tags,
                         'text' => $vid['description'] ?? '',
                         'thumb' => $out,
-                        'views' => $vid['stats']['plays'],
                         'index' => $i
                     ];
-                    if ($i == 0) {$embcolor = $vid['embed']['color'];$i++;}
+                    if ($i == 0) $embcolor = $vid['embed']['color'];
+                    
+                    $i++;
                     
                 } // END VIDEO LOOP
                 $albobj = [
@@ -112,9 +119,9 @@ class Admin {
                     fwrite( $filew, $contents );
                     fclose( $filew );
 
-                echo '<div>Album '.$alb['name'].' has been updated <br/></div>';
+                echo "Album ".$alb['name']." has been updated \r\n\n";
             }
-            echo '<div>The Vimeo JSON cache has been updated <br/></div>';
+            echo "The Vimeo JSON cache has been updated \r\n\n";
         } catch ( Exception $e ) {
 
             print_r( $e );

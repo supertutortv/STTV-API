@@ -59,7 +59,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -68,7 +68,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -77,7 +77,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -86,7 +86,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -95,7 +95,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -104,7 +104,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]
@@ -113,7 +113,7 @@ function sttv_stripe_errors($cb) {
         $body = $e->getJsonBody();
         $err  = $body['error'];
         return sttv_rest_response(
-            'stripeError',
+            'signupError',
             'There was an error',
             200,
             [ 'data' => $err ]

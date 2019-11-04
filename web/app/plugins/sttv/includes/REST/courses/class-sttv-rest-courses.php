@@ -75,7 +75,7 @@ class Courses extends \WP_REST_Controller {
 	public function get_course_data( $req ) {
 		global $wpdb;
 		$user = wp_get_current_user();
-		$userid = get_current_user_id();
+		$userid = $user->ID;
 		
 		$umeta = get_user_meta( $userid, 'sttv_user_data', true );
 
@@ -101,6 +101,15 @@ class Courses extends \WP_REST_Controller {
 				'playlist' => false
 			];
 		
+		$umeta['user']['data'] = [
+			'fullname' => $user->display_name,
+			'firstname' => $user->user_firstname,
+			'lastname' => $user->user_lastname,
+			'email' => $user->user_email,
+			'ID' => $userid,
+			'uuid' => $user->user_login
+		];
+		
 		$admin = (current_user_can('manage_options') || current_user_can('course_editor'));
 
 		$access = $admin ? ['the-best-act-prep-course-ever'=>[],'the-best-sat-prep-course-ever'=>[]] : $umeta['courses'];
@@ -123,21 +132,23 @@ class Courses extends \WP_REST_Controller {
 
 			if ( !$admin && !current_user_can( "course_{$test_code}_access" ) ) continue;
 
-			$trialing = !$admin && current_user_can( "course_{$test_code}_trial_access" );
+			$trialing = !!(!$admin && current_user_can( "course_{$test_code}_trial_access" ));
 
-			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user) {
+			$failFlag = !!(get_user_meta($userid, "invoiceFailFlag-$test_code", true) || get_user_meta($userid, "invoiceFailFlag-all", true));
+
+			$umeta['courses'][$slug] = (function() use (&$meta,$trialing,$user,$failFlag) {
 				$meta['trialing'] = $trialing;
-
+				
 				foreach ( $meta['collections'] as $sec => &$val ) {
 					if ( $sec === 'practice' ) continue;
 
-					if ( !current_user_can($val['permissions']) ) {
+					if ( $failFlag || !current_user_can($val['permissions']) ) {
 						unset( $meta['collections'][$sec] );
 						continue;
 					}
 
 					foreach ( $val['collection'] as $k => &$subsec ) {
-						if ( !current_user_can($subsec['permissions']) ) {
+						if ( $failFlag || !current_user_can($subsec['permissions']) ) {
 							unset($val['collection'][$k]);
 							continue;
 						}
@@ -162,13 +173,13 @@ class Courses extends \WP_REST_Controller {
 				}
 
 				foreach ( $meta['collections']['practice']['collection'] as $k => &$book ) {
-					if ( !current_user_can($book['permissions']) ) {
+					if ( $failFlag || !current_user_can($book['permissions']) ) {
 						unset($meta['collections']['practice']['collection'][$k]);
 						continue;
 					}
 
 					foreach ( $book['tests'] as $b => &$test ) {
-						if ( !current_user_can($test['permissions']) ) {
+						if ( $failFlag || !current_user_can($test['permissions']) ) {
 							unset($book['tests'][$b]);
 							continue;
 						}
@@ -196,6 +207,9 @@ class Courses extends \WP_REST_Controller {
 				return $meta;
 			})();
 
+			$umeta['courses'][$slug]['subId'] = get_user_meta( $userid, "sub_id-$test_code", true);
+			$umeta['courses'][$slug]['failFlag'] = $failFlag;
+
 			$dbtable = $wpdb->prefix.'course_udata';
 			$cu_data = $wpdb->get_results(
 				$wpdb->prepare("SELECT * FROM $dbtable WHERE wp_id = %d AND udata_test = %s;",$userid,$meta['test'])
@@ -214,6 +228,7 @@ class Courses extends \WP_REST_Controller {
 		}
 
 		$umeta['size'] = ( mb_strlen( json_encode( $umeta ), '8bit' )/1000 ) . 'KB';
+		$umeta['refresh'] = time() + 18 * HOUR_IN_SECONDS;
 		
 		return sttv_rest_response(
 			'user_course_data_success',
