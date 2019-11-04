@@ -42,6 +42,10 @@ class Admin {
             $vimeo = new \Vimeo\Vimeo( VIMEO_CLIENT, VIMEO_SECRET, VIMEO_TOKEN );
             $alb_data = $vimeo->request( "/me/albums?fields=uri,name&per_page=100" );
             $albs = (array) $alb_data['body']['data'];
+
+            print_r($albs);
+
+            return;
             
             foreach ($albs as $alb) { // MAIN CACHE LOOP (LOOP THROUGH ALBUMS)
                 $path = STTV_CACHE_DIR . '/';
