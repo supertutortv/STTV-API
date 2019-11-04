@@ -48,6 +48,9 @@
     "wordpress-install-dir": "web/wp"
   },
   "scripts": {
+    "gitpush": [
+      "git add -A && git commit -m 'jgvhjgcjhfcjhfc' && git push"
+    ],
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
     ],
