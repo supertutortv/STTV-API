@@ -270,12 +270,27 @@ function customer_subscription_updated( $data ) {
 
     $fullname = $user->first_name.' '.$user->last_name;
 
-    // update any previous attributes
+    // take action based on any previous attributes
     foreach ($prev as $attr => $val) {
         switch($attr) {
             case 'status':
                 if ($val === 'trialing' && $obj['status'] === 'active') {
-                    
+                    new \STTV\Email\Template([
+                        'template' => 'trial-ended',
+                        'email' => $user->user_email,
+                        'name' => $fullname,
+                        'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
+                        'content' => [
+                            [
+                                'name' => 'fname',
+                                'content' => $user->first_name
+                            ],
+                            [
+                                'name' => 'coursename',
+                                'content' => $prod->name
+                            ]
+                        ]
+                    ]);
                 }
             break;
         }
@@ -339,6 +354,7 @@ function customer_subscription_deleted( $data ) {
 function invoice_payment_succeeded( $data ) {
     $obj = $data['data']['object'];
     $priship = null;
+    $ret = [];
 
     if ($obj['paid'] == true && $obj['amount_paid'] > 0) {
         $cus = \Stripe\Customer::retrieve($obj['customer']);
@@ -359,29 +375,18 @@ function invoice_payment_succeeded( $data ) {
         $sub->cancel_at_period_end = true;
         $sub->save();
 
+        foreach ($obj['lines']['data'] as $line) {
+            $course = strtolower($line['plan']['product']);
+            $ret[$course] = delete_user_meta($user->ID,"invoiceFailFlag-$course");
+        }
+        delete_user_meta($user->ID,"invoiceFailFlag-all");
+
         $email = new \STTV\Email\Standard([
             'to' => 'info@supertutortv.com',
             'subject' => $fullname.'\'s trial has ended - PAID',
             'message' => 'Please wait 24 hrs before shipping their book(s).'
         ]);
         $email->send();
-        
-        new \STTV\Email\Template([
-            'template' => 'trial-ended',
-            'email' => $user->user_email,
-            'name' => $fullname,
-            'subject' => 'Your SupertutorTV Course is now UNLOCKED! ',
-            'content' => [
-                [
-                    'name' => 'fname',
-                    'content' => $user->first_name
-                ],
-                [
-                    'name' => 'coursename',
-                    'content' => $prod->name
-                ]
-            ]
-        ]);
 
         if ( $submeta['priship'] == 'true' ) {
             $priship = \Stripe\Charge::create([
