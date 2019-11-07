@@ -361,11 +361,12 @@ function invoice_payment_succeeded( $data ) {
         $sub = \Stripe\Subscription::retrieve($obj['subscription']);
         $meta = __stJ2A($cus->metadata);
         $submeta = __stJ2A($sub->metadata);
+        $planmeta = __stJ2A($sub->plan->metadata);
         $user = get_userdata( $meta['wp_id'] );
         $umeta = get_user_meta( $meta['wp_id'], 'sttv_user_data', true );
         $fullname = $user->first_name.' '.$user->last_name;
 
-        $roles = explode('|',$submeta['roles']);
+        $roles = explode('|',$planmeta['roles']);
 
         foreach ( $roles as $role ) {
             $user->remove_role($role.'_trial');
@@ -390,7 +391,7 @@ function invoice_payment_succeeded( $data ) {
 
         if ( $submeta['priship'] == 'true' ) {
             $priship = \Stripe\Charge::create([
-                "amount" => $sub->plan->metadata->priship ?? 795,
+                "amount" => $planmeta['priship'] ?? 795,
                 "currency" => "usd",
                 "customer" => $obj['customer'],
                 "description" => "Priority shipping for ".$fullname,
@@ -401,6 +402,8 @@ function invoice_payment_succeeded( $data ) {
             ]);
         }
     }
+
+    return $ret;
 }
 
 // invoice.created
