@@ -49,10 +49,13 @@
   },
   "scripts": {
     "gitpush": [
-      "git add -A && git commit -m 'jgvhjgcjhfcjhfc' && git push"
+      "git add -A && git commit -a && git push"
     ],
     "dev-deploy": [
       "ssh sttvapi 'cd devapi/app && git pull'"
+    ],
+    "prod-deploy": [
+      "ssh sttvapi 'cd api/app && git pull'"
     ],
     "post-root-package-install": [
       "php -r \"copy('.env.example', '.env');\""
