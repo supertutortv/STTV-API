@@ -247,7 +247,7 @@ class Signup extends \WP_REST_Controller {
                     'checkout_id' => $session['id'],
                     'checkout_sig' => $session['signature'],
                     'wp_id' => $user->ID,
-                    'priship' => $priship
+                    'priship' => false //$priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
