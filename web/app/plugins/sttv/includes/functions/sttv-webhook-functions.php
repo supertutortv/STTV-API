@@ -103,7 +103,8 @@ function customer_subscription_created( $data ) {
     } else {
         $uid = $cus->metadata->wp_id;
         $sub->metadata = [
-            'priship' => "false",
+            'note' => 'manually created subscription',
+            'priship' => 'false',
             'wp_id' => $uid
         ];
         $sub->save();
