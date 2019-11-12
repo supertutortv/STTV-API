@@ -207,7 +207,7 @@ class Signup extends \WP_REST_Controller {
             $user = wp_get_current_user();
 
             $dotrial = isset($plan['doTrial']) && $plan['doTrial'];
-            $priship = isset($shipping['priShip']) && $shipping['priShip'];
+            $priship = isset($shipping['priShip']) && filter_var($shipping['priShip'], FILTER_VALIDATE_BOOLEAN);
             $phone = isset($shipping['phone']) ? $shipping['phone'] : null;
 
             $plans = json_decode(get_option('pricingplan_'.$plan['id']),true);
@@ -247,7 +247,7 @@ class Signup extends \WP_REST_Controller {
                     'checkout_id' => $session['id'],
                     'checkout_sig' => $session['signature'],
                     'wp_id' => $user->ID,
-                    'priship' => false //$priship
+                    'priship' => $priship
                 ],
                 'trial_period_days' => $dotrial ? 5 : 0
             ]);
