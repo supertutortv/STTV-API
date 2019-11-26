@@ -214,7 +214,7 @@ class Signup extends \WP_REST_Controller {
 
             foreach ($plans['plans'] as $pln) {
                 if ($pln['interval_count'] == $plan['length'] || $pln['interval_count']*12 == $plan['length']) {
-                    $sItems = ['plan' => $pln['id']];
+                    $sItems[] = ['plan' => $pln['id']];
                     break;
                 }
             }
@@ -237,7 +237,7 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
-                'items' => [$sItems],
+                'items' => $sItems,
                 'cancel_at_period_end' => !$dotrial,
                 'metadata' => [
                     'checkout_id' => $session['id'],
