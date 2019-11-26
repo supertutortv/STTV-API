@@ -198,7 +198,7 @@ class Signup extends \WP_REST_Controller {
         return sttv_stripe_errors(function() use ($body) {
             extract($body);
 
-            $atts = [];
+            $atts = $sItems = [];
 
             $atts['source'] = $token ?: null;
 
@@ -214,7 +214,7 @@ class Signup extends \WP_REST_Controller {
 
             foreach ($plans['plans'] as $pln) {
                 if ($pln['interval_count'] == $plan['length'] || $pln['interval_count']*12 == $plan['length']) {
-                    $plan = $pln;
+                    $sItems = ['plan' => $pln['id']];
                     break;
                 }
             }
@@ -237,11 +237,7 @@ class Signup extends \WP_REST_Controller {
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
                 'customer' => $customer->id,
-                'items' => [
-                    [
-                        'plan' => $plan['id']
-                    ]
-                ],
+                'items' => [$sItems],
                 'cancel_at_period_end' => !$dotrial,
                 'metadata' => [
                     'checkout_id' => $session['id'],
