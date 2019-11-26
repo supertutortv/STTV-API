@@ -233,6 +233,8 @@ class Signup extends \WP_REST_Controller {
                 "cus_$user->user_login",
                 $atts
             );
+	
+		return $sItems;
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
