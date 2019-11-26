@@ -211,6 +211,13 @@ class Signup extends \WP_REST_Controller {
             $phone = isset($shipping['phone']) ? $shipping['phone'] : null;
 
             $plans = json_decode(get_option('pricingplan_'.$plan['id']),true);
+		
+	return sttv_rest_response(
+	    'signupError',
+	    'The site is undergoing maintenance at the moment. Try back again in a few minutes.',
+	    200,
+	    [ 'data' => $plans ]
+	);
 
             foreach ($plans['plans'] as $pln) {
                 if ($pln['interval_count'] == $plan['length'] || $pln['interval_count']*12 == $plan['length']) {
@@ -233,8 +240,6 @@ class Signup extends \WP_REST_Controller {
                 "cus_$user->user_login",
                 $atts
             );
-	
-		return $sItems;
             
             //Begin Order Processing
             $order = \Stripe\Subscription::create([
